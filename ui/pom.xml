@@ -42,14 +42,17 @@
 				<filtering>true</filtering>
 				<directory>${project.basedir}</directory>
 				<includes>
-					<include>output/**</include>
-					<include>**/*.html</include>
+					<include>output/index.min.js</include>
+					<include>index.html</include>
+					<include>node_modules/bootstrap/dist/css/bootstrap.min.css</include>
 				</includes>
-				<excludes>
-					<exclude>node/**</exclude>
-					<exclude>node_modules/**</exclude>
-					<exclude>node</exclude>
-				</excludes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>${project.basedir}</directory>
+				<includes>
+					<include>node_modules/bootstrap/dist/fonts/**</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>

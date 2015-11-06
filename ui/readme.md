@@ -31,11 +31,11 @@ Run
 Navigate to _http://localhost:3000/dev.html_ The browser will be automatically updated
  whenever you save some changes.
 
-To get the project ready for production, run just
+To get the project ready for production, run
 
-    webpack
+    maven package
 
-That will minify and optimize the scripts, use _index.html_ for production.
+Don't forget to add resources necessary for production in _pom.xml_
 
 ### Debugging
 Add the "debug" key to the local storage to get debug messages
