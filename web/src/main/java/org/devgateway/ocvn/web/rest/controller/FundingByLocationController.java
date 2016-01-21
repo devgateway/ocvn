@@ -90,9 +90,7 @@ public class FundingByLocationController extends GenericOcvnController {
 				match(where("planning").exists(true).and("planning.locations").exists(true).ne(null).orOperator(yearCriteria)),
 				new CustomProjectionOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
 				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
-						.as("recordsCount"));
-
-		System.out.println(agg);
+						.as("recordsCount"));		
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
