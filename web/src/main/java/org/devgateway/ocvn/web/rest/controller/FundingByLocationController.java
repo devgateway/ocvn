@@ -24,8 +24,9 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.BasicDBObject;
@@ -53,8 +54,8 @@ public class FundingByLocationController extends GenericOcvnController {
 	}
 	
 
-	@RequestMapping("/api/plannedFundingByLocation/{year:^\\d{4}$}")
-	public List<DBObject> plannedFundingByLocation(@PathVariable Integer year) {
+	@RequestMapping("/api/plannedFundingByLocation")
+	public List<DBObject> plannedFundingByLocation(@RequestParam(required=false) Integer[] year) {
 
 		DBObject vars=new BasicDBObject();
 		vars.put("numberOfLocations", new BasicDBObject("$size","$planning.locations"));
@@ -73,13 +74,24 @@ public class FundingByLocationController extends GenericOcvnController {
 		project.put("planning.budget.amount.amount",1);
 		project.put("dividedTotal",dividedTotal);
 		
+		Criteria[] yearCriteria=null;
+		
+		if (year == null) {
+			yearCriteria = new Criteria[1];
+			yearCriteria[0] = where("planning.bidPlanProjectDateApprove").ne(null);
+		} else {
+			yearCriteria = new Criteria[year.length];
+			for (int i = 0; i < year.length; i++)
+				yearCriteria[i] = where("planning.bidPlanProjectDateApprove").gte(getStartDate(year[i]))
+						.lte(getEndDate(year[i]));
+		}
+		
 		Aggregation agg = newAggregation(
-				match(where("planning").exists(true).and("planning.locations").exists(true).ne(null)
-						.and("planning.bidPlanProjectDateApprove").gte(getStartDate(year)).lte(getEndDate(year))),
+				match(where("planning").exists(true).and("planning.locations").exists(true).ne(null).orOperator(yearCriteria)),
 				new CustomProjectionOperation(new BasicDBObject("$project", project)), unwind("$planning.locations"),
 				group("planning.locations").sum("$dividedTotal").as("totalPlannedAmount").sum("$cntprj")
-						.as("recordsCount"));
-	
+						.as("recordsCount"));		
+
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
 		return tagCount;
