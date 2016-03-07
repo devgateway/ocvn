@@ -22,8 +22,9 @@ var aggregateLocations = locations => locations
 
 export default class Planning extends Component{
   render(){
-    var {locations} = this.props;
-    var aggregatedLocations = aggregateLocations(locations);
+    var {locations, years} = this.props;
+    var filteredLocations = locations.filter(location => years.get(location.get('year'), false));
+    var aggregatedLocations = aggregateLocations(filteredLocations);
     var maxAmount = Math.max(0, ...aggregatedLocations.map(location => location.amount));
     return (
         <div className="col-sm-12 content map-content">

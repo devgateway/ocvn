@@ -8,10 +8,12 @@ export default class BiddingPeriod extends Plot{
   }
 
   getData(){
-    if(!this.props.data) return [];
+    var {years, data} = this.props;
+    if(!data) return [];
+    var filteredData = data.filter(({_id}) => years.get(_id, false));
     return [{
-      x: this.props.data.map(pluck('_id')),
-      y: this.props.data.map(pluck('totalCancelledTendersAmount')),
+      x: filteredData.map(pluck('_id')),
+      y: filteredData.map(pluck('totalCancelledTendersAmount')),
       type: 'scatter',
       fill: 'tonexty'
     }];
@@ -21,6 +23,7 @@ export default class BiddingPeriod extends Plot{
     return {
       xaxis: {
         title: "Years",
+        type: 'category',
         titlefont: {
           color: "#cc3c3b"
         }

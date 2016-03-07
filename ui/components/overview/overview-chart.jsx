@@ -22,6 +22,7 @@ export default class OverviewPlot extends Plot{
     return {
       xaxis: {
         title: "Years",
+        type: "category",
         titlefont: {
           color: "#cc3c3b"
         }

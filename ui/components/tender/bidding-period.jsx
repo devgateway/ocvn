@@ -8,17 +8,19 @@ export default class BiddingPeriod extends Plot{
   }
 
   getData(){
-    if(!this.props.data) return [];
-    var years = this.props.data.map(pluck('year'));
+    var {data, years} = this.props;
+    if(!data) return [];
+    var filteredData = data.filter(({year}) => years.get(year, false));
+    var filteredYears = filteredData.map(pluck('year'));
     return [{
-      x: this.props.data.map(pluck('tender')),
-      y: years,
+      x: filteredData.map(pluck('tender')),
+      y: filteredYears,
       name: "Tender",
       type: "bar",
       orientation: 'h'
     }, {
-      x: this.props.data.map(pluck('award')),
-      y: years,
+      x: filteredData.map(pluck('award')),
+      y: filteredYears,
       name: "Award",
       type: "bar",
       orientation: 'h'
@@ -36,6 +38,7 @@ export default class BiddingPeriod extends Plot{
       },
       yaxis: {
         title: "Years",
+        type: "category",
         titlefont: {
           color: "#cc3c3b"
         }

@@ -69,6 +69,7 @@ export default class App extends React.Component{
                 case tabs.PLANNING: return (
                     <Planning
                         width={globalState.get('contentWidth')}
+                        years={globalState.get('selectedYears')}
                         locations={globalState.getIn(['data', 'locations'])}
                     />
                 );
