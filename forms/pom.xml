@@ -15,7 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>forms</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>OCVN Forms</name>
     <description>OCVN Forms</description>
@@ -270,7 +270,16 @@
         </resources>
 
         <plugins>
-			<plugin>
+        
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.6</version>
+            <configuration>
+                <failOnMissingWebXml>false</failOnMissingWebXml>
+            </configuration>
+        </plugin>
+    	<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
@@ -286,7 +295,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-        			<executable>true</executable>
+        			<executable>false</executable>
     			</configuration>
 				<version>${spring.boot.version}</version>
 				<executions>
