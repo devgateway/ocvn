@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "build": "gulp",
-    "extract-translatables": "extract-gettext -o languages/en_US.json components/"
+    "build": "gulp"
   },
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",
