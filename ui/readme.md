@@ -144,6 +144,60 @@ the action creator in _index.es6_
 ##### Stores
 Put your stores in _flux/stores_. Don't forget to import and register them in _flux/index.es6_
 
+### Internationalization
+This module contains a very minimal gettext implementation. You can use it, or opt for an own solution
+
+#### Translatable class decorator
+The translatable class decorator is located in _components/translatable.jsx_.
+```js
+import translatable from "./translatable";
+class MyComponent extends translatable(Component){
+```
+
+It provides two functions: *\_\_* for translating strings and *\_\_n* for pluralization:
+```js
+this.__("Translatable string")
+this.__n("cat", "cats", 1)//returns "1 cat";
+this.__n("book", "books", 10)//return "10 books"
+```
+
+#### Extracting strings
+There are a number of solutions that extract translations strings directly from the code, given you're using the gettext
+functions(*\_\_,* *\_\_n* etc.), for example [extract-gettext](https://github.com/mvhenten/extract-gettext). You'll have
+to install it globally:
+
+    npm install -g extract-gettext
+
+And once it's done, you can trigger the _extract-translatables_ npm script:
+
+    npm run extract-translatables
+
+The strings will be extracted to _languages/en_US.json,_ **Warning: it will overwrite the existing file**
+You can then give that file to a translator to get the translation strings.
+
+#### Using translations
+You can bundle your translation string directly or you can load it asynchronously with AMD require. First method makes
+sense when you don't have a lot of translation strings, as it will make switching between languages instant, eliminating
+the delay needed to fetch the _languages/*.json_ file from the server. The async method, of course, makes sense when you
+ have a lot of translatables, thus it doesn't make sense to include them into the bundle unconditionally. If you're opting
+ for the second option, don't forget to update _Gulpfile_ to copy the _languages/_ folder to the _public/ui/_ folder.
+
+In the end, you must pass it to a _translatable_ component via a _translations_ prop:
+
+```js
+var translationsMock = {
+    "Hello": "Salut"
+}
+
+<MyTranslatableComponent translations={translations}/>
+
+//somewhere inside component's render method:
+this.__("Hello")//returns "Salut"
+```
+
+#### Example
+You can look at the example <App/> component, it was made translatable using this method
+
 ##Troubleshooting
 If running
 

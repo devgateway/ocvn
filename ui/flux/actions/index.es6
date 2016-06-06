@@ -244,5 +244,10 @@ export default {
 
   updateComparisonCriteria(criteria){
     dispatcher.dispatch(constants.COMPARISON_CRITERIA_UPDATED, criteria);
+  },
+
+  setLocale(loc){
+    localStorage.lang = loc;
+    dispatcher.dispatch(constants.LOCALE_CHANGED, loc);
   }
 }

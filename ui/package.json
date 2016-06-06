@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "build": "gulp"
+    "build": "gulp",
+    "extract-translatables": "extract-gettext -o languages/en_US.json components/"
   },
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",
@@ -50,6 +51,7 @@
     "jest-cli": "^0.5.9",
     "keymirror": "^0.1.1",
     "leaflet.markercluster": "https://github.com/Leaflet/Leaflet.markercluster.git#leaflet-0.7",
+    "json-loader": "^0.5.4",
     "less": "^2.5.1",
     "less-loader": "^2.2.0",
     "nuclear-js": "^1.1.1",

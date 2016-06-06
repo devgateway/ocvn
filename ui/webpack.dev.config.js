@@ -13,7 +13,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.(jsx|es6)$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
+      { test: /\.(jsx|es6)$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
       { test: /\.json$/, loader: 'json' },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
       { test: /\.less$/, loader: "style!css!less" }

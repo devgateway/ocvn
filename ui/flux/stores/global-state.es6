@@ -14,7 +14,8 @@ var store = Store({
       data: {},
       comparisonData: {},
       procuringEntityQuery: "",
-      filters: {}
+      filters: {},
+      locale: localStorage.lang || 'en'
     })
   },
 
