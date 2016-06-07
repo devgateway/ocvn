@@ -1,12 +1,13 @@
 import Component from "../pure-render-component";
 import {pluck} from "../../tools";
+import translatable from "../translatable";
 const DATE_FORMAT = {
   year: 'numeric',
   month: 'short',
   day: 'numeric'
 };
 
-export default class TendersTable extends Component{
+export default class TendersTable extends translatable(Component){
   render(){
     if(!this.props.data) return null;
     return (
@@ -15,10 +16,10 @@ export default class TendersTable extends Component{
           <table className="table table-striped table-hover awards-table">
             <thead>
               <tr>
-                <th>Number</th>
-                <th>Price</th>
-                <th>Supplier</th>
-                <th>Date</th>
+                <th>{this.__('Number')}</th>
+                <th>{this.__('Price')}</th>
+                <th>{this.__('Supplier')}</th>
+                <th>{this.__('Date')}</th>
               </tr>
             </thead>
             <tbody>

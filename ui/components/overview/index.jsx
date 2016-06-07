@@ -3,9 +3,9 @@ import OverviewChart from "./overview-chart";
 import TendersTable from "./tenders-table";
 import AwardsTable from "./awards-table";
 import Comparison from "../comparison";
-import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class Overview extends Component{
+export default class Overview extends translatable(Component){
   render(){
     var {width, state} = this.props;
     var {compare, overview, topTenders, topAwards} = state;
@@ -16,13 +16,13 @@ export default class Overview extends Component{
                   width={width}
                   state={overview}
                   Component={OverviewChart}
-                  title="Overview chart"
+                  title={this.__("Overview chart")}
               />
           :
               <OverviewChart
                   width={width}
                   data={overview}
-                  title="Overview chart"
+                  title={this.__("Overview chart")}
               />
           }
           <TendersTable data={topTenders}/>

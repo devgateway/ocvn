@@ -1,7 +1,8 @@
 import Plot from "../plot";
 import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class OverviewPlot extends Plot{
+export default class OverviewPlot extends translatable(Plot){
   getData(){
     var {data} = this.props;
     return data ? ['award', 'bidplan', 'tender'].map(key => {
@@ -17,14 +18,14 @@ export default class OverviewPlot extends Plot{
   getLayout(){
     return {
       xaxis: {
-        title: "Years",
+        title: this.__("Years"),
         type: "category",
         titlefont: {
           color: "#cc3c3b"
         }
       },
       yaxis: {
-        title: "Count",
+        title: this.__("Count"),
         titlefont: {
           color: "#cc3c3b"
         }
