@@ -6,9 +6,9 @@ import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
-import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class Tender extends Component{
+export default class Tender extends translatable(Component){
   render(){
     var {state, width} = this.props;
     var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
@@ -19,11 +19,11 @@ export default class Tender extends Component{
                   width={width}
                   state={costEffectiveness}
                   Component={CostEffectiveness}
-                  title="Cost effectiveness"
+                  title={this.__("Cost effectiveness")}
               />
           :
               <CostEffectiveness
-                title="Cost effectiveness"
+                title={this.__("Cost effectiveness")}
                 data={costEffectiveness}
                 width={width}
               />
@@ -34,11 +34,11 @@ export default class Tender extends Component{
                   width={width}
                   state={bidPeriod}
                   Component={BiddingPeriod}
-                  title="Bid period"
+                  title={this.__("Bid period")}
               />
               :
               <BiddingPeriod
-                  title="Bid period"
+                  title={this.__("Bid period")}
                   data={bidPeriod}
                   width={width}
               />
@@ -49,11 +49,11 @@ export default class Tender extends Component{
                   width={width}
                   state={bidType}
                   Component={BidSelection}
-                  title="Bid Selection Method"
+                  title={this.__("Bid Selection Method")}
               />
               :
               <BidSelection
-                  title="Bid Selection Method"
+                  title={this.__("Bid Selection Method")}
                   data={bidType}
                   width={width}
               />
@@ -64,11 +64,11 @@ export default class Tender extends Component{
                   width={width}
                   state={cancelled}
                   Component={Cancelled}
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
               />
               :
               <Cancelled
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
                   data={cancelled}
                   width={width}
               />
