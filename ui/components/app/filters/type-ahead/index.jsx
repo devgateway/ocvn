@@ -1,5 +1,6 @@
 import Component from "../../../pure-render-component";
 import cn from "classnames";
+import translatable from "../../../translatable";
 import style from "./style.less";
 
 var pluralize = (sg, pl) => count => count == 1 ? `${count} ${sg}` : `${count} ${pl}`;
@@ -17,14 +18,14 @@ export default class TypeAhead extends Component{
     return (
         <section className={cn('field procuring-entities', {open: open})}>
           <header onClick={e => actions.toggleFilter(slug, !open)}>
-            <i className="glyphicon glyphicon-menu-right"></i> Procuring entity
+            <i className="glyphicon glyphicon-menu-right"/>{this.__('Procuring entity')}
             <span className="pull-right count">({selectedCount}/{totalOptions})</span>
           </header>
           <section className="options">
             <input
                 type="text"
                 className="input-sm form-control search"
-                placeholder="type search query"
+                placeholder={this.__("type search query")}
                 value={query}
                 onChange={e => actions.updateProcuringEntityQuery(e.target.value)}
             />
