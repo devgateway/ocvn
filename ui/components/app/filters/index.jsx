@@ -7,7 +7,7 @@ import translatable from "../../translatable";
 
 export default class Filters extends translatable(Component){
   render(){
-    var {actions, state} = this.props;
+    var {actions, state, translations} = this.props;
     var globalState = state.get('globalState');
     var open = 'filters' == globalState.get('filtersBox');
     var filters = globalState.get('filters');
@@ -41,6 +41,7 @@ export default class Filters extends translatable(Component){
                   query={globalState.get('procuringEntityQuery')}
                   state={filters.get('procuringEntities')}
                   actions={actions}
+                  translations={translations}
               />
             </div>
           </div>
