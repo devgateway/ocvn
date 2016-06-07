@@ -1,9 +1,9 @@
 import Marker from "./marker";
 import Component from  "../../pure-render-component";
 import {Popup} from "react-leaflet";
-import {toK} from "../../../tools";
+import translatable from "../../translatable";
 
-export default class LocationWrapper extends Component{
+export default class LocationWrapper extends translatable(Component){
   render(){
     var {amount, name} = this.props.data;
     return (
@@ -12,7 +12,7 @@ export default class LocationWrapper extends Component{
             <div>
               <h3>{name}</h3>
               <p>
-                <strong>Total Planned Amount (VND):</strong> {amount.toLocaleString()}
+                <strong>{this.__("Total Planned Amount (VND):")}</strong> {amount.toLocaleString()}
               </p>
             </div>
           </Popup>
