@@ -15,7 +15,7 @@ export default class TypeAhead extends translatable(Component){
     return (
         <section className={cn('field procuring-entities', {open: open})}>
           <header onClick={e => actions.toggleFilter(slug, !open)}>
-            <i className="glyphicon glyphicon-menu-right"/>{this.__('Procuring entity')}
+            <i className="glyphicon glyphicon-menu-right"/>{this.__('Procuring Entity')}
             <span className="pull-right count">({selectedCount}/{totalOptions})</span>
           </header>
           <section className="options">
