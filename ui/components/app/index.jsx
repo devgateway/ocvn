@@ -18,7 +18,7 @@ export default class App extends translatable(Component){
   }
 
   render(){
-    var {state, actions} = this.props;
+    var {state, actions, translations} = this.props;
     var width = state.getIn(['globalState', 'contentWidth']);
     var navigationLink = (text, marker, tab) =>
         <NavigationLink text={text} actions={actions} tab={tab} marker={marker} active={state.getIn(['globalState', 'tab']) == tab}/>
@@ -73,6 +73,7 @@ export default class App extends translatable(Component){
               switch(tab){
                 case tabs.OVERVIEW:
                   return <Overview
+                      translations={translations}
                       actions={actions}
                       state={state.get('overview')}
                       width={width}

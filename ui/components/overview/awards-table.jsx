@@ -7,7 +7,7 @@ const DATE_FORMAT = {
   day: 'numeric'
 };
 
-export default class TendersTable extends translatable(Component){
+export default class AwardsTable extends translatable(Component){
   render(){
     if(!this.props.data) return null;
     return (
