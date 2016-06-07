@@ -10,12 +10,13 @@ import translatable from "../translatable";
 
 export default class Tender extends translatable(Component){
   render(){
-    var {state, width} = this.props;
+    var {state, width, translations} = this.props;
     var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={costEffectiveness}
                   Component={CostEffectiveness}
@@ -23,6 +24,7 @@ export default class Tender extends translatable(Component){
               />
           :
               <CostEffectiveness
+                  translations={translations}
                 title={this.__("Cost effectiveness")}
                 data={costEffectiveness}
                 width={width}
@@ -31,6 +33,7 @@ export default class Tender extends translatable(Component){
 
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={bidPeriod}
                   Component={BiddingPeriod}
@@ -38,6 +41,7 @@ export default class Tender extends translatable(Component){
               />
               :
               <BiddingPeriod
+                  translations={translations}
                   title={this.__("Bid period")}
                   data={bidPeriod}
                   width={width}
@@ -46,6 +50,7 @@ export default class Tender extends translatable(Component){
 
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={bidType}
                   Component={BidSelection}
@@ -53,6 +58,7 @@ export default class Tender extends translatable(Component){
               />
               :
               <BidSelection
+                  translations={translations}
                   title={this.__("Bid Selection Method")}
                   data={bidType}
                   width={width}
@@ -61,6 +67,7 @@ export default class Tender extends translatable(Component){
 
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={cancelled}
                   Component={Cancelled}
@@ -68,6 +75,7 @@ export default class Tender extends translatable(Component){
               />
               :
               <Cancelled
+                  translations={translations}
                   title={this.__("Cancelled funding")}
                   data={cancelled}
                   width={width}

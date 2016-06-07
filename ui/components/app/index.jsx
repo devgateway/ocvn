@@ -88,6 +88,7 @@ export default class App extends translatable(Component){
                 );
                 default: return (
                     <Tender
+                        translations={translations}
                         actions={actions}
                         state={state.get('tender')}
                         width={width}
