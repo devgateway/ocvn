@@ -52,6 +52,10 @@ export default class App extends translatable(Component){
             </section>
             <Filters {...this.props}/>
             <ComparisonCriteria {...this.props}/>
+            <section className="col-sm-12 language-switcher">
+              <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
+              <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
+            </section>
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
