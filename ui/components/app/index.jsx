@@ -80,6 +80,7 @@ export default class App extends translatable(Component){
                   />;
                 case tabs.PLANNING: return (
                     <Planning
+                        translations={translations}
                         width={globalState.get('contentWidth')}
                         years={globalState.getIn(['filters', 'years'])}
                         locations={globalState.getIn(['data', 'locations'])}

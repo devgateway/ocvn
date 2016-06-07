@@ -22,7 +22,7 @@ var aggregateLocations = locations => locations
 
 export default class Planning extends Component{
   render(){
-    var {locations, years} = this.props;
+    var {locations, years, translations} = this.props;
     var filteredLocations = locations.filter(location => years.get(location.get('year'), false));
     var aggregatedLocations = aggregateLocations(filteredLocations);
     var maxAmount = Math.max(0, ...aggregatedLocations.map(location => location.amount));
@@ -36,6 +36,7 @@ export default class Planning extends Component{
             <Cluster maxAmount={maxAmount}>
               {aggregatedLocations.map(location => (
                 <Location
+                    translations={translations}
                     key={location._id}
                     position={location.coords.reverse()}
                     maxAmount={maxAmount}
