@@ -6,7 +6,7 @@ import style from "./style.less";
 var pluralize = (sg, pl) => count => count == 1 ? `${count} ${sg}` : `${count} ${pl}`;
 var pluralizeResults = pluralize("result", "results");
 
-export default class TypeAhead extends Component{
+export default class TypeAhead extends translatable(Component){
   render(){
     var {query, actions, state, slug} = this.props;
     if(!state) return null;

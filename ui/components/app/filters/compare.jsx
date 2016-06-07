@@ -2,7 +2,7 @@ import Component from "../../pure-render-component";
 import cn from "classnames";
 import translatable from "../../translatable";
 
-export default class ComparisionCriteria extends Component{
+export default class ComparisionCriteria extends translatable(Component){
   render(){
     var {actions, state} = this.props;
     var globalState = state.get('globalState');

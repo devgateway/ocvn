@@ -5,7 +5,7 @@ import MultipleSelect from "./multiple-select";
 import TypeAhead from "./type-ahead";
 import translatable from "../../translatable";
 
-export default class Filters extends Component{
+export default class Filters extends translatable(Component){
   render(){
     var {actions, state} = this.props;
     var globalState = state.get('globalState');
