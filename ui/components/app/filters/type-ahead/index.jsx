@@ -3,9 +3,6 @@ import cn from "classnames";
 import translatable from "../../../translatable";
 import style from "./style.less";
 
-var pluralize = (sg, pl) => count => count == 1 ? `${count} ${sg}` : `${count} ${pl}`;
-var pluralizeResults = pluralize("result", "results");
-
 export default class TypeAhead extends translatable(Component){
   render(){
     var {query, actions, state, slug} = this.props;
@@ -30,7 +27,7 @@ export default class TypeAhead extends translatable(Component){
                 onChange={e => actions.updateProcuringEntityQuery(e.target.value)}
             />
             {haveQuery ?
-                <div className="result-count">{pluralizeResults(totalOptions)}</div>
+                <div className="result-count">{this.__n("result", "results", totalOptions)}</div>
                 : null}
             {options.map(option => (
                 <div className="checkbox" >
