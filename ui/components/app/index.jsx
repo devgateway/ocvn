@@ -5,14 +5,14 @@ import Overview from "../overview";
 import Planning from "../planning";
 import Tender from "../tender";
 import NavigationLink from "./navigation-link";
-import {years} from "../../tools";
 import cn from "classnames";
 import {toImmutable} from "nuclear-js";
 import Filters from "./filters";
 import ComparisonCriteria from "./filters/compare";
+import translatable from ".././translatable";
 require('./style.less');
 
-export default class App extends React.Component{
+export default class App extends translatable(Component){
   componentDidMount(){
     this.props.actions.changeContentWidth(document.querySelector('.years-bar').offsetWidth);
   }
@@ -29,22 +29,24 @@ export default class App extends React.Component{
           <div className="row">
             <section className="col-sm-12 branding">
               <h1>
-                E-procurement
-                <small>Toolkit</small>
+                {this.__('E-procurement')}
+                <small>{this.__('Toolkit')}</small>
               </h1>
             </section>
             <div role="navigation">
-              {navigationLink("Overview", 'search', tabs.OVERVIEW)}
-              {navigationLink("Planning", 'map-marker', tabs.PLANNING)}
-              {navigationLink("Tender", 'time', tabs.TENDER_AWARD)}
+              {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
+              {navigationLink(this.__("Planning"), 'map-marker', tabs.PLANNING)}
+              {navigationLink(this.__("Tender"), 'time', tabs.TENDER_AWARD)}
             </div>
             <section className="col-sm-12 description">
-              <p><strong>Toolkit description</strong></p>
+              <p><strong>{this.__("Toolkit description")}</strong></p>
               <p>
                 <small>
+                  {this.__(`
                   The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating
                   information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam
                   Government eProcurement system (eGP).
+                  `)}
                 </small>
               </p>
             </section>
