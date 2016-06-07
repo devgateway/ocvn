@@ -3,7 +3,7 @@ import Plot from "../plot";
 import {pluck} from "../../tools";
 import translatable from "../translatable";
 
-export default class BiddingPeriod extends Plot{
+export default class BiddingPeriod extends translatable(Plot){
   getData(){
     var {data} = this.props;
     var years = data.map(pluck('year'));
