@@ -1,8 +1,8 @@
 import Plot from "../plot";
 import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class FundingByBidType extends Plot {
-
+export default class FundingByBidType extends translatable(Plot){
   getData(){
     return [{
       x: this.props.data.map(pluck('_id')),
@@ -14,14 +14,14 @@ export default class FundingByBidType extends Plot {
   getLayout(){
     return {
       xaxis: {
-        title: "Category",
+        title: this.__("Category"),
         type: "category",
         titlefont: {
           color: "#cc3c3b"
         }
       },
       yaxis: {
-        title: "Amount",
+        title: this.__("Amount"),
         titlefont: {
           color: "#cc3c3b"
         }

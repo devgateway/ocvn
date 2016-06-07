@@ -14,7 +14,8 @@ var store = Store({
       data: {},
       comparisonData: {},
       procuringEntityQuery: "",
-      filters: {}
+      filters: {},
+      locale: localStorage.lang || 'en'
     })
   },
 
@@ -62,6 +63,8 @@ var store = Store({
     this.on(constants.CANCELLED_COMPARISON_DATA_UPDATED, (state, data) =>
         state.setIn(['comparisonData', 'cancelled'], data));
     this.on(constants.COMPARISON_CRITERIA_NAMES_UPDATED, (state, names) => state.set('comparisonCriteriaNames', names))
+
+    this.on(constants.LOCALE_CHANGED, (state, newLocale) => state.set('locale', newLocale));
   }
 });
 

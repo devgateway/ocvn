@@ -1,11 +1,12 @@
 import Component from "../pure-render-component";
+import translatable from '../translatable';
 const DATE_FORMAT = {
   year: 'numeric',
   month: 'short',
   day: 'numeric'
 };
 
-export default class TendersTable extends Component{
+export default class TendersTable extends translatable(Component){
   render(){
     if(!this.props.data) return null;
     return (
@@ -14,11 +15,11 @@ export default class TendersTable extends Component{
           <table className="table table-striped table-hover tenders-table">
             <thead>
               <tr>
-                <th>Number</th>
-                <th>Start date</th>
-                <th>End date</th>
-                <th>Procuring entity</th>
-                <th>Estimated price</th>
+                <th>{this.__("Number")}</th>
+                <th>{this.__("Start date")}</th>
+                <th>{this.__("End date")}</th>
+                <th>{this.__("Procuring Entity")}</th>
+                <th>{this.__("Estimated price")}</th>
               </tr>
             </thead>
             <tbody>

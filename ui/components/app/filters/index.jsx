@@ -3,10 +3,11 @@ import style from "./style.less";
 import cn from "classnames";
 import MultipleSelect from "./multiple-select";
 import TypeAhead from "./type-ahead";
+import translatable from "../../translatable";
 
-export default class Filters extends Component{
+export default class Filters extends translatable(Component){
   render(){
-    var {actions, state} = this.props;
+    var {actions, state, translations} = this.props;
     var globalState = state.get('globalState');
     var open = 'filters' == globalState.get('filtersBox');
     var filters = globalState.get('filters');
@@ -17,15 +18,20 @@ export default class Filters extends Component{
         >
           <div className="row">
             <div className="col-sm-10 text">
-              Filter the data
+              {this.__('Filter the data')}
             </div>
             <div className="col-sm-1 end arrow">
               <i className="glyphicon glyphicon-menu-right"></i>
             </div>
             <div className="box" onClick={e => e.stopPropagation()}>
-              <MultipleSelect title="Bid type" slug="bidTypes" state={filters.get('bidTypes')} actions={actions}/>
               <MultipleSelect
-                  title="Bid selection method"
+                  title={this.__("Bid type")}
+                  slug="bidTypes"
+                  state={filters.get('bidTypes')}
+                  actions={actions}
+              />
+              <MultipleSelect
+                  title={this.__("Bid selection method")}
                   slug="bidSelectionMethods"
                   state={filters.get('bidSelectionMethods')}
                   actions={actions}
@@ -35,6 +41,7 @@ export default class Filters extends Component{
                   query={globalState.get('procuringEntityQuery')}
                   state={filters.get('procuringEntities')}
                   actions={actions}
+                  translations={translations}
               />
             </div>
           </div>

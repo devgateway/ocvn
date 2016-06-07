@@ -2,7 +2,7 @@ import Component from "./pure-render-component";
 
 export default class Comparison extends Component{
   render(){
-    var {state, Component, title, width} = this.props;
+    var {state, Component, title, width, translations} = this.props;
     var {data, yAxisRange, xAxisRange, criteriaNames} = state;
     return (
         <div>
@@ -15,6 +15,7 @@ export default class Comparison extends Component{
                       yAxisRange={yAxisRange}
                       xAxisRange={xAxisRange}
                       data={datum}
+                      translations={translations}
                       pageHeaderTitle={false}
                       title={criteriaNames[index] || "Other"}
                       width={width}

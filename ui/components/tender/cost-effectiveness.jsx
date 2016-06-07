@@ -1,7 +1,8 @@
 import Plot from "../plot";
 import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class CostEffectiveness extends Plot{
+export default class CostEffectiveness extends translatable(Plot){
   getData(){
     var {data} = this.props;
     var years = data.map(pluck('year'));
@@ -9,14 +10,14 @@ export default class CostEffectiveness extends Plot{
     var bidPrice = {
       x: years,
       y: data.map(pluck('tender')),
-      name: 'Bid price',
+      name: this.__('Bid price'),
       type: 'bar'
     };
 
     var diff = {
       x: years,
       y: data.map(pluck('diff')),
-      name: 'Difference',
+      name: this.__('Difference'),
       type: 'bar'
     };
 
@@ -27,14 +28,14 @@ export default class CostEffectiveness extends Plot{
     return {
       barmode: "stack",
       xaxis: {
-        title: "Years",
+        title: this.__("Years"),
         type: "category",
         titlefont: {
           color: "#cc3c3b"
         }
       },
       yaxis: {
-        title: "Amount",
+        title: this.__("Amount"),
         titlefont: {
           color: "#cc3c3b"
         }

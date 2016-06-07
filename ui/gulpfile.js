@@ -4,7 +4,7 @@ var webpack = require("webpack");
 var webpackConfig = require('./webpack.config.js');
 var gnf = require('gulp-npm-files');
 
-gulp.task("default", ['webpack', 'copy-deps', 'copy-html']);
+gulp.task("default", ['webpack', 'copy-deps', 'copy-html', 'copy-assets']);
 
 gulp.task("webpack", function(cb){
   webpack(webpackConfig, function(err, stats) {
@@ -20,4 +20,8 @@ gulp.task("copy-deps", function(){
 
 gulp.task("copy-html", function(){
   gulp.src("index.html").pipe(gulp.dest('public/ui/'));
+});
+
+gulp.task("copy-assets", function(){
+  gulp.src("assets/**/*").pipe(gulp.dest("./public/ui/assets"));
 });

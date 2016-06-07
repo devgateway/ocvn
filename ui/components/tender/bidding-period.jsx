@@ -1,21 +1,22 @@
 import React from "react";
 import Plot from "../plot";
 import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class BiddingPeriod extends Plot{
+export default class BiddingPeriod extends translatable(Plot){
   getData(){
     var {data} = this.props;
     var years = data.map(pluck('year'));
     return [{
       x: data.map(pluck('tender')),
       y: years,
-      name: "Tender",
+      name: this.__("Tender"),
       type: "bar",
       orientation: 'h'
     }, {
       x: data.map(pluck('award')),
       y: years,
-      name: "Award",
+      name: this.__("Award"),
       type: "bar",
       orientation: 'h'
     }];
@@ -25,13 +26,13 @@ export default class BiddingPeriod extends Plot{
     return {
       barmode: "stack",
       xaxis: {
-        title: "Days",
+        title: this.__("Days"),
         titlefont: {
           color: "#cc3c3b"
         }
       },
       yaxis: {
-        title: "Years",
+        title: this.__("Years"),
         type: "category",
         titlefont: {
           color: "#cc3c3b"

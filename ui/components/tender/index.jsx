@@ -6,132 +6,26 @@ import BiddingPeriod from "./bidding-period";
 import Cancelled from "./cancelled";
 import {toImmutable} from "nuclear-js";
 import Comparison from "../comparison";
-import {pluck} from "../../tools";
+import translatable from "../translatable";
 
-export default class Tender extends Component{
-  getBiddingPeriod(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')){
-      var bidPeriodData = globalState.getIn(['comparisonData', 'bidPeriod']);
-      if(!bidPeriodData) return null;
-      var minValue = Math.min.apply(Math, bidPeriodData.map(datum =>
-          Math.min.apply(Math, ["award", "tender"].map(key =>
-              Math.min.apply(Math, datum.map(pluck(key)))
-          ))
-      ));
-      var maxValue = Math.max.apply(Math, bidPeriodData.map(datum =>
-          Math.max.apply(Math, ["award", "tender"].map(key =>
-              Math.max.apply(Math, datum.map(pluck(key)))
-          ))
-      ));
-      return (
-          <Comparison
-              years={selectedYears}
-              width={width}
-              data={bidPeriodData}
-              Component={BiddingPeriod}
-              xAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      return (
-          <BiddingPeriod
-              years={selectedYears}
-              width={width}
-              data={data.get('bidPeriod')}
-          />
-      )
-    }
-  }
-
-  getBidType(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')){
-      var bidTypeData = globalState.getIn(['comparisonData', 'bidType']);
-      if(!bidTypeData) return null;
-      var filteredBidTypeData = bidTypeData.map(filterBidTypeData(selectedYears));
-      var minValue = Math.min.apply(Math, filteredBidTypeData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck("totalTenderAmount")))
-      ));
-      var maxValue = Math.max.apply(Math, filteredBidTypeData.map(datum =>
-          Math.max.apply(Math, datum.map(pluck("totalTenderAmount")))
-      ));
-      return (
-          <Comparison
-            years={selectedYears}
-            width={width}
-            data={filteredBidTypeData}
-            Component={BidSelection}
-            yAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      var bidTypeData = data.get('bidType');
-      if(!bidTypeData) return null;
-      return (
-          <BidSelection
-              width={width}
-              data={filterBidTypeData(selectedYears)(bidTypeData)}
-          />
-      )
-    }
-  }
-
-  getCancelled(){
-    var globalState = this.props.state.get('globalState');
-    var selectedYears = globalState.getIn(['filters', 'years']);
-    var width = globalState.get('contentWidth');
-    var data = globalState.get('data');
-    if(globalState.get('compareBy')) {
-      var cancelledData = globalState.getIn(['comparisonData', 'cancelled']);
-      if(!cancelledData) return null;
-      var minValue = Math.min.apply(Math, cancelledData.map(datum =>
-          Math.min.apply(Math, datum.map(pluck("totalCancelledTendersAmount")))
-      ));
-      var maxValue = Math.max.apply(Math, cancelledData.map(datum =>
-          Math.max.apply(Math, datum.map(pluck("totalCancelledTendersAmount")))
-      ));
-      return (
-          <Comparison
-              years={selectedYears}
-              width={width}
-              data={cancelledData}
-              Component={Cancelled}
-              yAxisRange={[minValue, maxValue]}
-          />
-      )
-    } else {
-      return (
-          <Cancelled
-              years={selectedYears}
-              width={width}
-              data={data.get('cancelled')}
-          />
-      )
-    }
-  }
-
+export default class Tender extends translatable(Component){
   render(){
-    var {state, width} = this.props;
+    var {state, width, translations} = this.props;
     var {compare, costEffectiveness, bidPeriod, bidType, cancelled} = state;
     return (
         <div className="col-sm-12 content">
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={costEffectiveness}
                   Component={CostEffectiveness}
-                  title="Cost effectiveness"
+                  title={this.__("Cost effectiveness")}
               />
           :
               <CostEffectiveness
-                title="Cost effectiveness"
+                  translations={translations}
+                title={this.__("Cost effectiveness")}
                 data={costEffectiveness}
                 width={width}
               />
@@ -139,14 +33,16 @@ export default class Tender extends Component{
 
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={bidPeriod}
                   Component={BiddingPeriod}
-                  title="Bid period"
+                  title={this.__("Bid period")}
               />
               :
               <BiddingPeriod
-                  title="Bid period"
+                  translations={translations}
+                  title={this.__("Bid period")}
                   data={bidPeriod}
                   width={width}
               />
@@ -154,14 +50,16 @@ export default class Tender extends Component{
 
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={bidType}
                   Component={BidSelection}
-                  title="Bid Selection Method"
+                  title={this.__("Bid Selection Method")}
               />
               :
               <BidSelection
-                  title="Bid Selection Method"
+                  translations={translations}
+                  title={this.__("Bid Selection Method")}
                   data={bidType}
                   width={width}
               />
@@ -169,26 +67,21 @@ export default class Tender extends Component{
 
           {compare ?
               <Comparison
+                  translations={translations}
                   width={width}
                   state={cancelled}
                   Component={Cancelled}
-                  title="Cancelled funding"
+                  title={this.__("Cancelled funding")}
               />
               :
               <Cancelled
-                  title="Cancelled funding"
+                  translations={translations}
+                  title={this.__("Cancelled funding")}
                   data={cancelled}
                   width={width}
               />
           }
         </div>
     );
-
-    return (
-        <div className="col-sm-12 content">
-          {this.getBidType()}
-          {this.getCancelled()}
-        </div>
-    )
   }
 }
