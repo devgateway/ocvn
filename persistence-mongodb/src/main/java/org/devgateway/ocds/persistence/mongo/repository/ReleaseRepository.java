@@ -14,6 +14,8 @@ public interface ReleaseRepository extends MongoRepository<Release, String> {
 
     Release findByOcid(String ocid);
 
+    Release findById(String id);
+
     @Override
     <S extends Release> S save(S entity);
 }

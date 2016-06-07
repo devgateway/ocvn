@@ -13,6 +13,9 @@ package org.devgateway.ocds.web.rest.controller.selector;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -40,6 +43,8 @@ public class BidSelectionMethodSearchController extends GenericOCDSController {
      *
      * @return
      */
+	@ApiOperation(value = "Display the available bid selection methods. "
+			+ "These are taken from tender.procurementMethodDetails")
     @RequestMapping(value = "/api/ocds/bidSelectionMethod/all", method = RequestMethod.GET,
             produces = "application/json")
     public List<DBObject> bidSelectionMethods() {

@@ -23,7 +23,14 @@ import java.util.Set;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "uri", "publishedDate", "releases", "publisher", "license", "publicationPolicy" })
+@JsonPropertyOrder({
+        "uri",
+        "publishedDate",
+        "releases",
+        "publisher",
+        "license",
+        "publicationPolicy"
+})
 @Document
 public class ReleasePackage implements Identifiable {
 
@@ -272,7 +279,5 @@ public class ReleasePackage implements Identifiable {
     public String getId() {
         return uri;
     }
-
-
 
 }

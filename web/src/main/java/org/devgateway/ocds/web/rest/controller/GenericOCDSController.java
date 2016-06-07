@@ -101,7 +101,7 @@ public class GenericOCDSController {
      * @return the {@link Criteria} for this filter
      */
     protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
-        return createFilterCriteria("tender.contrMethod", filter.getContrMethod(), filter);
+        return createFilterCriteria("tender.contrMethod._id", filter.getContrMethod(), filter);
     }
 
 

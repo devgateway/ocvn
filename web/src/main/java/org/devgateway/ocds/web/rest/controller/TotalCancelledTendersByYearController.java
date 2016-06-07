@@ -13,6 +13,9 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
@@ -41,6 +44,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 public class TotalCancelledTendersByYearController extends GenericOCDSController {
 
+	@ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
+			+ "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/totalCancelledTendersByYear", method = RequestMethod.GET,
             produces = "application/json")
     public List<DBObject> totalCancelledTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {

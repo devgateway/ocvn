@@ -44,9 +44,9 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
         Organization savedOrganization = organizationRepository.save(organization);
 
         Assert.assertNotNull(savedOrganization);
-        Assert.assertEquals(savedOrganization.getId(), ORG_ID);
+        Assert.assertEquals(ORG_ID, savedOrganization.getId());
 
-        Organization foundOrg= organizationRepository.findOne(ORG_ID);
+        Organization foundOrg = organizationRepository.findOne(ORG_ID);
         Assert.assertNotNull(foundOrg);
     }
 

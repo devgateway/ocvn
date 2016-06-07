@@ -30,6 +30,8 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+import io.swagger.annotations.ApiOperation;
+
 /**
  *
  * @author mpostelnicu
@@ -48,6 +50,11 @@ public class TopTenController extends GenericOCDSController {
      * @return
      */
 
+	@ApiOperation(value = "Returns the top ten largest active awards."
+			+ " The amount is taken from the award.value field. The returned data will contain"
+			+ "the following fields: "
+			+ "planning.bidNo, awards.date, awards.suppliers.name, "
+			+ "awards.value, awards.suppliers.name, planning.budget (if any)")
     @RequestMapping(value = "/api/topTenLargestAwards", method = RequestMethod.GET,
             produces = "application/json")
     public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
@@ -81,6 +88,10 @@ public class TopTenController extends GenericOCDSController {
      *
      * @return
      */
+	@ApiOperation(value = "Returns the top ten largest active tenders."
+			+ " The amount is taken from the tender.value field." + " The returned data will contain"
+			+ "the following fields: " + "planning.bidNo, tender.date, tender.value, tender.tenderPeriod, "
+					+ "tender.procuringEntity.name")
     @RequestMapping(value = "/api/topTenLargestTenders", method = RequestMethod.GET,
             produces = "application/json")
     public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {

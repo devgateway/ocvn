@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 import javax.validation.Valid;
 import java.util.Arrays;
 
@@ -18,6 +20,9 @@ import java.util.Arrays;
 @RestController
 public class TenderBidPeriodPercentilesByYearController extends GenericOCDSController {
 
+	@ApiOperation(value = "Returns the tender bid period percentiles: min, q1, median, a3 and max. "
+			+ "The tender length in days is "
+			+ "calculated from tender.tenderPeriod.startDate and tender.tenderPeriod.endDate")
     @RequestMapping(value = "/api/tenderBidPeriodPercentiles", method = RequestMethod.GET,
             produces = "application/json")
     public Object tenderBidPeriodPercentiles(@ModelAttribute @Valid final YearFilterPagingRequest filter) {

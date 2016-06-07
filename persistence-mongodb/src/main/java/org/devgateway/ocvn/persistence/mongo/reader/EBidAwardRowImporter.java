@@ -5,6 +5,7 @@ import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
@@ -13,6 +14,7 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
+import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 
 import java.text.ParseException;
@@ -48,6 +50,14 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
             release.setPlanning(planning);
             planning.setBidNo(row[0]);
         }
+        
+		if (release.getTender() == null) {
+			VNTender tender = new VNTender();
+			tender.setId(release.getOcid());
+			release.setTender(tender);
+		}
+		
+		release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission.toString());
 
         VNAward award = new VNAward();
         award.setId(release.getOcid() + "-award-" + release.getAwards().size());
@@ -93,13 +103,11 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
         // For unsuccessful awards (in both eBid and Offline bid tabs), map the
         // information on the bidder (supplier) to tender.tenderers for that
         // BID_NO
-        // we ignore the fields if there are no tenders found
-        if (release.getTender() != null) {
-            if (award.getStatus().equals(Award.Status.unsuccesful)) {
-                release.getTender().getTenderers().add(supplier);
-            }
-            release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
-        }
+        // we ignore the fields if there are no tenders found       
+		if (award.getStatus().equals(Award.Status.unsuccesful)) {
+			release.getTender().getTenderers().add(supplier);
+		}
+		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 
         return release;
     }

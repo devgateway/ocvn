@@ -25,7 +25,15 @@ import java.util.Set;
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "uri", "publisher", "license", "publicationPolicy", "publishedDate", "packages", "records" })
+@JsonPropertyOrder({
+        "uri",
+        "publisher",
+        "license",
+        "publicationPolicy",
+        "publishedDate",
+        "packages",
+        "records"
+})
 @Document
 public class RecordPackage implements Identifiable {
 

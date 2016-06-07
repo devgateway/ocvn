@@ -39,6 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import io.swagger.annotations.ApiOperation;
+
 /**
  *
  * @author mpostelnicu
@@ -47,25 +49,28 @@ import com.mongodb.DBObject;
 @RestController
 public class AverageNumberOfTenderers extends GenericOCDSController {
 
-    @RequestMapping(value = "/api/averageNumberOfTenderers", method = RequestMethod.GET, produces = "application/json")
-    public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	@ApiOperation(value = "Calculate average number of tenderers, by year. The endpoint can be filtered"
+			+ "by year read from tender.tenderPeriod.startDate. "
+			+ "The number of tenderers are read from tender.numberOfTenderers")
+	@RequestMapping(value = "/api/averageNumberOfTenderers", method = RequestMethod.GET, produces = "application/json")
+	public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
-        DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        project.put("tender.numberOfTenderers", 1);
+		DBObject project = new BasicDBObject();
+		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project.put("tender.numberOfTenderers", 1);
 
-        Aggregation agg = newAggregation(
-                match(where("tender.numberOfTenderers").gt(0).andOperator(getDefaultFilterCriteria(filter))),
-                new CustomProjectionOperation(project),
-                group("$year").avg("tender.numberOfTenderers").as("averageNoTenderers"),
-                project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF))).andInclude("averageNoTenderers")
-                        .andExclude(Fields.UNDERSCORE_ID),
-                new CustomSortingOperation(new BasicDBObject("year", 1)),
-                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize()));
+		Aggregation agg = newAggregation(
+				match(where("tender.numberOfTenderers").gt(0).andOperator(getDefaultFilterCriteria(filter))),
+				new CustomProjectionOperation(project),
+				group("$year").avg("tender.numberOfTenderers").as("averageNoTenderers"),
+				project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF))).andInclude("averageNoTenderers")
+						.andExclude(Fields.UNDERSCORE_ID),
+				new CustomSortingOperation(new BasicDBObject("year", 1)), sort(Direction.ASC, "year"),
+				skip(filter.getSkip()), limit(filter.getPageSize()));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
-    }
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> list = results.getMappedResults();
+		return list;
+	}
 
 }

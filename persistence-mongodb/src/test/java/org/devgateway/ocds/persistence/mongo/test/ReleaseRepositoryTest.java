@@ -25,7 +25,7 @@ public class ReleaseRepositoryTest extends AbstractMongoTest {
 
         Release byOcid = releaseRepository.findByOcid(OCID);
 
-        Assert.assertEquals(byOcid.getOcid(),OCID);
+        Assert.assertEquals(OCID, byOcid.getOcid());
 
     }
 

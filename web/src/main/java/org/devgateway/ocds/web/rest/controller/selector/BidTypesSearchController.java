@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 import java.util.List;
 
 /**
@@ -34,6 +36,8 @@ public class BidTypesSearchController extends GenericOCDSController {
     @Autowired
     private ClassificationRepository classificationRepository;
 
+	@ApiOperation(value = "Display the available bid types. "
+			+ "These are the Classification entities in OCDS")
     @RequestMapping(value = "/api/ocds/bidType/all", method = RequestMethod.GET, produces = "application/json")
     public List<Classification> bidTypes() {
 

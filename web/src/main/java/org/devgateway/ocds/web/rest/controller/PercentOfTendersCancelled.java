@@ -13,6 +13,9 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -44,6 +47,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 public class PercentOfTendersCancelled extends GenericOCDSController {
 
+	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
+			+ " The year is taken from tender.tenderPeriod.startDate. The response also contains the"
+			+ " total number of tenders and total number of cancelled tenders for each year.")
     @RequestMapping(value = "/api/percentTendersCancelled", method = RequestMethod.GET, produces = "application/json")
     public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 

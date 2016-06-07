@@ -936,6 +936,49 @@ public class Tender {
         }
 
     }
+    
+    
+    
+    public enum SubmissionMethod {
+    	electronicAuction("electronicAuction"),
+
+    	electronicSubmission("electronicSubmission"),
+
+    	written("written"),
+    	
+    	inPerson("inPerson");
+
+        private final String value;
+
+        private static final Map<String, SubmissionMethod> CONSTANTS = new HashMap<String, SubmissionMethod>();
+
+        static {
+            for (SubmissionMethod c: values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        SubmissionMethod(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static SubmissionMethod fromValue(String value) {
+        	SubmissionMethod constant = CONSTANTS.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
+    }
 
     public enum Status {
         planned("planned"),

@@ -13,6 +13,9 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.data.domain.Sort.Direction;
@@ -44,6 +47,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 public class FundingByLocationController extends GenericOCDSController {
 
+	@ApiOperation(value = "Planned funding by location by year. Returns the total amount of planning.budget"
+			+ " available per planning.budget.projectLocation, grouped by year. "
+			+ "This will return full location information, including geocoding data.")
     @RequestMapping(value = "/api/plannedFundingByLocation", method = RequestMethod.GET, produces = "application/json")
     public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
