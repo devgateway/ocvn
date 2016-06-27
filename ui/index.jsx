@@ -1,5 +1,6 @@
 import App from "./components/app";
 import React from "react";
+import ReactDOM from "react-dom";
 import flux from "./flux";
 import {debounce} from "./tools";
 var TRANSLATIONS = {
@@ -8,7 +9,7 @@ var TRANSLATIONS = {
 };
 
 flux.onUpdate(state =>
-  React.render(
+  ReactDOM.render(
     <App state={state} actions={flux.actions} translations={TRANSLATIONS[state.getIn(['globalState', 'locale'])]}/>,
     document.getElementById('dg-container')
   )

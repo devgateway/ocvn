@@ -14,7 +14,13 @@
  */
 package org.devgateway.toolkit.persistence.spring;
 
-import com.zaxxer.hikari.HikariDataSource;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.Properties;
+
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.derby.drda.NetworkServerControl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,11 +32,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.util.Properties;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author mpostelnicu
@@ -60,8 +62,8 @@ public class DatabaseConfiguration {
 	@Value("${dg-toolkit.derby.port}")
 	private int DERBY_PORT;
 	
-	@Value("${spring.datasource.jndi-name}")
-	private String springDatasourceJndiName;
+	@Value("${dg-toolkit.datasource.jndi-name}")
+	private String datasourceJndiName;
 	
     protected static Logger logger = Logger.getLogger(DatabaseConfiguration.class);
 
@@ -84,7 +86,7 @@ public class DatabaseConfiguration {
     @Bean
     public SimpleNamingContextBuilder jndiBuilder() {
         SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-		builder.bind(springDatasourceJndiName, dataSource());
+		builder.bind(datasourceJndiName, dataSource());
         try {
             builder.activate();
         } catch (IllegalStateException e) {

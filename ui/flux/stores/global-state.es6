@@ -4,12 +4,18 @@ import keyMirror from "keymirror";
 import {identity} from "../../tools";
 import actions from "../actions";
 
-var store = Store({
+export let tabs = keyMirror({
+  OVERVIEW: null,
+  PLANNING: null,
+  TENDER_AWARD: null
+});
+
+let store = Store({
   getInitialState(){
     return toImmutable({
       filtersBox: false,
       compareBy: "",
-      tab: store.tabs.OVERVIEW,
+      tab: tabs.OVERVIEW,
       contentWidth: 0,
       data: {},
       comparisonData: {},
@@ -66,12 +72,6 @@ var store = Store({
 
     this.on(constants.LOCALE_CHANGED, (state, newLocale) => state.set('locale', newLocale));
   }
-});
-
-store.tabs = keyMirror({
-  OVERVIEW: null,
-  PLANNING: null,
-  TENDER_AWARD: null
 });
 
 export default store;
