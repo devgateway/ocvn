@@ -36,26 +36,52 @@ export default class App extends translatable(Component){
         <div className="col-sm-6 menu">
           <Filters {...this.props}/>
           <ComparisonCriteria {...this.props}/>
-          <div>
-            <i className="glyphicon glyphicon-download-alt"></i> Export <i className="glyphicon glyphicon-menu-down"></i>
+          <div className="filters">
+            <img className="top-nav-icon" src="assets/icons/export.svg"/> Export <i className="glyphicon glyphicon-menu-down"></i>
           </div>
         </div>
-        <div className="col-sm-1 language-switcher">
-          <img src="assets/flags/us.png" alt="" onClick={e => actions.setLocale("en")}/>
-          <img src="assets/flags/vn.png" alt="" onClick={e => actions.setLocale("vn")}/>
+        <div className="col-sm-2 language-switcher">
+          <img className="flag" src="assets/flags/us.png" alt="US flag" onClick={e => actions.setLocale("en")}/>
+          <img className="flag" src="assets/flags/vn.png" alt="Vietnam flag" onClick={e => actions.setLocale("vn")}/>
         </div>
       </header>
       <aside className="col-xs-4 col-md-3 col-lg-2">
         <div className="row">
           <div role="navigation">
-               {navigationLink(this.__("Overview"), 'search', tabs.OVERVIEW)}
-               {navigationLink(this.__("Location"), 'map-marker', tabs.PLANNING)}
-               {navigationLink(this.__("Competitiveness"), '', tabs.COMPETITIVENESS)}
-               {navigationLink(this.__("Efficiency"), '', tabs.EFFICIENCY)}
-               {navigationLink(this.__("eProcurement"), '', tabs.E_PROCUREMENT)}
+          <a className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/overview.svg"/>
+          </span>
+          Overview
+          </a>
+          <a className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/planning.svg"/>
+          </span>
+          Planning
+          </a>
+          <a className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/competitive.svg"/>
+          </span>
+          Competitiveness
+          </a>
+          <a className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/efficiency.svg"/>
+          </span>
+          Efficiency
+          </a>
+          <a className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src="assets/icons/eprocurement.svg"/>
+          </span>
+          E-procurement
+          </a>
+
           </div>
           <section className="col-sm-12 description">
-            <p><strong>{this.__("Toolkit description")}</strong></p>
+            <h3><strong>{this.__("Toolkit description")}</strong></h3>
             <p>
               <small>
                 {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}

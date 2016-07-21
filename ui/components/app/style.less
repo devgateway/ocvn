@@ -1,4 +1,5 @@
 @red: #cc3c3b;
+@base-unit: 1em;
 
 .content{
   margin-top: 3em;
@@ -38,10 +39,14 @@ header.branding{
 
   .menu{
     color: white;
+    display: inline-block;
+    float: right;
+    padding-left: 15%;
     text-transform: uppercase;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-start;
+    width: 100%;
+    @media only screen and (max-width: 1280px) {
+      margin-left: -140px;
+    }
     &>div{
       cursor: pointer;
       padding: 20px;
@@ -53,6 +58,20 @@ header.branding{
     display: flex;
     align-items: center;
     justify-content: center;
+    .flag {
+      box-shadow: 0px 1px 10px 1px #B53636;
+      -webkit-box-shadow: 0px 1px 10px 1px #B53636;
+      -moz-box-shadow: 0px 1px 10px 1px #B53636;
+      -o-box-shadow: 0px 1px 10px 1px #B53636;
+      margin-right: @base-unit / 2.5;
+      width: 2.2em;
+      &:hover {
+        box-shadow: 0px 1px 10px 1px #db5151;
+        -webkit-box-shadow: 0px 1px 10px 1px #db5151;
+        -moz-box-shadow: 0px 1px 10px 1px #db5151;
+        -o-box-shadow: 0px 1px 10px 1px #db5151;
+      }
+    }
   }
 }
 
@@ -62,22 +81,30 @@ aside {
   top: 64px;
   bottom: 0;
   height: auto;
-  background-color: #f2f2f2;
-  border-right: 1px solid #333;
+  background-color: #e9e9e9;
+  border-right: 2px solid #c5c5c5;
 
   section.col-sm-12 {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
   }
 
-  section.description strong{
-    color: @red;
+  section.description{
+    background: #ffffff;
+    line-height: 120%;
+    h3 {
+      color: @red;
+      font-size: 1em;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
   }
 }
 
 .years-bar {
   position: fixed;
   bottom: 34px;
+  border-bottom: 2px solid #c5c5c5;
   z-index: 1;
   padding-left: 0;
   padding-right: 0;
@@ -90,6 +117,9 @@ aside {
     text-decoration: none;
     padding: 5px 0 5px 20px;
     border-right: 2px #f2f2f2 solid;
+    &:hover {
+      background-color: #707070;
+    }
     .glyphicon {
       visibility: hidden;
     }
@@ -97,8 +127,8 @@ aside {
       border-right: none;
     }
     &.active {
-      color: @red;
-      background-color: #f2f2f2;
+      color: white;
+      background-color: #808080;
       .glyphicon {
         visibility: visible;
       }

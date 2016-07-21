@@ -36,7 +36,7 @@ class Plot extends translatable(Component){
   render(){
     var {pageHeaderTitle, title} = this.props;
     return (
-        <section>
+        <section className="chart-section-container">
           {pageHeaderTitle && <h4 className="page-header">{title}</h4>}
           <div ref="chartContainer"></div>
         </section>

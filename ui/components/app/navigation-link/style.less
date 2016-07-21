@@ -1,27 +1,56 @@
+@active-color: #808080;
+@circle-grey: #666666;
+@tab-light-grey: #f2f2f2;
+
 aside [role=navigation] a{
+  border-bottom: 1px solid #c5c5c5;
+  color: #707070;
   display: block;
-  color: #333;
-  font-size: 1.3em;
-  text-transform: uppercase;
-  border-bottom: 1px solid #ccc;
-  padding: 5px 0 5px 20px;
+  cursor: pointer;
+  font-size: 1.05em;
+  line-height: 190%;
+  padding: 15px 0 15px 20px;
   text-decoration: none;
+  text-transform: uppercase;
+  &:hover {
+    background-color: @active-color;
+    color: @tab-light-grey;
+  }
   &.active{
-    background-color: #808080;
-    color: #f2f2f2;
+    background-color: @active-color;
+    color: @tab-light-grey;
     .circle{
-      background-color: #f2f2f2;
-      color: #666;
+      background-color: @tab-light-grey;
+      color: @circle-grey;
     }
   }
   .circle{
-    display: inline-block;
-    background-color: #666;
-    color: #f2f2f2;
+    background-color: @circle-grey;
     border-radius: 50%;
-    width: 1.4em;
-    height: 1.4em;
-    padding-top: .1em;
+    color: @tab-light-grey;
+    display: block;
+    float: left;
+    height: 1.6em;
+    margin-right: 0.4em;
     text-align: center;
+    width: 1.6em;
   }
+}
+
+.nav-icon {
+  display:block;
+  height:1.28em;
+  margin: auto;
+  padding-top: 5px;
+  width: 1.28em;
+}
+.chart-section-container {
+  margin-bottom: 7em;
+}
+.js-plotly-plot .plotly .modebar {
+  margin-top: -50px;
+}
+.js-plotly-plot .plotly .main-svg  {
+  background: none !important;
+  margin-top: -60px;
 }

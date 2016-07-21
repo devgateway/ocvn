@@ -17,7 +17,7 @@ class Filters extends translatable(Component){
         onClick={e => actions.setMenuBox(open ? "" : "filters")}
         className={cn("filters", {open})}
     >
-      {icon('filter')} {this.__('Filter the data')} {icon('menu-down')}
+      {<img className="top-nav-icon" src="assets/icons/filter.svg"/>} {this.__('Filter the data')} {icon('menu-down')}
       <div className="box" onClick={e => e.stopPropagation()}>
         <MultipleSelect
             title={this.__("Bid type")}

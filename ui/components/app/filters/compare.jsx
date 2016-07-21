@@ -13,7 +13,7 @@ export default class ComparisionCriteria extends translatable(Component){
         onClick={e => actions.setMenuBox(open ? "" : "compare")}
         className={cn("filters compare", {open})}
     >
-      {icon('th-large')} {this.__('Compare')} {icon('menu-down')}
+      {<img className="top-nav-icon" src="assets/icons/compare.svg"/>} {this.__('Compare')} {icon('menu-down')}
       <div className="box" onClick={e => e.stopPropagation()}>
         <div className="col-sm-6">
           <label>{this.__('Comparison criteria')}</label>
