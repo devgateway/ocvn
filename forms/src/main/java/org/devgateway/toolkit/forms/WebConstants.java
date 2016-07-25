@@ -46,6 +46,7 @@ public final class WebConstants {
 	// add more languages here. It is pointless to make this dynamic because the
 	// wicket i18n is in .properties files so we need
 	// to change the src code anyway.
-	public static final List<Locale> availableLocales = Collections.unmodifiableList(Arrays.asList(new Locale("en")));
+	public static final List<Locale> availableLocales = Collections
+			.unmodifiableList(Arrays.asList(new Locale("en"), new Locale("vi")));
 
 }
