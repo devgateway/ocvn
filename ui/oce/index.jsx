@@ -80,18 +80,6 @@ export default class OCApp extends React.Component{
   }
 
   filters(){
-    return <div className="filters">
-      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
-    </div>
-  }
-
-  setMenuBox(e, slug){
-    let {menuBox} = this.state;
-    e.stopPropagation();
-    this.setState({menuBox: menuBox == slug ? "" : slug})
-  }
-
-  filters(){
     let {menuBox, bidTypes, locale} = this.state;
     return <this.constructor.Filters
         onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
