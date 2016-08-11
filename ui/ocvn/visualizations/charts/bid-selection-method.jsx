@@ -1,4 +1,4 @@
-import ProcurementMethod from "../../oce/visualizations/charts/procurement-method";
+import ProcurementMethod from "../../../oce/visualizations/charts/procurement-method";
 
 class BidSelectionMethod extends ProcurementMethod{}
 

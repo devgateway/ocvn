@@ -1,7 +1,7 @@
 import TenderLocations from "../../../oce/visualizations/map/tender-locations";
 import TenderLocation, {ChartTab, OverviewTab, OverviewChartTab, CostEffectivenessTab}
   from "../../../oce/visualizations/map/tender-locations/location";
-import BidSelectionMethod from "../../visualizations/bid-selection-method";
+import BidSelectionMethod from "../../visualizations/charts/bid-selection-method";
 
 class BidSelectionMethodTab extends ChartTab{
   static getName(__){
