@@ -71,15 +71,15 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 	@RequestMapping(value = "/api/tenderPriceByBidSelectionMethodYear", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> tenderPriceByBidSelectionMethodYear(
-			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+			@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 		project.put("tender.procurementMethodDetails", 1);
 		project.put("tender.value", 1);
 
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true).
+				andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
 				sort(Direction.ASC, "year"));
