@@ -1,23 +1,27 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import com.mongodb.DBObject;
-import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.mongodb.DBObject;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * @author idobre
@@ -46,14 +50,14 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
         final List<DBObject> costEffectivenessTenderAmount =
                 costEffectivenessVisualsController.costEffectivenessTenderAmount(filter);
 
-        final List<String> categories = excelChartHelper.getCategoriesFromDBObject("_id",
+        final List<String> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
                 costEffectivenessAwardAmount, costEffectivenessTenderAmount);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAmount,
-                categories, "_id", "totalTenderAmount");
+                categories, Fields.UNDERSCORE_ID, "totalTenderAmount");
         final List<Number> awardPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessAwardAmount,
-                categories, "_id", "totalAwardAmount");
+                categories, Fields.UNDERSCORE_ID, "totalAwardAmount");
 
         // calculate the difference
         final List<Number> diffPrice = new ArrayList<>();
