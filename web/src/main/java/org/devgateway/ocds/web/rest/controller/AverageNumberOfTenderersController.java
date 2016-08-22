@@ -52,6 +52,11 @@ import io.swagger.annotations.ApiOperation;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class AverageNumberOfTenderersController extends GenericOCDSController {
+	
+	public static final class Keys {
+		public static final String AVERAGE_NO_OF_TENDERERS = "averageNoTenderers";
+		public static final String YEAR = "year";
+	}
 
 	@ApiOperation(value = "Calculate average number of tenderers, by year. The endpoint can be filtered"
 			+ "by year read from tender.tenderPeriod.startDate. "
@@ -69,8 +74,9 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 				match(where("tender.numberOfTenderers").gt(0).and("tender.tenderPeriod.startDate").exists(true)
 						.andOperator(getDefaultFilterCriteria(filter))),
 				new CustomProjectionOperation(project),
-				group("$year").avg("tender.numberOfTenderers").as("averageNoTenderers"),
-				project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF))).andInclude("averageNoTenderers")
+				group("$year").avg("tender.numberOfTenderers").as(Keys.AVERAGE_NO_OF_TENDERERS),
+				project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF))).
+				andInclude(Keys.AVERAGE_NO_OF_TENDERERS)
 						.andExclude(Fields.UNDERSCORE_ID),
 				new CustomSortingOperation(new BasicDBObject("year", 1)), sort(Direction.ASC, "year"),
 				skip(filter.getSkip()), limit(filter.getPageSize()));

@@ -50,6 +50,12 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class NumberOfTendersByItemClassification extends GenericOCDSController {
 
+	public static final class Keys {
+		public static final String TOTAL_TENDERS = "totalTenders";
+		public static final String ITEMS_CLASSIFICATION = "items.classification";
+		public static final String YEAR = "year";
+	}
+	
 	@ApiOperation(value = "This should show the number of tenders per tender.items.classification."
 			+ "The tender date is taken from tender.tenderPeriod.startDate.")
 	@RequestMapping(value = "/api/numberOfTendersByItemClassification", method = { RequestMethod.POST,
@@ -62,13 +68,13 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put("year", year);
-        project.put("tender.items.classification", 1);
+		project.put("tender." + Keys.ITEMS_CLASSIFICATION, 1);
 
 		Aggregation agg = newAggregation(
 				match(where("tender.tenderPeriod.startDate").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				unwind("tender.items"),
-				group("$year", "$tender.items.classification").count().as("totalTenders"),
+				group("$year", "$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS),
 				sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

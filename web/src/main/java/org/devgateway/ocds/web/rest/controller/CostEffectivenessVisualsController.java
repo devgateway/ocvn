@@ -61,13 +61,26 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
+	public static final class Keys {
+		public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
+		public static final String TOTAL_AWARDS = "totalAwards";
+		public static final String TOTAL_AWARDS_WITH_TENDER = "totalAwardsWithTender";
+		public static final String PERCENTAGE_AWARDS_WITH_TENDER = "percentageAwardsWithTender";
+		public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
+		public static final String TOTAL_TENDERS = "totalTenders";
+		public static final String TOTAL_TENDER_WITH_AWARDS = "totalTenderWithAwards";
+		public static final String PERCENTAGE_TENDERS_WITH_AWARDS = "percentageTendersWithAwards";
+		public static final String DIFF_TENDER_AWARD_AMOUNT = "diffTenderAwardAmount";
+	}
+
+	
 	@ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
 			+ "The tender entity, for each award, has to have amount value. The year is calculated from awards.date")
 	@RequestMapping(value = "/api/costEffectivenessAwardAmount", 
 			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
 	public List<DBObject> costEffectivenessAwardAmount(
 			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
-
+	
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$awards.date"));
 		project.put("awards.value.amount", 1);
@@ -80,10 +93,10 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
 		DBObject project1 = new BasicDBObject();
 		project1.put(Fields.UNDERSCORE_ID, 1);
-		project1.put("totalAwardAmount", 1);
-		project1.put("totalAwards", 1);
-		project1.put("totalAwardsWithTender", 1);
-		project1.put("percentageAwardsWithTender", new BasicDBObject("$multiply", Arrays
+		project1.put(Keys.TOTAL_AWARD_AMOUNT, 1);
+		project1.put(Keys.TOTAL_AWARDS, 1);
+		project1.put(Keys.TOTAL_AWARDS_WITH_TENDER, 1);
+		project1.put(Keys.PERCENTAGE_AWARDS_WITH_TENDER, new BasicDBObject("$multiply", Arrays
 				.asList(new BasicDBObject("$divide", Arrays.asList("$totalAwardsWithTender", "$totalAwards")), 100)));
 
 		Aggregation agg = Aggregation.newAggregation(
@@ -92,9 +105,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 				getMatchDefaultFilterOperation(filter), unwind("$awards"),
 				match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true)),
 				new CustomProjectionOperation(project),
-				group("$year").sum("awardsWithTenderValue").as("totalAwardAmount").count().as("totalAwards")
-						.sum("totalAwardsWithTender").as("totalAwardsWithTender"),
-				new CustomProjectionOperation(project1), sort(Direction.DESC, "totalAwardAmount"),
+				group("$year").sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
+						.sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
+				new CustomProjectionOperation(project1), sort(Direction.DESC, Keys.TOTAL_AWARD_AMOUNT),
 				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -134,10 +147,10 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
 		DBObject project2 = new BasicDBObject();
 		project2.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
-		project2.put("totalTenderAmount", 1);
-		project2.put("totalTenders", 1);
-		project2.put("totalTenderWithAwards", 1);
-		project2.put("percentageTendersWithAwards", new BasicDBObject("$multiply", Arrays
+		project2.put(Keys.TOTAL_TENDER_AMOUNT, 1);
+		project2.put(Keys.TOTAL_TENDERS, 1);
+		project2.put(Keys.TOTAL_TENDER_WITH_AWARDS, 1);
+		project2.put(Keys.PERCENTAGE_TENDERS_WITH_AWARDS, new BasicDBObject("$multiply", Arrays
 				.asList(new BasicDBObject("$divide", Arrays.asList("$totalTenderWithAwards", "$totalTenders")), 100)));
 
 		Aggregation agg = Aggregation.newAggregation(
@@ -145,9 +158,10 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 						.exists(true)),
 				getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
 				new CustomGroupingOperation(group1),
-				getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as("totalTenderAmount").count()
-						.as("totalTenders").sum("tenderWithAwards").as("totalTenderWithAwards"),
-				new CustomProjectionOperation(project2), sort(Direction.DESC, "totalTenderAmount"),
+				getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as(Keys.TOTAL_TENDER_AMOUNT)
+						.count()
+						.as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(Keys.TOTAL_TENDER_WITH_AWARDS),
+				new CustomProjectionOperation(project2), sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT),
 				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -186,8 +200,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 		
 		Collection<DBObject> respCollection = response.values();
 		respCollection.forEach(dbobj -> {
-			dbobj.put("diffTenderAwardAmount", BigDecimal.valueOf((double) dbobj.get("totalTenderAmount"))
-					.subtract(BigDecimal.valueOf((double) dbobj.get("totalAwardAmount"))));
+			dbobj.put(Keys.DIFF_TENDER_AWARD_AMOUNT, BigDecimal.valueOf((double) dbobj.get(Keys.TOTAL_TENDER_AMOUNT))
+					.subtract(BigDecimal.valueOf((double) dbobj.get(Keys.TOTAL_AWARD_AMOUNT))));
 		});
 		
 		return new ArrayList<>(respCollection);

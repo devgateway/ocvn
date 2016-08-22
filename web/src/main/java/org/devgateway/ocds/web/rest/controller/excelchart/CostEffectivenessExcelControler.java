@@ -57,7 +57,7 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
         final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAmount,
                 categories, Fields.UNDERSCORE_ID, "totalTenderAmount");
         final List<Number> awardPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessAwardAmount,
-                categories, Fields.UNDERSCORE_ID, "totalAwardAmount");
+                categories,  Fields.UNDERSCORE_ID, "totalAwardAmount");
 
         // calculate the difference
         final List<Number> diffPrice = new ArrayList<>();

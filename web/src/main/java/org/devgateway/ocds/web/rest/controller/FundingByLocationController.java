@@ -54,6 +54,16 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class FundingByLocationController extends GenericOCDSController {
 	
+	public static final class Keys {
+		public static final String ITEMS_DELIVERY_LOCATION = "items.deliveryLocation";
+		public static final String TOTAL_TENDERS_AMOUNT = "totalTendersAmount";
+		public static final String TENDERS_COUNT = "tendersCount";
+		public static final String TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION = "totalTendersWithStartDateAndLocation";
+		public static final String TOTAL_TENDERS_WITH_START_DATE = "totalTendersWithStartDate";
+		public static final String PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION =
+				"percentTendersWithStartDateAndLocation";
+	}
+	
 	@ApiOperation(value = "Total estimated funding (tender.value) grouped by "
 			+ "tender.items.deliveryLocation and also grouped by year."
 			+ " The endpoint also returns the count of tenders for each location. "
@@ -73,9 +83,9 @@ public class FundingByLocationController extends GenericOCDSController {
 						.and("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
 				new CustomProjectionOperation(project), unwind("$tender.items"),
 				unwind("$tender.items.deliveryLocation"), match(where("tender.items.deliveryLocation").exists(true)),
-				group("year", "tender.items.deliveryLocation").sum("$tender.value.amount").as("totalTendersAmount")
-						.count().as("tendersCount"),
-				sort(Direction.DESC, "totalTendersAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+				group("year", "tender." + Keys.ITEMS_DELIVERY_LOCATION).sum("$tender.value.amount")
+						.as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
+				sort(Direction.DESC, Keys.TOTAL_TENDERS_AMOUNT), skip(filter.getSkip()), limit(filter.getPageSize()));
 			
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -101,9 +111,9 @@ public class FundingByLocationController extends GenericOCDSController {
 
 		DBObject project1 = new BasicDBObject();
 		project1.put(Fields.UNDERSCORE_ID, 0);
-		project1.put("totalTendersWithStartDate", 1);
-		project1.put("totalTendersWithStartDateAndLocation", 1);
-		project1.put("percentTendersWithStartDateAndLocation",
+		project1.put(Keys.TOTAL_TENDERS_WITH_START_DATE, 1);
+		project1.put(Keys.TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION, 1);
+		project1.put(Keys.PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION,
 				new BasicDBObject("$multiply",
 						Arrays.asList(new BasicDBObject("$divide",
 								Arrays.asList("$totalTendersWithStartDateAndLocation", "$totalTendersWithStartDate")),
@@ -115,7 +125,7 @@ public class FundingByLocationController extends GenericOCDSController {
 				unwind("$tender.items"), new CustomProjectionOperation(project),
 				group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
 				group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
-						.as("totalTendersWithStartDateAndLocation"),
+						.as(Keys.TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION),
 				new CustomProjectionOperation(project1), skip(filter.getSkip()),
 				limit(filter.getPageSize()));
 

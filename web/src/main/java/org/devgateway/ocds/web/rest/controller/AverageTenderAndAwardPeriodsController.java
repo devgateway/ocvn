@@ -55,6 +55,17 @@ import io.swagger.annotations.ApiOperation;
 public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
 
 	private static final int DAY_MS = 86400000;
+	
+	public static final class Keys {
+		public static final String AVERAGE_TENDER_DAYS = "averageTenderDays";
+		public static final String TOTAL_TENDER_WITH_START_END_DATES = "totalTenderWithStartEndDates";
+		public static final String TOTAL_TENDERS = "totalTenders";
+		public static final String TOTAL_AWARDS = "totalAwards";
+		public static final String AVERAGE_AWARD_DAYS = "averageAwardDays";
+		public static final String TOTAL_AWARD_WITH_START_END_DATES = "totalAwardWithStartEndDates";
+		public static final String PERCENTAGE_AWARD_WITH_START_END_DATES = "percentageAwardWithStartEndDates";
+	}
+	
 
 	@ApiOperation(value = "Calculates the average tender period, per each year. The year is taken from "
 			+ "tender.tenderPeriod.startDate and the duration is taken by counting the days"
@@ -80,8 +91,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 				match(where("tender.tenderPeriod.startDate").exists(true).and("tender.tenderPeriod.endDate")
 						.exists(true).andOperator(getDefaultFilterCriteria(filter))),
 				new CustomProjectionOperation(project),
-				group("$year").avg("$tenderLengthDays").as("averageTenderDays"),
-				sort(Direction.DESC, "averageTenderDays"), skip(filter.getSkip()), limit(filter.getPageSize()));
+				group("$year").avg("$tenderLengthDays").as(Keys.AVERAGE_TENDER_DAYS),
+				sort(Direction.DESC, Keys.AVERAGE_TENDER_DAYS), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
@@ -117,7 +128,8 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
 		Aggregation agg = newAggregation(match(getDefaultFilterCriteria(filter)),
 				new CustomProjectionOperation(project),
-				group().sum("tenderWithStartEndDates").as("totalTenderWithStartEndDates").count().as("totalTenders"),
+				group().sum("tenderWithStartEndDates").as(Keys.TOTAL_TENDER_WITH_START_END_DATES).count().
+				as(Keys.TOTAL_TENDERS),
 				new CustomProjectionOperation(project1));
 		
 
@@ -149,7 +161,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
 		DBObject group = new BasicDBObject();
 		group.put(Fields.UNDERSCORE_ID, "$year");
-		group.put("averageAwardDays", new BasicDBObject("$avg", "$awardLengthDays"));
+		group.put(Keys.AVERAGE_AWARD_DAYS, new BasicDBObject("$avg", "$awardLengthDays"));
 
 		DBObject sort = new BasicDBObject();
 		sort.put("averageAwardDays", -1);
@@ -192,17 +204,17 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
 		DBObject project1 = new BasicDBObject();
 		project1.put(Fields.UNDERSCORE_ID, 0);
-		project1.put("totalAwardWithStartEndDates", 1);
-		project1.put("totalAwards", 1);
-		project1.put("percentageAwardWithStartEndDates",
+		project1.put(Keys.TOTAL_AWARD_WITH_START_END_DATES, 1);
+		project1.put(Keys.TOTAL_AWARDS, 1);
+		project1.put(Keys.PERCENTAGE_AWARD_WITH_START_END_DATES,
 				new BasicDBObject("$multiply", Arrays.asList(
 						new BasicDBObject("$divide", Arrays.asList("$totalAwardWithStartEndDates", "$totalAwards")),
 						100)));
 
 		Aggregation agg = newAggregation(
 				match(where("awards.0").exists(true).andOperator(getDefaultFilterCriteria(filter))), unwind("$awards"),
-				new CustomProjectionOperation(project),
-				group().sum("awardWithStartEndDates").as("totalAwardWithStartEndDates").count().as("totalAwards"),
+				new CustomProjectionOperation(project), group().sum("awardWithStartEndDates")
+						.as(Keys.TOTAL_AWARD_WITH_START_END_DATES).count().as(Keys.TOTAL_AWARDS),
 				new CustomProjectionOperation(project1));
 				
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
