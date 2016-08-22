@@ -68,9 +68,9 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 	@ApiOperation(value = "Returns the tender price by Vietnam type (procurementMethodDetails), by year. "
 			+ "The OCDS type is read from tender.procurementMethodDetails. The tender price is read from "
 			+ "tender.value.amount")
-	@RequestMapping(value = "/api/tenderPriceByBidSelectionMethodYear", method = { RequestMethod.POST,
+	@RequestMapping(value = "/api/tenderPriceByBidSelectionMethod", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tenderPriceByBidSelectionMethodYear(
+	public List<DBObject> tenderPriceByBidSelectionMethod(
 			@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
