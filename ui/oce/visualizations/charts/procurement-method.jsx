@@ -47,7 +47,7 @@ class ProcurementMethod extends FrontendYearFilterableChart{
   }
 }
 
-ProcurementMethod.endpoint = 'tenderPriceByProcurementMethodYear';
+ProcurementMethod.endpoint = 'tenderPriceByProcurementMethod';
 ProcurementMethod.getName = __ => __('Procurement method');
 ProcurementMethod.UPDATABLE_FIELDS = ['data', 'years', 'cats'];
 ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
