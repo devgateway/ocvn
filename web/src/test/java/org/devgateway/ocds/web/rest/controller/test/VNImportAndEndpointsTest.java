@@ -98,7 +98,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 				
 		DBObject root = averageNumberOfTenderers.get(0);
 		int year = (int) root.get("year");
-		Assert.assertEquals(2012, year);
+		Assert.assertEquals(2013, year);
 
 		double averageNoTenderers = (double) root.get("averageNoTenderers");
 		Assert.assertEquals(2, averageNoTenderers, 0);
