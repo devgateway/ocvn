@@ -2,6 +2,7 @@ import PureRenderCompoent from "./pure-render-component";
 import translatable from "./translatable";
 import {max, cacheFn} from "./tools";
 import {List, Set, Map} from "immutable";
+import ReactDOM from "react-dom";
 
 let computeUniformYears = cacheFn((Component, comparisonData, years) =>
     comparisonData.reduce((res, data) =>
@@ -54,20 +55,29 @@ class Comparison extends translatable(PureRenderCompoent){
       rangeProp = {};
     }
 
-    return this.wrap(decoratedFilters.map((comparisonFilters, index) => <div className="col-md-6" key={index}>
-          <Component
-              filters={comparisonFilters}
-              requestNewData={(_, data) => requestNewComparisonData([index], data)}
-              data={uniformData.get(index)}
-              years={years}
-              title={this.getTitle(index)}
-              width={width / 2}
-              translations={translations}
-              styling={styling}
-              {...rangeProp}
-          />
+    return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
+      let ref = `visualization${index}`;
+      return <div className="col-md-6 comparison" key={index} ref={ref}>
+        <Component
+            filters={comparisonFilters}
+            requestNewData={(_, data) => requestNewComparisonData([index], data)}
+            data={uniformData.get(index)}
+            years={years}
+            title={this.getTitle(index)}
+            width={width / 2}
+            translations={translations}
+            styling={styling}
+            {...rangeProp}
+        />
+        <div className="chart-toolbar"
+             onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
+        >
+          <div className="btn btn-default">
+            <img src="assets/icons/camera.svg"/>
+          </div>
+        </div>
       </div>
-    ));
+    }));
   }
 }
 

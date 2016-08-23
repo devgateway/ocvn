@@ -8,7 +8,6 @@ import CostEffectiveness from "../../../visualizations/charts/cost-effectiveness
 import {cacheFn} from "../../../tools"
 import ProcurementMethodChart from '../../../visualizations/charts/procurement-method';
 import ReactDOM from "react-dom";
-import style from "./style.less";
 
 class LocationWrapper extends translatable(Component){
   constructor(props){
@@ -103,7 +102,7 @@ export class ChartTab extends Tab{
             b: 50
           }}
       />
-      <div className="text-center chart-toolbar"
+      <div className="chart-toolbar"
            onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
       >
         <div className="btn btn-default">
