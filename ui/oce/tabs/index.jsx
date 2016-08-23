@@ -5,8 +5,16 @@ import DefaultComparison from "../comparison";
 
 class Tab extends Visualization{
   maybeWrap({dontWrap, getName}, index, rendered){
-    return dontWrap ? rendered : <section key={index}>
-      <h4 className="page-header">{getName(this.__.bind(this))}</h4>
+    let ref = `section${index}`;
+    return dontWrap ? rendered : <section key={index} ref={ref}>
+      <h4 className="page-header">
+        {getName(this.__.bind(this))}
+        <img
+            src="assets/icons/camera.svg"
+            className="camera-icon"
+            onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
+        />
+      </h4>
       {rendered}
     </section>
   }
