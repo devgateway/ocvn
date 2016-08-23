@@ -7,6 +7,8 @@ import OverviewChart from "../../../visualizations/charts/overview";
 import CostEffectiveness from "../../../visualizations/charts/cost-effectiveness";
 import {cacheFn} from "../../../tools"
 import ProcurementMethodChart from '../../../visualizations/charts/procurement-method';
+import ReactDOM from "react-dom";
+import style from "./style.less";
 
 class LocationWrapper extends translatable(Component){
   constructor(props){
@@ -84,7 +86,7 @@ export class ChartTab extends Tab{
 
   render(){
     let {filters, styling, years, translations, data} = this.props;
-    return <div>
+    return <div className="map-chart">
       <this.constructor.Chart
           filters={addTenderDeliveryLocationId(filters, data._id)}
           styling={styling}
@@ -101,6 +103,13 @@ export class ChartTab extends Tab{
             b: 50
           }}
       />
+      <div className="chart-toolbar"
+           onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
+      >
+        <div className="btn btn-default">
+          <img src="assets/icons/camera.svg"/>
+        </div>
+      </div>
     </div>
   }
 }
