@@ -37,32 +37,33 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class TenderPriceByTypeYearController extends GenericOCDSController {
-	
-	public static final class Keys {
-		public static final String YEAR = "year";
-		public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
-		public static final String PROCUREMENT_METHOD = "procurementMethod";
-	}
 
-	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
-			+ "The OCDS type is read from tender.procurementMethod. The tender price is read from "
-			+ "tender.value.amount")
-	@RequestMapping(value = "/api/tenderPriceByProcurementMethodYear", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tenderPriceByProcurementMethodYear(
-			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public static final class Keys {
+        public static final String YEAR = "year";
+        public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
+        public static final String PROCUREMENT_METHOD = "procurementMethod";
+        public static final String PROCUREMENT_METHOD_DETAILS = "procurementMethodDetails";
+    }
+
+    @ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
+            + "The OCDS type is read from tender.procurementMethod. The tender price is read from "
+            + "tender.value.amount")
+    @RequestMapping(value = "/api/tenderPriceByProcurementMethodYear", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> tenderPriceByProcurementMethodYear(
+            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project.put("tender.procurementMethod", 1);
         project.put("tender.value", 1);
 
-		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
-				group(Keys.YEAR, "tender." + Keys.PROCUREMENT_METHOD).sum("$tender.value.amount")
-						.as(Keys.TOTAL_TENDER_AMOUNT),
-				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT), skip(filter.getSkip()), limit(filter.getPageSize()));
+        Aggregation agg = newAggregation(
+                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+                getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
+                group(Keys.YEAR, "tender." + Keys.PROCUREMENT_METHOD).sum("$tender.value.amount")
+                        .as(Keys.TOTAL_TENDER_AMOUNT),
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -70,29 +71,29 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
 	}
 
-	@ApiOperation(value = "Returns the tender price by Vietnam type (procurementMethodDetails), by year. "
-			+ "The OCDS type is read from tender.procurementMethodDetails. The tender price is read from "
-			+ "tender.value.amount")
-	@RequestMapping(value = "/api/tenderPriceByBidSelectionMethodYear", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tenderPriceByBidSelectionMethodYear(
-			@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    @ApiOperation(value = "Returns the tender price by Vietnam type (procurementMethodDetails), by year. "
+            + "The OCDS type is read from tender.procurementMethodDetails. The tender price is read from "
+            + "tender.value.amount")
+    @RequestMapping(value = "/api/tenderPriceByBidSelectionMethodYear", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> tenderPriceByBidSelectionMethodYear(
+            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
-		DBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-		project.put("tender.procurementMethodDetails", 1);
-		project.put("tender.value", 1);
+        DBObject project = new BasicDBObject();
+        project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project.put("tender.procurementMethodDetails", 1);
+        project.put("tender.value", 1);
 
-		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
-				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
-				group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
-				sort(Direction.ASC, "year"));
+        Aggregation agg = newAggregation(
+                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
+                getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
+                group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
+                sort(Direction.ASC, Keys.YEAR));
 
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();
-		return tagCount;
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
 
-	}
+    }
 
 }

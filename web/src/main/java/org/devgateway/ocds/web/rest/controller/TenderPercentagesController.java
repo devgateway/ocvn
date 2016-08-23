@@ -96,7 +96,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                         .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
-                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -113,7 +113,7 @@ public class TenderPercentagesController extends GenericOCDSController {
     		@Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project1.put("tender.numberOfTenderers", 1);
 
         DBObject group = new BasicDBObject();
@@ -136,7 +136,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                         .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
-                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

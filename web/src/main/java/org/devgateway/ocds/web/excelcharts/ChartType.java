@@ -10,17 +10,21 @@ public enum ChartType {
 
     barcol("barcol"),
 
-    area("area"),
+    stackedbar("stackedbar"),
+
+    stackedcol("stackedcol"),
+
+    stackedbarpercentage("stackedbarpercentage"),
+
+    stackedcolpercentage("stackedcolpercentage"),
 
     line("line"),
 
-    pie("pie"),
+    area("area"),
 
     scatter("scatter"),
 
-    stacked("stacked"),
-
-    stackedpercentage("stackedpercentage"),
+    pie("pie"),
 
     bubble("bubble");
 

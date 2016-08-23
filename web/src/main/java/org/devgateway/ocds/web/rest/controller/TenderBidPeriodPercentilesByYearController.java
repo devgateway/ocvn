@@ -22,6 +22,7 @@ import java.util.Arrays;
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
+@Deprecated
 public class TenderBidPeriodPercentilesByYearController extends GenericOCDSController {
 
 	public static final class Keys {

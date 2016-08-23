@@ -64,6 +64,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 		public static final String AVERAGE_AWARD_DAYS = "averageAwardDays";
 		public static final String TOTAL_AWARD_WITH_START_END_DATES = "totalAwardWithStartEndDates";
 		public static final String PERCENTAGE_AWARD_WITH_START_END_DATES = "percentageAwardWithStartEndDates";
+		public static final String YEAR = "year";
 	}
 	
 
@@ -84,7 +85,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
 		DBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
-		project.put("year", year);
+		project.put(Keys.YEAR, year);
 		project.put("tenderLengthDays", tenderLengthDays);
 
 		Aggregation agg = newAggregation(
@@ -92,7 +93,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 						.exists(true).andOperator(getDefaultFilterCriteria(filter))),
 				new CustomProjectionOperation(project),
 				group("$year").avg("$tenderLengthDays").as(Keys.AVERAGE_TENDER_DAYS),
-				sort(Direction.DESC, Keys.AVERAGE_TENDER_DAYS), skip(filter.getSkip()), limit(filter.getPageSize()));
+				sort(Direction.ASC, Fields.UNDERSCORE_ID), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> list = results.getMappedResults();
@@ -153,7 +154,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
 		DBObject project = new BasicDBObject();
 		project.put(Fields.UNDERSCORE_ID, 0);
-		project.put("year", year);
+		project.put(Keys.YEAR, year);
 		project.put("awardLengthDays", awardLengthDays);
 		project.put("awards.date", 1);
 		project.put("awards.status", 1);
@@ -164,7 +165,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 		group.put(Keys.AVERAGE_AWARD_DAYS, new BasicDBObject("$avg", "$awardLengthDays"));
 
 		DBObject sort = new BasicDBObject();
-		sort.put("averageAwardDays", -1);
+		sort.put(Fields.UNDERSCORE_ID, 1);
 
 		Aggregation agg = newAggregation(
 				// this is repeated so we gain speed by filtering items before

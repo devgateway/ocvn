@@ -26,7 +26,7 @@ public class ExcelChartDefault implements ExcelChart {
 
     private final String title;
 
-    private final List<String> categories;
+    private final List<?> categories;
 
     private final List<List<? extends Number>> values;
 
@@ -36,7 +36,7 @@ public class ExcelChartDefault implements ExcelChart {
 
     public ExcelChartDefault(final String title,
                              final ChartType type,
-                             final List<String> categories,
+                             final List<?> categories,
                              final List<List<? extends Number>> values) {
         for (List<? extends Number> value : values) {
             if (categories.size() != value.size()) {
@@ -63,7 +63,7 @@ public class ExcelChartDefault implements ExcelChart {
         final CustomChartDataFactory customChartDataFactory = new CustomChartDataFactoryDefault();
         final CustomChartData chartData = customChartDataFactory.createChartData(type, title);
 
-        final ChartDataSource<String> categoryDataSource = excelChartSheet.getCategoryChartDataSource();
+        final ChartDataSource<?> categoryDataSource = excelChartSheet.getCategoryChartDataSource();
         final List<ChartDataSource<Number>> valuesDataSource = excelChartSheet.getValuesChartDataSource();
         for (int i = 0; i < valuesDataSource.size(); i++) {
             final ChartDataSource<Number> valueDataSource = valuesDataSource.get(i);
@@ -103,7 +103,7 @@ public class ExcelChartDefault implements ExcelChart {
     private void addCategories(final ExcelChartSheet excelChartSheet) {
         final Row row = excelChartSheet.createRow();
         int coll = 0;
-        for (String category : categories) {
+        for (Object category : categories) {
             excelChartSheet.writeCell(category, row, coll);
             excelChartSheet.setColumnWidth(coll, 3500);
             coll++;

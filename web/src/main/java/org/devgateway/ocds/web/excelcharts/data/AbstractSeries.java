@@ -13,13 +13,13 @@ public abstract class AbstractSeries extends AbstractXSSFChartSeries implements 
 
     protected final int order;
 
-    protected final ChartDataSource<String> categories;
+    protected final ChartDataSource<?> categories;
 
     protected final ChartDataSource<? extends Number> values;
 
     public AbstractSeries(final int id,
                           final int order,
-                          final ChartDataSource<String> categories,
+                          final ChartDataSource<?> categories,
                           final ChartDataSource<? extends Number> values) {
         this.id = id;
         this.order = order;

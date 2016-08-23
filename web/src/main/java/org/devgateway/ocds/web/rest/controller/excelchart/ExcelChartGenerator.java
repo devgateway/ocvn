@@ -30,7 +30,7 @@ public class ExcelChartGenerator {
     public byte[] getExcelChart(final ChartType type,
                                 final String title,
                                 final List<String> seriesTitle,
-                                final List<String> categories,
+                                final List<?> categories,
                                 final List<List<? extends Number>> values) throws IOException {
         final ExcelChart excelChart = new ExcelChartDefault(title, type, categories, values);
         excelChart.configureSeriesTitle(seriesTitle);
