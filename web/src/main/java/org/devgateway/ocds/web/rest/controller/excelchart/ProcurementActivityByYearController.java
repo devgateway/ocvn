@@ -49,21 +49,26 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
         final List<DBObject> countAwardsByYear = countPlansTendersAwardsController.countAwardsByYear(filter);
         final List<DBObject> countTendersByYear = countPlansTendersAwardsController.countTendersByYear(filter);
+        final List<DBObject> countBidPlansByYear = countPlansTendersAwardsController.countBidPlansByYear(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
-                countAwardsByYear, countTendersByYear);
+                countAwardsByYear, countTendersByYear, countBidPlansByYear);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(countAwardsByYear, categories,
                 Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(countTendersByYear, categories,
                 Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
+        final List<Number> valueBidPlans = excelChartHelper.getValuesFromDBObject(countBidPlansByYear, categories,
+                Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
         values.add(valueAwards);
         values.add(valueTenders);
+        values.add(valueBidPlans);
 
         final List<String> seriesTitle = Arrays.asList(
                 "Award",
-                "Tender");
+                "Tender",
+                "Bidplan");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
