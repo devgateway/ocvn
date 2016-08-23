@@ -64,6 +64,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 		public static final String TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS = "totalTendersWithOneOrMoreTenderers";
 		public static final String TOTAL_TENDERS_USING_EBID = "totalTendersUsingEbid";
 		public static final String PERCENTAGE_TENDERS_USING_EBID = "percentageTendersUsingEbid";
+        public static final String PERCENTAGE_EGP = "percentEgp";
 	}
 
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."

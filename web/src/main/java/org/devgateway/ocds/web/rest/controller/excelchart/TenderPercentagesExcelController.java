@@ -97,4 +97,36 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
                         seriesTitle,
                         categories, values));
     }
+
+
+    @ApiOperation(value = "Exports *Percent of Tenders Using e-Procurement* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/percentTendersUsingEgpExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
+    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+                                                  final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Percent of Tenders Using e-Procurement";
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> percentTendersUsingEgp = tenderPercentagesController.percentTendersUsingEgp(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+                percentTendersUsingEgp);
+        final List<List<? extends Number>> values = new ArrayList<>();
+
+        final List<Number> percentEgp = excelChartHelper.getValuesFromDBObject(percentTendersUsingEgp, categories,
+                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_EGP);
+        values.add(percentEgp);
+
+        final List<String> seriesTitle = Arrays.asList(
+                "Percent");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.area,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
 }
