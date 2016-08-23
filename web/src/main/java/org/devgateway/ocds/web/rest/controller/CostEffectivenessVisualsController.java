@@ -201,10 +201,14 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 		
 		Collection<DBObject> respCollection = response.values();
 		respCollection.forEach(dbobj -> {
-			dbobj.put(Keys.DIFF_TENDER_AWARD_AMOUNT, BigDecimal.valueOf((double) dbobj.get(Keys.TOTAL_TENDER_AMOUNT))
-					.subtract(BigDecimal.valueOf((double) dbobj.get(Keys.TOTAL_AWARD_AMOUNT))));
+			dbobj.put(Keys.DIFF_TENDER_AWARD_AMOUNT,
+					BigDecimal
+							.valueOf(dbobj.get(Keys.TOTAL_TENDER_AMOUNT) == null ? 0d
+									: ((Number) dbobj.get(Keys.TOTAL_TENDER_AMOUNT)).doubleValue())
+							.subtract(BigDecimal.valueOf(dbobj.get(Keys.TOTAL_AWARD_AMOUNT) == null ? 0d
+									: ((Number) dbobj.get(Keys.TOTAL_AWARD_AMOUNT)).doubleValue())));
 		});
-		
+
 		return new ArrayList<>(respCollection);
 	}
 	
