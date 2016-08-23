@@ -71,7 +71,7 @@ public class TopTenController extends GenericOCDSController {
 	@ApiOperation(value = "Returns the top ten largest active awards."
 			+ " The amount is taken from the award.value field. The returned data will contain"
 			+ "the following fields: "
-			+ "awards.date, awards.suppliers.name, "
+			+ "planning.bidNo,awards.date, awards.suppliers.name, "
 			+ "awards.value.amount, awards.suppliers.name, planning.budget (if any)")
 	@RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
 			RequestMethod.GET },
@@ -109,7 +109,7 @@ public class TopTenController extends GenericOCDSController {
      */
 	@ApiOperation(value = "Returns the top ten largest active tenders."
 			+ " The amount is taken from the tender.value.amount field." + " The returned data will contain"
-			+ "the following fields: " + "tender.date, tender.value.amount, tender.tenderPeriod, "
+			+ "the following fields: " + "planning.bidNo, tender.date, tender.value.amount, tender.tenderPeriod, "
 					+ "tender.procuringEntity.name")
     @RequestMapping(value = "/api/topTenLargestTenders", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
