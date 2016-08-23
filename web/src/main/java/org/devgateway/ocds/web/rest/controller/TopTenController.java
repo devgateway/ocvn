@@ -117,7 +117,8 @@ public class TopTenController extends GenericOCDSController {
 
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("tender.value.amount", 1);
+        project.put("planning.bidNo", 1);
+        project.put("tender.value.amount", 1);    
         project.put("tender.tenderPeriod", 1);
         project.put("tender.procuringEntity.name", 1);
 
