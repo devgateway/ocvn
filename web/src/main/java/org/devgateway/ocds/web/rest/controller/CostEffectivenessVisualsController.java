@@ -107,7 +107,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 				new CustomProjectionOperation(project),
 				group("$year").sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
 						.sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
-				new CustomProjectionOperation(project1), sort(Direction.DESC, Keys.TOTAL_AWARD_AMOUNT),
+				new CustomProjectionOperation(project1),  sort(Direction.ASC, Fields.UNDERSCORE_ID),
 				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -161,7 +161,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 				getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as(Keys.TOTAL_TENDER_AMOUNT)
 						.count()
 						.as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(Keys.TOTAL_TENDER_WITH_AWARDS),
-				new CustomProjectionOperation(project2), sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT),
+				new CustomProjectionOperation(project2), sort(Direction.ASC, Fields.UNDERSCORE_ID),
 				skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

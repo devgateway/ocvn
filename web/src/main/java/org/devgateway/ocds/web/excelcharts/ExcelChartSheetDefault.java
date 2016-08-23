@@ -16,7 +16,6 @@ import org.apache.poi.ss.usermodel.charts.DataSources;
 import org.apache.poi.ss.usermodel.charts.LegendPosition;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -183,7 +182,7 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
      * Returns a ChartDataSource with the categories. Categories should be on the first row of the excel sheet
      */
     @Override
-    public ChartDataSource<String> getCategoryChartDataSource() {
+    public ChartDataSource<?> getCategoryChartDataSource() {
         if (excelSheet.getRow(0) == null) {
             throw new IllegalStateException("It seems that we don't have any category in the excel file");
         }

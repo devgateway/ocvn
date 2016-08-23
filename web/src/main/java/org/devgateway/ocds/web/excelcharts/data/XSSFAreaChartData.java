@@ -27,7 +27,7 @@ public class XSSFAreaChartData extends AbstractXSSFChartData {
     }
 
     @Override
-    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<String> categories,
+    protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
                                                final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override

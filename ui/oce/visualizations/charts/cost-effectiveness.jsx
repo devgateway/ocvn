@@ -3,14 +3,12 @@ import {response2obj, pluckImm} from "../../tools";
 import {Map} from "immutable";
 
 class CostEffectiveness extends FrontendYearFilterableChart{
-  transform([tenderResponse, awardResponse]){
-    let tender = response2obj('totalTenderAmount', tenderResponse);
-    let award = response2obj('totalAwardAmount', awardResponse);
-    return Object.keys(tender).map(year => ({
-      year: year,
-      tender: tender[year],
-      diff: tender[year] - award[year]
-    }))
+  transform(data){
+    return data.map(datum => ({
+      year: datum._id,
+      tender: datum.totalTenderAmount,
+      diff: datum.diffTenderAwardAmount
+    }));
   }
 
   getData(){
@@ -52,7 +50,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
 }
 
 CostEffectiveness.getName = __ => __('Cost effectiveness');
-CostEffectiveness.endpoints = ['costEffectivenessTenderAmount', 'costEffectivenessAwardAmount'];
+CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
 CostEffectiveness.getFillerDatum = year => Map({
   year,
   tender: 0,

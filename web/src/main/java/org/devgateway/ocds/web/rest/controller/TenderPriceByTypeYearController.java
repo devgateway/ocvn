@@ -42,6 +42,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 		public static final String YEAR = "year";
 		public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
 		public static final String PROCUREMENT_METHOD = "procurementMethod";
+        public static final String PROCUREMENT_METHOD_DETAILS = "procurementMethodDetails";
 	}
 
 	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
@@ -62,7 +63,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				group(Keys.YEAR, "tender." + Keys.PROCUREMENT_METHOD).sum("$tender.value.amount")
 						.as(Keys.TOTAL_TENDER_AMOUNT),
-				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT), skip(filter.getSkip()), limit(filter.getPageSize()));
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -87,12 +88,11 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
-				sort(Direction.ASC, "year"));
+				sort(Direction.ASC, Keys.YEAR));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
 		return tagCount;
 
 	}
-
 }
