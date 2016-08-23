@@ -41,8 +41,8 @@ public class TenderPriceExcelControler extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Bid selection* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+    public void bidSelectionExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+                                       final HttpServletResponse response) throws IOException {
         final String chartTitle = "Bid selection";
 
         // fetch the data that will be displayed in the chart

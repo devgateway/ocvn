@@ -15,7 +15,7 @@ public class CustomGroupingOperation extends CustomOperation {
     /**
      * @param operation
      */
-    public CustomGroupingOperation(DBObject operation) {
+    public CustomGroupingOperation(final DBObject operation) {
         super(new BasicDBObject("$group", operation));
     }
 

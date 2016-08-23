@@ -36,7 +36,7 @@ import java.util.List;
 @Component
 @Profile("reports")
 public class MarkupCacheService {
-    protected static Logger logger = LoggerFactory.getLogger(MarkupCacheService.class);
+    protected static final Logger logger = LoggerFactory.getLogger(MarkupCacheService.class);
 
     /**
      * start-key used to identify the reports markup

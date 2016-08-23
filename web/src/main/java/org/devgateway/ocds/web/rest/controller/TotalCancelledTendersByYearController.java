@@ -49,14 +49,14 @@ import io.swagger.annotations.ApiOperation;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class TotalCancelledTendersByYearController extends GenericOCDSController {
-	
-	public static final class Keys {
-		public static final String TOTAL_CANCELLED_TENDERS_AMOUNT = "totalCancelledTendersAmount";
-		public static final String YEAR = "year";
-	}
 
-	@ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
-			+ "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
+    public static final class Keys {
+        public static final String TOTAL_CANCELLED_TENDERS_AMOUNT = "totalCancelledTendersAmount";
+        public static final String YEAR = "year";
+    }
+
+    @ApiOperation(value = "Total Cancelled tenders by year. The tender amount is read from tender.value."
+            + "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate.")
     @RequestMapping(value = "/api/totalCancelledTendersByYear", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> totalCancelledTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
@@ -68,11 +68,11 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
         project.put(Keys.YEAR, year);
         project.put("tender.value.amount", 1);
 
-		Aggregation agg = newAggregation(
-				match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)),
-				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-				group("$year").sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
-				sort(Direction.ASC, Fields.UNDERSCORE_ID));
+        Aggregation agg = newAggregation(
+                match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)),
+                getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
+                group("$year").sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
+                sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();

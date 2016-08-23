@@ -20,12 +20,12 @@ public class GenericExcelChartKeyGenerator implements KeyGenerator {
 
     private final ObjectMapper objectMapper;
 
-    public GenericExcelChartKeyGenerator(ObjectMapper objectMapper) {
+    public GenericExcelChartKeyGenerator(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public Object generate(Object target, Method method, Object... params) {
+    public Object generate(final Object target, final Method method, final Object... params) {
         if (params.length < 1) {
             throw new RuntimeException(
                     "Wrong parameters received for generating custom GenericExcelChartKeyGenerator key!");

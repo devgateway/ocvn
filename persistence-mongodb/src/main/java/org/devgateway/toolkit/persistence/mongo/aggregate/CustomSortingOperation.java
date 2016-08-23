@@ -15,7 +15,7 @@ public class CustomSortingOperation extends CustomOperation {
     /**
      * @param operation
      */
-    public CustomSortingOperation(DBObject operation) {
+    public CustomSortingOperation(final DBObject operation) {
         super(new BasicDBObject("$sort", operation));
     }
 

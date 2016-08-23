@@ -3,11 +3,11 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.TenderPriceByTypeYearController;
+import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +22,12 @@ import java.util.List;
 
 /**
  * @author idobre
- * @since 8/22/16
+ * @since 8/23/16
  *
- * Exports an excel chart based on *Average number of bids* dashboard
+ * Exports an excel chart based on *Cancelled funding* dashboard
  */
 @RestController
-public class AverageNumberOfTenderersExcelController extends GenericOCDSController {
+public class TotalCancelledTendersExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -35,40 +35,36 @@ public class AverageNumberOfTenderersExcelController extends GenericOCDSControll
     private ExcelChartHelper excelChartHelper;
 
     @Autowired
-    private AverageNumberOfTenderersController averageNumberOfTenderersController;
+    private TotalCancelledTendersByYearController totalCancelledTendersByYearController;
 
-    @ApiOperation(value = "Exports *Average number of bids* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/averageNumberBidsExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void averageNumberBidsExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                                            final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Average number of bids";
+    @ApiOperation(value = "Exports *Cancelled funding* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/cancelledFundingExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
+    public void cancelledFundingExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+                                           final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Cancelled funding";
 
         // fetch the data that will be displayed in the chart
-        final List<DBObject> averageNumberOfTenderers =
-                averageNumberOfTenderersController.averageNumberOfTenderers(filter);
+        final List<DBObject> totalCancelledTenders = totalCancelledTendersByYearController
+                .totalCancelledTendersByYear(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-                AverageNumberOfTenderersController.Keys.YEAR, averageNumberOfTenderers);
-
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+                totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
-        final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(averageNumberOfTenderers,
-                categories, AverageNumberOfTenderersController.Keys.YEAR,
-                AverageNumberOfTenderersController.Keys.AVERAGE_NO_OF_TENDERERS);
-        values.add(totalTenderAmount);
+        final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
+                Fields.UNDERSCORE_ID, TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
+        values.add(cancelledAmount);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Average Number");
+                "Amount");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
-                        ChartType.barcol,
+                        ChartType.area,
                         chartTitle,
                         seriesTitle,
                         categories, values));
-
     }
-
 }

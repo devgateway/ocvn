@@ -15,7 +15,7 @@ public class CustomProjectionOperation extends CustomOperation {
     /**
      * @param operation
      */
-    public CustomProjectionOperation(DBObject operation) {
+    public CustomProjectionOperation(final DBObject operation) {
         super(new BasicDBObject("$project", operation));
     }
 
