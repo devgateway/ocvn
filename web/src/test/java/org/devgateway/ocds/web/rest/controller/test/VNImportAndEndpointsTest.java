@@ -87,7 +87,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 		Assert.assertEquals(2012, year);
 
 		double totalAwardAmount = (double) root.get("totalTenderAmount");
-		Assert.assertEquals(1500, totalAwardAmount, 0);
+		Assert.assertEquals(1000, totalAwardAmount, 0);
 
 	}
 	
@@ -124,14 +124,14 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
 		DBObject root = averageTenderPeriod.get(0);
 		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2013, year);
+		Assert.assertEquals(2012, year);
 
 		double n = (double) root.get("averageTenderDays");
 		Assert.assertEquals(15, n, 0);
 		
 		root = averageTenderPeriod.get(1);
 		year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2012, year);
+		Assert.assertEquals(2013, year);
 
 		n = (double) root.get("averageTenderDays");
 		Assert.assertEquals(15, n, 0);
