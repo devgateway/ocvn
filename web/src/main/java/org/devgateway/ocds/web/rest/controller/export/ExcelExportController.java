@@ -49,7 +49,7 @@ public class ExcelExportController extends GenericOCDSController {
     @ApiOperation(value = "Export releases in Excel format.")
     @RequestMapping(value = "/api/ocds/excelExport", method = {RequestMethod.GET, RequestMethod.POST})
     public void excelExport(@ModelAttribute @Valid final YearFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+                            final HttpServletResponse response) throws IOException {
 
         // set the default page size from admin settings
         filter.setPageSize(settingsUtils.getExcelBatchSize());

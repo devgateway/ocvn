@@ -42,8 +42,8 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Cost effectiveness* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/costEffectivenessExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+    public void costEffectivenessExcelChart(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
+                                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "cost effectiveness";
 
         // fetch the data that will be displayed in the chart

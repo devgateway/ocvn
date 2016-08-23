@@ -39,8 +39,8 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
 
     @ApiOperation(value = "Exports *Bid period* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidPeriodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final YearFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+    public void bidPeriodExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                    final HttpServletResponse response) throws IOException {
         final String chartTitle = "Bid period";
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)

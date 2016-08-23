@@ -162,7 +162,8 @@ public abstract class AbstractExcelSheet implements ExcelSheet {
      * @param sheetName
      * @param rowNumber
      */
-    public void writeCellLink(final Object value, final Row row, final int column, String sheetName, int rowNumber) {
+    public void writeCellLink(final Object value, final Row row, final int column,
+                              final String sheetName, final int rowNumber) {
         this.writeCell(value, row, column);
 
         Hyperlink link = createHelper.createHyperlink(Hyperlink.LINK_DOCUMENT);

@@ -46,17 +46,17 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class TopTenController extends GenericOCDSController {
-	
-	public static final class Keys {
-		public static final String AWARDS = "awards";
-		public static final String DATE = "date";
-		public static final String SUPPLIERS = "suppliers";
-		public static final String VALUE = "value";
-		public static final String NAME = "name";
-		public static final String TENDER = "tender";
-		public static final String TENDER_PERIOD = "tenderPeriod";
-		public static final String PROCURING_ENTITY = "procuringEntity";
-	}
+
+    public static final class Keys {
+        public static final String AWARDS = "awards";
+        public static final String DATE = "date";
+        public static final String SUPPLIERS = "suppliers";
+        public static final String VALUE = "value";
+        public static final String NAME = "name";
+        public static final String TENDER = "tender";
+        public static final String TENDER_PERIOD = "tenderPeriod";
+        public static final String PROCURING_ENTITY = "procuringEntity";
+    }
 
     /**
      * db.release.aggregate( [ {$match: {"awards.value.amount": {$exists:
@@ -68,13 +68,13 @@ public class TopTenController extends GenericOCDSController {
      * @return
      */
 
-	@ApiOperation(value = "Returns the top ten largest active awards."
-			+ " The amount is taken from the award.value field. The returned data will contain"
-			+ "the following fields: "
-			+ "planning.bidNo,awards.date, awards.suppliers.name, "
-			+ "awards.value.amount, awards.suppliers.name, planning.budget (if any)")
-	@RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
-			RequestMethod.GET },
+    @ApiOperation(value = "Returns the top ten largest active awards."
+            + " The amount is taken from the award.value field. The returned data will contain"
+            + "the following fields: "
+            + "planning.bidNo,awards.date, awards.suppliers.name, "
+            + "awards.value.amount, awards.suppliers.name, planning.budget (if any)")
+    @RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
+            RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
@@ -107,10 +107,10 @@ public class TopTenController extends GenericOCDSController {
      *
      * @return
      */
-	@ApiOperation(value = "Returns the top ten largest active tenders."
-			+ " The amount is taken from the tender.value.amount field." + " The returned data will contain"
-			+ "the following fields: " + "planning.bidNo, tender.date, tender.value.amount, tender.tenderPeriod, "
-					+ "tender.procuringEntity.name")
+    @ApiOperation(value = "Returns the top ten largest active tenders."
+            + " The amount is taken from the tender.value.amount field." + " The returned data will contain"
+            + "the following fields: " + "planning.bidNo, tender.date, tender.value.amount, tender.tenderPeriod, "
+            + "tender.procuringEntity.name")
     @RequestMapping(value = "/api/topTenLargestTenders", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
@@ -118,7 +118,7 @@ public class TopTenController extends GenericOCDSController {
         BasicDBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
         project.put("planning.bidNo", 1);
-        project.put("tender.value.amount", 1);    
+        project.put("tender.value.amount", 1);
         project.put("tender.tenderPeriod", 1);
         project.put("tender.procuringEntity.name", 1);
 

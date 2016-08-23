@@ -52,7 +52,7 @@ public class ReleasePackageJsonImport implements JsonImportPackage<ReleasePackag
     }
 
     @Override
-    public void logMessage(String message) {
+    public void logMessage(final String message) {
 
     }
 }

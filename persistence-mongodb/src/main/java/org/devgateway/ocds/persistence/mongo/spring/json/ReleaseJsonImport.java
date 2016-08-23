@@ -43,7 +43,7 @@ public class ReleaseJsonImport implements JsonImport<Release> {
     }
 
     @Override
-    public void logMessage(String message) {
+    public void logMessage(final String message) {
 
     }
 }
