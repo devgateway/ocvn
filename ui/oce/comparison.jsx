@@ -2,7 +2,6 @@ import PureRenderCompoent from "./pure-render-component";
 import translatable from "./translatable";
 import {max, cacheFn} from "./tools";
 import {List, Set, Map} from "immutable";
-import ReactDOM from "react-dom";
 
 let computeUniformYears = cacheFn((Component, comparisonData, years) =>
     comparisonData.reduce((res, data) =>
@@ -70,7 +69,7 @@ class Comparison extends translatable(PureRenderCompoent){
             {...rangeProp}
         />
         <div className="chart-toolbar"
-             onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
+             onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
         >
           <div className="btn btn-default">
             <img src="assets/icons/camera.svg"/>
