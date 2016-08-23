@@ -15,7 +15,7 @@ public interface CustomChartData extends ChartData {
      * @param values     data source for values.
      * @return a new chart serie.
      */
-    CustomChartSeries addSeries(final ChartDataSource<String> categories,
+    CustomChartSeries addSeries(final ChartDataSource<?> categories,
                                 final ChartDataSource<? extends Number> values);
 
     /**
@@ -24,6 +24,6 @@ public interface CustomChartData extends ChartData {
      * @return a new chart serie with a title.
      */
     CustomChartSeries addSeries(final String title,
-                                final ChartDataSource<String> categories,
+                                final ChartDataSource<?> categories,
                                 final ChartDataSource<? extends Number> values);
 }
