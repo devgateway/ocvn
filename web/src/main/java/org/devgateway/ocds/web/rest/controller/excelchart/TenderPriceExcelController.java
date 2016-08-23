@@ -29,7 +29,7 @@ import java.util.Map;
  * Exports an excel chart based on *Bid selection method* dashboard
  */
 @RestController
-public class TenderPriceExcelControler extends GenericOCDSController {
+public class TenderPriceExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
