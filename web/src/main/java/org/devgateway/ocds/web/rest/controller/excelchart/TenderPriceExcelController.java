@@ -63,9 +63,10 @@ public class TenderPriceExcelController extends GenericOCDSController {
                         Object tenderValue1 = map.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
                         Object tenderValue2 = mapResponse.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
                         mapResponse.put(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT,
-                                (double) tenderValue1 + (double) tenderValue2);
+                                ((double) tenderValue1 + (double) tenderValue2));
                         DBObject dbObject = new BasicDBObject(mapResponse);
-                        result.put(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT, dbObject);
+                        result.put((String) dbobj.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS),
+                                dbObject);
                     } else {
                         result.put((String) dbobj.get(
                                 TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS
