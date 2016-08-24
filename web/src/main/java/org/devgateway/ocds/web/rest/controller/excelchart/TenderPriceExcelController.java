@@ -43,7 +43,7 @@ public class TenderPriceExcelController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void bidSelectionExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
                                        final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Bid selection";
+        final String chartTitle = "Bid selection method";
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> tenderPriceByBidSelection =
@@ -84,10 +84,14 @@ public class TenderPriceExcelController extends GenericOCDSController {
         final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(respCollection,
                 categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS,
                 TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        // use trillions for amounts
+        for (int i = 0; i < totalTenderAmount.size(); i++) {
+            totalTenderAmount.set(i, totalTenderAmount.get(i).doubleValue() / 1000000000);
+        }
         values.add(totalTenderAmount);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Bid selection method");
+                "Bid selection method (trillions)");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
