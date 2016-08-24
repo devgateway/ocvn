@@ -29,7 +29,7 @@ import java.util.Map;
  * Exports an excel chart based on *Bid selection method* dashboard
  */
 @RestController
-public class TenderPriceExcelControler extends GenericOCDSController {
+public class TenderPriceExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -41,8 +41,8 @@ public class TenderPriceExcelControler extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Bid selection* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+    public void bidSelectionExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+                                       final HttpServletResponse response) throws IOException {
         final String chartTitle = "Bid selection";
 
         // fetch the data that will be displayed in the chart
@@ -63,9 +63,10 @@ public class TenderPriceExcelControler extends GenericOCDSController {
                         Object tenderValue1 = map.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
                         Object tenderValue2 = mapResponse.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
                         mapResponse.put(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT,
-                                (double) tenderValue1 + (double) tenderValue2);
+                                ((double) tenderValue1 + (double) tenderValue2));
                         DBObject dbObject = new BasicDBObject(mapResponse);
-                        result.put(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT, dbObject);
+                        result.put((String) dbobj.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS),
+                                dbObject);
                     } else {
                         result.put((String) dbobj.get(
                                 TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS

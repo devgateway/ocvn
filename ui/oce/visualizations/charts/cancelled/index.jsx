@@ -3,6 +3,7 @@ import Percents from "./percents";
 import translatable from "../../../translatable";
 import {Set} from "immutable";
 import Comparison from "../../../comparison";
+import ReactDOM from "react-dom";
 
 class Cancelled extends translatable(React.Component){
   constructor(props){
@@ -23,6 +24,11 @@ class Cancelled extends translatable(React.Component){
             className="btn btn-default btn-sm"
             onClick={_ => this.setState({percents: !percents})}
             dangerouslySetInnerHTML={{__html: percents ? '&#8363;' : '%'}}
+        />
+        <img
+            src="assets/icons/camera.svg"
+            className="camera-icon"
+            onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
         />
       </h4>
       <Chart {...this.props}/>

@@ -3,9 +3,9 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
+import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,12 +22,12 @@ import java.util.List;
 
 /**
  * @author idobre
- * @since 8/19/16
+ * @since 8/23/16
  *
- * Exports an excel chart based on *Cost effectiveness* dashboard
+ * Exports an excel chart based on *Cancelled funding* dashboard
  */
 @RestController
-public class CostEffectivenessExcelControler extends GenericOCDSController {
+public class TotalCancelledTendersExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -35,41 +35,34 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
     private ExcelChartHelper excelChartHelper;
 
     @Autowired
-    private CostEffectivenessVisualsController costEffectivenessVisualsController;
+    private TotalCancelledTendersByYearController totalCancelledTendersByYearController;
 
-    @ApiOperation(value = "Exports *Cost effectiveness* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/costEffectivenessExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
-        final String chartTitle = "cost effectiveness";
+    @ApiOperation(value = "Exports *Cancelled funding* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/cancelledFundingExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
+    public void cancelledFundingExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+                                           final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Cancelled funding";
 
         // fetch the data that will be displayed in the chart
-        final List<DBObject> costEffectivenessTenderAwardAmount =
-                costEffectivenessVisualsController.costEffectivenessTenderAwardAmount(filter);
+        final List<DBObject> totalCancelledTenders = totalCancelledTendersByYearController
+                .totalCancelledTendersByYear(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
-                costEffectivenessTenderAwardAmount);
-
+                totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
-        final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
-        final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
-        values.add(tenderPrice);
-        values.add(diffPrice);
+        final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
+                Fields.UNDERSCORE_ID, TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
+        values.add(cancelledAmount);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Bid price",
-                "Difference"
-        );
+                "Amount");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
-
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
-                        ChartType.stackedcol,
+                        ChartType.area,
                         chartTitle,
                         seriesTitle,
                         categories, values));

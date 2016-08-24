@@ -82,7 +82,6 @@
         }
     },
     "required": ["id", "ocid", "date", "tag", "initiationType", "planning", "tender", "buyer", "awards", "contracts", "language"],
-    "additionalProperties": false,
     "definitions": {
         "Planning": {
             "title": "Planning",

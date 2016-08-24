@@ -15,7 +15,7 @@ import java.io.InputStream;
 public class ReleaseJsonToObject extends AbstractJsonToObject<Release> {
     private Release release;
 
-    public ReleaseJsonToObject(String jsonObject) {
+    public ReleaseJsonToObject(final String jsonObject) {
         super(jsonObject);
     }
 

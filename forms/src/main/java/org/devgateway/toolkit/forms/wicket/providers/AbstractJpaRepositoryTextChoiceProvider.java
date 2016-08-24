@@ -36,7 +36,7 @@ public abstract class AbstractJpaRepositoryTextChoiceProvider<T extends GenericP
 
 	private static final long serialVersionUID = 5709987900445896586L;
 
-	protected static Logger logger = Logger.getLogger(AbstractJpaRepositoryTextChoiceProvider.class);
+	protected static final Logger logger = Logger.getLogger(AbstractJpaRepositoryTextChoiceProvider.class);
 
 	protected T newObject;
 

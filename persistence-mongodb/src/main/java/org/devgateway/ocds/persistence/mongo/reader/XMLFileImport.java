@@ -42,7 +42,7 @@ public abstract class XMLFileImport implements XMLFile {
      *
      * @param obj
      */
-    public void saveRelease(Object obj) {
+    public void saveRelease(final Object obj) {
         if (obj instanceof Release) {
             Release release = processRelease((Release) obj);
 

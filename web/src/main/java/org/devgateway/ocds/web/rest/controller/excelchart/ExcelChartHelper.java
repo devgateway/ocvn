@@ -29,7 +29,7 @@ public class ExcelChartHelper {
      * @return
      */
     @Cacheable
-    public List<?> getCategoriesFromDBObject(String catKey, final List<DBObject>... lists) {
+    public List<?> getCategoriesFromDBObject(final String catKey, final List<DBObject>... lists) {
         final List<Object> categoriesWithDuplicates = new ArrayList<>();
         for (List<DBObject> list : lists) {
             list.parallelStream()
@@ -52,7 +52,8 @@ public class ExcelChartHelper {
      * If the category doesn't exist then we add the null value (we will have an empty cell in excel file).
      */
     @Cacheable
-    public List<Number> getValuesFromDBObject(List<DBObject> list, List<?> categories, String catKey, String valKey) {
+    public List<Number> getValuesFromDBObject(final List<DBObject> list, final List<?> categories,
+                                              final String catKey, final String valKey) {
         final List<Number> values = new ArrayList<>();
 
         categories.forEach(cat -> {
