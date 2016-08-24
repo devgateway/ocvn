@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TenderPriceByTypeYearController;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,66 +41,37 @@ public class TenderPriceExcelController extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Bid selection* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void bidSelectionExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+    public void bidSelectionExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                        final HttpServletResponse response) throws IOException {
         final String chartTitle = "Bid selection method";
 
-        
         // fetch the data that will be displayed in the chart
-        //no bid selection method in OCE
-//        final List<DBObject> tenderPriceByBidSelection =
-//                tenderPriceByTypeYearController.tenderPriceByBidSelectionMethodYear(filter);
+       final List<DBObject> tenderPriceByBidSelection =
+               tenderPriceByTypeYearController.tenderPriceByBidSelectionMethod(filter);
 
+       final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
+               TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS, tenderPriceByBidSelection);
 
-//        // TODO - change this when we update the endpoint
-//        final LinkedHashMap<String, DBObject> result = new LinkedHashMap<>();
-//        // sum the amounts
-//        tenderPriceByBidSelection.forEach(dbobj -> {
-//                    if (result.containsKey(
-//                            dbobj.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS))) {
-//                        Map<?, ?> map = dbobj.toMap();
-//                        Map<String, Double> mapResponse =
-//                                result.get(dbobj.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS))
-//                                        .toMap();
-		// Object tenderValue1 =
-		// map.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
-		// Object tenderValue2 =
-		// mapResponse.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
-		// mapResponse.put(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT,
-		// ((double) tenderValue1 + (double) tenderValue2));
-		// DBObject dbObject = new BasicDBObject(mapResponse);
-		// result.put((String)
-		// dbobj.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS),
-		// dbObject);
-//                    } else {
-//                        result.put((String) dbobj.get(
-//                                TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS
-//                        ), dbobj);
-//                    }
-//                }
-//        );
-//        List<DBObject> respCollection = new ArrayList(result.values());
+       final List<List<? extends Number>> values = new ArrayList<>();
+       final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(tenderPriceByBidSelection,
+               categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS,
+               TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        // use trillions for amounts
+        for (int i = 0; i < totalTenderAmount.size(); i++) {
+            totalTenderAmount.set(i, totalTenderAmount.get(i).doubleValue() / 1000000000);
+        }
+       values.add(totalTenderAmount);
 
-//        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-//                TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS, respCollection);
-//
-//        final List<List<? extends Number>> values = new ArrayList<>();
-//
-//        final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(respCollection,
-//                categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS,
-//                TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
-//        values.add(totalTenderAmount);
-//
-//        final List<String> seriesTitle = Arrays.asList(
-//                "Bid selection method");
-//
-//        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-//        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
-//        response.getOutputStream().write(
-//                excelChartGenerator.getExcelChart(
-//                        ChartType.barcol,
-//                        chartTitle,
-//                        seriesTitle,
-//                        categories, values));
+       final List<String> seriesTitle = Arrays.asList(
+               "Bid selection method (trillions)");
+
+       response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+       response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+       response.getOutputStream().write(
+               excelChartGenerator.getExcelChart(
+                       ChartType.barcol,
+                       chartTitle,
+                       seriesTitle,
+                       categories, values));
     }
 }
