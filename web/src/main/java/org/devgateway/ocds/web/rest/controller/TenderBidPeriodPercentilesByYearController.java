@@ -22,8 +22,17 @@ import java.util.Arrays;
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
+@Deprecated
 public class TenderBidPeriodPercentilesByYearController extends GenericOCDSController {
 
+	public static final class Keys {
+		public static final String MIN = "min";
+		public static final String Q1 = "q1";
+		public static final String MEDIAN = "median";
+		public static final String Q3 = "q3";
+		public static final String MAX = "max";
+	}
+	
 	@ApiOperation(value = "Returns the tender bid period percentiles: min, q1, median, a3 and max. "
 			+ "The tender length in days is "
 			+ "calculated from tender.tenderPeriod.startDate and tender.tenderPeriod.endDate")

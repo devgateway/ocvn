@@ -348,7 +348,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     /**
      * Functions that check if the header cell is empty, if yes then add the field label
      */
-    private void writeHeaderLabel(Field field, int coll) {
+    private void writeHeaderLabel(final Field field, final int coll) {
         final Row headerRow = excelSheet.getRow(0);
         final Cell headerCell = headerRow.getCell(coll);
 
@@ -360,7 +360,7 @@ public final class OCDSObjectExcelSheet extends AbstractExcelSheet {
     /**
      * Functions that check if the header cell is empty, if yes then add the label
      */
-    private void writeHeaderLabel(String label, int coll) {
+    private void writeHeaderLabel(final String label, final int coll) {
         final Row headerRow = excelSheet.getRow(0);
         final Cell headerCell = headerRow.getCell(coll);
 

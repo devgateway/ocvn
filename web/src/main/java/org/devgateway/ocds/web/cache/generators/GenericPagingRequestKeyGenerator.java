@@ -23,7 +23,7 @@ public class GenericPagingRequestKeyGenerator implements KeyGenerator {
 
     private final ObjectMapper objectMapper;
 
-    public GenericPagingRequestKeyGenerator(ObjectMapper objectMapper) {
+    public GenericPagingRequestKeyGenerator(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -35,7 +35,7 @@ public class GenericPagingRequestKeyGenerator implements KeyGenerator {
      * Object, java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    public Object generate(Object target, Method method, Object... params) {
+    public Object generate(final Object target, final Method method, final Object... params) {
         if (params.length != 1 || !(params[0] instanceof GenericPagingRequest)) {
             throw new RuntimeException(
                     "Wrong parameters received for generating custom GenericPagingRequest key!");

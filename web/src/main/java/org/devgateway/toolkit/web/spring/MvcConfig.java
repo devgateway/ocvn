@@ -54,12 +54,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean(name = "genericPagingRequestKeyGenerator")
-    public KeyGenerator genericPagingRequestKeyGenerator(ObjectMapper objectMapper) {
+    public KeyGenerator genericPagingRequestKeyGenerator(final ObjectMapper objectMapper) {
         return new GenericPagingRequestKeyGenerator(objectMapper);
     }
 
     @Bean(name = "genericExcelChartKeyGenerator")
-    public KeyGenerator genericExcelChartKeyGenerator(ObjectMapper objectMapper) {
+    public KeyGenerator genericExcelChartKeyGenerator(final ObjectMapper objectMapper) {
         return new GenericExcelChartKeyGenerator(objectMapper);
     }
 

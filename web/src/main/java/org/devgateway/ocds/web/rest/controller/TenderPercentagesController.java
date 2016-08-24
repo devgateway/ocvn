@@ -54,6 +54,18 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class TenderPercentagesController extends GenericOCDSController {
 
+	public static final class Keys {
+		public static final String TOTAL_TENDERS = "totalTenders";
+		public static final String TOTAL_CANCELLED = "totalCancelled";
+		public static final String PERCENT_CANCELLED = "percentCancelled";
+		public static final String YEAR = "year";
+		public static final String TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS = "totalTendersWithTwoOrMoreTenderers";
+		public static final String PERCENT_TENDERS = "percentTenders";
+		public static final String TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS = "totalTendersWithOneOrMoreTenderers";
+		public static final String TOTAL_TENDERS_USING_EBID = "totalTendersUsingEbid";
+		public static final String PERCENTAGE_TENDERS_USING_EBID = "percentageTendersUsingEbid";
+	}
+
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
 			+ " The year is taken from tender.tenderPeriod.startDate. The response also contains the"
 			+ " total number of tenders and total number of cancelled tenders for each year.")
@@ -62,21 +74,21 @@ public class TenderPercentagesController extends GenericOCDSController {
     public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project1.put("tender.status", 1);
 
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, "$year");
-        group.put("totalTenders", new BasicDBObject("$sum", 1));
-        group.put("totalCancelled", new BasicDBObject("$sum", new BasicDBObject("$cond",
+        group.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
+        group.put(Keys.TOTAL_CANCELLED, new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$tender.status", "cancelled")), 1, 0))));
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
-        project2.put("year", Fields.UNDERSCORE_ID_REF);
-        project2.put("totalTenders", 1);
-        project2.put("totalCancelled", 1);
-        project2.put("percentCancelled", new BasicDBObject("$multiply",
+        project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
+        project2.put(Keys.TOTAL_TENDERS, 1);
+        project2.put(Keys.TOTAL_CANCELLED, 1);
+        project2.put(Keys.PERCENT_CANCELLED, new BasicDBObject("$multiply",
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalCancelled", "$totalTenders")), 100)));
 
         Aggregation agg = newAggregation(
@@ -84,7 +96,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                         .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
-                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -101,21 +113,21 @@ public class TenderPercentagesController extends GenericOCDSController {
     		@Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project1.put("tender.numberOfTenderers", 1);
 
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, "$year");
-        group.put("totalTenders", new BasicDBObject("$sum", 1));
+        group.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
         group.put("totalTendersWithTwoOrMoreTenderers", new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.numberOfTenderers", 1)), 1, 0))));        
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
-        project2.put("year", Fields.UNDERSCORE_ID_REF);
-        project2.put("totalTenders", 1);
-        project2.put("totalTendersWithTwoOrMoreTenderers", 1);
-		project2.put("percentTenders", new BasicDBObject("$multiply", Arrays.asList(
+        project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
+        project2.put(Keys.TOTAL_TENDERS, 1);
+        project2.put(Keys.TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS, 1);
+		project2.put(Keys.PERCENT_TENDERS, new BasicDBObject("$multiply", Arrays.asList(
 				new BasicDBObject("$divide", Arrays.asList("$totalTendersWithTwoOrMoreTenderers", "$totalTenders")),
 				100)));
 
@@ -124,7 +136,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                         .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
-                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -140,23 +152,23 @@ public class TenderPercentagesController extends GenericOCDSController {
     public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project1.put("tender.numberOfTenderers", 1);
 
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, "$year");
-        group.put("totalTendersWithOneOrMoreTenderers", new BasicDBObject("$sum", new BasicDBObject("$cond",
+        group.put(Keys.TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS, new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.numberOfTenderers", 0)), 1, 0))));        
         
-        group.put("totalTendersWithTwoOrMoreTenderers", new BasicDBObject("$sum", new BasicDBObject("$cond",
+        group.put(Keys.TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS, new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.numberOfTenderers", 1)), 1, 0))));        
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
-        project2.put("year", Fields.UNDERSCORE_ID_REF);
-        project2.put("totalTendersWithOneOrMoreTenderers", 1);
-        project2.put("totalTendersWithTwoOrMoreTenderers", 1);
-		project2.put("percentTenders",
+        project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
+        project2.put(Keys.TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS, 1);
+        project2.put(Keys.TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS, 1);
+		project2.put(Keys.PERCENT_TENDERS,
 				new BasicDBObject("$multiply", Arrays.asList(new BasicDBObject("$divide",
 						Arrays.asList("$totalTendersWithTwoOrMoreTenderers", "$totalTendersWithOneOrMoreTenderers")),
 						100)));
@@ -166,7 +178,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                         .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
-                sort(Direction.ASC, "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -193,20 +205,20 @@ public class TenderPercentagesController extends GenericOCDSController {
 
 		DBObject group1 = new BasicDBObject();
 		group1.put(Fields.UNDERSCORE_ID, Fields.UNDERSCORE_ID_REF);
-		group1.put("year", new BasicDBObject("$first", "$year"));
+		group1.put(Keys.YEAR, new BasicDBObject("$first", "$year"));
 		group1.put("electronicSubmission", new BasicDBObject("$max", "$electronicSubmission"));
 		
 		DBObject group2 = new BasicDBObject();
 		group2.put(Fields.UNDERSCORE_ID, "$year");
-		group2.put("totalTenders", new BasicDBObject("$sum", 1));
-		group2.put("totalTendersUsingEbid", new BasicDBObject("$sum", "$electronicSubmission"));
+		group2.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
+		group2.put(Keys.TOTAL_TENDERS_USING_EBID, new BasicDBObject("$sum", "$electronicSubmission"));
                
 		DBObject project2 = new BasicDBObject();
 		project2.put(Fields.UNDERSCORE_ID, 0);
-		project2.put("year", Fields.UNDERSCORE_ID_REF);
-		project2.put("totalTenders", 1);
-		project2.put("totalTendersUsingEbid", 1);
-		project2.put("percentageTendersUsingEbid", new BasicDBObject("$multiply", Arrays
+		project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
+		project2.put(Keys.TOTAL_TENDERS, 1);
+		project2.put(Keys.TOTAL_TENDERS_USING_EBID, 1);
+		project2.put(Keys.PERCENTAGE_TENDERS_USING_EBID, new BasicDBObject("$multiply", Arrays
 				.asList(new BasicDBObject("$divide", Arrays.asList("$totalTendersUsingEbid", "$totalTenders")), 100)));
 
         Aggregation agg = newAggregation(
@@ -217,7 +229,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group1),
                 new CustomGroupingOperation(group2),
                 new CustomProjectionOperation(project2),
-                sort(Direction.ASC,  "year"), skip(filter.getSkip()), limit(filter.getPageSize())
+                sort(Direction.ASC,  Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

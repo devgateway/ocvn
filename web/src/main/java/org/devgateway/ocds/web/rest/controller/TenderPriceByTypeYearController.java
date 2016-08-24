@@ -39,6 +39,13 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class TenderPriceByTypeYearController extends GenericOCDSController {
 
+    public static final class Keys {
+        public static final String YEAR = "year";
+        public static final String TOTAL_TENDER_AMOUNT = "totalTenderAmount";
+        public static final String PROCUREMENT_METHOD = "procurementMethod";
+        public static final String PROCUREMENT_METHOD_DETAILS = "procurementMethodDetails";
+    }
+
 	@ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
 			+ "The OCDS type is read from tender.procurementMethod. The tender price is read from "
 			+ "tender.value.amount")
@@ -52,12 +59,11 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 		project.put("tender.value", 1);
 
 		Aggregation agg = newAggregation(
-                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true).
-                		andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
-				match(getDefaultFilterCriteria(filter)),
-				new CustomProjectionOperation(project),
-				group("tender.procurementMethod").sum("$tender.value.amount").as("totalTenderAmount"),
-				sort(Direction.DESC, "totalTenderAmount"), skip(filter.getSkip()), limit(filter.getPageSize()));
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
+						.andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
+				match(getDefaultFilterCriteria(filter)), new CustomProjectionOperation(project),
+				group("tender." + Keys.PROCUREMENT_METHOD).sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT), skip(filter.getSkip()), limit(filter.getPageSize()));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();
@@ -74,15 +80,16 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 			@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
-		project.put("tender.procurementMethodDetails", 1);
+		project.put("tender." + Keys.PROCUREMENT_METHOD_DETAILS, 1);
 		project.put("tender.value", 1);
 
 		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true).
-				andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
-				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
-				group("year", "tender.procurementMethodDetails").sum("$tender.value.amount").as("totalTenderAmount"),
-				sort(Direction.ASC, "year"));
+				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
+						.andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
+				getMatchDefaultFilterOperation(filter),
+				new CustomProjectionOperation(project), group("year", "tender." + Keys.PROCUREMENT_METHOD_DETAILS)
+						.sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
 		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 		List<DBObject> tagCount = results.getMappedResults();

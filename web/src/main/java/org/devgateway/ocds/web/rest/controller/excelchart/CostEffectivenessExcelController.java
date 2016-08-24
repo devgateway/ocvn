@@ -7,6 +7,7 @@ import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsControlle
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,9 +23,11 @@ import java.util.List;
 /**
  * @author idobre
  * @since 8/19/16
+ *
+ * Exports an excel chart based on *Cost effectiveness* dashboard
  */
 @RestController
-public class CostEffectivenessExcelControler extends GenericOCDSController {
+public class CostEffectivenessExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -36,30 +39,23 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Cost effectiveness* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/costEffectivenessExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void excelExport(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
-                            HttpServletResponse response) throws IOException {
+    public void costEffectivenessExcelChart(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
+                                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "cost effectiveness";
 
-        // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
-        final List<DBObject> costEffectivenessAwardAmount =
-                costEffectivenessVisualsController.costEffectivenessAwardAmount(filter);
-        final List<DBObject> costEffectivenessTenderAmount =
-                costEffectivenessVisualsController.costEffectivenessTenderAmount(filter);
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> costEffectivenessTenderAwardAmount =
+                costEffectivenessVisualsController.costEffectivenessTenderAwardAmount(filter);
 
-        final List<String> categories = excelChartHelper.getCategoriesFromDBObject("_id",
-                costEffectivenessAwardAmount, costEffectivenessTenderAmount);
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+                costEffectivenessTenderAwardAmount);
+
         final List<List<? extends Number>> values = new ArrayList<>();
 
-        final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAmount,
-                categories, "_id", "totalTenderAmount");
-        final List<Number> awardPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessAwardAmount,
-                categories, "_id", "totalAwardAmount");
-
-        // calculate the difference
-        final List<Number> diffPrice = new ArrayList<>();
-        for (int i = 0; i < tenderPrice.size(); i++) {
-            diffPrice.add((double) tenderPrice.get(i) - (double) awardPrice.get(i));
-        }
+        final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
+                categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
+        final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
+                categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         values.add(tenderPrice);
         values.add(diffPrice);
 
@@ -73,7 +69,7 @@ public class CostEffectivenessExcelControler extends GenericOCDSController {
 
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
-                        ChartType.stacked,
+                        ChartType.stackedcol,
                         chartTitle,
                         seriesTitle,
                         categories, values));

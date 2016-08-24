@@ -49,6 +49,12 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class CountPlansTendersAwardsController extends GenericOCDSController {
+
+    public static final class Keys {
+        public static final String COUNT = "count";
+        public static final String YEAR = "year";
+    }
+
     /**
      * db.release.aggregate( [ {$match : { "tender.tenderPeriod.startDate": {
      * $exists: true } }}, {$project: { year: {$year :
@@ -64,12 +70,12 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
     public List<DBObject> countTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 
         Aggregation agg = Aggregation.newAggregation(match(where("tender.tenderPeriod.startDate").exists(true)),
                 getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-                group("$year").count().as("count"), sort(Direction.DESC, Fields.UNDERSCORE_ID), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+                group("$year").count().as(Keys.COUNT), sort(Direction.ASC, Fields.UNDERSCORE_ID),
+                skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -94,15 +100,15 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         project0.put("awards", 1);
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$awards.date"));
+        project.put(Keys.YEAR, new BasicDBObject("$year", "$awards.date"));
         project.put(Fields.UNDERSCORE_ID, 0);
 
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, "$year");
-        group.put("count", new BasicDBObject("$sum", 1));
+        group.put(Keys.COUNT, new BasicDBObject("$sum", 1));
 
         DBObject sort = new BasicDBObject();
-        sort.put("count", -1);
+        sort.put(Fields.UNDERSCORE_ID, 1);
 
         Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)),
 				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project0)),

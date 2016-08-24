@@ -88,7 +88,9 @@ class ProcurementMethodComparison extends Comparison{
       uniformData = comparisonData;
     }
 
-    return this.wrap(decoratedFilters.map((comparisonFilters, index) => <div className="col-md-6" key={index}>
+    return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
+      let ref = `visualization${index}`;
+      return <div className="col-md-6" key={index}>
           <Component
               filters={comparisonFilters}
               requestNewData={(_, data) => requestNewComparisonData([index], data)}
@@ -99,8 +101,15 @@ class ProcurementMethodComparison extends Comparison{
               styling={styling}
               {...rangeProp}
           />
+        <div className="chart-toolbar"
+             onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
+        >
+          <div className="btn btn-default">
+            <img src="assets/icons/camera.svg"/>
+          </div>
         </div>
-    ));
+        </div>
+    }));
   }
 }
 

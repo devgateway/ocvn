@@ -34,13 +34,13 @@ public abstract class AbstractXSSFChartData implements CustomChartData {
     }
 
     @Override
-    public CustomChartSeries addSeries(final ChartDataSource<String> categoryAxisData,
+    public CustomChartSeries addSeries(final ChartDataSource<?> categoryAxisData,
                                        final ChartDataSource<? extends Number> values) {
         return this.addSeries(null, categoryAxisData, values);
     }
 
     @Override
-    public CustomChartSeries addSeries(final String title, final ChartDataSource<String> categoryAxisData,
+    public CustomChartSeries addSeries(final String title, final ChartDataSource<?> categoryAxisData,
                                        final ChartDataSource<? extends Number> values) {
         if (!values.isNumeric()) {
             throw new IllegalArgumentException("Value data source must be numeric.");
@@ -60,6 +60,6 @@ public abstract class AbstractXSSFChartData implements CustomChartData {
      * Add a new Serie specific to each AbstractXSSFChartData implementation.
      */
     protected abstract CustomChartSeries createNewSerie(final int id, final int order,
-                                                        final ChartDataSource<String> categories,
+                                                        final ChartDataSource<?> categories,
                                                         final ChartDataSource<? extends Number> values);
 }

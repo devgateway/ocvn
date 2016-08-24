@@ -35,13 +35,24 @@ public class CustomChartDataFactoryDefault implements CustomChartDataFactory {
             case barcol:
                 chartData = new XSSFBarChartData(title);
                 break;
-            case stacked:
+            case stackedcol:
                 chartData = new XSSFStackedBarChartData(title);
                 break;
-            case stackedpercentage:
+            case stackedcolpercentage:
+                XSSFStackedBarChartData stackedColChartData = new XSSFStackedBarChartData(title);
+                stackedColChartData.setBarGrouping(STBarGrouping.PERCENT_STACKED);
+                chartData = stackedColChartData;
+                break;
+            case stackedbar:
                 XSSFStackedBarChartData stackedBarChartData = new XSSFStackedBarChartData(title);
-                stackedBarChartData.setBarGrouping(STBarGrouping.PERCENT_STACKED);
-                chartData = new XSSFStackedBarChartData(title);
+                stackedBarChartData.setBarDir(STBarDir.BAR);
+                chartData = stackedBarChartData;
+                break;
+            case stackedbarpercentage:
+                XSSFStackedBarChartData stackedBarPercentageChartData = new XSSFStackedBarChartData(title);
+                stackedBarPercentageChartData.setBarGrouping(STBarGrouping.PERCENT_STACKED);
+                stackedBarPercentageChartData.setBarDir(STBarDir.BAR);
+                chartData = stackedBarPercentageChartData;
                 break;
             case line:
                 chartData = new XSSFLineChartData(title);

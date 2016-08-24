@@ -29,17 +29,22 @@ public class ExcelChartHelper {
      * @return
      */
     @Cacheable
-    public List<String> getCategoriesFromDBObject(String catKey, final List<DBObject>... lists) {
-        final List<String> categoriesWithDuplicates = new ArrayList<>();
+    public List<?> getCategoriesFromDBObject(final String catKey, final List<DBObject>... lists) {
+        final List<Object> categoriesWithDuplicates = new ArrayList<>();
         for (List<DBObject> list : lists) {
-            list.parallelStream().forEach(
-                    item -> categoriesWithDuplicates.add(String.valueOf(item.toMap().get(catKey))));
+            list.parallelStream()
+                    .filter(item -> item.toMap().get(catKey) != null)
+                    .forEach(item -> categoriesWithDuplicates.add(item.toMap().get(catKey)));
         }
 
         // sort and keep only the unique categories
         // keep in mind that we can have different number of categories from each source
         // (example different number of years)
-        return categoriesWithDuplicates.parallelStream().sorted().distinct().collect(Collectors.toList());
+        return categoriesWithDuplicates
+                .parallelStream()
+                .sorted()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     /**
@@ -47,14 +52,15 @@ public class ExcelChartHelper {
      * If the category doesn't exist then we add the null value (we will have an empty cell in excel file).
      */
     @Cacheable
-    public List<Number> getValuesFromDBObject(List<DBObject> list, List<String> categories,
-                                              String catKey, String valKey) {
+    public List<Number> getValuesFromDBObject(final List<DBObject> list, final List<?> categories,
+                                              final String catKey, final String valKey) {
         final List<Number> values = new ArrayList<>();
 
         categories.forEach(cat -> {
             // check if the category 'cat' is present in the list of DBObjects and extract the value
             Optional<DBObject> result = list.parallelStream().filter(
-                    val -> val.toMap().get(catKey).equals(Integer.parseInt(cat))).findFirst();
+                    val -> val.toMap().get(catKey) != null && val.toMap().get(catKey).equals(cat)
+            ).findFirst();
             if (result.isPresent()) {
                 values.add((Number) result.get().toMap().get(valKey));
             } else {
