@@ -85,11 +85,11 @@ A visualization of distribution of funding by type of bid used in tendering proc
 
 #### Endpoint 1 - Tender Price By OCDS Types
 
-`/api/tenderPriceByProcurementMethodYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
+`/api/tenderPriceByProcurementMethod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 #### Endpoint 2 - Tender Price By Vietnam Types
 
-`/api/tenderPriceByBidSelectionMethodYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
+`/api/tenderPriceByBidSelectionMethod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 
 ### Visualization 5 - Counts for Tenders, Awards, Bid Plans Per Year

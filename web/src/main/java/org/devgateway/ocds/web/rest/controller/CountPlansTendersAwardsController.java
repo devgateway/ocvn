@@ -63,10 +63,10 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
      *
      * @return
      */
-    @ApiOperation(value = "Count the tenders and group the results by year. The year is calculated from "
-            + "tender.tenderPeriod.startDate.")
-    @RequestMapping(value = "/api/countTendersByYear",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+	@ApiOperation(value = "Count the tenders and group the results by year. The year is calculated from "
+			+ "tender.tenderPeriod.startDate.")
+	@RequestMapping(value = "/api/countTendersByYear", 
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> countTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
@@ -90,10 +90,10 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
      *
      * @return
      */
-    @ApiOperation(value = "Count the awards and group the results by year. "
-            + "The year is calculated from the awards.date field.")
-    @RequestMapping(value = "/api/countAwardsByYear",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+	@ApiOperation(value = "Count the awards and group the results by year. "
+			+ "The year is calculated from the awards.date field.")
+	@RequestMapping(value = "/api/countAwardsByYear", 
+	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
         DBObject project0 = new BasicDBObject();
@@ -111,9 +111,9 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         sort.put(Fields.UNDERSCORE_ID, 1);
 
         Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)),
-                getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project0)),
-                unwind("$awards"), match(where("awards.date").exists(true)),
-                new CustomOperation(new BasicDBObject("$project", project)),
+				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project0)),
+				unwind("$awards"), match(where("awards.date").exists(true)),
+				new CustomOperation(new BasicDBObject("$project", project)),
                 new CustomOperation(new BasicDBObject("$group", group)),
                 new CustomOperation(new BasicDBObject("$sort", sort)), skip(filter.getSkip()),
                 limit(filter.getPageSize()));
@@ -122,33 +122,33 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         List<DBObject> tagCount = results.getMappedResults();
         return tagCount;
     }
+	
+	/**
+	 * db.release.aggregate( [ {$match : { "planning.bidPlanProjectDateApprove":
+	 * { $exists: true } }}, {$project: { planning:1, year: {$year :
+	 * "$planning.bidPlanProjectDateApprove"} } }, {$group: {_id: "$year",
+	 * count: { $sum:1}}}, {$sort: { _id:1}} ])
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "Count of bid plans, by year. This will count the releases that have the field"
+			+ "planning.bidPlanProjectDateApprove populated. "
+			+ "The year grouping is taken from planning.bidPlanProjectDateApprove")
+	@RequestMapping(value = "/api/countBidPlansByYear", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
-    /**
-     * db.release.aggregate( [ {$match : { "planning.bidPlanProjectDateApprove":
-     * { $exists: true } }}, {$project: { planning:1, year: {$year :
-     * "$planning.bidPlanProjectDateApprove"} } }, {$group: {_id: "$year",
-     * count: { $sum:1}}}, {$sort: { _id:1}} ])
-     *
-     * @return
-     */
-    @ApiOperation(value = "Count of bid plans, by year. This will count the releases that have the field"
-            + "planning.bidPlanProjectDateApprove populated. "
-            + "The year grouping is taken from planning.bidPlanProjectDateApprove")
-    @RequestMapping(value = "/api/countBidPlansByYear", method = { RequestMethod.POST,
-            RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+		DBObject project = new BasicDBObject();
+		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
-        DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
+		Aggregation agg = Aggregation.newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
+				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
+				group("$year").count().as("count"), sort(Direction.DESC, Fields.UNDERSCORE_ID), skip(filter.getSkip()),
+				limit(filter.getPageSize()));
 
-        Aggregation agg = Aggregation.newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
-                getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
-                group("$year").count().as("count"), sort(Direction.DESC, Fields.UNDERSCORE_ID), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> tagCount = results.getMappedResults();
+		return tagCount;
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> tagCount = results.getMappedResults();
-        return tagCount;
-
-    }
+	}
 }

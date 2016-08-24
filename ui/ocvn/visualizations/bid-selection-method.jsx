@@ -2,7 +2,7 @@ import ProcurementMethod from "../../oce/visualizations/charts/procurement-metho
 
 class BidSelectionMethod extends ProcurementMethod{}
 
-BidSelectionMethod.endpoint = 'tenderPriceByBidSelectionMethodYear';
+BidSelectionMethod.endpoint = 'tenderPriceByBidSelectionMethod';
 BidSelectionMethod.getName = __ => __('Bid selection method');
 ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethodDetails';
 

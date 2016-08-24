@@ -1,16 +1,7 @@
 import Visualization from '../../visualization';
+import backendYearFilterable from "../../backend-year-filterable";
 
-class Table extends Visualization{
-  buildUrl(ep){
-    return super.buildUrl(ep).addSearch('year', this.props.years.toArray());
-  }
-
-  componentDidUpdate(prevProps){
-    if(this.props.years != prevProps.years){
-      this.fetch()
-    } else super.componentDidUpdate(prevProps);
-  }
-}
+class Table extends backendYearFilterable(Visualization){}
 
 Table.DATE_FORMAT = {
   year: 'numeric',
