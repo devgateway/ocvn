@@ -53,10 +53,14 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
 
         final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
                 Fields.UNDERSCORE_ID, TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
+        // use trillions for amounts
+        for(int i = 0; i < cancelledAmount.size(); i++) {
+            cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+        }
         values.add(cancelledAmount);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Amount");
+                "Amount (trillions)");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
