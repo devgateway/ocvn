@@ -85,7 +85,7 @@ public class TenderPriceExcelController extends GenericOCDSController {
                 categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS,
                 TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
         // use trillions for amounts
-        for(int i = 0; i < totalTenderAmount.size(); i++) {
+        for (int i = 0; i < totalTenderAmount.size(); i++) {
             totalTenderAmount.set(i, totalTenderAmount.get(i).doubleValue() / 1000000000);
         }
         values.add(totalTenderAmount);

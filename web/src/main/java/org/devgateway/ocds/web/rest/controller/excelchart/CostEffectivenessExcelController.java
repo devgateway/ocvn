@@ -57,7 +57,7 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
         final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
                 categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         // use trillions for amounts
-        for(int i = 0; i < tenderPrice.size(); i++) {
+        for (int i = 0; i < tenderPrice.size(); i++) {
             tenderPrice.set(i, tenderPrice.get(i).doubleValue() / 1000000000);
             diffPrice.set(i, diffPrice.get(i).doubleValue() / 1000000000);
         }
