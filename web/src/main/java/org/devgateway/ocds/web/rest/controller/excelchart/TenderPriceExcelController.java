@@ -43,7 +43,7 @@ public class TenderPriceExcelController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void bidSelectionExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
                                        final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Bid selection";
+        final String chartTitle = "Bid selection method";
 
         
         // fetch the data that will be displayed in the chart
