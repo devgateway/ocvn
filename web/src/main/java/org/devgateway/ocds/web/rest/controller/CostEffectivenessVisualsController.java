@@ -61,7 +61,6 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
-
     public static final class Keys {
         public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
         public static final String TOTAL_AWARDS = "totalAwards";

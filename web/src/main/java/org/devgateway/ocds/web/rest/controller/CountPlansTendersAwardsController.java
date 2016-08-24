@@ -151,6 +151,4 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 		return tagCount;
 
 	}
-	
-	
 }

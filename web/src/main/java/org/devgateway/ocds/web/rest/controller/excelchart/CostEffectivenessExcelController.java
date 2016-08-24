@@ -56,12 +56,17 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
                 categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
                 categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+        // use trillions for amounts
+        for (int i = 0; i < tenderPrice.size(); i++) {
+            tenderPrice.set(i, tenderPrice.get(i).doubleValue() / 1000000000);
+            diffPrice.set(i, diffPrice.get(i).doubleValue() / 1000000000);
+        }
         values.add(tenderPrice);
         values.add(diffPrice);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Bid price",
-                "Difference"
+                "Bid price (trillions)",
+                "Difference (trillions)"
         );
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

@@ -54,6 +54,9 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class TenderPercentagesController extends GenericOCDSController {
 
+	
+
+
 	public static final class Keys {
 		public static final String TOTAL_TENDERS = "totalTenders";
 		public static final String TOTAL_CANCELLED = "totalCancelled";
@@ -64,6 +67,8 @@ public class TenderPercentagesController extends GenericOCDSController {
 		public static final String TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS = "totalTendersWithOneOrMoreTenderers";
 		public static final String TOTAL_TENDERS_USING_EBID = "totalTendersUsingEbid";
 		public static final String PERCENTAGE_TENDERS_USING_EBID = "percentageTendersUsingEbid";
+        public static final String PERCENTAGE_EGP = "percentEgp";
+        public static final String TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN = "totalTendersWithLinkedProcurementPlan";
 	}
 
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
@@ -275,6 +280,48 @@ public class TenderPercentagesController extends GenericOCDSController {
     }
 	
 	
-	
+	@ApiOperation("Percentage of tenders that are associated in releases that "
+			+ "have the planning.budget.amount non empty,"
+			+ "meaning there really is a planning entity correlated with the tender entity."
+			+ "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
+	@RequestMapping(value = "/api/percentTendersWithLinkedProcurementPlan", 
+			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> percentTendersWithLinkedProcurementPlan(@ModelAttribute 
+    		@Valid final DefaultFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        project1.put("tender._id", 1);
+        project1.put("planning.budget.amount", 1);
+
+        DBObject group = new BasicDBObject();
+        group.put(Fields.UNDERSCORE_ID, "$year");
+        group.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
+		group.put(Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, new BasicDBObject("$sum", new BasicDBObject("$cond",
+				Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.amount", null)), 1, 0))));
+
+        DBObject project2 = new BasicDBObject();
+        project2.put(Fields.UNDERSCORE_ID, 0);
+        project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
+        project2.put(Keys.TOTAL_TENDERS, 1);
+        project2.put(Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, 1);
+		project2.put(Keys.PERCENT_TENDERS,
+				new BasicDBObject("$multiply",
+						Arrays.asList(new BasicDBObject("$divide", Arrays.asList(
+								"$" + Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, "$" + Keys.TOTAL_TENDERS)),
+								100)));
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true)
+                        .andOperator(getDefaultFilterCriteria(filter))),
+                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+                new CustomProjectionOperation(project2),
+                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
 
 }
