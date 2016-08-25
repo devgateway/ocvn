@@ -1,6 +1,17 @@
 import Map from "../../../oce/visualizations/map";
 
 class PlannedLocations extends Map{
+  transform(data){
+    return data.filter(location => {
+      if(!location['budget.projectLocation'].geometry){
+        console.warn("Invalid delivery location! Missing geometry!", location);
+        return false;
+      }
+      return true;
+    });
+  }
+
+
   getData(){
     let data = super.getData();
     if(!data) return [];
