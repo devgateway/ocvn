@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,9 @@ public class MongoTemplateConfiguration {
     private MongoTemplate mongoTemplate;
 
     public void createMandatoryImportIndexes() {    	
-        //mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
-        //mongoTemplate.indexOps(Location.class).ensureIndex(new Index().on("description", Direction.ASC));
+		// vietnam specific indexes
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
+		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));		
     	logger.info("Added mandatory Mongo indexes");
     }
 
@@ -53,8 +55,13 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));        
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.numberOfTenderers", Direction.ASC));
+		mongoTemplate.indexOps(Release.class)
+				.ensureIndex(new Index().on("tender.cancellationRationale", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.publicationMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
@@ -72,6 +79,13 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
+
+    	mongoTemplate.indexOps(VNLocation.class)
+    	.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
+    	
+    	//vietnam specific indexes:
+    	  mongoTemplate.indexOps(Release.class)
+    	  .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
 
         logger.info("Added extra Mongo indexes");
 

@@ -11,8 +11,8 @@
     <artifactId>persistence</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer Persistence</name>
-    <description>OCExplorer Persistence</description>
+    <name>OCVN Persistence</name>
+    <description>OCVN Persistence</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,10 +25,21 @@
     </properties>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.5.3-SNAPSHOT</version>
     </parent>
+
+    <repositories>
+        <repository>
+            <id>DG Central</id>
+            <name>DG Central Repo</name>
+            <url>http://artifactory.ampdev.net/artifactory/ccrs/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -103,6 +114,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

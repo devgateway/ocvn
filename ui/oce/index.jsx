@@ -110,7 +110,8 @@ class OCApp extends React.Component{
               onChange={e => this.updateComparisonCriteria(e.target.value)}
           >
             <option value="">{this.__('None')}</option>
-            <option value="bidTypeId">{this.__('Bid Type')}</option>            
+            <option value="bidTypeId">{this.__('Bid Type')}</option>      
+            <option value="bidSelectionMethod">{this.__('Bid Selection Method')}</option>      
             <option value="procuringEntityId">{this.__('Procuring Entity')}</option>
           </select>
         </div>

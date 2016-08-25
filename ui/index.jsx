@@ -1,12 +1,13 @@
 import ReactDOM from "react-dom";
 import OCApp from "./oce";
 import OverviewTab from './oce/tabs/overview';
-import LocationTab from './oce/tabs/location';
-import CompetitivenessTab from './oce/tabs/competitiveness';
+import OCVNLocation from "./ocvn/tabs/location";
+import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
 import EfficiencyTab from './oce/tabs/efficiency';
 import EProcurementTab from './oce/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
+import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
 function getBidTypeDescription(__, {id, description}){
@@ -17,12 +18,12 @@ function getBidTypeDescription(__, {id, description}){
   }
 }
 
-class OCEChild extends OCApp{
+class OCVN extends OCApp{
   constructor(props) {
     super(props);
     this.registerTab(OverviewTab);
-    this.registerTab(LocationTab);
-    this.registerTab(CompetitivenessTab);
+    this.registerTab(OCVNLocation);
+    this.registerTab(OCVNCompetitiveness);
     this.registerTab(EfficiencyTab);
     this.registerTab(EProcurementTab);
   }
@@ -31,7 +32,7 @@ class OCEChild extends OCApp{
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-              map.set(datum.id, getBidTypeDescription(this.__.bind(this), datum)), Map())
+            map.set(datum.id, getBidTypeDescription(this.__.bind(this), datum)), Map())
         })
     );
   }
@@ -82,7 +83,21 @@ class OCEChild extends OCApp{
   }
 }
 
-ReactDOM.render(<OCEChild/>, document.getElementById('dg-container'));
+OCVN.Filters = OCVNFilters;
+
+OCVN.TRANSLATIONS = {
+  us: {},
+  vn: require('./languages/vn_VN.json')
+};
+
+OCVN.STYLING = {
+  charts: {
+    axisLabelColor: "#cc3c3b",
+    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"]
+  }
+};
+
+ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

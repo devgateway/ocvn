@@ -73,7 +73,6 @@ public class Tender {
      * Tender title
      *
      */
-    @ExcelExport
     @JsonProperty("title")
     private String title;
 
@@ -81,7 +80,6 @@ public class Tender {
      * Tender description
      *
      */
-    @ExcelExport
     @JsonProperty("description")
     private String description;
 
@@ -109,7 +107,6 @@ public class Tender {
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     private Set<Item> items = new LinkedHashSet<Item>();
 
-    @ExcelExport
     @JsonProperty("minValue")
     private Amount minValue;
 
@@ -124,7 +121,6 @@ public class Tender {
      * Open, Selective, Limited
      *
      */
-    @ExcelExport
     @JsonProperty("procurementMethod")
     private ProcurementMethod procurementMethod;
 
@@ -132,7 +128,6 @@ public class Tender {
      * Rationale of procurement method, especially in the case of Limited tendering.
      *
      */
-    @ExcelExport
     @JsonProperty("procurementMethodRationale")
     private String procurementMethodRationale;
 
@@ -141,7 +136,6 @@ public class Tender {
      * [award criteria codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#award-criteria)
      *
      */
-    @ExcelExport
     @JsonProperty("awardCriteria")
     private String awardCriteria;
 
@@ -149,7 +143,6 @@ public class Tender {
      * Any detailed or further information on the award or selection criteria.
      *
      */
-    @ExcelExport
     @JsonProperty("awardCriteriaDetails")
     private String awardCriteriaDetails;
 
@@ -160,7 +153,6 @@ public class Tender {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#submission-method)
      *
      */
-    @ExcelExport
     @JsonProperty("submissionMethod")
     private Set<String> submissionMethod = new TreeSet<String>();
 
@@ -170,7 +162,6 @@ public class Tender {
      * and any special requirements to be followed for submissions.
      *
      */
-    @ExcelExport
     @JsonProperty("submissionMethodDetails")
     private String submissionMethodDetails;
 
@@ -245,7 +236,6 @@ public class Tender {
      * for details of potential documents to include.
      *
      */
-    @ExcelExport
     @JsonProperty("documents")
     private List<Document> documents = new ArrayList<Document>();
 

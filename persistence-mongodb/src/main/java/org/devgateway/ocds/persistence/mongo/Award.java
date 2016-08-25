@@ -60,7 +60,6 @@ public class Award {
      * Award title
      *
      */
-    @ExcelExport
     @JsonProperty("title")
     private String title;
 
@@ -68,7 +67,6 @@ public class Award {
      * Award description
      *
      */
-    @ExcelExport
     @JsonProperty("description")
     private String description;
 
@@ -125,7 +123,6 @@ public class Award {
      * <p>
      *
      */
-    @ExcelExport
     @JsonProperty("contractPeriod")
     private Period contractPeriod;
 

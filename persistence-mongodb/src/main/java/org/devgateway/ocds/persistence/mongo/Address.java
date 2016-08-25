@@ -36,7 +36,6 @@ public class Address {
      * The locality. For example, Mountain View.
      *
      */
-    @ExcelExport
     @JsonProperty("locality")
     private String locality;
 
@@ -44,7 +43,6 @@ public class Address {
      * The region. For example, CA.
      *
      */
-    @ExcelExport
     @JsonProperty("region")
     private String region;
 
@@ -52,7 +50,6 @@ public class Address {
      * The postal code. For example, 94043.
      *
      */
-    @ExcelExport
     @JsonProperty("postalCode")
     private String postalCode;
 
@@ -60,7 +57,6 @@ public class Address {
      * The country name. For example, United States.
      *
      */
-    @ExcelExport
     @JsonProperty("countryName")
     private String countryName;
 

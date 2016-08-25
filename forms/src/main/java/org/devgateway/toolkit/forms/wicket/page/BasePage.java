@@ -37,12 +37,13 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.devgateway.ocvn.forms.wicket.page.VietnamImportPage;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
-import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
@@ -242,7 +243,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 		return accountMenu;
 	}
 
-	
+
 	protected NavbarButton<Homepage> newHomeMenu() {
         // home
         NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, this.getPageParameters(),
@@ -264,10 +265,19 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 list.add(new MenuBookmarkablePageLink<ListGroupPage>(ListGroupPage.class, null,
                         new StringResourceModel("navbar.groups", this, null)).setIconType(FontAwesomeIconType.tags));
 
-                list.add(new
-                        MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
-                        new StringResourceModel("navbar.testcomponents", this, null)).
-                        setIconType(FontAwesomeIconType.android));
+                // list.add(new
+                // MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class,
+                // null,
+                // new StringResourceModel("navbar.testcomponents", this, null))
+                // .setIconType(FontAwesomeIconType.android));
+
+                list.add(new MenuBookmarkablePageLink<ListVietnamImportSourceFiles>(ListVietnamImportSourceFiles.class,
+                        null, new StringResourceModel("navbar.importfiles", this, null))
+                        .setIconType(FontAwesomeIconType.file_archive_o));
+
+                list.add(new MenuBookmarkablePageLink<VietnamImportPage>(VietnamImportPage.class, null,
+                        new StringResourceModel("navbar.import", this, null))
+                        .setIconType(FontAwesomeIconType.cloud_upload));
 
                 list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
                         new StringResourceModel("navbar.users", this, null)).setIconType(FontAwesomeIconType.users));

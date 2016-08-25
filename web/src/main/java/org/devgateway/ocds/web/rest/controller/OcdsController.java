@@ -16,6 +16,7 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -41,7 +42,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @RestController
 public class OcdsController extends GenericOCDSController {
 
-    private static final String SERVER_DOMAIN = "http://ocexplorer.dgstg.org";
+    private static final String SERVER_DOMAIN = "http://ocvn.developmentgateway.org";
 
     @Autowired
     private ReleaseRepository releaseRepository;
@@ -54,6 +55,26 @@ public class OcdsController extends GenericOCDSController {
     public Release ocdsByProjectId(@PathVariable final String projectId) {
 
         Release release = releaseRepository.findByBudgetProjectId(projectId);
+        return release;
+    }
+
+    /**
+     * Returns one {@link Release} entity found based on
+     * {@link VNPlanning#getBidNo()}
+     *
+     * @param bidNo
+     *            the bidNo
+     * @return the release
+     */
+	
+	@ApiOperation(value = "Returns a release entity for the given Planning Bid Number."
+			+ "The planning bid number is taken from planning.bidNo")    
+    @RequestMapping(value = "/api/ocds/release/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", 
+    method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    public Release ocdsByPlanningBidNo(@PathVariable final String bidNo) {
+
+        Release release = releaseRepository.findByPlanningBidNo(bidNo);
         return release;
     }
 
@@ -94,6 +115,17 @@ public class OcdsController extends GenericOCDSController {
         return releasePackage;
     }
 
+	@ApiOperation(value = "Returns a release package for the given open contracting id (OCID)."
+			+ "This will contain the OCDS package information (metadata about publisher) plus the release itself.")
+    @RequestMapping(value = "/api/ocds/package/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}", 
+    method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    public ReleasePackage packagedReleaseByPlanningBidNo(@PathVariable final String bidNo) {
+        Release release = ocdsByPlanningBidNo(bidNo);
+
+        return createReleasePackage(release);
+    }
+
 	@ApiOperation(value = "Returns a release package for the given project id. "
 			+ "The project id is read from planning.budget.projectID."
 			+ "This will contain the OCDS package information (metadata about publisher) plus the release itself.") 
@@ -120,7 +152,8 @@ public class OcdsController extends GenericOCDSController {
                 Direction.ASC, "id");
 
         List<Release> find = mongoTemplate
-                .find(query(getDefaultFilterCriteria(releaseRequest)).with(pageRequest), Release.class);
+                .find(query(getYearFilterCriteria("planning.bidPlanProjectDateApprove", releaseRequest)
+                        .andOperator(getDefaultFilterCriteria(releaseRequest))).with(pageRequest), Release.class);
 
         return find;
 

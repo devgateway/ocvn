@@ -15,9 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -86,7 +88,7 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.items.classification._id", filter.getBidTypeId(), filter);
     }
 
-
+    
     /**
      * Appends the tender.items.deliveryLocation._id
      *
@@ -95,66 +97,81 @@ public class GenericOCDSController {
      */
     protected Criteria getByTenderDeliveryLocationIdentifier(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.items.deliveryLocation._id",
-                filter.getTenderLoc(), filter);
+        		filter.getTenderLoc(), filter);
     }
-
-    /**
-     * Creates a search criteria filter based on tender.value.amount and uses
-     * {@link DefaultFilterPagingRequest#getMinTenderValue()} and
-     * {@link DefaultFilterPagingRequest#getMaxTenderValue()} to create
-     * interval search
-     *
-     * @param filter
-     * @return
-     */
-    private Criteria getByTenderAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
-        if (filter.getMaxTenderValue() == null && filter.getMinTenderValue() == null) {
-            return new Criteria();
-        }
-        Criteria criteria = where("tender.value.amount");
-        if (filter.getMinTenderValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
-            criteria = criteria.gte(filter.getMinTenderValue().doubleValue());
-        }
-        if (filter.getMaxTenderValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
-            criteria = criteria.lte(filter.getMaxTenderValue().doubleValue());
-        }
-        return criteria;
-    }
-
-    /**
-     * Creates a search criteria filter based on awards.value.amount and uses
-     * {@link DefaultFilterPagingRequest#getMinAwardValue()} and
-     * {@link DefaultFilterPagingRequest#getMaxAwardValue()} to create
-     * interval search
-     *
-     * @param filter
-     * @return
-     */
-    private Criteria getByAwardAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
-        if (filter.getMaxAwardValue() == null && filter.getMinAwardValue() == null) {
-            return new Criteria();
-        }
-        Criteria criteria = where("awards.value.amount");
-        if (filter.getMinAwardValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
-            criteria = criteria.gte(filter.getMinAwardValue().doubleValue());
-        }
-        if (filter.getMaxAwardValue() != null) {
-            if (filter.getInvert()) {
-                criteria = criteria.not();
-            }
-            criteria = criteria.lte(filter.getMaxAwardValue().doubleValue());
-        }
-        return criteria;
-    }
+    
+	/**
+	 * Creates a search criteria filter based on tender.value.amount and uses
+	 * {@link DefaultFilterPagingRequest#getMinTenderValue()} and
+	 * {@link DefaultFilterPagingRequest#getMaxTenderValue()} to create
+	 * interval search
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	private Criteria getByTenderAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
+		if (filter.getMaxTenderValue() == null && filter.getMinTenderValue() == null) {
+			return new Criteria();
+		}
+		Criteria criteria = where("tender.value.amount");
+		if (filter.getMinTenderValue() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.gte(filter.getMinTenderValue().doubleValue());
+		}
+		if (filter.getMaxTenderValue() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.lte(filter.getMaxTenderValue().doubleValue());
+		}
+		return criteria;
+	}
+	
+	/**
+	 * Creates a search criteria filter based on awards.value.amount and uses
+	 * {@link DefaultFilterPagingRequest#getMinAwardValue()} and
+	 * {@link DefaultFilterPagingRequest#getMaxAwardValue()} to create
+	 * interval search
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	private Criteria getByAwardAmountIntervalCriteria(final DefaultFilterPagingRequest filter) {
+		if (filter.getMaxAwardValue() == null && filter.getMinAwardValue() == null) {
+			return new Criteria();
+		}
+		Criteria criteria = where("awards.value.amount");
+		if (filter.getMinAwardValue() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.gte(filter.getMinAwardValue().doubleValue());
+		}
+		if (filter.getMaxAwardValue() != null) {
+			if (filter.getInvert()) {
+				criteria = criteria.not();
+			}
+			criteria = criteria.lte(filter.getMaxAwardValue().doubleValue());
+		}
+		return criteria;
+	}
+	
+	
+	/**
+	 * Appends the contrMethod filter, based on tender.contrMethod
+	 *
+	 * @param filter
+	 * @return the {@link Criteria} for this filter
+	 */
+	protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
+		return filter.getContrMethod() == null ? new Criteria()
+				: createFilterCriteria("tender.contrMethod._id",
+						filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
+						filter);
+	}
+     
 
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
@@ -176,16 +193,18 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
     }
 
-    @PostConstruct
-    protected void init() {
-        Map<String, Object> tmpMap = new HashMap<>();
-        tmpMap.put("tender.procuringEntity._id", 1);
-        tmpMap.put("tender.items.classification._id", 1);
-        tmpMap.put("tender.items.deliveryLocation._id", 1);
-        tmpMap.put("tender.value.amount", 1);
-        tmpMap.put("awards.value.amount", 1);
-        filterProjectMap = Collections.unmodifiableMap(tmpMap);
-    }
+	@PostConstruct
+	protected void init() {
+		Map<String, Object> tmpMap = new HashMap<>();
+		tmpMap.put("tender.procuringEntity._id", 1);
+		tmpMap.put("tender.items.classification._id", 1);		
+		tmpMap.put("tender.items.deliveryLocation._id", 1);		
+		tmpMap.put("tender.procurementMethodDetails", 1);
+		tmpMap.put("tender.contrMethod", 1);
+		tmpMap.put("tender.value.amount", 1);
+		tmpMap.put("awards.value.amount", 1);
+		filterProjectMap = Collections.unmodifiableMap(tmpMap);
+	}
 
     protected Criteria getYearFilterCriteria(final String dateProperty, final YearFilterPagingRequest filter) {
         Criteria[] yearCriteria = null;
@@ -204,13 +223,24 @@ public class GenericOCDSController {
 
         return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
     }
+    
+	/**
+	 * Appends the bid selection method to the filter, this will filter based on
+	 * tender.procurementMethodDetails. It accepts multiple elements
+	 *
+	 * @param filter
+	 * @return the {@link Criteria} for this filter
+	 */
+	protected Criteria getBidSelectionMethod(final DefaultFilterPagingRequest filter) {
+		return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
+	}
 
-
-    protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
-        return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
-                getByAwardAmountIntervalCriteria(filter));
-    }
+	protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
+		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+				getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
+				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
+				getByAwardAmountIntervalCriteria(filter));
+	}
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
         return match(getDefaultFilterCriteria(filter));
@@ -238,13 +268,15 @@ public class GenericOCDSController {
         return group(groupBy.toArray(new String[0]));
     }
 
-    private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
-        if ("bidTypeId".equals(filter.getGroupByCategory())) {
-            return "tender.items.classification._id".replace(".", "");
-        } else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
-            return "tender.procuringEntity._id".replace(".", "");
-        }
-        return null;
-    }
+	private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
+		if ("bidSelectionMethod".equals(filter.getGroupByCategory())) {
+			return "tender.procurementMethodDetails".replace(".", "");
+		} else if ("bidTypeId".equals(filter.getGroupByCategory())) {
+			return "tender.items.classification._id".replace(".", "");
+		} else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
+			return "tender.procuringEntity._id".replace(".", "");
+		}
+		return null;
+	}
 
 }

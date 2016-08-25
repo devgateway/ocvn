@@ -22,15 +22,20 @@ class LocationTab extends Tab{
     super(props);
     this.state = {
       currentLayer: 0,
-      dropdownOpen: false
+      dropdownOpen: false,
+      switcherPos: {
+        top: 0,
+        left: 0
+      }
     }
   }
 
   maybeGetSwitcher(){
     let {LAYERS} = this.constructor;
+    let {switcherPos} = this.state;
     if(this.constructor.LAYERS.length > 1){
       let {currentLayer, dropdownOpen} = this.state;
-      return <div className="layer-switcher">
+      return <div className="layer-switcher" style={switcherPos}>
         <div className={cn("dropdown", {open: dropdownOpen})} onClick={e => this.setState({dropdownOpen: !dropdownOpen})}>
           <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1">
             {LAYERS[currentLayer].getLayerName(this.__.bind(this))} <span className="caret"></span>
@@ -46,6 +51,17 @@ class LocationTab extends Tab{
         </div>
       </div>
     }
+  }
+
+  componentDidMount(){
+    super.componentDidMount();
+    let zoom = document.querySelector('.leaflet-control-zoom');
+    this.setState({
+      switcherPos: {
+        top: zoom.offsetTop,
+        left: zoom.offsetLeft + zoom.offsetWidth + 10
+      }
+    })
   }
 
   render(){

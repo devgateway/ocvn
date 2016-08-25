@@ -17,13 +17,13 @@
     <artifactId>forms</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer Forms</name>
-    <description>OCExplorer Forms</description>
+    <name>OCVN Forms</name>
+    <description>OCVN Forms</description>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.5.3-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -37,27 +37,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.5.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence-mongodb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.5.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>ui</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.5.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.devgateway.ocds</groupId>
+            <groupId>org.devgateway.ocvn</groupId>
             <artifactId>web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.5.3-SNAPSHOT</version>
         </dependency>
 
         <!--
@@ -68,7 +68,6 @@
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
          -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-integration</artifactId>
@@ -90,6 +89,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
@@ -110,6 +110,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
@@ -127,7 +128,6 @@
             <artifactId>wicket-webjars</artifactId>
             <version>${wicket.webjars.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -306,36 +306,43 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-extensions</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-util</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-request</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>
                 <version>${derby.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-ehcache</artifactId>
                 <version>${hibernate.core.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
                 <version>${hibernate.core.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-envers</artifactId>

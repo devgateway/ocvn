@@ -5,8 +5,8 @@
     <artifactId>ui</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer UI</name>
-    <description>OCExplorer UI Module</description>
+    <name>OCVN UI</name>
+    <description>OCVN UI Module</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,9 +16,9 @@
     </properties>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>0.5.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -61,8 +61,8 @@
                 </excludes>
             </resource>
         </resources>
-        <plugins>
 
+        <plugins>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.6.1</version>
@@ -151,6 +151,7 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
 
     <dependencyManagement>

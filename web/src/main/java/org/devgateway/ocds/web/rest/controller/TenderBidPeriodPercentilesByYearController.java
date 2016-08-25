@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.Arrays;
 
 /**
- * 
+ *
  * @author mpostelnicu
  *
  */
@@ -38,19 +38,22 @@ public class TenderBidPeriodPercentilesByYearController extends GenericOCDSContr
 			+ "calculated from tender.tenderPeriod.startDate and tender.tenderPeriod.endDate")
 	@RequestMapping(value = "/api/tenderBidPeriodPercentiles", 
 			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-	public Object tenderBidPeriodPercentiles(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public Object tenderBidPeriodPercentiles(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-		ScriptOperations scriptOps = mongoTemplate.scriptOps();
+        ScriptOperations scriptOps = mongoTemplate.scriptOps();
 
 		Object object = scriptOps.call("tenderBidPeriodPercentiles",
 				filter.getYear() == null ? null : Arrays.toString(filter.getYear().toArray()),
 				filter.getProcuringEntityId() == null ? null
 						: Arrays.toString(filter.getProcuringEntityId().toArray()).replace("[", "").replace("]", ""),
 				filter.getBidTypeId() == null ? null
-						: Arrays.toString(filter.getBidTypeId().toArray()).replace("[", "").replace("]", "")
+						: Arrays.toString(filter.getBidTypeId().toArray()).replace("[", "").replace("]", ""),
+				filter.getBidSelectionMethod() == null ? null
+						: Arrays.toString(filter.getBidSelectionMethod().toArray()).replace("[", "").replace("]", "")
+
 		);
 
-		return object;
-	}
+        return object;
+    }
 
 }

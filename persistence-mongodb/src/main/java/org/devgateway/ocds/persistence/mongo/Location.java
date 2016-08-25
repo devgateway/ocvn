@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.geo.GeoJson;
 
@@ -31,6 +32,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
      * This description may be used in a user-interface.
      *
      */
+    @ExcelExport
     @JsonProperty("description")
     private String description;
 

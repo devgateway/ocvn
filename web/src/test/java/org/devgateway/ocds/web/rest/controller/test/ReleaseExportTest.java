@@ -1,4 +1,4 @@
-package org.devgateway.ocds.web.rest.controller;
+package org.devgateway.ocds.web.rest.controller.test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
