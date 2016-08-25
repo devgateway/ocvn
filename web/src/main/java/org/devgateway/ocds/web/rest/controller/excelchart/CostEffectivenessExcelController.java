@@ -41,7 +41,7 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/costEffectivenessExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void costEffectivenessExcelChart(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
                                             final HttpServletResponse response) throws IOException {
-        final String chartTitle = "cost effectiveness";
+        final String chartTitle = "Cost effectiveness";
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> costEffectivenessTenderAwardAmount =

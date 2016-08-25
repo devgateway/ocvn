@@ -44,7 +44,7 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/procurementActivityExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void procurementActivityExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                               final HttpServletResponse response) throws IOException {
-        final String chartTitle = "procurement activity by year";
+        final String chartTitle = "Procurement activity by year";
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
         final List<DBObject> countAwardsByYear = countPlansTendersAwardsController.countAwardsByYear(filter);
