@@ -168,6 +168,7 @@ public class FundingByLocationController extends GenericOCDSController {
                 match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
                         .andOperator(getProcuringEntityIdCriteria(filter))),
                 new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
+                match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
                 group("year", "planning.budget.projectLocation").sum("$dividedTotal").as("totalPlannedAmount")
                         .sum("$cntprj").as("recordsCount"),
                 sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
