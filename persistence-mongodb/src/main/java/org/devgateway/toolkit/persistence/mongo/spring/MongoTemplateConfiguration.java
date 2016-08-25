@@ -23,17 +23,18 @@ import org.springframework.data.mongodb.core.script.NamedMongoScript;
 
 @Configuration
 public class MongoTemplateConfiguration {
+
     private final Logger logger = LoggerFactory.getLogger(MongoTemplateConfiguration.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-	public void createMandatoryImportIndexes() {
+    public void createMandatoryImportIndexes() {    	
 		// vietnam specific indexes
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
 		mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));		
     	logger.info("Added mandatory Mongo indexes");
-	}
+    }
 
     @PostConstruct
     public void mongoPostInit() {
@@ -53,7 +54,7 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.status", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.date", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("awards.value.amount", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.value.amount", Direction.ASC));        
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.numberOfTenderers", Direction.ASC));
@@ -67,7 +68,10 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
-        		on("tender.items.deliveryLocation._id", Direction.ASC));
+                on("tender.items.deliveryLocation._id", Direction.ASC));
+        
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
 
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class)
@@ -75,7 +79,7 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
-        
+
     	mongoTemplate.indexOps(VNLocation.class)
     	.ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
     	
@@ -108,4 +112,5 @@ public class MongoTemplateConfiguration {
         }
 
     }
+
 }
