@@ -12,15 +12,32 @@ class CancelledFunding extends FrontendYearFilterableChart{
   getData(){
     let data = super.getData();
     if(!data) return [];
-    return [{
-      x: data.map(pluckImm('year')).toArray(),
-      y: data.map(pluckImm('count')).toArray(),
+    let {traceColors, hoverFormatter} = this.props.styling.charts;
+    let trace = {
+      x: [],
+      y: [],
       type: 'scatter',
       fill: 'tonexty',
       marker: {
-        color: this.props.styling.charts.traceColors[0]
+        color: traceColors[0]
       }
-    }];
+    };
+
+    if(hoverFormatter){
+      trace.text = [];
+      trace.hoverinfo = "text";
+    }
+
+    for(let datum of data){
+      let year = datum.get('year');
+      let count = datum.get('count');
+      trace.x.push(year);
+      trace.y.push(count);
+      if(hoverFormatter) trace.text.push(hoverFormatter(count));
+    }
+
+
+    return [trace];
   }
 
   getLayout(){

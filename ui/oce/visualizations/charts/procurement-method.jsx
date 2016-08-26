@@ -8,15 +8,30 @@ class ProcurementMethod extends backendYearFilterable(Chart){
   getData(){
     let data = super.getData();
     if(!data) return [];
-
-    return [{
-      x: data.map(imm => imm.get(this.constructor.PROCUREMENT_METHOD_FIELD) || this.__('Unspecified')).toArray(),
-      y: data.map(pluckImm('totalTenderAmount')).toArray(),
+    let {traceColors, hoverFormatter} = this.props.styling.charts;
+    let trace = {
+      x: [],
+      y: [],
       type: 'bar',
       marker: {
-        color: this.props.styling.charts.traceColors[0]
+        color: traceColors[0]
       }
-    }];
+    };
+
+    if(hoverFormatter){
+      trace.text = [];
+      trace.hoverinfo = "text";
+    }
+
+    for(let datum of data){
+      let cat = datum.get(this.constructor.PROCUREMENT_METHOD_FIELD) || this.__('Unspecified');
+      let totalTenderAmount = datum.get('totalTenderAmount');
+      trace.x.push(cat);
+      trace.y.push(totalTenderAmount);
+      if(hoverFormatter) trace.text.push(hoverFormatter(totalTenderAmount));
+    }
+
+    return [trace];
   }
 
   getLayout(){
