@@ -4,7 +4,7 @@ import OverviewTab from './oce/tabs/overview';
 import OCVNLocation from "./ocvn/tabs/location";
 import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
 import OCVNEfficiency from './ocvn/tabs/efficiency';
-import EProcurementTab from './oce/tabs/e-procurement';
+import OCVNEProcurement from './ocvn/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
 import OCVNFilters from "./ocvn/filters";
@@ -25,7 +25,7 @@ class OCVN extends OCApp{
     this.registerTab(OCVNLocation);
     this.registerTab(OCVNCompetitiveness);
     this.registerTab(OCVNEfficiency);
-    this.registerTab(EProcurementTab);
+    this.registerTab(OCVNEProcurement);
   }
 
   fetchBidTypes(){
@@ -99,10 +99,11 @@ OCVN.STYLING = {
     axisLabelColor: "#cc3c3b",
     traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
     hoverFormatter: number => {
+      if(typeof number == "undefined") return number;
       if(number >= BILLION) return (number/BILLION).toFixed(2) + "B";
       if(number >= MILLION) return (number/MILLION).toFixed(2) + "M";
       if(number >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
-      else return number.toFixed(2);
+      return number.toFixed(2);
     }
   }
 };
