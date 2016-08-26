@@ -2,16 +2,6 @@ import Map from "../index.jsx";
 import Location from './location';
 
 class TenderLocations extends Map{
-  transform(data){
-    return data.filter(location => {
-      if(!location['items.deliveryLocation'].geometry){
-        console.warn("Invalid delivery location! Missing geometry!", location);
-        return false;
-      }
-      return true;
-    });
-  }
-
   getData(){
     let data = super.getData();
     if(!data) return [];
