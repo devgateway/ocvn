@@ -13,6 +13,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
@@ -25,6 +26,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.devgateway.ocds.persistence.mongo.Tender;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -57,6 +59,8 @@ public class TenderPercentagesController extends GenericOCDSController {
 	
 
 
+	
+
 	public static final class Keys {
 		public static final String TOTAL_TENDERS = "totalTenders";
 		public static final String TOTAL_CANCELLED = "totalCancelled";
@@ -69,6 +73,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 		public static final String PERCENTAGE_TENDERS_USING_EBID = "percentageTendersUsingEbid";
         public static final String PERCENTAGE_EGP = "percentEgp";
         public static final String TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN = "totalTendersWithLinkedProcurementPlan";
+        public static final String AVG_TIME_FROM_PLAN_TO_TENDER_PHASE = "avgTimeFromPlanToTenderPhase";
 	}
 
 	@ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
@@ -324,47 +329,34 @@ public class TenderPercentagesController extends GenericOCDSController {
         return list;
     }
 	
-	
-	@ApiOperation("")
-	@RequestMapping(value = "/api/avgTimeFromPlanToTenderPhase", 
-			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> avgTimeFromPlanToTenderPhase(@ModelAttribute 
-    		@Valid final DefaultFilterPagingRequest filter) {
+	@ApiOperation("For all tenders that have both tender.tenderPeriod.startDate and planning.bidPlanProjectDateApprove"
+			+ "calculates the number o days from planning.bidPlanProjectDateApprove to tender.tenderPeriod.startDate"
+			+ "and creates the average. Groups results by tender year, calculatedfrom tender.tenderPeriod.startDate")
+	@RequestMapping(value = "/api/avgTimeFromPlanToTenderPhase", method = { RequestMethod.POST,
+			RequestMethod.GET }, produces = "application/json")
+	public List<DBObject> avgTimeFromPlanToTenderPhase(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
 
-        DBObject project1 = new BasicDBObject();
-        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        project1.put("tender._id", 1);
-        project1.put("planning.budget.amount", 1);
+		DBObject timeFromPlanToTenderPhase = new BasicDBObject("$divide",
+				Arrays.asList(
+						new BasicDBObject("$subtract",
+								Arrays.asList("$tender.tenderPeriod.startDate", "$planning.bidPlanProjectDateApprove")),
+						MongoConstants.DAY_MS));
 
-        DBObject group = new BasicDBObject();
-        group.put(Fields.UNDERSCORE_ID, "$year");
-        group.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
-		group.put(Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, new BasicDBObject("$sum", new BasicDBObject("$cond",
-				Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.amount", null)), 1, 0))));
+		DBObject project1 = new BasicDBObject();
+		project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+		project1.put("timeFromPlanToTenderPhase", timeFromPlanToTenderPhase);
 
-        DBObject project2 = new BasicDBObject();
-        project2.put(Fields.UNDERSCORE_ID, 0);
-        project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
-        project2.put(Keys.TOTAL_TENDERS, 1);
-        project2.put(Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, 1);
-		project2.put(Keys.PERCENT_TENDERS,
-				new BasicDBObject("$multiply",
-						Arrays.asList(new BasicDBObject("$divide", Arrays.asList(
-								"$" + Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, "$" + Keys.TOTAL_TENDERS)),
-								100)));
+		Aggregation agg = newAggregation(
+				match(where("tender.tenderPeriod.startDate").exists(true).and("planning.budget.amount").exists(true)
+						.and("planning.bidPlanProjectDateApprove").exists(true)
+						.andOperator(getDefaultFilterCriteria(filter))),
+				new CustomProjectionOperation(project1),
+				group("year").avg("timeFromPlanToTenderPhase").as(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
+				sort(Direction.ASC, Fields.UNDERSCORE_ID), skip(filter.getSkip()), limit(filter.getPageSize()));
 
-        Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true).
-                		and("planning.budget.amount").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
-                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
-                new CustomProjectionOperation(project2),
-                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize())
-        );
-
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-        List<DBObject> list = results.getMappedResults();
-        return list;
-    }
+		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+		List<DBObject> list = results.getMappedResults();
+		return list;
+	}
 
 }
