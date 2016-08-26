@@ -4,7 +4,7 @@ import OverviewTab from './oce/tabs/overview';
 import OCVNLocation from "./ocvn/tabs/location";
 import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
 import OCVNEfficiency from './ocvn/tabs/efficiency';
-import EProcurementTab from './oce/tabs/e-procurement';
+import OCVNEProcurement from './ocvn/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
 import OCVNFilters from "./ocvn/filters";
@@ -25,7 +25,7 @@ class OCVN extends OCApp{
     this.registerTab(OCVNLocation);
     this.registerTab(OCVNCompetitiveness);
     this.registerTab(OCVNEfficiency);
-    this.registerTab(EProcurementTab);
+    this.registerTab(OCVNEProcurement);
   }
 
   fetchBidTypes(){
