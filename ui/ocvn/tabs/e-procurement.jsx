@@ -1,10 +1,9 @@
 import EProcurement from "../../oce/tabs/e-procurement";
-import PercentEProcurement from "../../oce/visualizations/charts/percent-e-procurement";
-import PercentEBid from "../../oce/visualizations/charts/percent-e-bid";
+import PercentWithTenders from "../visualizations/percent-with-tenders";
 
 class OCVNProcurement extends EProcurement{}
 
 OCVNProcurement.icon = "eprocurement";
-OCVNProcurement.visualizations = [PercentEProcurement, PercentEBid];
+OCVNProcurement.visualizations = EProcurement.visualizations.concat(PercentWithTenders);
 
 export default OCVNProcurement;
