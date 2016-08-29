@@ -1,5 +1,4 @@
 import FrontendYearFilterableChart from "./frontend-filterable";
-import {response2obj, pluckImm} from "../../tools";
 import {Map} from "immutable";
 
 class CostEffectiveness extends FrontendYearFilterableChart{
@@ -11,28 +10,48 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     }));
   }
 
+  mkTrace(name, colorIndex){
+    let {traceColors, hoverFormatter} = this.props.styling.charts;
+    let trace = {
+      x: [],
+      y: [],
+      text: [],
+      name,
+      type: 'bar',
+      marker: {
+        color: traceColors[colorIndex]
+      }
+    };
+
+    if(hoverFormatter) trace.hoverinfo = "text+name";
+
+    return trace;
+  }
+
   getData(){
     let data = super.getData();
     if(!data) return [];
-    var years = data.map(pluckImm('year')).toArray();
+    let traces = [
+        this.mkTrace(this.__('Bid price'), 0),
+        this.mkTrace(this.__('Difference'), 1)
+    ];
 
-    return [{
-      x: years,
-      y: data.map(pluckImm('tender')).toArray(),
-      name: this.__('Bid price'),
-      type: 'bar',
-      marker: {
-        color: this.props.styling.charts.traceColors[0]
+    let {hoverFormatter} = this.props.styling.charts;
+
+    for(let datum of data){
+      let year = datum.get('year');
+      traces.forEach(trace => trace.x.push(year));
+      let tender = datum.get('tender');
+      let diff = datum.get('diff');
+      traces[0].y.push(tender);
+      traces[1].y.push(diff);
+      if(hoverFormatter){
+        traces[0].text.push(hoverFormatter(tender));
+        traces[1].text.push(hoverFormatter(diff));
       }
-    }, {
-      x: years,
-      y: data.map(pluckImm('diff')).toArray(),
-      name: this.__('Difference'),
-      type: 'bar',
-      marker: {
-        color: this.props.styling.charts.traceColors[1]
-      }
-    }];
+    }
+
+    return traces;
   }
 
   getLayout(){
