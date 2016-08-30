@@ -1,10 +1,13 @@
 import Chart from "./index";
-import {pluckImm} from "../../tools";
 import {Map, OrderedMap, Set} from "immutable";
 import Comparison from "../../comparison";
 import backendYearFilterable from "../../backend-year-filterable";
 
-class ProcurementMethod extends backendYearFilterable(Chart){
+class BidsByItem extends backendYearFilterable(Chart){
+  static getName(__){
+    return __('Number of bids by item');
+  }
+
   getData(){
     let data = super.getData();
     if(!data) return [];
@@ -24,11 +27,11 @@ class ProcurementMethod extends backendYearFilterable(Chart){
     }
 
     for(let datum of data){
-      let cat = datum.get(this.constructor.PROCUREMENT_METHOD_FIELD) || this.__('Unspecified');
-      let totalTenderAmount = datum.get('totalTenderAmount');
-      trace.x.push(cat);
-      trace.y.push(totalTenderAmount);
-      if(hoverFormatter) trace.text.push(hoverFormatter(totalTenderAmount));
+      let name = datum.get('description');
+      let totalTenders = datum.get('totalTenders');
+      trace.x.push(name);
+      trace.y.push(totalTenders);
+      if(hoverFormatter) trace.text.push(hoverFormatter(totalTenders));
     }
 
     return [trace];
@@ -37,22 +40,20 @@ class ProcurementMethod extends backendYearFilterable(Chart){
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Method"),
+        title: this.__("Item"),
         type: "category"
       },
       yaxis: {
-        title: this.__("Amount (in VND)")
+        title: this.__("Count")
       }
     }
   }
 }
 
-ProcurementMethod.endpoint = 'tenderPriceByProcurementMethod';
-ProcurementMethod.getName = __ => __('Procurement method');
-ProcurementMethod.UPDATABLE_FIELDS = ['data'];
-ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
+BidsByItem.endpoint = 'numberOfTendersByItemClassification';
+BidsByItem.UPDATABLE_FIELDS = ['data'];
 
-class ProcurementMethodComparison extends Comparison{
+class BidsByItemComparison extends Comparison{
   render(){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations,
         styling} = this.props;
@@ -62,34 +63,34 @@ class ProcurementMethodComparison extends Comparison{
     let rangeProp, uniformData;
 
     if(comparisonData.count() == comparisonCriteriaValues.length + 1){
-      let byCats = comparisonData.map(
+      let byItems = comparisonData.map(
           data => data.reduce(
-              (cats, datum) => cats.set(datum.get(Component.PROCUREMENT_METHOD_FIELD), datum),
+              (items, datum) => items.set(datum.get('description'), datum),
               Map()
           )
       );
 
-      let cats = comparisonData.reduce(
-          (cats, data) => data.reduce(
-              (cats, datum) => {
-                let cat = datum.get(Component.PROCUREMENT_METHOD_FIELD);
-                return cats.set(cat, Map({
-                  [Component.PROCUREMENT_METHOD_FIELD]: cat,
-                  totalTenderAmount: 0
+      let items = comparisonData.reduce(
+          (items, data) => data.reduce(
+              (items, datum) => {
+                let item = datum.get('description');
+                return items.set(item, Map({
+                  description: item,
+                  totalTenders: 0
                 }))
               },
-              cats
+              items
           ),
           Map()
       );
 
-      uniformData = byCats.map(
-          data => cats.merge(data).toList()
+      uniformData = byItems.map(
+          data => items.merge(data).toList()
       );
 
       let maxValue = uniformData.reduce(
           (max, data) => data.reduce(
-              (max, datum) => Math.max(max, datum.get('totalTenderAmount'))
+              (max, datum) => Math.max(max, datum.get('totalTenders'))
               , max
           )
           , 0
@@ -106,16 +107,16 @@ class ProcurementMethodComparison extends Comparison{
     return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
       let ref = `visualization${index}`;
       return <div className="col-md-6 comparison" key={index}>
-        <Component
-            filters={comparisonFilters}
-            requestNewData={(_, data) => requestNewComparisonData([index], data)}
-            data={uniformData.get(index)}
-            years={years}
-            title={this.getTitle(index)}
-            translations={translations}
-            styling={styling}
-            {...rangeProp}
-        />
+          <Component
+              filters={comparisonFilters}
+              requestNewData={(_, data) => requestNewComparisonData([index], data)}
+              data={uniformData.get(index)}
+              years={years}
+              title={this.getTitle(index)}
+              translations={translations}
+              styling={styling}
+              {...rangeProp}
+          />
         <div className="chart-toolbar"
              onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
         >
@@ -123,12 +124,12 @@ class ProcurementMethodComparison extends Comparison{
             <img src="assets/icons/camera.svg"/>
           </div>
         </div>
-      </div>
+        </div>
     }));
   }
 }
 
 
-ProcurementMethod.compareWith = ProcurementMethodComparison;
+BidsByItem.compareWith = BidsByItemComparison;
 
-export default ProcurementMethod;
+export default BidsByItem;
