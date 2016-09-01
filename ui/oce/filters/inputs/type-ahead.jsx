@@ -5,6 +5,7 @@ import URI from "urijs";
 import {fromJS} from "immutable";
 
 const MIN_QUERY_LENGTH = 3;
+let NAMES = {};
 
 class TypeAhead extends translatable(Component){
   constructor(props){
@@ -12,7 +13,7 @@ class TypeAhead extends translatable(Component){
     this.state = {
       query: "",
       options: fromJS([])
-    }
+    };
   }
 
   updateQuery(query){
@@ -23,6 +24,26 @@ class TypeAhead extends translatable(Component){
     }
   }
 
+  /* Marks an option as selected */
+  select(option){
+    let id = option.get('id');
+    let name = option.get('name');
+    NAMES[id] = name;
+    this.props.onToggle(id);
+  }
+
+  renderOption({id, name, checked, cb}){
+    return <div className="checkbox" key={id}>
+      <label>
+        <input
+            type="checkbox"
+            checked={checked}
+            onChange={cb}
+        /> {name}
+      </label>
+    </div>
+  }
+
   render(){
     let {query, options} = this.state;
     let {selected, onToggle} = this.props;
@@ -31,6 +52,13 @@ class TypeAhead extends translatable(Component){
         <section className="field type-ahead">
           <header>{this.__('Procuring Entity')} ({selected.count()})</header>
           <section className="options">
+            {selected.map(id => this.renderOption({
+              id,
+              name: NAMES[id],
+              checked: true,
+              cb: () => onToggle(id)
+            }))}
+
             <input
                 type="text"
                 className="input-sm form-control search"
@@ -41,18 +69,12 @@ class TypeAhead extends translatable(Component){
 
             {haveQuery && <div className="result-count">{this.__n("result", "results", options.count())}</div>}
 
-            {options.map(option => (
-                <div className="checkbox" >
-                  <label key={option.get('id')}>
-                    <input
-                        key={option.get('id')}
-                        type="checkbox"
-                        checked={selected.has(option.get('id'))}
-                        onChange={e => onToggle(option.get('id'))}
-                    /> {option.get('name')}
-                  </label>
-                </div>
-            )).toArray()}
+            {options.filter(option => !selected.has(option.get('id'))).map(option => this.renderOption({
+              id: option.get('id'),
+              name: option.get('name'),
+              checked: false,
+              cb: this.select.bind(this, option)
+            }))}
           </section>
         </section>
     )
