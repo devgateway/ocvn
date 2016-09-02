@@ -53,12 +53,6 @@
             <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Uncomment this if you are planning to use Spring Boot DevTools (if
             you don't use JRebel) <dependency> <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId> </dependency> -->
@@ -70,10 +64,6 @@
                 <exclusion>
                     <artifactId>hibernate-entitymanager</artifactId>
                     <groupId>org.hibernate</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>tomcat-jdbc</artifactId>
-                    <groupId>org.apache.tomcat</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

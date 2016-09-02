@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,7 +39,7 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
 
     @ApiOperation(value = "Exports *Cancelled funding* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledFundingExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void cancelledFundingExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+    public void cancelledFundingExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "Cancelled funding";
 

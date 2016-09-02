@@ -19,10 +19,11 @@ import java.net.InetAddress;
 import java.util.Properties;
 
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import org.apache.derby.drda.NetworkServerControl;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
-import com.zaxxer.hikari.HikariDataSource;
+
 
 /**
  * @author mpostelnicu
@@ -57,7 +58,13 @@ public class DatabaseConfiguration {
 	private String springDatasourceDriverClassName;
 	
 	@Value("${spring.datasource.transaction-isolation}")
-	private String springDatasourceTransactionIsolation;
+	private int springDatasourceTransactionIsolation;
+	
+	@Value("${spring.datasource.initial-size}")
+	private int springDatasourceInitialSize;
+	
+	@Value("${spring.datasource.max-active}")
+	private int springDatasourceMaxActive;
 	
 	@Value("${dg-toolkit.derby.port}")
 	private int derbyPort;
@@ -107,13 +114,19 @@ public class DatabaseConfiguration {
 	@Bean
 	@DependsOn(value = { "derbyServer"})
 	public DataSource dataSource() {
-		HikariDataSource ds = new HikariDataSource();
-		ds.setTransactionIsolation(springDatasourceTransactionIsolation);
-		ds.setJdbcUrl(springDatasourceUrl);
-		ds.setUsername(springDatasourceUsername);
-		ds.setPassword(springDatasourcePassword);
-		ds.setDriverClassName(springDatasourceDriverClassName);
-		return ds;
+		PoolProperties pp = new PoolProperties();
+		pp.setJmxEnabled(true);
+		pp.setDefaultTransactionIsolation(springDatasourceTransactionIsolation);
+		pp.setInitialSize(springDatasourceInitialSize);
+		pp.setMaxActive(springDatasourceMaxActive);
+		
+		DataSource dataSource = new DataSource(pp);
+		
+		dataSource.setUrl(springDatasourceUrl);
+		dataSource.setUsername(springDatasourceUsername);
+		dataSource.setPassword(springDatasourcePassword);
+		dataSource.setDriverClassName(springDatasourceDriverClassName);
+		return dataSource;
 	}
 
 	/**
