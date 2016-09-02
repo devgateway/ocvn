@@ -172,7 +172,8 @@ public class TenderPercentagesController extends GenericOCDSController {
         project2.put(Keys.TOTAL_TENDERS_WITH_TWO_OR_MORE_TENDERERS, 1);
         project2.put(Keys.PERCENT_TENDERS,
                 new BasicDBObject("$multiply", Arrays.asList(new BasicDBObject("$divide",
-                                Arrays.asList("$totalTendersWithTwoOrMoreTenderers", "$totalTendersWithOneOrMoreTenderers")),
+                                Arrays.asList("$totalTendersWithTwoOrMoreTenderers",
+                                        "$totalTendersWithOneOrMoreTenderers")),
                         100)));
 
         Aggregation agg = newAggregation(
@@ -202,7 +203,8 @@ public class TenderPercentagesController extends GenericOCDSController {
         project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
         project1.put(Fields.UNDERSCORE_ID, "$tender._id");
         project1.put("electronicSubmission", new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$eq",
-                        Arrays.asList("$tender.submissionMethod", Tender.SubmissionMethod.electronicSubmission.toString())), 1,
+                        Arrays.asList("$tender.submissionMethod",
+                                Tender.SubmissionMethod.electronicSubmission.toString())), 1,
                 0)));
 
         DBObject group1 = new BasicDBObject();
