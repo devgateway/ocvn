@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TenderPercentagesController;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +39,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Cancelled funding (percentage)* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledFundingPercentageExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            final HttpServletResponse response) throws IOException {
+    public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                     final HttpServletResponse response) throws IOException {
         final String chartTitle = "Cancelled funding (percentage)";
 
         // fetch the data that will be displayed in the chart
@@ -70,8 +70,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Bid* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEBidExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            final HttpServletResponse response) throws IOException {
+    public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                  final HttpServletResponse response) throws IOException {
         final String chartTitle = "Percent of Tenders Using e-Bid";
 
         // fetch the data that will be displayed in the chart
@@ -102,8 +102,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Procurement* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEgpExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                                                  final HttpServletResponse response) throws IOException {
+    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                 final HttpServletResponse response) throws IOException {
         final String chartTitle = "Percent of Tenders Using e-Procurement";
 
         // fetch the data that will be displayed in the chart

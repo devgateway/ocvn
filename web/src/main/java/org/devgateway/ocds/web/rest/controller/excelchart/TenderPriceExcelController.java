@@ -1,6 +1,5 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
@@ -18,9 +17,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author idobre
@@ -46,32 +43,32 @@ public class TenderPriceExcelController extends GenericOCDSController {
         final String chartTitle = "Bid selection method";
 
         // fetch the data that will be displayed in the chart
-       final List<DBObject> tenderPriceByBidSelection =
-               tenderPriceByTypeYearController.tenderPriceByBidSelectionMethod(filter);
+        final List<DBObject> tenderPriceByBidSelection =
+                tenderPriceByTypeYearController.tenderPriceByBidSelectionMethod(filter);
 
-       final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-               TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS, tenderPriceByBidSelection);
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
+                TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS, tenderPriceByBidSelection);
 
-       final List<List<? extends Number>> values = new ArrayList<>();
-       final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(tenderPriceByBidSelection,
-               categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS,
-               TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        final List<List<? extends Number>> values = new ArrayList<>();
+        final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(tenderPriceByBidSelection,
+                categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS,
+                TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < totalTenderAmount.size(); i++) {
             totalTenderAmount.set(i, totalTenderAmount.get(i).doubleValue() / 1000000000);
         }
-       values.add(totalTenderAmount);
+        values.add(totalTenderAmount);
 
-       final List<String> seriesTitle = Arrays.asList(
-               "Bid selection method (trillions)");
+        final List<String> seriesTitle = Arrays.asList(
+                "Bid selection method (trillions)");
 
-       response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-       response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
-       response.getOutputStream().write(
-               excelChartGenerator.getExcelChart(
-                       ChartType.barcol,
-                       chartTitle,
-                       seriesTitle,
-                       categories, values));
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.barcol,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
     }
 }

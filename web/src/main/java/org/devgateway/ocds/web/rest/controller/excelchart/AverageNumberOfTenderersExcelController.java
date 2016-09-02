@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.TenderPriceByTypeYearController;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +38,7 @@ public class AverageNumberOfTenderersExcelController extends GenericOCDSControll
 
     @ApiOperation(value = "Exports *Average number of bids* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/averageNumberBidsExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void averageNumberBidsExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
+    public void averageNumberBidsExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                             final HttpServletResponse response) throws IOException {
         final String chartTitle = "Average number of bids";
 
