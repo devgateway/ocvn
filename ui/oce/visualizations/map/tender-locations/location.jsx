@@ -5,7 +5,7 @@ import translatable from "../../../translatable";
 import cn from "classnames";
 import OverviewChart from "../../../visualizations/charts/overview";
 import CostEffectiveness from "../../../visualizations/charts/cost-effectiveness";
-import {cacheFn} from "../../../tools"
+import {cacheFn, download} from "../../../tools"
 import ProcurementMethodChart from '../../../visualizations/charts/procurement-method';
 import ReactDOM from "react-dom";
 import style from "./style.less";
@@ -86,9 +86,16 @@ export class ChartTab extends Tab{
 
   render(){
     let {filters, styling, years, translations, data} = this.props;
+    let decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
+    let doExcelExport = e => download({
+      ep: this.constructor.Chart.excelEP,
+      filters: decoratedFilters,
+      years,
+      __: this.__.bind(this)
+    });
     return <div className="map-chart">
       <this.constructor.Chart
-          filters={addTenderDeliveryLocationId(filters, data._id)}
+          filters={decoratedFilters}
           styling={styling}
           years={years}
           translations={translations}
@@ -103,10 +110,16 @@ export class ChartTab extends Tab{
             b: 50
           }}
       />
-      <div className="chart-toolbar"
-           onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
-      >
-        <div className="btn btn-default">
+      <div className="chart-toolbar">
+        <div className="btn btn-default" onClick={doExcelExport}>
+          <img
+              src="assets/icons/export-black.svg"
+              width="16"
+              height="16"
+          />
+        </div>
+
+        <div className="btn btn-default" onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}>
           <img src="assets/icons/camera.svg"/>
         </div>
       </div>
