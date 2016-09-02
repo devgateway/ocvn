@@ -50,6 +50,7 @@ class OverviewChart extends FrontendYearFilterableChart{
 }
 
 OverviewChart.endpoints = ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'];
+OverviewChart.excelEP = 'procurementActivityExcelChart';
 
 OverviewChart.getName = __ => __("Procurement activity by year");
 

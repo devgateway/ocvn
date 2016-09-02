@@ -4,6 +4,7 @@ import translatable from "../../../translatable";
 import {Set} from "immutable";
 import Comparison from "../../../comparison";
 import ReactDOM from "react-dom";
+import {download} from "../../../tools";
 
 class Cancelled extends translatable(React.Component){
   constructor(props){
@@ -15,6 +16,7 @@ class Cancelled extends translatable(React.Component){
 
   render(){
     let {percents} = this.state;
+    let {filters, years} = this.props;
     let Chart = percents ? Percents : Amounts;
     return <section>
       <h4 className="page-header">
@@ -26,8 +28,21 @@ class Cancelled extends translatable(React.Component){
             dangerouslySetInnerHTML={{__html: percents ? '&#8363;' : '%'}}
         />
         <img
+            src="assets/icons/export-black.svg"
+            width="16"
+            height="16"
+            className="chart-export-icon"
+            onClick={e => download({
+              ep: Chart.excelEP,
+              filters,
+              years,
+              __: this.__.bind(this)
+            })}
+        />
+
+        <img
             src="assets/icons/camera.svg"
-            className="camera-icon"
+            className="chart-export-icon"
             onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}
         />
       </h4>
