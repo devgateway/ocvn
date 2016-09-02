@@ -1,5 +1,5 @@
-import FrontendYearFilterableChart from "./frontend-filterable";
-import {pluckImm} from "../../tools";
+import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
+import {pluckImm} from "../../oce/tools";
 
 class PercentEProcurement extends FrontendYearFilterableChart{
   getData(){
