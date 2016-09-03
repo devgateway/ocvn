@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -40,7 +42,7 @@ public class Organization implements Identifiable {
     private String id;
     
     @JsonProperty("types")
-    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)    
 	private Set<OrganizationType> types = new LinkedHashSet<OrganizationType>();
 
     @ExcelExport
@@ -56,6 +58,7 @@ public class Organization implements Identifiable {
      */
     @JsonProperty("additionalIdentifiers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<Identifier> additionalIdentifiers = new LinkedHashSet<Identifier>();
 
     /**

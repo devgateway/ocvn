@@ -19,10 +19,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -52,15 +50,16 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("tender.procurementMethod", 1);
+        project.put("tender." + Keys.PROCUREMENT_METHOD, 1);
         project.put("tender.value", 1);
 
         Aggregation agg = newAggregation(
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
                         .andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
-                match(getDefaultFilterCriteria(filter)), new CustomProjectionOperation(project),
-                group("tender." + Keys.PROCUREMENT_METHOD).sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
-                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT), skip(filter.getSkip()), limit(filter.getPageSize()));
+                getMatchDefaultFilterOperation(filter),
+                new CustomProjectionOperation(project), group("year", "tender." + Keys.PROCUREMENT_METHOD)
+                        .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();

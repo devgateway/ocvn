@@ -1,8 +1,10 @@
 
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,9 +12,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({
         "ocid",
@@ -32,7 +33,7 @@ public class Record implements Identifiable {
      *
      */
     @JsonProperty("ocid")
-    @Id
+    @Id    
     private String ocid;
     /**
      * Linked releases
@@ -42,8 +43,7 @@ public class Record implements Identifiable {
      * from oldest (at position 0) to newest (last). (Required)
      *
      */
-    @JsonProperty("releases")
-    @DBRef
+    @JsonProperty("releases")    
     private List<Release> releases = new ArrayList<Release>();
 
     /**
