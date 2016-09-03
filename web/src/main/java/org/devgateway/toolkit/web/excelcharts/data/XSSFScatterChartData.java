@@ -1,12 +1,12 @@
-package org.devgateway.ocds.web.excelcharts.data;
+package org.devgateway.toolkit.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.xmlbeans.XmlObject;
-import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
-import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
+import org.devgateway.toolkit.web.excelcharts.CustomChartSeries;
+import org.devgateway.toolkit.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTCatAx;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;

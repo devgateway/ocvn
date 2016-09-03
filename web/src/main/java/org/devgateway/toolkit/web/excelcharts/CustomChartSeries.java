@@ -1,4 +1,4 @@
-package org.devgateway.ocds.web.excelcharts;
+package org.devgateway.toolkit.web.excelcharts;
 
 import org.apache.poi.ss.usermodel.charts.ChartSeries;
 import org.apache.xmlbeans.XmlObject;

@@ -1,8 +1,8 @@
-package org.devgateway.ocds.web.excelcharts.data;
+package org.devgateway.toolkit.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.charts.AbstractXSSFChartSeries;
-import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
+import org.devgateway.toolkit.web.excelcharts.CustomChartSeries;
 
 /**
  * @author idobre

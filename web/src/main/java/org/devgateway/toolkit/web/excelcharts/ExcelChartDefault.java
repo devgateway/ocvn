@@ -1,4 +1,4 @@
-package org.devgateway.ocds.web.excelcharts;
+package org.devgateway.toolkit.web.excelcharts;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.Row;
@@ -9,8 +9,8 @@ import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.ss.usermodel.charts.ValueAxis;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.devgateway.ocds.web.excelcharts.util.CustomChartDataFactory;
-import org.devgateway.ocds.web.excelcharts.util.CustomChartDataFactoryDefault;
+import org.devgateway.toolkit.web.excelcharts.util.CustomChartDataFactory;
+import org.devgateway.toolkit.web.excelcharts.util.CustomChartDataFactoryDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,27 @@ import java.util.List;
  * @since 8/16/16
  *
  * Class that returns Workbook with a chart based on categories/values provided.
+ *
+ * Examples of usage:
+ *
+ * private static final List<?> categories = Arrays.asList(
+ *      "cat 1",
+ *      "cat 2",
+ *      "cat 3"
+ *  );
+ *
+ * private static final List<List<? extends Number>> values = Arrays.asList(
+ *      Arrays.asList(5, 7, 10),
+ *      Arrays.asList(20, 12, 10)
+ *  );
+ *
+ * final ExcelChart excelChart = new ExcelChartDefault("line chart", ChartType.line, categories, values);
+ * final Workbook workbook = excelChart.createWorkbook();
+ *
+ * OR
+ *
+ * final ExcelChart excelChart = new ExcelChartDefault("stacked chart", ChartType.stackedcol, categories, values);
+ * final Workbook workbook = excelChart.createWorkbook();
  */
 public class ExcelChartDefault implements ExcelChart {
     private final ChartType type;
@@ -33,6 +54,8 @@ public class ExcelChartDefault implements ExcelChart {
     private final Workbook workbook;
 
     private final List<String> seriesTitle;
+
+    private static final int COLUMNWIDTH = 3500;
 
     public ExcelChartDefault(final String title,
                              final ChartType type,
@@ -105,7 +128,7 @@ public class ExcelChartDefault implements ExcelChart {
         int coll = 0;
         for (Object category : categories) {
             excelChartSheet.writeCell(category, row, coll);
-            excelChartSheet.setColumnWidth(coll, 3500);
+            excelChartSheet.setColumnWidth(coll, COLUMNWIDTH);
             coll++;
         }
     }
