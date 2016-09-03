@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -30,6 +33,7 @@ public class Address {
      */
     @ExcelExport
     @JsonProperty("streetAddress")
+    @Merge(MergeStrategy.ocdsVersion)
     private String streetAddress;
 
     /**
@@ -37,6 +41,7 @@ public class Address {
      *
      */
     @JsonProperty("locality")
+    @Merge(MergeStrategy.ocdsVersion)
     private String locality;
 
     /**
@@ -44,6 +49,7 @@ public class Address {
      *
      */
     @JsonProperty("region")
+    @Merge(MergeStrategy.ocdsVersion)
     private String region;
 
     /**
@@ -51,6 +57,7 @@ public class Address {
      *
      */
     @JsonProperty("postalCode")
+    @Merge(MergeStrategy.ocdsVersion)
     private String postalCode;
 
     /**
@@ -58,6 +65,7 @@ public class Address {
      *
      */
     @JsonProperty("countryName")
+    @Merge(MergeStrategy.ocdsVersion)
     private String countryName;
 
     /**

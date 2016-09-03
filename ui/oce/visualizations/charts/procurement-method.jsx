@@ -48,7 +48,7 @@ class ProcurementMethod extends backendYearFilterable(Chart){
 }
 
 ProcurementMethod.endpoint = 'tenderPriceByProcurementMethod';
-ProcurementMethod.excelEP = 'bidSelectionExcelChart';
+ProcurementMethod.excelEP = 'procurementMethodExcelChart';
 ProcurementMethod.getName = __ => __('Procurement method');
 ProcurementMethod.UPDATABLE_FIELDS = ['data'];
 ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';

@@ -71,4 +71,36 @@ public class TenderPriceExcelController extends GenericOCDSController {
                         seriesTitle,
                         categories, values));
     }
+
+    @ApiOperation(value = "Exports *Procurement method* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/procurementMethodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
+    public void procurementMethodExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                       final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Procurement method";
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> tenderPriceByBidSelection =
+                tenderPriceByTypeYearController.tenderPriceByProcurementMethod(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
+                TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD, tenderPriceByBidSelection);
+
+        final List<List<? extends Number>> values = new ArrayList<>();
+        final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(tenderPriceByBidSelection,
+                categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD,
+                TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        values.add(totalTenderAmount);
+
+        final List<String> seriesTitle = Arrays.asList(
+                "Procurement method");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.barcol,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
 }

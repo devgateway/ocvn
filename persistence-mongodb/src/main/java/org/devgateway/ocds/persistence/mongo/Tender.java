@@ -1,16 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -18,6 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -55,7 +58,7 @@ import java.util.TreeSet;
         "milestones",
         "amendment"
 })
-public class Tender {
+public class Tender implements Identifiable {
 
     /**
      * Tender ID
@@ -67,6 +70,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -74,6 +78,7 @@ public class Tender {
      *
      */
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -81,6 +86,7 @@ public class Tender {
      *
      */
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -92,6 +98,7 @@ public class Tender {
      */
     @ExcelExport
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -105,6 +112,7 @@ public class Tender {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     @JsonProperty("minValue")
@@ -122,6 +130,7 @@ public class Tender {
      *
      */
     @JsonProperty("procurementMethod")
+    @Merge(MergeStrategy.ocdsVersion)
     private ProcurementMethod procurementMethod;
 
     /**
@@ -129,6 +138,7 @@ public class Tender {
      *
      */
     @JsonProperty("procurementMethodRationale")
+    @Merge(MergeStrategy.ocdsVersion)
     private String procurementMethodRationale;
 
     /**
@@ -137,6 +147,7 @@ public class Tender {
      *
      */
     @JsonProperty("awardCriteria")
+    @Merge(MergeStrategy.ocdsVersion)
     private String awardCriteria;
 
     /**
@@ -144,6 +155,7 @@ public class Tender {
      *
      */
     @JsonProperty("awardCriteriaDetails")
+    @Merge(MergeStrategy.ocdsVersion)
     private String awardCriteriaDetails;
 
     /**
@@ -154,6 +166,7 @@ public class Tender {
      *
      */
     @JsonProperty("submissionMethod")
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<String> submissionMethod = new TreeSet<String>();
 
     /**
@@ -163,6 +176,7 @@ public class Tender {
      *
      */
     @JsonProperty("submissionMethodDetails")
+    @Merge(MergeStrategy.ocdsVersion)
     private String submissionMethodDetails;
 
     /**
@@ -189,6 +203,7 @@ public class Tender {
      *
      */
     @JsonProperty("hasEnquiries")
+    @Merge(MergeStrategy.ocdsVersion)
     private Boolean hasEnquiries;
 
     /**
@@ -196,6 +211,7 @@ public class Tender {
      *
      */
     @JsonProperty("eligibilityCriteria")
+    @Merge(MergeStrategy.ocdsVersion)
     private String eligibilityCriteria;
 
     /**
@@ -209,6 +225,7 @@ public class Tender {
 
     @ExcelExport
     @JsonProperty("numberOfTenderers")
+    @Merge(MergeStrategy.ocdsVersion)
     private Integer numberOfTenderers;
 
     /**
@@ -218,6 +235,7 @@ public class Tender {
     @ExcelExport
     @JsonProperty("tenderers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<Organization> tenderers = new LinkedHashSet<Organization>();
 
     /**
@@ -237,6 +255,7 @@ public class Tender {
      *
      */
     @JsonProperty("documents")
+    @Merge(MergeStrategy.arrayMergeById)
     private List<Document> documents = new ArrayList<Document>();
 
     /**
@@ -244,6 +263,7 @@ public class Tender {
      *
      */
     @JsonProperty("milestones")
+    @Merge(MergeStrategy.arrayMergeById)
     private List<Milestone> milestones = new ArrayList<Milestone>();
 
     /**

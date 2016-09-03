@@ -1,15 +1,18 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -34,6 +37,7 @@ public class Implementation {
     @ExcelExport
     @JsonProperty("transactions")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Transaction> transactions = new LinkedHashSet<>();
 
     /**
@@ -42,6 +46,7 @@ public class Implementation {
      */
     @JsonProperty("milestones")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Milestone> milestones = new LinkedHashSet<Milestone>();
 
     /**
@@ -50,6 +55,7 @@ public class Implementation {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**
