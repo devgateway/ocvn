@@ -1,9 +1,9 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.devgateway.ocds.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.excelcharts.ExcelChart;
-import org.devgateway.ocds.web.excelcharts.ExcelChartDefault;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
+import org.devgateway.toolkit.web.excelcharts.ExcelChart;
+import org.devgateway.toolkit.web.excelcharts.ExcelChartDefault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;

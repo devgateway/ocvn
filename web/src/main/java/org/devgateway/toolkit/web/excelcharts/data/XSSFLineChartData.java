@@ -1,31 +1,29 @@
-package org.devgateway.ocds.web.excelcharts.data;
+package org.devgateway.toolkit.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.xmlbeans.XmlObject;
-import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
-import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
+import org.devgateway.toolkit.web.excelcharts.CustomChartSeries;
+import org.devgateway.toolkit.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTBarChart;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTBarSer;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTCatAx;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
-import org.openxmlformats.schemas.drawingml.x2006.chart.STBarDir;
-import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
+import org.openxmlformats.schemas.drawingml.x2006.chart.STMarkerStyle;
 
 /**
  * @author idobre
- * @since 8/8/16
+ * @since 8/12/16
  *
- * Holds data for a XSSF Bar Chart.
+ * Holds data for a XSSF Line Chart.
  */
-public class XSSFBarChartData extends AbstractXSSFChartData {
-    protected STBarDir.Enum barDir = STBarDir.COL;
-
-    public XSSFBarChartData(final String title) {
+public class XSSFLineChartData extends AbstractXSSFChartData {
+    public XSSFLineChartData(final String title) {
         super(title);
     }
 
@@ -35,20 +33,23 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                final CTBarChart ctBarChart = (CTBarChart) ctChart;
-                final CTBarSer ctBarSer = ctBarChart.addNewSer();
+                final CTLineChart ctLineChart = (CTLineChart) ctChart;
+                final CTLineSer ctLineSer = ctLineChart.addNewSer();
 
-                ctBarSer.addNewIdx().setVal(this.id);
-                ctBarSer.addNewOrder().setVal(this.order);
+                ctLineSer.addNewIdx().setVal(this.id);
+                ctLineSer.addNewOrder().setVal(this.order);
 
-                final CTAxDataSource catDS = ctBarSer.addNewCat();
+                // No marker symbol on the chart line.
+                ctLineSer.addNewMarker().addNewSymbol().setVal(STMarkerStyle.CIRCLE);
+
+                final CTAxDataSource catDS = ctLineSer.addNewCat();
                 XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                final CTNumDataSource valueDS = ctBarSer.addNewVal();
+                final CTNumDataSource valueDS = ctLineSer.addNewVal();
                 XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
-                    ctBarSer.setTx(getCTSerTx());
+                    ctLineSer.setTx(getCTSerTx());
                 }
             }
         };
@@ -62,31 +63,28 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
 
         final XSSFChart xssfChart = (XSSFChart) chart;
         final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        final CTBarChart barChart = plotArea.addNewBarChart();
+        final CTLineChart lineChart = plotArea.addNewLineChart();
+        lineChart.addNewVaryColors().setVal(false);
 
-        barChart.addNewVaryColors().setVal(false);
+        for (CustomChartSeries s : series) {
+            s.addToChart(lineChart);
+        }
 
-        // set bars orientation
-        barChart.addNewBarDir().setVal(barDir);
+        for (ChartAxis ax : axis) {
+            lineChart.addNewAxId().setVal(ax.getId());
+        }
 
         xssfChart.setTitle(this.title);
+
+        // add grid lines
+        CTCatAx[] ctCatAx = plotArea.getCatAxArray();
+        if (ctCatAx.length != 0) {
+            ctCatAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
+        }
 
         CTValAx[] ctValAx = plotArea.getValAxArray();
         if (ctValAx.length != 0) {
             ctValAx[0].addNewMajorGridlines().addNewSpPr().addNewSolidFill();
-            ctValAx[0].getCrossBetween().setVal(STCrossBetween.BETWEEN);
         }
-
-        for (CustomChartSeries s : series) {
-            s.addToChart(barChart);
-        }
-
-        for (ChartAxis ax : axis) {
-            barChart.addNewAxId().setVal(ax.getId());
-        }
-    }
-
-    public void setBarDir(final STBarDir.Enum barDir) {
-        this.barDir = barDir;
     }
 }

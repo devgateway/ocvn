@@ -1,14 +1,14 @@
-package org.devgateway.ocds.web.excelcharts.util;
+package org.devgateway.toolkit.web.excelcharts.util;
 
-import org.devgateway.ocds.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.excelcharts.CustomChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFAreaChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFBarChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFBubbleChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFLineChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFPieChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFScatterChartData;
-import org.devgateway.ocds.web.excelcharts.data.XSSFStackedBarChartData;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
+import org.devgateway.toolkit.web.excelcharts.CustomChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFAreaChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFBarChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFBubbleChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFLineChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFPieChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFScatterChartData;
+import org.devgateway.toolkit.web.excelcharts.data.XSSFStackedBarChartData;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STBarDir;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STBarGrouping;
 

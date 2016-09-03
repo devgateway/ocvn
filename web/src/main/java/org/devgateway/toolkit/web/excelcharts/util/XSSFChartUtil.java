@@ -1,4 +1,4 @@
-package org.devgateway.ocds.web.excelcharts.util;
+package org.devgateway.toolkit.web.excelcharts.util;
 
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
