@@ -49,6 +49,6 @@ class CancelledFunding extends FrontendYearFilterableChart{
 }
 
 CancelledFunding.endpoint = 'totalCancelledTendersByYearByRationale';
-CancelledFunding. = 'cancelledTendersByYearByRationaleExcelChart';
+CancelledFunding.excelEP = 'cancelledTendersByYearByRationaleExcelChart';
 
 export default CancelledFunding;
