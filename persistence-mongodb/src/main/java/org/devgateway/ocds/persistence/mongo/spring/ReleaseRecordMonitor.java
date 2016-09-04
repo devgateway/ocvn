@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.devgateway.toolkit.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;

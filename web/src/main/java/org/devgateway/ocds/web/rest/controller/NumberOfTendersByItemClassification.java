@@ -48,7 +48,7 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
     public static final class Keys {
         public static final String TOTAL_TENDERS = "totalTenders";
         public static final String ITEMS_CLASSIFICATION = "items.classification";
-        public static final String YEAR = "year";
+        public static final String DESCRIPTION = "description";
     }
 
     @ApiOperation(value = "This should show the number of tenders per tender.items.classification."
@@ -68,7 +68,6 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
                 match(getDefaultFilterCriteria(filter)), new CustomProjectionOperation(project),
                 unwind("tender.items"),
                 group("$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS)
-                //,sort(Direction.ASC, Keys.YEAR)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
