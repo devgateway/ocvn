@@ -1,12 +1,13 @@
 /**
  * 
  */
-package org.devgateway.toolkit.persistence.mongo.spring;
+package org.devgateway.ocds.persistence.mongo.spring;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -103,115 +104,123 @@ public class ReleaseCompilerService {
 	}
 
 	/**
-	 * @param left
-	 * @param right
+	 * @param leftCollection
+	 * @param rightCollection
 	 * @return
 	 * @see {@link MergeStrategy#arrayMergeById}
 	 */
 	@SuppressWarnings("unchecked")
-	protected <S extends Collection<Identifiable>> S mergeFieldStrategyArrayMergeById(final S left, final S right) {
+	protected <S extends Collection<Identifiable>> S mergeFieldStrategyArrayMergeById(final S leftCollection,
+			final S rightCollection) {
 
-		// target collections must be cloned
+		// target collections must be instantiated
 		S target = null;
 		try {
-			target = (S) left.getClass().newInstance();
+			target = (S) leftCollection.getClass().newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 
-		target.addAll(left);
+		// we add all the left
+		target.addAll(leftCollection);
 
 		// iterate all right elements
-		for (Identifiable identifiable : right) {
+		for (Identifiable rightIdentifiable : rightCollection) {
 
 			// if there is an existing element with the same id, perform merge
 			// on the children and replace existing left element
-			Identifiable leftIdentifiable = getIdentifiableById(identifiable.getId(), left);
+			Identifiable leftIdentifiable = getIdentifiableById(rightIdentifiable.getId(), leftCollection);
 			if (leftIdentifiable != null) {
 				target.remove(leftIdentifiable);
-				target.add(mergeOCDSBeans(leftIdentifiable, identifiable));
+				target.add(mergeOcdsBeans(leftIdentifiable, rightIdentifiable));
 			} else {
 				// otherwise add the new element to the left list
-				target.add(identifiable);
+				target.add(rightIdentifiable);
 			}
 		}
 		return target;
 	}
 
 	/**
-	 * Merges the right object into a shallow copy of the left.
+	 * Merges the fields of the right bean into a shallow copy of the left bean
 	 * 
-	 * @param left
-	 * @param right
+	 * @param leftBean
+	 * @param rightBean
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected <S> S mergeOCDSBeans(final S left, final S right) {
+	protected <S> S mergeOcdsBeans(final S leftBean, final S rightBean) {
 
 		// if there is no data to the right, the merge just returns the
 		// unmutated left
-		if (right == null) {
-			return left;
+		if (rightBean == null) {
+			return leftBean;
 		}
 
-		Class<?> clazz = right.getClass();
-		if (!left.getClass().equals(clazz)) {
+		Class<?> clazz = rightBean.getClass();
+		if (leftBean != null && !leftBean.getClass().equals(clazz)) {
 			throw new RuntimeException("Attempted the merging of objects of different type!");
 		}
 
-		S target = null;
+		//we perform a shallow copy of the left bean
+		S target;
 		try {
-			target = (S) BeanUtils.cloneBean(left);
+			target = (S) BeanUtils.cloneBean(leftBean);
 		} catch (IllegalAccessException | InstantiationException | InvocationTargetException
 				| NoSuchMethodException e1) {
 			throw new RuntimeException(e1);
 		}
 
-		Field[] rightDeclaredFields = right.getClass().getDeclaredFields();
-
-		Field field = null;
-		for (int i = 0; i < rightDeclaredFields.length; i++) {
+		Arrays.asList(rightBean.getClass().getDeclaredFields()).parallelStream().forEach(field -> {
 			try {
-				field = rightDeclaredFields[i];
-				String fieldName = rightDeclaredFields[i].getName();
-				Object rightFieldValue = PropertyUtils.getProperty(right, fieldName);
-				Object leftFieldValue = PropertyUtils.getProperty(target, fieldName);
-				if (fieldsAnnotatedWithMerge.contains(field)) {
-					MergeStrategy mergeStrategy = field.getDeclaredAnnotation(Merge.class).value();
-					switch (mergeStrategy) {
-					case overwrite:
-						PropertyUtils.setProperty(target, fieldName,
-								mergeFieldStrategyOverwrite(leftFieldValue, rightFieldValue));
-						break;
-					case ocdsOmit:
-						PropertyUtils.setProperty(target, fieldName,
-								mergeFieldStrategyOcdsOmit(leftFieldValue, rightFieldValue));
-						break;
-					case ocdsVersion:
-						PropertyUtils.setProperty(target, fieldName,
-								mergeFieldStrategyOcdsVersion(leftFieldValue, rightFieldValue));
-						break;
-					case arrayMergeById:
-						PropertyUtils.setProperty(target, fieldName, mergeFieldStrategyArrayMergeById(
-								(Collection<Identifiable>) leftFieldValue, (Collection<Identifiable>) rightFieldValue));
-						break;
-
-					default:
-						throw new RuntimeException("Unknown or unimplemented merge strategy!");
-					}
-				} else {
-					PropertyUtils.setProperty(target, fieldName, mergeOCDSBeans(leftFieldValue, rightFieldValue));
-				}
-
-			} catch (Exception e) {
-				logger.error(
-						e.getMessage() + " while processing field " + clazz.getSimpleName() + "." + field.getName());
+				PropertyUtils.setProperty(target, field.getName(), mergeFieldFromOcdsBeans(field, leftBean, rightBean));
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				throw new RuntimeException(e);
 			}
-		}
+		});
 
 		return target;
 
+	}
+
+	/**
+	 * Computes the output of an atomic merging operation on a specific field
+	 * 
+	 * @param field the field to perform the merge on
+	 * @param leftBean the left bean 
+	 * @param rightBean the right bean
+	 * @return the merged result
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	protected <S> Object mergeFieldFromOcdsBeans(Field field, final S leftBean, final S rightBean)
+			throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		Object rightFieldValue = PropertyUtils.getProperty(rightBean, field.getName());
+		Object leftFieldValue = PropertyUtils.getProperty(leftBean, field.getName());
+		if (fieldsAnnotatedWithMerge.contains(field)) {
+			MergeStrategy mergeStrategy = field.getDeclaredAnnotation(Merge.class).value();
+			switch (mergeStrategy) {
+			case overwrite:
+				return mergeFieldStrategyOverwrite(leftFieldValue, rightFieldValue);
+			case ocdsOmit:
+				return mergeFieldStrategyOcdsOmit(leftFieldValue, rightFieldValue);
+
+			case ocdsVersion:
+				return mergeFieldStrategyOcdsVersion(leftFieldValue, rightFieldValue);
+
+			case arrayMergeById:
+				return mergeFieldStrategyArrayMergeById((Collection<Identifiable>) leftFieldValue,
+						(Collection<Identifiable>) rightFieldValue);
+
+			default:
+				throw new RuntimeException("Unknown or unimplemented merge strategy!");
+			}
+		} else {
+			// if no merge strategy was defined for the given field,
+			// recursively invoke the method on the field value
+			return mergeOcdsBeans(leftFieldValue, rightFieldValue);
+		}
 	}
 
 	protected Release createCompiledRelease(final Record record) {
@@ -226,7 +235,7 @@ public class ReleaseCompilerService {
 			// we merge each element of the list to its left partner
 			List<Release> subList = record.getReleases().subList(1, record.getReleases().size());
 			for (Release right : subList) {
-				Release compiled = mergeOCDSBeans(left, right);
+				Release compiled = mergeOcdsBeans(left, right);
 				left = compiled;
 			}
 		}

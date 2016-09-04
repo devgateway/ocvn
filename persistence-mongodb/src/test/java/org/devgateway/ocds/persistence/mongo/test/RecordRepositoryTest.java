@@ -10,7 +10,7 @@ import org.devgateway.ocds.persistence.mongo.Record;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.RecordRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.toolkit.persistence.mongo.spring.ReleaseCompilerService;
+import org.devgateway.ocds.persistence.mongo.spring.ReleaseCompilerService;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Test;
