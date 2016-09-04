@@ -97,7 +97,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
                 match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)),
                 getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
                 group("$year", "$tender.cancellationRationale").sum("$tender.value.amount")
-                        .as("totalCancelledTendersAmount"),
+                        .as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
