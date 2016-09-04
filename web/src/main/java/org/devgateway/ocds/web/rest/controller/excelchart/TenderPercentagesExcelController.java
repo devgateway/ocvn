@@ -129,4 +129,37 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
                         seriesTitle,
                         categories, values));
     }
+
+    @ApiOperation(value = "Exports *Percentage of plans with tender* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/tendersWithLinkedProcurementPlanExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
+    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                           final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Percentage of plans with tender";
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+                .percentTendersWithLinkedProcurementPlan(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+                percentTendersWithLinkedProcurementPlan);
+        final List<List<? extends Number>> values = new ArrayList<>();
+
+        final List<Number> percentTenders = excelChartHelper.getValuesFromDBObject(
+                percentTendersWithLinkedProcurementPlan, categories, TenderPercentagesController.Keys.YEAR,
+                TenderPercentagesController.Keys.PERCENT_TENDERS);
+        values.add(percentTenders);
+
+        final List<String> seriesTitle = Arrays.asList(
+                "Percent");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.area,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
 }

@@ -36,6 +36,7 @@ class PercentEProcurement extends FrontendYearFilterableChart{
 
 
 PercentEProcurement.endpoint = 'percentTendersWithLinkedProcurementPlan';
+PercentEProcurement.excelEP = 'tendersWithLinkedProcurementPlanExcelChart';
 PercentEProcurement.getMaxField = imm => imm.get('percentTenders', 0);
 
 export default PercentEProcurement;
