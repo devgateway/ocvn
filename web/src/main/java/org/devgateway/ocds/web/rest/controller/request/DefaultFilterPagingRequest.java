@@ -23,7 +23,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 			+ "Corresponds to the OCDS Organization.identifier")
     private List<String> procuringEntityId;
     
-    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+	//@EachPattern(regexp = "^[\\p{L}0-9]*$")
 	@ApiModelProperty(value = "This is the id of the organization/supplier entity. "
 			+ "Corresponds to the OCDS Organization.identifier")
 	private List<String> supplierId;

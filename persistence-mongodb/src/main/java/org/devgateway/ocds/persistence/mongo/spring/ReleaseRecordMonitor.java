@@ -34,8 +34,9 @@ import java.util.stream.StreamSupport;
  * 
  * 
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
+@Deprecated
 public class ReleaseRecordMonitor {
 
 	protected static Logger logger = Logger.getLogger(ReleaseRecordMonitor.class);
@@ -65,8 +66,8 @@ public class ReleaseRecordMonitor {
 	 * @param release
 	 * @return
 	 */
-	@AfterReturning(value = "execution(*"
-			+ " org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository+.insert(..))", returning = "release")
+//	@AfterReturning(value = "execution(*"
+//			+ " org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository+.insert(..))", returning = "release")
 	public Record saveRecordForRelease(JoinPoint jp, Release release) {
 		logger.debug("Release record archival triggered by " + jp);
 		return saveRecordForRelease(release);

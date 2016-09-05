@@ -4,7 +4,6 @@ import {fetchJson} from "../../tools";
 import URI from "urijs";
 import {fromJS} from "immutable";
 
-const MIN_QUERY_LENGTH = 3;
 let NAMES = {};
 
 class TypeAhead extends translatable(Component){
@@ -16,13 +15,15 @@ class TypeAhead extends translatable(Component){
     };
   }
 
-  updateQuery(query){
+	updateQuery(query){
     this.setState({query});
-    if (query.length >= MIN_QUERY_LENGTH) {
-      fetchJson(new URI('/api/ocds/organization/procuringEntity/all').addSearch('text', query).toString())
-          .then(data => this.setState({options: fromJS(data)}));
+    if(query.length >= this.constructor.MIN_QUERY_LENGTH) {
+      fetchJson(new URI(this.constructor.endpoint).addSearch('text', query).toString())
+        .then(data => this.setState({options: fromJS(data)}));
+    } else {
+      this.setState({options: fromJS([])})
     }
-  }
+  }    
 
   /* Marks an option as selected */
   select(option){
@@ -47,10 +48,10 @@ class TypeAhead extends translatable(Component){
   render(){
     let {query, options} = this.state;
     let {selected, onToggle} = this.props;
-    let haveQuery = query.length >= MIN_QUERY_LENGTH;
+    let haveQuery = query.length >= this.constructor.MIN_QUERY_LENGTH;
     return (
         <section className="field type-ahead">
-          <header>{this.__('Procuring Entity')} ({selected.count()})</header>
+          <header>{this.constructor.getName(this.__.bind(this))} ({selected.count()})</header>
           <section className="options">
             {selected.map(id => this.renderOption({
               id,
@@ -80,5 +81,7 @@ class TypeAhead extends translatable(Component){
     )
   }
 }
+
+TypeAhead.MIN_QUERY_LENGTH = 3;
 
 export default TypeAhead;
