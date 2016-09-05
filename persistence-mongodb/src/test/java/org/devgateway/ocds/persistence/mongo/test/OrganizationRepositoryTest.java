@@ -76,7 +76,12 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
         Organization foundOrg3 = organizationRepository.findByIdAndTypes(ORG_ID, 
         		Organization.OrganizationType.supplier);
         Assert.assertNull(foundOrg3);
+        
+        Organization foundOrg4 = organizationRepository.findByIdOrNameAllIgnoreCase(ORG_ID, ORG_ID);
+        Assert.assertNotNull(foundOrg4);
 
     }
+    
+  
 
 }
