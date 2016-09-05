@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 
@@ -33,7 +35,7 @@ import java.util.Date;
         "receiverOrganization",
         "uri"
 })
-public class Transaction {
+public class Transaction implements Identifiable {
 
     /**
      * A unique identifier for this transaction. This identifier should be possible to cross-reference against the
@@ -42,6 +44,7 @@ public class Transaction {
      *
      */
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -54,6 +57,7 @@ public class Transaction {
      */
     @ExcelExport
     @JsonProperty("source")
+    @Merge(MergeStrategy.ocdsVersion)
     private String source;
 
     /**
@@ -62,6 +66,7 @@ public class Transaction {
      */
     @ExcelExport
     @JsonProperty("date")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date date;
 
     @ExcelExport
@@ -83,6 +88,7 @@ public class Transaction {
      *
      */
     @JsonProperty("uri")
+    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**

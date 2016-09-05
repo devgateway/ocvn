@@ -10,6 +10,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +42,7 @@ import java.util.Set;
         "amendment",
         "implementation"
 })
-public class Contract {
+public class Contract implements Identifiable {
 
     /**
      * Contract ID
@@ -54,6 +56,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -65,6 +68,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("awardID")
+    @Merge(MergeStrategy.ocdsVersion)
     private String awardID;
 
     /**
@@ -73,6 +77,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -81,6 +86,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -93,6 +99,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Status status;
 
     /**
@@ -120,6 +127,7 @@ public class Contract {
     @ExcelExportSepareteSheet
     @JsonProperty("items")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
     /**
@@ -128,6 +136,7 @@ public class Contract {
      */
     @ExcelExport
     @JsonProperty("dateSigned")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dateSigned;
 
     /**
@@ -136,6 +145,7 @@ public class Contract {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**

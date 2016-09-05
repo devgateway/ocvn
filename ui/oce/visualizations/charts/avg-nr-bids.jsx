@@ -32,6 +32,7 @@ class AvgNrBids extends FrontendYearFilterableChart{
 }
 
 AvgNrBids.endpoint = 'averageNumberOfTenderers';
+AvgNrBids.excelEP = 'averageNumberBidsExcelChart';
 AvgNrBids.getName = __ => __('Average number of bids');
 AvgNrBids.getFillerDatum = year => Map({
   year,

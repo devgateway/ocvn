@@ -1,8 +1,8 @@
-package org.devgateway.ocds.web.excelcharts.data;
+package org.devgateway.toolkit.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
-import org.devgateway.ocds.web.excelcharts.CustomChartData;
-import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
+import org.devgateway.toolkit.web.excelcharts.CustomChartData;
+import org.devgateway.toolkit.web.excelcharts.CustomChartSeries;
 
 import java.util.ArrayList;
 import java.util.List;

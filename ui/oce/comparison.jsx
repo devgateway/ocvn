@@ -1,6 +1,6 @@
 import PureRenderCompoent from "./pure-render-component";
 import translatable from "./translatable";
-import {max, cacheFn} from "./tools";
+import {max, cacheFn, download} from "./tools";
 import {List, Set, Map} from "immutable";
 
 let computeUniformYears = cacheFn((Component, comparisonData, years) =>
@@ -33,7 +33,7 @@ class Comparison extends translatable(PureRenderCompoent){
 
   render(){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, width
-      , translations, styling} = this.props;
+        , translations, styling} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -56,6 +56,12 @@ class Comparison extends translatable(PureRenderCompoent){
 
     return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
       let ref = `visualization${index}`;
+      let downloadExcel = e => download({
+        ep: Component.excelEP,
+        filters: comparisonFilters,
+        years,
+        __: this.__.bind(this)
+      });
       return <div className="col-md-6 comparison" key={index} ref={ref}>
         <Component
             filters={comparisonFilters}
@@ -68,10 +74,12 @@ class Comparison extends translatable(PureRenderCompoent){
             styling={styling}
             {...rangeProp}
         />
-        <div className="chart-toolbar"
-             onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
-        >
-          <div className="btn btn-default">
+        <div className="chart-toolbar">
+          {Component.excelEP && <div className="btn btn-default" onClick={downloadExcel}>
+            <img src="assets/icons/export-black.svg" width="16" height="16"/>
+          </div>}
+
+          <div className="btn btn-default" onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}>
             <img src="assets/icons/camera.svg"/>
           </div>
         </div>

@@ -1,19 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
-import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +7,23 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Schema for an Open Contracting Release
@@ -54,7 +57,8 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("id")
-    @Id
+    @Id   
+    @Merge(MergeStrategy.ocdsOmit)
     private String id;
 
     /**
@@ -69,6 +73,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("ocid")
+	@Merge(MergeStrategy.ocdsOmit)
     private String ocid;
 
     /**
@@ -82,6 +87,7 @@ public class Release implements Identifiable {
     @ExcelExport
     @JsonProperty("date")
     @CreatedDate
+    @Merge(MergeStrategy.ocdsOmit)
     private Date date;
 
     /**
@@ -96,6 +102,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("tag")
+    @Merge(MergeStrategy.ocdsOmit)
     private List<Tag> tag = new ArrayList<Tag>();
 
     /**
@@ -109,6 +116,7 @@ public class Release implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("initiationType")
+    @Merge(MergeStrategy.ocdsVersion)
     private InitiationType initiationType = InitiationType.tender;
 
     /**
@@ -157,6 +165,7 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("awards")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+	@Merge(MergeStrategy.arrayMergeById)
     private Set<Award> awards = new LinkedHashSet<Award>();
 
     /**
@@ -167,6 +176,7 @@ public class Release implements Identifiable {
      */
     @JsonProperty("contracts")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Contract> contracts = new LinkedHashSet<Contract>();
 
     /**
@@ -177,6 +187,7 @@ public class Release implements Identifiable {
      *
      */
     @JsonProperty("language")
+	@Merge(MergeStrategy.ocdsVersion)
     private String language = "en";
 
 

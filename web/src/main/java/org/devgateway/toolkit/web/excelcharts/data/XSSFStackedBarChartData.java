@@ -1,9 +1,9 @@
-package org.devgateway.ocds.web.excelcharts.data;
+package org.devgateway.toolkit.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.xssf.usermodel.XSSFChart;
-import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
+import org.devgateway.toolkit.web.excelcharts.CustomChartSeries;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTBarChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
@@ -18,6 +18,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
  */
 public class XSSFStackedBarChartData extends XSSFBarChartData {
     private STBarGrouping.Enum barGrouping = STBarGrouping.STACKED;
+
+    private static final int OVERLAPPERCENTAGE = 100;
 
     public XSSFStackedBarChartData(final String title) {
         super(title);
@@ -37,7 +39,7 @@ public class XSSFStackedBarChartData extends XSSFBarChartData {
 
         // create a stacked bar
         barChart.addNewGrouping().setVal(barGrouping);
-        barChart.addNewOverlap().setVal((byte) 100);
+        barChart.addNewOverlap().setVal((byte) OVERLAPPERCENTAGE);
 
         // set bars orientation
         barChart.addNewBarDir().setVal(barDir);

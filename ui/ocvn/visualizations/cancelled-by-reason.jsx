@@ -2,7 +2,7 @@ import FrontendYearFilterableChart from "../../oce/visualizations/charts/fronten
 
 class CancelledFunding extends FrontendYearFilterableChart{
   static getName(__){
-    return __('Cancelled funding by reason');
+    return __(' Cancelled funding by reason');
   }
 
   getData(){
@@ -49,5 +49,6 @@ class CancelledFunding extends FrontendYearFilterableChart{
 }
 
 CancelledFunding.endpoint = 'totalCancelledTendersByYearByRationale';
+CancelledFunding.excelEP = 'cancelledTendersByYearByRationaleExcelChart';
 
 export default CancelledFunding;

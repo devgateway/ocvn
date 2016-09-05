@@ -2,10 +2,10 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.ocds.web.excelcharts.ChartType;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TenderPercentagesController;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +39,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Cancelled funding (percentage)* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledFundingPercentageExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            final HttpServletResponse response) throws IOException {
+    public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                     final HttpServletResponse response) throws IOException {
         final String chartTitle = "Cancelled funding (percentage)";
 
         // fetch the data that will be displayed in the chart
@@ -70,8 +70,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Bid* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEBidExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                            final HttpServletResponse response) throws IOException {
+    public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                  final HttpServletResponse response) throws IOException {
         final String chartTitle = "Percent of Tenders Using e-Bid";
 
         // fetch the data that will be displayed in the chart
@@ -102,8 +102,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Procurement* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEgpExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final DefaultFilterPagingRequest filter,
-                                                  final HttpServletResponse response) throws IOException {
+    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                 final HttpServletResponse response) throws IOException {
         final String chartTitle = "Percent of Tenders Using e-Procurement";
 
         // fetch the data that will be displayed in the chart
@@ -116,6 +116,39 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         final List<Number> percentEgp = excelChartHelper.getValuesFromDBObject(percentTendersUsingEgp, categories,
                 TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_EGP);
         values.add(percentEgp);
+
+        final List<String> seriesTitle = Arrays.asList(
+                "Percent");
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.area,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
+
+    @ApiOperation(value = "Exports *Percentage of plans with tender* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/tendersWithLinkedProcurementPlanExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
+    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                                           final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Percentage of plans with tender";
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+                .percentTendersWithLinkedProcurementPlan(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+                percentTendersWithLinkedProcurementPlan);
+        final List<List<? extends Number>> values = new ArrayList<>();
+
+        final List<Number> percentTenders = excelChartHelper.getValuesFromDBObject(
+                percentTendersWithLinkedProcurementPlan, categories, TenderPercentagesController.Keys.YEAR,
+                TenderPercentagesController.Keys.PERCENT_TENDERS);
+        values.add(percentTenders);
 
         final List<String> seriesTitle = Arrays.asList(
                 "Percent");

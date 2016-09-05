@@ -9,25 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ReleaseRepositoryTest extends AbstractMongoTest {
 
-    private String OCID="release-1";
+	private String ocid = "release-1";
 
-    @Autowired
-    private ReleaseRepository releaseRepository;
+	@Autowired
+	private ReleaseRepository releaseRepository;
 
-    @Test
-    public void testReleaseSaveAndFind() {
+	@Test
+	public void testReleaseSaveAndFind() {
 
-        Release release=new Release();
+		Release release = new Release();
 
-        release.setOcid(OCID);
+		release.setOcid(ocid);
 
-        releaseRepository.insert(release);
+		releaseRepository.insert(release);
 
+		Release byOcid = releaseRepository.findByOcid(ocid);
 
-        Release byOcid = releaseRepository.findByOcid(OCID);
+		Assert.assertEquals(ocid, byOcid.getOcid());
 
-        Assert.assertEquals(OCID, byOcid.getOcid());
-
-    }
+	}
 
 }

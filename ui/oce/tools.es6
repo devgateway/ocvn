@@ -1,3 +1,4 @@
+import URI from "urijs";
 /**
  * Returns a function that will invoke `func` property on its argument
  * @param {Function} func
@@ -42,3 +43,32 @@ export var cacheFn = fn => {
 };
 
 export let max = (a, b) => a > b ? a : b;
+
+export let download = ({ep, filters, years, __}) => {
+  let url = new URI(`/api/ocds/${ep}`).addSearch(filters.toJS()).addSearch('year', years.toArray());
+  return fetch(url.clone().query(""), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: url.query()
+  }).then(response => {
+    let {userAgent} = navigator;
+    let isSafari =  -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
+    if(isSafari){
+      location.href = url;
+      return response;
+    }
+    let [_, filename] = response.headers.get('Content-Disposition').split("filename=");
+    response.blob().then(blob => {
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+    });
+    return response;
+  }).catch(() => {
+    alert(__("An error occurred during export!"));
+  });
+}

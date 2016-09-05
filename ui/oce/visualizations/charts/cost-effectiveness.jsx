@@ -32,8 +32,8 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     let data = super.getData();
     if(!data) return [];
     let traces = [
-        this.mkTrace(this.__('Bid price'), 0),
-        this.mkTrace(this.__('Difference'), 1)
+      this.mkTrace(this.__('Bid price'), 0),
+      this.mkTrace(this.__('Difference'), 1)
     ];
 
     let {hoverFormatter} = this.props.styling.charts;
@@ -70,6 +70,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
 
 CostEffectiveness.getName = __ => __('Cost effectiveness');
 CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
+CostEffectiveness.excelEP = 'costEffectivenessExcelChart';
 CostEffectiveness.getFillerDatum = year => Map({
   year,
   tender: 0,

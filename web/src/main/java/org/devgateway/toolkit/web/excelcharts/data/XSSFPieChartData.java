@@ -1,26 +1,26 @@
-package org.devgateway.ocds.web.excelcharts.data;
+package org.devgateway.toolkit.web.excelcharts.data;
 
 import org.apache.poi.ss.usermodel.Chart;
 import org.apache.poi.ss.usermodel.charts.ChartAxis;
 import org.apache.poi.ss.usermodel.charts.ChartDataSource;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.xmlbeans.XmlObject;
-import org.devgateway.ocds.web.excelcharts.CustomChartSeries;
-import org.devgateway.ocds.web.excelcharts.util.XSSFChartUtil;
+import org.devgateway.toolkit.web.excelcharts.CustomChartSeries;
+import org.devgateway.toolkit.web.excelcharts.util.XSSFChartUtil;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTAxDataSource;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTBubbleChart;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTBubbleSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieChart;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTPieSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
 
 /**
  * @author idobre
- * @since 8/12/16
+ * @since 8/8/16
  *
- * Holds data for a XSSF Bubble Chart.
+ * Holds data for a XSSF Pie Chart.
  */
-public class XSSFBubbleChartData extends AbstractXSSFChartData {
-    public XSSFBubbleChartData(final String title) {
+public class XSSFPieChartData extends AbstractXSSFChartData {
+    public XSSFPieChartData(final String title) {
         super(title);
     }
 
@@ -30,20 +30,20 @@ public class XSSFBubbleChartData extends AbstractXSSFChartData {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
-                final CTBubbleChart ctBubbleChart = (CTBubbleChart) ctChart;
-                final CTBubbleSer bubbleSer = ctBubbleChart.addNewSer();
+                final CTPieChart ctPieChart = (CTPieChart) ctChart;
+                final CTPieSer ctPieSer = ctPieChart.addNewSer();
 
-                bubbleSer.addNewIdx().setVal(this.id);
-                bubbleSer.addNewOrder().setVal(this.order);
+                ctPieSer.addNewIdx().setVal(this.id);
+                ctPieSer.addNewOrder().setVal(this.order);
 
-                final CTAxDataSource catDS = bubbleSer.addNewXVal();
+                final CTAxDataSource catDS = ctPieSer.addNewCat();
                 XSSFChartUtil.buildAxDataSource(catDS, this.categories);
 
-                final CTNumDataSource valueDS = bubbleSer.addNewBubbleSize();
+                final CTNumDataSource valueDS = ctPieSer.addNewVal();
                 XSSFChartUtil.buildNumDataSource(valueDS, this.values);
 
                 if (isTitleSet()) {
-                    bubbleSer.setTx(getCTSerTx());
+                    ctPieSer.setTx(getCTSerTx());
                 }
             }
         };
@@ -57,17 +57,13 @@ public class XSSFBubbleChartData extends AbstractXSSFChartData {
 
         final XSSFChart xssfChart = (XSSFChart) chart;
         final CTPlotArea plotArea = xssfChart.getCTChart().getPlotArea();
-        final CTBubbleChart bubbleChart = plotArea.addNewBubbleChart();
-
-        for (CustomChartSeries s : series) {
-            s.addToChart(bubbleChart);
-        }
-
-        for (ChartAxis ax : axis) {
-            bubbleChart.addNewAxId().setVal(ax.getId());
-        }
+        final CTPieChart pieChart = plotArea.addNewPieChart();
+        pieChart.addNewVaryColors().setVal(true);
 
         xssfChart.setTitle(this.title);
+
+        for (CustomChartSeries s : series) {
+            s.addToChart(pieChart);
+        }
     }
 }
-

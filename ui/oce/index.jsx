@@ -1,6 +1,6 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce} from "./tools";
+import {fetchJson, debounce, download} from "./tools";
 import URI from "urijs";
 import Filters from "./filters";
 import OCEStyle from "./style.less";
@@ -110,8 +110,8 @@ class OCApp extends React.Component{
               onChange={e => this.updateComparisonCriteria(e.target.value)}
           >
             <option value="">{this.__('None')}</option>
-            <option value="bidTypeId">{this.__('Bid Type')}</option>      
-            <option value="bidSelectionMethod">{this.__('Bid Selection Method')}</option>      
+            <option value="bidTypeId">{this.__('Bid Type')}</option>
+            <option value="bidSelectionMethod">{this.__('Bid Selection Method')}</option>
             <option value="procuringEntityId">{this.__('Procuring Entity')}</option>
           </select>
         </div>
@@ -204,36 +204,16 @@ class OCApp extends React.Component{
   }
 
   downloadExcel(){
+    let {filters, selectedYears: years} = this.state;
+    let onDone = () => this.setState({exporting: false});
     this.setState({exporting: true});
-    let url = new URI('/api/ocds/excelExport').addSearch(this.state.filters.toJS()).addSearch('year', this.state.selectedYears.toArray());
-    fetch(url.clone().query(""), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: url.query()
-    }).then(response => {
-      let {userAgent} = navigator;
-      let isSafari =  -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
-      if(isSafari){
-        location.href = url;
-        this.setState({exporting: false});
-        return;
-      }
-      let [_, filename] = response.headers.get('Content-Disposition').split("filename=");
-      response.blob().then(blob => {
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        this.setState({exporting: false})
-      });
-      return response;
-    }).catch((...args) => {
-      alert(this.__("An error occurred during export!"));
-      this.setState({exporting: false})
-    });
+    download({
+      ep: 'excelExport',
+      filters,
+      years,
+      __: this.__.bind(this)
+    }).then(onDone).catch(onDone);
+
   }
 
   exportBtn(){

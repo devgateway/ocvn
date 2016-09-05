@@ -1,7 +1,7 @@
-package org.devgateway.ocds.web.excelcharts.util;
+package org.devgateway.toolkit.web.excelcharts.util;
 
-import org.devgateway.ocds.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.excelcharts.CustomChartData;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
+import org.devgateway.toolkit.web.excelcharts.CustomChartData;
 
 /**
  * @author idobre
