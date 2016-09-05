@@ -107,6 +107,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 new CustomProjectionOperation(project1), sort(Direction.ASC, Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
 
+        System.out.println(agg);
+        
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
         return tagCount;

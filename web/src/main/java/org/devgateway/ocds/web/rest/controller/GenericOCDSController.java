@@ -192,10 +192,23 @@ public class GenericOCDSController {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
     }
 
+    
+    /**
+     * Appends the supplier entity id for this filter, this will fitler based
+     * on tender.procuringEntity._id
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getSupplierIdCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
+    }
+
     @PostConstruct
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
         tmpMap.put("tender.procuringEntity._id", 1);
+		tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
         tmpMap.put("tender.procurementMethodDetails", 1);
@@ -237,6 +250,7 @@ public class GenericOCDSController {
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
                 getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
+                getSupplierIdCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter));
     }

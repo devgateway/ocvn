@@ -22,6 +22,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	@ApiModelProperty(value = "This is the id of the organization/procuring entity. "
 			+ "Corresponds to the OCDS Organization.identifier")
     private List<String> procuringEntityId;
+    
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+	@ApiModelProperty(value = "This is the id of the organization/supplier entity. "
+			+ "Corresponds to the OCDS Organization.identifier")
+	private List<String> supplierId;
 
 	@ApiModelProperty(value = "This will filter after tender.procurementMethodDetails."
 			+ "Valid examples are Đấu thầu rộng rãi, Đấu thầu hạn chế, etc...")
@@ -147,6 +152,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setMaxAwardValue(BigDecimal maxAwardValue) {
 		this.maxAwardValue = maxAwardValue;
+	}
+
+	public List<String> getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(List<String> supplierId) {
+		this.supplierId = supplierId;
 	}
 
 }
