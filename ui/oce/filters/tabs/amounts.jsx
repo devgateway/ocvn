@@ -1,5 +1,6 @@
 import Tab from "./index";
 import TenderPrice from "../tender-price";
+import AwardValue from "../award-value";
 
 class Amount extends Tab{
     renderChild(slug, Component){
@@ -18,6 +19,7 @@ class Amount extends Tab{
     render(){
       return <div>
         {this.renderChild("TenderValue", TenderPrice)}
+        {this.renderChild("AwardValue", AwardValue)}
       </div>
   }
 }
