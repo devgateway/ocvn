@@ -67,7 +67,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		value.setAmount(getDecimal(getRowCell(row, 1)));
 		award.setValue(value);
 
-		Organization supplier = organizationRepository.findByIdOrNameAndTypes(getRowCell(row, 2),
+		Organization supplier = organizationRepository.findByIdOrNameInsensitiveAndTypes(getRowCell(row, 2),
 				Organization.OrganizationType.supplier);
 				
 		

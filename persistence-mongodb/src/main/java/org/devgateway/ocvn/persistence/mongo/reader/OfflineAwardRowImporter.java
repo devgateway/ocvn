@@ -75,7 +75,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 		Organization supplier = null;
 		if (getRowCell(row, 3) != null) {
 			
-			supplier = organizationRepository.findByIdOrNameAndTypes(getRowCell(row, 3),
+			supplier = organizationRepository.findByIdOrNameInsensitiveAndTypes(getRowCell(row, 3),
 					Organization.OrganizationType.supplier);
 
 			if (supplier == null) {
