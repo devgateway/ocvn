@@ -15,7 +15,10 @@ public interface OrganizationRepository extends GenericOrganizationRepository<Or
 
 	@Query(value = "{$and: [ { $or: [ {'_id' : ?0 }, "
 			+ "{'name': {$regex : '^?0$', $options: 'i'} } ] }  , { 'types': ?1 } ]}")
-	Organization findByIdOrNameAndTypes(String id, OrganizationType type);
+	Organization findByIdOrNameInsensitiveAndTypes(String id, OrganizationType type);
+	
+	@Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'name': {$regex : '^?0$', $options: 'i'} } ] }")
+	Organization findByIdOrNameInsensitive(String idName);
 
 	Organization findByIdAndTypes(String id, OrganizationType type);
 
