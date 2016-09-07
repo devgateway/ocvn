@@ -42,7 +42,7 @@ class OverviewChart extends FrontendYearFilterableChart{
         type: "category"
       },
       yaxis: {
-        title: this.__("Count (in VND)"),
+        title: this.__("Count"),
         exponentformat: 'none'
       }
     }

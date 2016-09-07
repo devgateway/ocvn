@@ -73,7 +73,7 @@ class BidPeriod extends FrontendYearFilterableChart {
 
 BidPeriod.endpoints = ['averageTenderPeriod', 'averageAwardPeriod'];
 BidPeriod.excelEP = 'bidPeriodExcelChart';
-BidPeriod.getName = __ => __('Bid period');
+BidPeriod.getName = __ => __('Bid Timeline');
 BidPeriod.horizontal = true;
 BidPeriod.getFillerDatum = year => Map({
   year,

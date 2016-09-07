@@ -2,7 +2,7 @@ import TypeAhead from "./inputs/type-ahead";
 
 class ProcuringEntity extends TypeAhead{
   static getName(__){
-      return __('Procuring entitiy');
+      return __('Procuring entity');
   }
 }
 
