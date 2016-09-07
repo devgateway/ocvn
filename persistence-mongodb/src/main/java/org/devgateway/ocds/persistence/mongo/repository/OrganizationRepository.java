@@ -13,13 +13,11 @@ import org.springframework.data.mongodb.repository.Query;
  */
 public interface OrganizationRepository extends GenericOrganizationRepository<Organization> {
 
-	@Query(value = "{$and: [ { $or: [ {'_id' : ?0 }, "
-			+ "{'name': {$regex : '^?0$', $options: 'i'} } ] }  , { 'types': ?1 } ]}")
-	Organization findByIdOrNameInsensitiveAndTypes(String id, OrganizationType type);
-	
-	@Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'name': {$regex : '^?0$', $options: 'i'} } ] }")
-	Organization findByIdOrNameInsensitive(String idName);
+	@Query(value = "{$and: [ { $or: [ {'_id' : ?0 }, " + "{'name': ?0 } ] }  , { 'types': ?1 } ]}")
+	Organization findByIdOrNameAndTypes(String idName, OrganizationType type);
+
+	@Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'name': ?0} ] }")
+	Organization findByIdOrName(String idName);
 
 	Organization findByIdAndTypes(String id, OrganizationType type);
-
 }

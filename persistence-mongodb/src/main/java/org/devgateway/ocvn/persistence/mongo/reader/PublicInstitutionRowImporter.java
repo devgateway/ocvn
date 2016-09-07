@@ -30,21 +30,21 @@ public class PublicInstitutionRowImporter extends RowImporter<Organization, Orga
 		if (getRowCell(row, 0) == null) {
 			throw new RuntimeException("Main identifier empty!");
 		}
-		Organization organization = repository.findOne(getRowCell(row, 0));
+		Organization organization = repository.findOne(getRowCellUpper(row, 0));
 		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
 		}
 		organization = new Organization();
 		Identifier identifier = new Identifier();
 
-		identifier.setId(getRowCell(row, 0));
-		organization.setId(getRowCell(row, 0));
+		identifier.setId(getRowCellUpper(row, 0));
+		organization.setId(getRowCellUpper(row, 0));
 		organization.setIdentifier(identifier);
-		organization.setName(getRowCell(row, 1));
+		organization.setName(getRowCellUpper(row, 1));
 
 		if (getRowCell(row, 44) != null) {
 			Identifier additionalIdentifier = new Identifier();
-			additionalIdentifier.setId(getRowCell(row, 44));
+			additionalIdentifier.setId(getRowCellUpper(row, 44));
 			organization.getAdditionalIdentifiers().add(additionalIdentifier);
 		}
 
