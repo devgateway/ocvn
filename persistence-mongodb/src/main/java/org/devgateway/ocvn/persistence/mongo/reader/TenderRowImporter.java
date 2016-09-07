@@ -170,7 +170,10 @@ public class TenderRowImporter extends ReleaseRowImporter {
 					classification.setDescription("Tư vấn");
 					break;
 				case "10":
-					classification.setDescription("EPC");
+					classification.setDescription("Combined");
+					break;
+				case "15":
+					classification.setDescription("Non-Consulting Services");
 					break;
 				default:
 					classification.setDescription("Unspecified");
