@@ -22,7 +22,7 @@ import java.io.Serializable;
  */
 public class LogLabel extends Label implements IAjaxIndicatorAware {
 
-    private static final int REFRESH_INTERVAL = 5;
+    private static final int REFRESH_INTERVAL = 10;
 
     private static final long serialVersionUID = 1L;
 

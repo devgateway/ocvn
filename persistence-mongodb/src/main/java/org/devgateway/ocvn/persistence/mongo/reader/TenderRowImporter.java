@@ -170,7 +170,10 @@ public class TenderRowImporter extends ReleaseRowImporter {
 					classification.setDescription("Tư vấn");
 					break;
 				case "10":
-					classification.setDescription("EPC");
+					classification.setDescription("Combined");
+					break;
+				case "15":
+					classification.setDescription("Non-Consulting Services");
 					break;
 				default:
 					classification.setDescription("Unspecified");
@@ -255,14 +258,14 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		tender.setTenderPeriod(period);
 		tender.setBidOpenDt(getExcelDate(getRowCell(row, 9)));
 
-		Organization procuringEntity = organizationRepository.findByIdOrNameAllIgnoreCase(getRowCell(row, 10),
-				getRowCell(row, 10));
+		Organization procuringEntity = organizationRepository.findByIdOrName(getRowCellUpper(row, 10));
 
 		if (procuringEntity == null) {
 			procuringEntity = new Organization();
 			procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
+			procuringEntity.setName(getRowCellUpper(row, 10));
 			Identifier procuringEntityIdentifier = new Identifier();
-			procuringEntityIdentifier.setId(getRowCell(row, 10));
+			procuringEntityIdentifier.setId(getRowCellUpper(row, 10));
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
 			procuringEntity = organizationRepository.insert(procuringEntity);
 		} else {
@@ -273,13 +276,13 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		}
 		tender.setProcuringEntity(procuringEntity);
 
-		Organization orderInstituCd = organizationRepository.findByIdOrNameAllIgnoreCase(getRowCell(row, 11),
-				getRowCell(row, 11));
+		Organization orderInstituCd = organizationRepository.findByIdOrName(getRowCellUpper(row, 11));
 
 		if (orderInstituCd == null) {
 			orderInstituCd = new Organization();
 			Identifier orderInstituCdIdentifier = new Identifier();
-			orderInstituCdIdentifier.setId(getRowCell(row, 11));
+			orderInstituCdIdentifier.setId(getRowCellUpper(row, 11));
+			orderInstituCd.setName(getRowCellUpper(row, 11));			
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
 			orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
 			orderInstituCd = organizationRepository.insert(orderInstituCd);
@@ -303,7 +306,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		tender.setCancellationRationale(getRowCell(row, 15));
 		
 		readLocationAndClassificationFromReleaseRow(row, tender);
-
+		
 		return release;
 	}
 }

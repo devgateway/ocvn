@@ -28,8 +28,7 @@ public class SupplierRowImporter extends RowImporter<Organization, OrganizationR
 		if (getRowCell(row, 0) == null) {
 			throw new RuntimeException("Main identifier empty!");
 		}
-		Organization organization = repository.findByIdAndTypes(getRowCell(row, 0),
-				Organization.OrganizationType.supplier);
+		Organization organization = repository.findOne(getRowCellUpper(row, 0));				
 				
 		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
@@ -37,10 +36,10 @@ public class SupplierRowImporter extends RowImporter<Organization, OrganizationR
 		organization = new Organization();
 		Identifier identifier = new Identifier();
 
-		identifier.setId(getRowCell(row, 0));
-		organization.setId(getRowCell(row, 0));
+		identifier.setId(getRowCellUpper(row, 0));
+		organization.setId(getRowCellUpper(row, 0));
 		organization.setIdentifier(identifier);
-		organization.setName(getRowCell(row, 2));
+		organization.setName(getRowCellUpper(row, 2));
 		organization.getTypes().add(Organization.OrganizationType.supplier);
 
 		Address address = new Address();

@@ -67,13 +67,13 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		value.setAmount(getDecimal(getRowCell(row, 1)));
 		award.setValue(value);
 
-		Organization supplier = organizationRepository.findByIdOrNameAndTypes(getRowCell(row, 2),
-				Organization.OrganizationType.supplier);
+		Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
 				
 		
 		if (supplier == null) {
 			supplier = new Organization();
-			supplier.setName(getRowCell(row, 2));
+			supplier.setName(getRowCellUpper(row, 2));
+			supplier.setId(getRowCellUpper(row, 2));
 			supplier.getTypes().add(Organization.OrganizationType.supplier);
 			supplier = organizationRepository.insert(supplier);
 		} else {

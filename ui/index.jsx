@@ -11,11 +11,12 @@ import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
 function getBidTypeDescription(__, {id, description}){
-  switch(+id){
-    case 12: return __("Unspecified") + " #1";
-    case 15: return __("Unspecified") + " #2";
-    default: return description;
-  }
+  //switch(+id){
+    //case 12: return __("Unspecified") + " #1";
+    //case 15: return __("Unspecified") + " #2";
+    //default: return description;
+  //}
+  return description;
 }
 
 class OCVN extends OCApp{

@@ -15,7 +15,11 @@ class OCVNTenderLocation extends TenderLocation{}
 
 OCVNTenderLocation.TABS = [OverviewTab, OverviewChartTab, CostEffectivenessTab, BidSelectionMethodTab];
 
-class OCVNTenderLocations extends TenderLocations{}
+class OCVNTenderLocations extends TenderLocations{
+    static getLayerName(__){
+        return __('Invitation to Bid Locations');
+    }
+}
 
 OCVNTenderLocations.Location = OCVNTenderLocation;
 

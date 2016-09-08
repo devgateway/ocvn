@@ -4,6 +4,6 @@ import OCVNTenderLocations from '../visualizations/map/tender-locations';
 
 class OCVNLocation extends Location{}
 
-OCVNLocation.LAYERS = [PlannedLocations, OCVNTenderLocations];
+OCVNLocation.LAYERS = [OCVNTenderLocations, PlannedLocations];
 
 export default OCVNLocation;
