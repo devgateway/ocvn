@@ -39,6 +39,10 @@
 	<cache name="contrMethods" eternal="true" overflowToDisk="false"
 		diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="10000"/>
 
+   <cache name="tendersAwardsYears" eternal="true" overflowToDisk="false"
+           diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000"/>
+           
+
     <cache name="excelExport"
            eternal="true"
            diskPersistent="false"
