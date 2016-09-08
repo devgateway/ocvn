@@ -24,7 +24,7 @@ import java.util.List;
  * @author idobre
  * @since 8/22/16
  *
- * Exports an excel chart based on *Bid period* dashboard
+ * Exports an excel chart based on *Bid Timeline* dashboard
  */
 @RestController
 public class AverageTenderAndAwardsExcelController extends GenericOCDSController {
@@ -37,11 +37,11 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
     @Autowired
     private AverageTenderAndAwardPeriodsController averageTenderAndAwardPeriodsController;
 
-    @ApiOperation(value = "Exports *Bid period* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/bidPeriodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void bidPeriodExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
-                                    final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Bid period";
+    @ApiOperation(value = "Exports *Bid Timeline* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/bidTimelineExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
+    public void bidTimelineExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+                                      final HttpServletResponse response) throws IOException {
+        final String chartTitle = "Bid timeline";
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
         final List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController.averageAwardPeriod(filter);
@@ -51,16 +51,16 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
                 averageTenderPeriod, averageAwardPeriod);
         final List<List<? extends Number>> values = new ArrayList<>();
 
-        final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(averageAwardPeriod, categories,
-                Fields.UNDERSCORE_ID, AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(averageTenderPeriod, categories,
                 Fields.UNDERSCORE_ID, AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
-        values.add(valueAwards);
+        final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(averageAwardPeriod, categories,
+                Fields.UNDERSCORE_ID, AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
         values.add(valueTenders);
+        values.add(valueAwards);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Award",
-                "Tender");
+                "Tender",
+                "Award");
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
