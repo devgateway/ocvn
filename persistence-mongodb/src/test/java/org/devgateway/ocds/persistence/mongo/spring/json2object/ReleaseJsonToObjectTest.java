@@ -16,13 +16,6 @@ import java.math.BigDecimal;
  * @since 5/31/16
  */
 public class ReleaseJsonToObjectTest {
-
-    @Before
-    public void setUp() {
-
-    }
-
-
     @Test
     public void toObject() throws Exception {
         String jsonRelease = "{\n" +
