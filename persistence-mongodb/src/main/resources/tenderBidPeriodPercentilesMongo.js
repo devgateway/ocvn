@@ -18,17 +18,20 @@ function(yearsStr,procuringEntityIdStr,bidTypeIdStr,bidSelectionMethod) {
    } else
 	   matchProcuringEntityId={};
    
+   //vietnam specific
+   if(bidSelectionMethod!=undefined) {	
+	   matchBidSelectionMethod= {"tender.succBidderMethodName" : {$in : bidSelectionMethod.split(",") }  };
+   } else
+	   matchBidSelectionMethod={};
+	      
+	      
+   
    if(bidTypeIdStr!=undefined) {	
 	   matchBidTypeId= {"tender.items.classification._id" : {$in : bidTypeIdStr.split(",") }  };
    } else
 	   matchBidTypeId={};
    
-   if(bidSelectionMethod!=undefined) {	
-	   matchBidSelectionMethod= {"tender.succBidderMethodName" : {$in : bidSelectionMethod.split(",") }  };
-   } else
-	   matchBidSelectionMethod={};
-   
-   
+ 
    
 	var agg = db.release.aggregate(
 	[

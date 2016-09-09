@@ -4,20 +4,20 @@ import java.text.ParseException;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 
 /**
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
@@ -28,10 +28,10 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository
  */
 public class OfflineAwardRowImporter extends ReleaseRowImporter {
 
-	private VNOrganizationRepository organizationRepository;
+	private OrganizationRepository organizationRepository;
 
 	public OfflineAwardRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-			final VNOrganizationRepository organizationRepository, final int skipRows) {
+			final OrganizationRepository organizationRepository, final int skipRows) {
 		super(releaseRepository, importService, skipRows);
 		this.organizationRepository = organizationRepository;
 	}
@@ -72,15 +72,22 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 			award.setValue(value);
 		}
 		
-		VNOrganization supplier = null;
+		Organization supplier = null;
 		if (getRowCell(row, 3) != null) {
-			supplier = organizationRepository.findOne(getRowCell(row, 3));
+			
+			supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 3));
 
 			if (supplier == null) {
-				supplier = new VNOrganization();
-				supplier.setName(getRowCell(row, 3));
-				supplier.setId(getRowCell(row, 3));
+				supplier = new Organization();
+				supplier.setName(getRowCellUpper(row, 3));
+				supplier.setId(getRowCellUpper(row, 3));
+				supplier.getTypes().add(Organization.OrganizationType.supplier);
 				supplier = organizationRepository.insert(supplier);
+			} else {
+				if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
+					supplier.getTypes().add(Organization.OrganizationType.supplier);
+					supplier = organizationRepository.save(supplier);
+				}
 			}
 		}
 
@@ -102,7 +109,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 
 		award.setBidSuccMethod(getInteger(getRowCell(row, 9)));
 		
-		VNOrganization supplierOrganization = supplier;
+		Organization supplierOrganization = supplier;
 		if (supplierOrganization != null && getRowCell(row, 10) != null) {
 			Amount value2 = new Amount();
 			value2.setCurrency("VND");

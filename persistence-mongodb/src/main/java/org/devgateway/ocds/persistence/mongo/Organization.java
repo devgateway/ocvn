@@ -1,17 +1,24 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
@@ -33,6 +40,10 @@ import java.util.Set;
 public class Organization implements Identifiable {
     @Id
     private String id;
+    
+    @JsonProperty("types")
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)    
+	private Set<OrganizationType> types = new LinkedHashSet<OrganizationType>();
 
     @ExcelExport
     @JsonProperty("identifier")
@@ -47,6 +58,7 @@ public class Organization implements Identifiable {
      */
     @JsonProperty("additionalIdentifiers")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
     private Set<Identifier> additionalIdentifiers = new LinkedHashSet<Identifier>();
 
     /**
@@ -240,6 +252,57 @@ public class Organization implements Identifiable {
                 append(contactPoint, rhs.contactPoint).
                 isEquals();
     }
+    
+    
+    public enum OrganizationType {
+        procuringEntity("procuringEntity"),
+
+        buyer("buyer"),
+
+        supplier("supplier");
+
+        private final String value;
+
+        private static final Map<String, OrganizationType> CONSTANTS = new HashMap<String, OrganizationType>();
+
+        static {
+            for (OrganizationType c: values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        OrganizationType(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static OrganizationType fromValue(String value) {
+        	OrganizationType constant = CONSTANTS.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
+    }
+
+
+	public Set<OrganizationType> getTypes() {
+		return types;
+	}
+
+	public void setTypes(Set<OrganizationType> types) {
+		this.types = types;
+	}
+
+
 
 }
 

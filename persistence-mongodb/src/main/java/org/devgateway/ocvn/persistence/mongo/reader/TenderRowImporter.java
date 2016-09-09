@@ -6,6 +6,7 @@ import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Item;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Period;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
@@ -14,17 +15,16 @@ import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
 import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 
 /**
  * Specific {@link RowImporter} for Tenders, in the custom Excel format provided
@@ -35,13 +35,13 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository
  */
 public class TenderRowImporter extends ReleaseRowImporter {
 
-	private VNOrganizationRepository organizationRepository;
+	private OrganizationRepository organizationRepository;
 	private ClassificationRepository classificationRepository;
 	private ContrMethodRepository contrMethodRepository;
 	private VNLocationRepository locationRepository;
 
 	public TenderRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-			final VNOrganizationRepository organizationRepository,
+			final OrganizationRepository organizationRepository,
 			final ClassificationRepository classificationRepository, final ContrMethodRepository contrMethodRepository,
 			final VNLocationRepository locationRepository,
 			final int skipRows) {
@@ -50,7 +50,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		this.classificationRepository = classificationRepository;
 		this.contrMethodRepository = contrMethodRepository;
 		this.locationRepository = locationRepository;
-	}
+	}	
 
 	
 	public void readProcurementMethodFromReleaseRow(final String[] row, VNTender tender) throws ParseException {
@@ -170,7 +170,10 @@ public class TenderRowImporter extends ReleaseRowImporter {
 					classification.setDescription("Tư vấn");
 					break;
 				case "10":
-					classification.setDescription("EPC");
+					classification.setDescription("Combined");
+					break;
+				case "15":
+					classification.setDescription("Non-Consulting Services");
 					break;
 				default:
 					classification.setDescription("Unspecified");
@@ -255,32 +258,39 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		tender.setTenderPeriod(period);
 		tender.setBidOpenDt(getExcelDate(getRowCell(row, 9)));
 
-		VNOrganization procuringEntity = organizationRepository.findOne(getRowCell(row, 10));
+		Organization procuringEntity = organizationRepository.findByIdOrName(getRowCellUpper(row, 10));
 
 		if (procuringEntity == null) {
-			procuringEntity = new VNOrganization();
-			procuringEntity.setProcuringEntity(true);
+			procuringEntity = new Organization();
+			procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
+			procuringEntity.setName(getRowCellUpper(row, 10));
 			Identifier procuringEntityIdentifier = new Identifier();
-			procuringEntityIdentifier.setId(getRowCell(row, 10));
+			procuringEntityIdentifier.setId(getRowCellUpper(row, 10));
 			procuringEntity.setIdentifier(procuringEntityIdentifier);
 			procuringEntity = organizationRepository.insert(procuringEntity);
 		} else {
-			if (procuringEntity.getProcuringEntity() == null || !procuringEntity.getProcuringEntity()) {
-				procuringEntity.setProcuringEntity(true);
+			if (!procuringEntity.getTypes().contains(Organization.OrganizationType.procuringEntity)) {
+				procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
 				procuringEntity = organizationRepository.save(procuringEntity);
 			}
 		}
-
 		tender.setProcuringEntity(procuringEntity);
 
-		VNOrganization orderInstituCd = organizationRepository.findOne(getRowCell(row, 11));
+		Organization orderInstituCd = organizationRepository.findByIdOrName(getRowCellUpper(row, 11));
 
 		if (orderInstituCd == null) {
-			orderInstituCd = new VNOrganization();
+			orderInstituCd = new Organization();
 			Identifier orderInstituCdIdentifier = new Identifier();
-			orderInstituCdIdentifier.setId(getRowCell(row, 11));
+			orderInstituCdIdentifier.setId(getRowCellUpper(row, 11));
+			orderInstituCd.setName(getRowCellUpper(row, 11));			
 			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
+			orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
 			orderInstituCd = organizationRepository.insert(orderInstituCd);
+		} else {
+			if (!orderInstituCd.getTypes().contains(Organization.OrganizationType.buyer)) {
+				orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
+				orderInstituCd = organizationRepository.save(orderInstituCd);
+			}
 		}
 		release.setBuyer(orderInstituCd);
 
@@ -296,7 +306,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
 		tender.setCancellationRationale(getRowCell(row, 15));
 		
 		readLocationAndClassificationFromReleaseRow(row, tender);
-
+		
 		return release;
 	}
 }

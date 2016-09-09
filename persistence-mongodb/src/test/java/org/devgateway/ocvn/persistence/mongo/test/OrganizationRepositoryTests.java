@@ -3,11 +3,17 @@
  */
 package org.devgateway.ocvn.persistence.mongo.test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.Organization;
+import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoPersistenceApplication;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,11 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author mihai
@@ -34,7 +35,7 @@ public class OrganizationRepositoryTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganizationRepositoryTests.class);
 
     @Autowired
-    protected VNOrganizationRepository vnOrganizationRepository;
+    protected OrganizationRepository vnOrganizationRepository;
 
     @Before
     public void init() {
@@ -44,7 +45,7 @@ public class OrganizationRepositoryTests {
     @Test
     public void saveOrganization() {
 
-        VNOrganization o = new VNOrganization();
+        Organization o = new Organization();
         Address a = new Address();
         a.setCountryName("United States");
         a.setLocality("Washington");
@@ -66,11 +67,11 @@ public class OrganizationRepositoryTests {
         i.setLegalName("Development Gateway");
         o.setIdentifier(i);
 
-        o.setProcuringEntity(true);
+        o.getTypes().add(OrganizationType.procuringEntity);
 
         o.getAdditionalIdentifiers().add(i);
 
-        VNOrganization save = vnOrganizationRepository.save(o);
+        Organization save = vnOrganizationRepository.save(o);
 
         assertThat(save.getId(), is(not(nullValue())));
 

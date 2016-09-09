@@ -25,15 +25,12 @@ There are 4 main types of filters, all of them are multivalue
 - year - this is just the year. Example: 2014
 - bidTypeId - this is the _dd_ of the Bid Type object, all entities are available here `/api/ocds/bidType/all`. Example: 10
 - procuringEntityId - this is the _id_ of the procuring entity, all procuring entities are available here `/api/ocds/organization/procuringEntity/all`
-- bidSelectionMethod - this is the bid selection method text, since OCDS does not allow an ID here we cannot create one, so we'll just use the text, all values are available here `/api/ocds/bidSelectionMethod/all`
-
 For endpoints that may return a lot of data there are two additional filter options
 - pageSize - this is the number of items one page will return - default is 100. Max is 1000.
 - pageNumber - this is the page number to display, first page is 0.
 
 ## Selectors
 
-- Bid Selection Method - `/api/ocds/bidSelectionMethod/all`
 - Bid Types - `/api/ocds/bidType/all`
 - Display Organization details, by Id - `/api/ocds/organization/id/[organizationId]`
 - Procuring Entity Search - `/api/ocds/organization/procuringEntity/all?text=[serachText]&pageNumber=[pageNo]&pageSize=[pageSize]`. All parameters are optional.
@@ -42,7 +39,7 @@ For endpoints that may return a lot of data there are two additional filter opti
 
 ### Display all OCDS data, paginated
 
-`/api/ocds/release/all?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&year=[year1]&year=[year2]...&pageNumber=[pageNo]&pageSize=[pageSize]`
+`/api/ocds/release/all?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&year=[year1]&year=[year2]...&pageNumber=[pageNo]&pageSize=[pageSize]`
 
 Example: `/api/ocds/release/all?procuringEntityId=Z002131&pageNumber=0&pageSize=10`
 
@@ -68,19 +65,19 @@ Shows the difference between the average tender amount and the average winning b
 
 #### Endpoint 1 - Cost Effectiveness Award Amount
 
-`/api/costEffectivenessAwardAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/costEffectivenessAwardAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 
 #### Endpoint 2 - Cost Effectiveness Tender Amount
 
-`/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 
 ### Visualization 3 - Bidding Period
 
 Visualization of distribution of bidding period (e.g. bid end date - bid start date). Visualization is be a box and whisker plot with: min, quartile 1, median, quartile 3, max
 
-`/api/tenderBidPeriodPercentiles?year=[year1]&year=[year2]...&bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/tenderBidPeriodPercentiles?year=[year1]&year=[year2]...&bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 ### Visualization 4 - Funding by Bid Type
 
@@ -88,11 +85,11 @@ A visualization of distribution of funding by type of bid used in tendering proc
 
 #### Endpoint 1 - Tender Price By OCDS Types
 
-`/api/tenderPriceByOcdsTypeYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/tenderPriceByProcurementMethod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 #### Endpoint 2 - Tender Price By Vietnam Types
 
-`/api/tenderPriceByVnTypeYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/tenderPriceByBidSelectionMethod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 
 ### Visualization 5 - Counts for Tenders, Awards, Bid Plans Per Year
@@ -105,15 +102,15 @@ This is a line chart displaying (by year) the COUNT of:
 
 #### Endpoint 1 - Count of Bid Plans Per Year
 
-`/api/countBidPlansByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/countBidPlansByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 #### Endpoint 2 - Count of Bid Plans Per Year
 
-`/api/countTendersByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/countTendersByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 #### Endpoint 3 - Count of Awards Per Year
 
-`/api/countAwardsByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/countAwardsByYear?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 ### Visualization 6 - Timeline Chart
 
@@ -121,11 +118,11 @@ Shows the average length of bid period and award period; displays averages by ye
 
 #### Endpoint 1 - Average Tender Period
 
-`/api/averageTenderPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/averageTenderPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 #### Endpoint 2 - Average Award Period
 
-`/api/averageAwardPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]`
+`/api/averageAwardPeriod?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....`
 
 ## Visualization 7 Largest Tenders/Awards
 
@@ -133,23 +130,23 @@ Table showing the top 10 largest tenders and the 10 largest awards, including am
 
 ### Endpoint 1 - Top 10 largest tenders
 
-`/api/topTenLargestTenders?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&year=[year1]...`
+`/api/topTenLargestTenders?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&year=[year1]...`
 
 ### Endpoint 2 - Top 10 largest awards
 
-`/api/topTenLargestAwards?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&year=[year1]...`
+`/api/topTenLargestAwards?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&year=[year1]...`
 
 ## Special Use of Cost Effectiveness Tender Amount Endpoint to derive the ordering of comparison charts
 
 It is used to calculate the largest values in the given category. You can use the same endpoint, but with an additional parameter (see last one)
 
-`/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&bidSelectionMethod=[bidSel1]&bidSelectionMethod=[bidSel2]&groupByCategory=[category]`
+`/api/costEffectivenessTenderAmount?bidTypeId=[bid1]&bidTypeId=[bid2]...&procuringEntityId=[proc1]&procuringEntityId=[proc2]....&groupByCategory=[category]`
 
-When `groupByCategory` is used, the behavior of the endpoint will change, in that it will group results by the values of the category specified by groupByCategory. The categories are among the filter types: "bidTypeId", "procuringEntityId", "bidSelectionMethod". 
+When `groupByCategory` is used, the behavior of the endpoint will change, in that it will group results by the values of the category specified by groupByCategory. The categories are among the filter types: "bidTypeId", "procuringEntityId". 
 
 A valid use of the filter would then be 
-`/api/costEffectivenessTenderAmount?groupByCategory=bidSelectionMethod` - this would return the tender amounts grouped by bidSelectionMethod and ordered descending. If you just want to get the top 3, you can pass the pageSize parameter.
+`/api/costEffectivenessTenderAmount?groupByCategory=bidTypeId` - this would return the tender amounts grouped by bidTypeId and ordered descending. If you just want to get the top 3, you can pass the pageSize parameter.
 
-`/api/costEffectivenessTenderAmount?groupByCategory=bidSelectionMethod&pageSize=3`
+`/api/costEffectivenessTenderAmount?groupByCategory=bidTypeId&pageSize=3`
 
 We re-used the Endpoint 2 to get this info to ensure the same filtering criteria and grouping calculations used by the Endpoint 2 are used also by the grouping. 

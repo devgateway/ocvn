@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
@@ -13,7 +14,6 @@ import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingReque
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -84,10 +84,10 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 				.costEffectivenessTenderAmount(new GroupingFilterPagingRequest());
 		DBObject root = costEffectivenessTenderAmount.get(0);
 		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2013, year);
+		Assert.assertEquals(2012, year);
 
 		double totalAwardAmount = (double) root.get("totalTenderAmount");
-		Assert.assertEquals(1500, totalAwardAmount, 0);
+		Assert.assertEquals(1000, totalAwardAmount, 0);
 
 	}
 	
@@ -98,7 +98,7 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 				
 		DBObject root = averageNumberOfTenderers.get(0);
 		int year = (int) root.get("year");
-		Assert.assertEquals(2012, year);
+		Assert.assertEquals(2013, year);
 
 		double averageNoTenderers = (double) root.get("averageNoTenderers");
 		Assert.assertEquals(2, averageNoTenderers, 0);
@@ -124,14 +124,14 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
 		DBObject root = averageTenderPeriod.get(0);
 		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2013, year);
+		Assert.assertEquals(2012, year);
 
 		double n = (double) root.get("averageTenderDays");
 		Assert.assertEquals(15, n, 0);
 		
 		root = averageTenderPeriod.get(1);
 		year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2012, year);
+		Assert.assertEquals(2013, year);
 
 		n = (double) root.get("averageTenderDays");
 		Assert.assertEquals(15, n, 0);
@@ -174,9 +174,9 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 	
 	@Test
 	public void testProcuringEntitySearchController() {
-		List<VNOrganization> procuringEntities = procuringEntitySearchController
-				.procuringEntitySearchText(new OrganizationSearchRequest());
-		Assert.assertEquals(procuringEntities.size(), 2, 0);
+		List<Organization> procuringEntities = procuringEntitySearchController.searchText
+				(new OrganizationSearchRequest());
+		Assert.assertEquals(procuringEntities.size(), 1, 0);
 	}
 
 }

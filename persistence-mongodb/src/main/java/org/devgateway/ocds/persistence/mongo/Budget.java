@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Budget Information
@@ -40,6 +43,7 @@ public class Budget {
      *
      */
     @JsonProperty("source")
+    @Merge(MergeStrategy.ocdsVersion)
     private String source;
 
     /**
@@ -48,6 +52,7 @@ public class Budget {
      *
      */
     @JsonProperty("id")
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -58,6 +63,7 @@ public class Budget {
      *
      */
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     @ExcelExport
@@ -75,6 +81,7 @@ public class Budget {
      */
     @ExcelExport
     @JsonProperty("project")
+    @Merge(MergeStrategy.ocdsVersion)
     private String project;
 
     /**
@@ -87,6 +94,7 @@ public class Budget {
      */
     @ExcelExport
     @JsonProperty("projectID")
+    @Merge(MergeStrategy.ocdsVersion)
     private String projectID;
 
     /**
@@ -97,6 +105,7 @@ public class Budget {
      *
      */
     @JsonProperty("uri")
+    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**

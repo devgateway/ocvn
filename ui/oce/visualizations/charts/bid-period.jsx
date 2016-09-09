@@ -9,8 +9,8 @@ class BidPeriod extends FrontendYearFilterableChart {
     let awardsHash = response2obj('averageAwardDays', awards);
     return tenders.map(tender => ({
       year: tender._id,
-      tender: +tender.averageTenderDays.toFixed(2),
-      award: +(awardsHash[tender._id] || 0).toFixed(2)
+      tender: +tender.averageTenderDays,
+      award: +(awardsHash[tender._id] || 0)
     }))
   };
 
@@ -60,10 +60,11 @@ class BidPeriod extends FrontendYearFilterableChart {
       annotations,
       barmode: "stack",
       xaxis: {
-        title: this.__("Days")
+        title: this.__("Number of days"),
+        hoverformat: '.2f'
       },
       yaxis: {
-        title: this.__("Years"),
+        title: this.__("Year"),
         type: "category"
       }
     }
@@ -71,7 +72,8 @@ class BidPeriod extends FrontendYearFilterableChart {
 }
 
 BidPeriod.endpoints = ['averageTenderPeriod', 'averageAwardPeriod'];
-BidPeriod.getName = __ => __('Bid period');
+BidPeriod.excelEP = 'bidTimelineExcelChart';
+BidPeriod.getName = __ => __('Bid Timeline');
 BidPeriod.horizontal = true;
 BidPeriod.getFillerDatum = year => Map({
   year,

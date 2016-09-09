@@ -1,23 +1,24 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
+
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 
-import java.text.ParseException;
 
 /**
  * @author mihai Specific {@link RowImporter} for Suppliers, in the custom Excel
  *         format provided by Vietnam
  * @see VNOrganization
  */
-public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizationRepository> {
+public class SupplierRowImporter extends RowImporter<Organization, OrganizationRepository> {
 
-	public SupplierRowImporter(final VNOrganizationRepository repository, final ImportService importService,
+	public SupplierRowImporter(final OrganizationRepository repository, final ImportService importService,
 			final int skipRows) {
 		super(repository, importService, skipRows);
 	}
@@ -27,17 +28,19 @@ public class SupplierRowImporter extends RowImporter<VNOrganization, VNOrganizat
 		if (getRowCell(row, 0) == null) {
 			throw new RuntimeException("Main identifier empty!");
 		}
-		VNOrganization organization = repository.findOne(getRowCell(row, 0));
+		Organization organization = repository.findOne(getRowCellUpper(row, 0));				
+				
 		if (organization != null) {
 			throw new RuntimeException("Duplicate identifer for organization " + organization);
 		}
-		organization = new VNOrganization();
+		organization = new Organization();
 		Identifier identifier = new Identifier();
 
-		identifier.setId(getRowCell(row, 0));
-		organization.setId(getRowCell(row, 0));
+		identifier.setId(getRowCellUpper(row, 0));
+		organization.setId(getRowCellUpper(row, 0));
 		organization.setIdentifier(identifier);
-		organization.setName(getRowCell(row, 2));
+		organization.setName(getRowCellUpper(row, 2));
+		organization.getTypes().add(Organization.OrganizationType.supplier);
 
 		Address address = new Address();
 		address.setStreetAddress(getRowCell(row, 18));

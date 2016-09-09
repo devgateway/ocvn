@@ -1,14 +1,17 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -32,6 +35,7 @@ public class Amendment {
      */
 
     @JsonProperty("date")
+    @Merge(MergeStrategy.overwrite)
     private Date date;
 
     /**
@@ -41,6 +45,7 @@ public class Amendment {
      *
      */
     @JsonProperty("changes")
+    @Merge(MergeStrategy.ocdsVersion)
     private List<Change> changes = new ArrayList<Change>();
 
     /**
@@ -48,6 +53,7 @@ public class Amendment {
      *
      */
     @JsonProperty("rationale")
+    @Merge(MergeStrategy.ocdsVersion)
     private String rationale;
 
     /**

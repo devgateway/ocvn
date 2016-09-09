@@ -19,7 +19,7 @@ class OverviewChart extends FrontendYearFilterableChart{
     if(!data) return [];
     let LINES = {
       award: this.__("Award"),
-      bidplan: this.__("Bid plan"),
+      bidplan: this.__("Bidplan"),
       tender: this.__("Tender")
     };
     let years = data.map(pluckImm('year')).toArray();
@@ -38,17 +38,19 @@ class OverviewChart extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Years"),
+        title: this.__("Year"),
         type: "category"
       },
       yaxis: {
-        title: this.__("Count")
+        title: this.__("Count"),
+        exponentformat: 'none'
       }
     }
   }
 }
 
 OverviewChart.endpoints = ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'];
+OverviewChart.excelEP = 'procurementActivityExcelChart';
 
 OverviewChart.getName = __ => __("Procurement activity by year");
 

@@ -4,6 +4,7 @@ import {pluck} from "../../tools";
 import Cluster from "./cluster";
 import Location from "./location";
 import Visualization from "../../visualization";
+import style from "./style.less";
 
 class MapVisual extends frontendYearFilterable(Visualization){
   getMaxAmount(){
@@ -11,6 +12,7 @@ class MapVisual extends frontendYearFilterable(Visualization){
   }
 
   render(){
+    let {translations, filters, years, styling} = this.props;
     return <Map center={[14.5, 105]} zoom={5}>
       <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -18,11 +20,15 @@ class MapVisual extends frontendYearFilterable(Visualization){
       />
       <Cluster maxAmount={this.getMaxAmount()}>
         {this.getData().map(location => (
-            <Location
+            <this.constructor.Location
                 key={location._id}
                 position={location.coords.reverse()}
                 maxAmount={this.getMaxAmount()}
                 data={location}
+                translations={translations}
+                filters={filters}
+                years={years}
+                styling={styling}
             />
         ))}
       </Cluster>
@@ -32,5 +38,6 @@ class MapVisual extends frontendYearFilterable(Visualization){
 
 MapVisual.propTypes = {};
 MapVisual.computeComparisonYears = null;
+MapVisual.Location = Location;
 
 export default MapVisual;

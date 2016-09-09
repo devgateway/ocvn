@@ -3,6 +3,7 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
+import java.math.BigDecimal;
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +22,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	@ApiModelProperty(value = "This is the id of the organization/procuring entity. "
 			+ "Corresponds to the OCDS Organization.identifier")
     private List<String> procuringEntityId;
+    
+	//@EachPattern(regexp = "^[\\p{L}0-9]*$")
+	@ApiModelProperty(value = "This is the id of the organization/supplier entity. "
+			+ "Corresponds to the OCDS Organization.identifier")
+	private List<String> supplierId;
 
 	@ApiModelProperty(value = "This will filter after tender.procurementMethodDetails."
 			+ "Valid examples are Đấu thầu rộng rãi, Đấu thầu hạn chế, etc...")
@@ -33,6 +39,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 	
 	@ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
 	private List<String> tenderLoc;
+
+	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a minimum"
+			+ "Use /api/tenderValueInterval to get the minimum allowed.")
+	private BigDecimal minTenderValue;
+	
+	@ApiModelProperty(value = "This will filter after tender.value.amount and will specify a maximum."
+			+ "Use /api/tenderValueInterval to get the maximum allowed.")
+	private BigDecimal maxTenderValue;
+
+	@ApiModelProperty(value = "This will filter after awards.value.amount and will specify a minimum"
+			+ "Use /api/awardValueInterval to get the minimum allowed.")
+	private BigDecimal minAwardValue;
+	
+	@ApiModelProperty(value = "This will filter after awards.value.amount and will specify a maximum."
+			+ "Use /api/awardValueInterval to get the maximum allowed.")
+	private BigDecimal maxAwardValue;
 
     /**
      * This parameter will invert (negate) all existing filtering parameters. So
@@ -98,6 +120,46 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
 	public void setTenderLoc(List<String> tenderDeliveryLocationGazetteerIdentifier) {
 		this.tenderLoc = tenderDeliveryLocationGazetteerIdentifier;
+	}
+
+	public BigDecimal getMinTenderValue() {
+		return minTenderValue;
+	}
+
+	public void setMinTenderValue(BigDecimal minTenderValueAmount) {
+		this.minTenderValue = minTenderValueAmount;
+	}
+
+	public BigDecimal getMaxTenderValue() {
+		return maxTenderValue;
+	}
+
+	public void setMaxTenderValue(BigDecimal maxTenderValueAmount) {
+		this.maxTenderValue = maxTenderValueAmount;
+	}
+
+	public BigDecimal getMinAwardValue() {
+		return minAwardValue;
+	}
+
+	public void setMinAwardValue(BigDecimal minAwardValue) {
+		this.minAwardValue = minAwardValue;
+	}
+
+	public BigDecimal getMaxAwardValue() {
+		return maxAwardValue;
+	}
+
+	public void setMaxAwardValue(BigDecimal maxAwardValue) {
+		this.maxAwardValue = maxAwardValue;
+	}
+
+	public List<String> getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(List<String> supplierId) {
+		this.supplierId = supplierId;
 	}
 
 }

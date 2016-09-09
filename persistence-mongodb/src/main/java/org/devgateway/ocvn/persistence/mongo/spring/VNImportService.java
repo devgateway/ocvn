@@ -1,26 +1,15 @@
-/**
- *
- */
 package org.devgateway.ocvn.persistence.mongo.spring;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.List;
-
+import com.google.common.io.Files;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
-import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidation;
+import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.EBidAwardRowImporter;
@@ -32,7 +21,6 @@ import org.devgateway.ocvn.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.TenderRowImporter;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
 import org.slf4j.Logger;
@@ -49,7 +37,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.io.Files;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * @author mihai Service that imports Excel sheets from given import file in
@@ -69,7 +64,7 @@ public class VNImportService implements ExcelImportService {
     private ReleaseRepository releaseRepository;
 
     @Autowired
-    private VNOrganizationRepository organizationRepository;
+    private OrganizationRepository organizationRepository;
 
     @Autowired
     private ClassificationRepository classificationRepository;
@@ -87,10 +82,10 @@ public class VNImportService implements ExcelImportService {
     private MongoTemplateConfiguration mongoTemplateConfiguration;
 
     @Autowired
-    private OcdsSchemaValidation validationService;
-    
-	@Autowired(required = false)
-	private CacheManager cacheManager;
+    private OcdsSchemaValidatorService validationService;
+
+    @Autowired(required = false)
+    private CacheManager cacheManager;
 
     private StringBuffer msgBuffer = new StringBuffer();
 
@@ -182,17 +177,17 @@ public class VNImportService implements ExcelImportService {
         }
     }
 
-    
-	/**
-	 * Simple method that gets all cache names and invokes {@link Cache#clear()}
-	 * on all
-	 */
-	public void clearAllCaches() {
-		if (cacheManager != null) {
-			cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
-		}
-	}
-    
+
+    /**
+     * Simple method that gets all cache names and invokes {@link Cache#clear()}
+     * on all
+     */
+    public void clearAllCaches() {
+        if (cacheManager != null) {
+            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+        }
+    }
+
     /**
      * Extracts the files from the given {@link VietnamImportSourceFiles}
      * object, creates a temp dir and drops them there.
@@ -230,9 +225,9 @@ public class VNImportService implements ExcelImportService {
             throws InterruptedException {
 
         String tempDirPath = null;
-        
+
         clearAllCaches();
-        
+
         try {
             newMsgBuffer();
             if (purgeDatabase) {
@@ -338,7 +333,7 @@ public class VNImportService implements ExcelImportService {
         msgBuffer = new StringBuffer();
     }
 
-    public OcdsSchemaValidation getValidationService() {
+    public OcdsSchemaValidatorService getValidationService() {
         return validationService;
     }
 

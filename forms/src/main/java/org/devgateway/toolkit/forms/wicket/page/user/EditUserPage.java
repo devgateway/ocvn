@@ -49,7 +49,6 @@ import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
-import java.util.Collection;
 import java.util.List;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
@@ -115,22 +114,6 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         this.jpaRepository = userRepository;
         this.listPageClass = ListUserPage.class;
-    }
-
-    protected class RolesValidator implements IValidator<Collection<Role>> {
-
-        private static final long serialVersionUID = -2412508063601996929L;
-
-        @Override
-        public void validate(final IValidatable<Collection<Role>> validatable) {
-            Collection<Role> value = validatable.getValue();
-            Role roleAdmin = roleRepository.findByAuthority(SecurityConstants.Roles.ROLE_ADMIN);
-            Role roleUser = roleRepository.findByAuthority(SecurityConstants.Roles.ROLE_USER);
-
-            if (value.contains(roleAdmin) && (!value.contains(roleUser))) {
-                validatable.error(new ValidationError(getString("adminRoleValidator")));
-            }
-        }
     }
 
     protected class UniqueUsernameValidator implements IValidator<String> {
@@ -264,7 +247,6 @@ public class EditUserPage extends AbstractEditPage<Person> {
         editForm.add(group);
         MetaDataRoleAuthorizationStrategy.authorize(group, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-        roles.getField().add(new RolesValidator());
         roles.required();
         roles.getField().setOutputMarkupId(true);
         roles.setIsFloatedInput(true);

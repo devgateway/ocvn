@@ -1,5 +1,7 @@
 package org.devgateway.ocds.persistence.mongo.test;
 
+import java.io.IOException;
+
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
@@ -7,6 +9,7 @@ import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,10 +18,17 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-    private String ORG_ID = "1234";
+    protected String ORG_ID = "1234";
 
-    @Test
-    public void testOrganizationSaveAndFind() {
+	
+    
+	@Before
+	public void importTestData() throws IOException, InterruptedException {
+
+		if (testDataInitialized) {
+			return;
+		}
+		
         Organization organization = new Organization();
         organization.setName("Development Gateway");
         organization.setId(ORG_ID);
@@ -41,14 +51,37 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
         Identifier identifier = new Identifier();
         organization.getAdditionalIdentifiers().add(identifier);
-
+        organization.getTypes().add(Organization.OrganizationType.procuringEntity);
+        organization.getTypes().add(Organization.OrganizationType.buyer);
+        
         Organization savedOrganization = organizationRepository.save(organization);
 
         Assert.assertNotNull(savedOrganization);
         Assert.assertEquals(ORG_ID, savedOrganization.getId());
+        
+		testDataInitialized = true;
+	}
+
+
+    @Test
+    public void testOrganizationSaveAndFind() {
 
         Organization foundOrg = organizationRepository.findOne(ORG_ID);
         Assert.assertNotNull(foundOrg);
+        
+        Organization foundOrg2 = organizationRepository.findByIdOrNameAndTypes(ORG_ID, 
+        		Organization.OrganizationType.procuringEntity);
+        Assert.assertNotNull(foundOrg2);
+        
+        Organization foundOrg3 = organizationRepository.findByIdOrNameAndTypes(ORG_ID, 
+        		Organization.OrganizationType.supplier);
+        Assert.assertNull(foundOrg3);
+        
+        Organization foundOrg4 = organizationRepository.findByIdOrNameAllIgnoreCase(ORG_ID, ORG_ID);
+        Assert.assertNotNull(foundOrg4);
+
     }
+    
+  
 
 }

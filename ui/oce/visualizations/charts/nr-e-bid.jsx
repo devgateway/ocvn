@@ -1,13 +1,13 @@
 import FrontendYearFilterableChart from "./frontend-filterable";
 import {pluckImm} from "../../tools";
 
-class PercentEProcurement extends FrontendYearFilterableChart{
+class NrEbid extends FrontendYearFilterableChart{
   getData(){
     let data = super.getData();
     if(!data) return [];
     return [{
       x: data.map(pluckImm('year')).toArray(),
-      y: data.map(pluckImm('percentEgp')).toArray(),
+      y: data.map(pluckImm('totalTendersUsingEbid')).toArray(),
       type: 'scatter',
       fill: 'tonexty',
       marker: {
@@ -19,19 +19,19 @@ class PercentEProcurement extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Years"),
+        title: this.__("Year"),
         type: 'category'
       },
       yaxis: {
-        title: "%"
+        title: this.__("Count"),
+        hoverformat: '.2f'
       }
     }
   }
 }
 
+NrEbid.endpoint = 'percentTendersUsingEBid';
+NrEbid.getName = __ => __('Number of eBid Awards');
+NrEbid.getMaxField = pluckImm('totalTendersUsingEbid');
 
-PercentEProcurement.endpoint = 'percentTendersUsingEgp';
-PercentEProcurement.getName = __ => __('Percent of tenders using eProcurement');
-PercentEProcurement.getMaxField = imm => imm.get('percentEgp', 0);
-
-export default PercentEProcurement;
+export default NrEbid;

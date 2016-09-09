@@ -4,13 +4,14 @@
 package org.devgateway.ocvn.persistence.mongo.dao;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
  * @author mihai
  *
  */
-public class VNTendererOrganization extends VNOrganization {
+public class VNTendererOrganization extends Organization {
     @ExcelExport
 	private Amount bidValue;
 
@@ -18,13 +19,13 @@ public class VNTendererOrganization extends VNOrganization {
 
     }
 
-	public VNTendererOrganization(VNOrganization organization) {
+	public VNTendererOrganization(Organization organization) {
 		this.setId(organization.getId());
 		this.setAddress(organization.getAddress());
 		this.setContactPoint(organization.getContactPoint());
 		this.setIdentifier(organization.getIdentifier());
 		this.setName(organization.getName());
-		this.setProcuringEntity(organization.getProcuringEntity());
+		this.setTypes(organization.getTypes());
 	}
 
 	public Amount getBidValue() {

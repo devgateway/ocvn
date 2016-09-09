@@ -18,12 +18,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
@@ -44,8 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     protected CustomJPAUserDetailsService customJPAUserDetailsService;
 
-	@Value("${allowedApiEndpoints}")
-	private String[] allowedApiEndpoints;
+    @Value("${allowedApiEndpoints}")
+    private String[] allowedApiEndpoints;
+
+    @Value("${roleHierarchy}")
+    private String roleHierarchyStringRepresentation;
 
     @Bean
     public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
@@ -61,17 +69,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
-				"/configuration/**", "/swagger-resources/**", "/dashboard").antMatchers(allowedApiEndpoints);
-
+                "/configuration/**", "/swagger-resources/**", "/dashboard").antMatchers(allowedApiEndpoints);
     }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
+        http.authorizeRequests()
+                .expressionHandler(webExpressionHandler()) // inject role hierarchy
+                .anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
                 .logout().permitAll().and().sessionManagement().and().csrf().disable();
         http.addFilter(securityContextPersistenceFilter());
+    }
+
+    /**
+     * Instantiates {@see DefaultWebSecurityExpressionHandler} and assigns to it role hierarchy.
+     *
+     * @return
+     */
+    private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        handler.setRoleHierarchy(roleHierarchy());
+        return handler;
+    }
+
+    /**
+     * Enable hierarchical roles. This bean can be used to extract all effective roles.
+     */
+    @Bean
+    RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
+        return roleHierarchy;
     }
 
     @Autowired

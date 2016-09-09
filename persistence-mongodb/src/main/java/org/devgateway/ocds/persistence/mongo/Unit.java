@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 
 /**
@@ -25,6 +27,7 @@ public class Unit {
      *
      */
     @JsonProperty("name")
+    @Merge(MergeStrategy.ocdsVersion)
     private String name;
 
     @JsonProperty("value")

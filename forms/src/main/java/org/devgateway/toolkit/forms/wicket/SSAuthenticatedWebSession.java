@@ -23,6 +23,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.RememberMeServices;
+
+import java.util.Collection;
 
 /**
  * AuthenticatedWebSession implementation using Spring Security.
@@ -54,6 +57,9 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 
     @SpringBean
     private AuthenticationManager authenticationManager;
+
+    @SpringBean
+    private RoleHierarchy roleHierarchy;
 
 //    @SpringBean
 //    private SessionRegistry sessionRegistry;
@@ -133,12 +139,15 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 	}
 
     /**
-     * Trivial iteration of {@link Authentication#getAuthorities()} and adding roles to Wicket {@link Roles} object
+     * Adds effective roles to Wicket {@link Roles} object. It does so by getting authorities from
+     * {@link Authentication#getAuthorities()} and building effective roles list by taking in account role hierarchy.
+     *
      * @param roles
      * @param authentication
      */
     private void addRolesFromAuthentication(final Roles roles, final Authentication authentication) {
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (GrantedAuthority authority : roleHierarchy.getReachableGrantedAuthorities(authorities)) {
             roles.add(authority.getAuthority());
         }
     }

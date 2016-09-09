@@ -2,11 +2,36 @@ import Visualization from "../visualization";
 import {Set, List} from "immutable";
 import {Map} from "immutable";
 import DefaultComparison from "../comparison";
+import Chart from "../visualizations/charts/index";
+import {download} from '../tools';
 
 class Tab extends Visualization{
-  maybeWrap({dontWrap, getName}, index, rendered){
-    return dontWrap ? rendered : <section key={index}>
-      <h4 className="page-header">{getName(this.__.bind(this))}</h4>
+  maybeWrap(Component, index, rendered){
+    let {dontWrap, getName} = Component;
+    let {filters, years} = this.props;
+    let ref = `section${index}`;
+    let exportable = Component.prototype instanceof Chart;
+    return dontWrap ? rendered : <section key={index} ref={ref}>
+      <h4 className="page-header">
+        {getName(this.__.bind(this))}
+        {exportable && Component.excelEP && <img
+            src="assets/icons/export-black.svg"
+            width="16"
+            height="16"
+            className="chart-export-icon"
+            onClick={e => download({
+              ep: Component.excelEP,
+              filters,
+              years,
+              __: this.__.bind(this)
+            })}
+        />}
+        {exportable && <img
+            src="assets/icons/camera.svg"
+            className="chart-export-icon"
+            onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
+        />}
+      </h4>
       {rendered}
     </section>
   }

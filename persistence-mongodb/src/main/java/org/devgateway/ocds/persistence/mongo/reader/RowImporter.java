@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -35,7 +36,8 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 	protected int skipRows;
 	protected int cursorRowNo = 0;
 	protected int importedRows = 0;
-
+	
+	
 	public RowImporter(final R repository, final ImportService importService, final int skipRows) {
 		this.repository = repository;
 		this.importService = importService;
@@ -48,7 +50,12 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		}
 		return null;
 	}
-
+	
+	public String getRowCellUpper(String[] row, int index) {
+		String rowCell = getRowCell(row, index);
+		return rowCell != null ? rowCell.toUpperCase() : null;
+	}
+	
 	/**
 	 * Returns a double number, checking the {@link NumberFormatException} and
 	 * wrapping the error into a {@link RuntimeException} that can be thrown
@@ -109,7 +116,8 @@ public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 		}
 		Calendar calendar;
 		try {
-			calendar = DateUtil.getJavaCalendar(Double.parseDouble(string));
+			calendar = DateUtil.getJavaCalendar(Double.parseDouble(string), false,
+					TimeZone.getTimeZone(MongoConstants.DEFAULT_IMPORT_TIMEZONE));
 			if (calendar.get(Calendar.YEAR) < MongoConstants.MINIMUM_MONGO_YEAR) {
 				throw new RuntimeException("Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
 						+ " (" + calendar.get(Calendar.YEAR) + ").");		

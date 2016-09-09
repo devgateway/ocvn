@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ import java.util.Set;
         "status",
         "documents"
 })
-public class Milestone {
+public class Milestone implements Identifiable {
 
     /**
      * A local identifier for this milestone, unique within this block. This field is used to keep track of
@@ -37,6 +39,7 @@ public class Milestone {
      *
      */
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -44,6 +47,7 @@ public class Milestone {
      *
      */
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -51,6 +55,7 @@ public class Milestone {
      *
      */
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -58,6 +63,7 @@ public class Milestone {
      *
      */
     @JsonProperty("dueDate")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dueDate;
 
     /**
@@ -65,6 +71,7 @@ public class Milestone {
      *
      */
     @JsonProperty("dateModified")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dateModified;
 
     /**
@@ -74,6 +81,7 @@ public class Milestone {
      *
      */
     @JsonProperty("status")
+    @Merge(MergeStrategy.ocdsVersion)
     private Milestone.Status status;
 
     /**
@@ -82,6 +90,7 @@ public class Milestone {
      */
     @JsonProperty("documents")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.arrayMergeById)
     private Set<Document> documents = new LinkedHashSet<Document>();
 
     /**

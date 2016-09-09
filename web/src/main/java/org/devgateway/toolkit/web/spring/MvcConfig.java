@@ -16,6 +16,7 @@ import java.util.TimeZone;
 
 import org.apache.commons.io.FileCleaningTracker;
 import org.bson.types.ObjectId;
+import org.devgateway.ocds.web.cache.generators.GenericExcelChartKeyGenerator;
 import org.devgateway.ocds.web.cache.generators.GenericPagingRequestKeyGenerator;
 import org.devgateway.ocds.web.rest.serializers.GeoJsonPointSerializer;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -33,29 +34,34 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
-	@Override
-	public void addViewControllers(final ViewControllerRegistry registry) {
-		registry.addViewController("/login").setViewName("login");
-		registry.addViewController("/dashboard").setViewName("redirect:/ui/index.html");
-	}
+    @Override
+    public void addViewControllers(final ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/dashboard").setViewName("redirect:/ui/index.html");
+    }
 
-	@Bean
-	public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+    @Bean
+    public Jackson2ObjectMapperBuilder objectMapperBuilder() {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
 
-		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-		builder.serializationInclusion(Include.NON_EMPTY).dateFormat(dateFormatGmt);
-		builder.serializerByType(GeoJsonPoint.class, new GeoJsonPointSerializer());
-		builder.serializerByType(ObjectId.class, new ToStringSerializer());
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        builder.serializationInclusion(Include.NON_EMPTY).dateFormat(dateFormatGmt);
+        builder.serializerByType(GeoJsonPoint.class, new GeoJsonPointSerializer());
+        builder.serializerByType(ObjectId.class, new ToStringSerializer());
 
-		return builder;
-	}
-	
-	@Bean(name = "genericPagingRequestKeyGenerator")
-	public KeyGenerator genericPagingRequestKeyGenerator(ObjectMapper objectMapper) {
-		return new GenericPagingRequestKeyGenerator(objectMapper);
-	}
+        return builder;
+    }
+
+    @Bean(name = "genericPagingRequestKeyGenerator")
+    public KeyGenerator genericPagingRequestKeyGenerator(final ObjectMapper objectMapper) {
+        return new GenericPagingRequestKeyGenerator(objectMapper);
+    }
+
+    @Bean(name = "genericExcelChartKeyGenerator")
+    public KeyGenerator genericExcelChartKeyGenerator(final ObjectMapper objectMapper) {
+        return new GenericExcelChartKeyGenerator(objectMapper);
+    }
 
     @Bean(destroyMethod = "exitWhenFinished")
     public FileCleaningTracker fileCleaningTracker() {

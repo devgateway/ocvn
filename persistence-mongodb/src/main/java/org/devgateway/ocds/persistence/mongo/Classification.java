@@ -1,13 +1,16 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Classification OCDS Entity http://standard.open-contracting.org/latest/en/schema/reference/#classification
@@ -30,6 +33,7 @@ public class Classification implements Identifiable {
      *
      */
     @JsonProperty("scheme")
+    @Merge(MergeStrategy.ocdsVersion)
     private String scheme;
 
     /**
@@ -39,6 +43,7 @@ public class Classification implements Identifiable {
     @ExcelExport
     @JsonProperty("id")
     @Id
+    @Merge(MergeStrategy.ocdsVersion)
     private String id;
 
     /**
@@ -47,6 +52,7 @@ public class Classification implements Identifiable {
      */
     @ExcelExport
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -55,6 +61,7 @@ public class Classification implements Identifiable {
      *
      */
     @JsonProperty("uri")
+    @Merge(MergeStrategy.ocdsVersion)
     private String uri;
 
     /**

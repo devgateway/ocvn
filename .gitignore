@@ -11,3 +11,4 @@ npm-debug.log
 *.iml
 .idea
 rebel.xml
+/logs/

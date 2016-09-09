@@ -1,12 +1,15 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.Date;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -30,7 +33,7 @@ import java.util.Date;
         "format",
         "language"
 })
-public class Document {
+public class Document implements Identifiable {
 
     /**
      * A local, unique identifier for this document. This field is used to keep track of multiple revisions
@@ -39,6 +42,7 @@ public class Document {
      *
      */
     @JsonProperty("id")
+    @Merge(MergeStrategy.overwrite)
     private String id;
 
     /**
@@ -49,6 +53,7 @@ public class Document {
      *
      */
     @JsonProperty("documentType")
+    @Merge(MergeStrategy.ocdsVersion)
     private String documentType;
 
     /**
@@ -56,6 +61,7 @@ public class Document {
      *
      */
     @JsonProperty("title")
+    @Merge(MergeStrategy.ocdsVersion)
     private String title;
 
     /**
@@ -65,6 +71,7 @@ public class Document {
      *
      */
     @JsonProperty("description")
+    @Merge(MergeStrategy.ocdsVersion)
     private String description;
 
     /**
@@ -73,6 +80,7 @@ public class Document {
      *
      */
     @JsonProperty("url")
+    @Merge(MergeStrategy.ocdsVersion)
     private String url;
 
     /**
@@ -81,6 +89,7 @@ public class Document {
      *
      */
     @JsonProperty("datePublished")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date datePublished;
 
     /**
@@ -88,6 +97,7 @@ public class Document {
      *
      */
     @JsonProperty("dateModified")
+    @Merge(MergeStrategy.ocdsVersion)
     private Date dateModified;
 
     /**
@@ -99,6 +109,7 @@ public class Document {
      *
      */
     @JsonProperty("format")
+    @Merge(MergeStrategy.ocdsVersion)
     private String format;
 
     /**
@@ -110,6 +121,7 @@ public class Document {
      *
      */
     @JsonProperty("language")
+    @Merge(MergeStrategy.ocdsVersion)
     private String language;
 
     /**

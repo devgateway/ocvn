@@ -1,7 +1,16 @@
 package org.devgateway.ocds.persistence.mongo.excel;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Award;
@@ -20,20 +29,11 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNBudget;
 import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 /**
  * @author idobre
@@ -186,7 +186,7 @@ public final class OCDSObjectUtil {
             .put(Budget.class, VNBudget.class)
             .put(Item.class, VNItem.class)
             .put(Location.class, VNLocation.class)
-            .put(Organization.class, VNOrganization.class)
+            .put(Organization.class, Organization.class)
             .put(Planning.class, VNPlanning.class)
             .put(Tender.class, VNTender.class)
             .build();

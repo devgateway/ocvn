@@ -3,19 +3,20 @@ import OCApp from "./oce";
 import OverviewTab from './oce/tabs/overview';
 import OCVNLocation from "./ocvn/tabs/location";
 import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
-import EfficiencyTab from './oce/tabs/efficiency';
-import EProcurementTab from './oce/tabs/e-procurement';
+import OCVNEfficiency from './ocvn/tabs/efficiency';
+import OCVNEProcurement from './ocvn/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
 import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
 function getBidTypeDescription(__, {id, description}){
-  switch(+id){
-    case 12: return __("Unspecified") + " #1";
-    case 15: return __("Unspecified") + " #2";
-    default: return description;
-  }
+  //switch(+id){
+    //case 12: return __("Unspecified") + " #1";
+    //case 15: return __("Unspecified") + " #2";
+    //default: return description;
+  //}
+  return description;
 }
 
 class OCVN extends OCApp{
@@ -24,8 +25,8 @@ class OCVN extends OCApp{
     this.registerTab(OverviewTab);
     this.registerTab(OCVNLocation);
     this.registerTab(OCVNCompetitiveness);
-    this.registerTab(EfficiencyTab);
-    this.registerTab(EProcurementTab);
+    this.registerTab(OCVNEfficiency);
+    this.registerTab(OCVNEProcurement);
   }
 
   fetchBidTypes(){
@@ -90,10 +91,21 @@ OCVN.TRANSLATIONS = {
   vn: require('./languages/vn_VN.json')
 };
 
+const BILLION = 1000000000;
+const MILLION = 1000000;
+const THOUSAND = 1000;
+
 OCVN.STYLING = {
   charts: {
     axisLabelColor: "#cc3c3b",
-    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"]
+    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
+    hoverFormatter: number => {
+      if(typeof number == "undefined") return number;
+      if(number >= BILLION) return (number/BILLION).toFixed(2) + "B";
+      if(number >= MILLION) return (number/MILLION).toFixed(2) + "M";
+      if(number >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
+      return number.toFixed(2);
+    }
   }
 };
 

@@ -35,8 +35,6 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 	 */
 	private static final String UNIQUE_SECRET_REMEMBER_ME_KEY = "secret";
 
-
-
 	/**
 	 * We ensure the superclass configuration is being applied Take note the
 	 * {@link FormsSecurityConfig} extends {@link WebSecurityConfig} which has
@@ -88,8 +86,7 @@ public class FormsSecurityConfig extends WebSecurityConfig {
 				sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).
 				//we let Wicket create and manage sessions, so we disable
 				//session creation by spring
-				and().csrf().disable(); // csrf protection interferes with some wicket
-								// stuff 
+				and().csrf().disable();  // csrf protection interferes with some wicket stuff
 
 		// we enable http rememberMe cookie for autologin
 		// http.rememberMe().key(UNIQUE_SECRET_REMEMBER_ME_KEY);

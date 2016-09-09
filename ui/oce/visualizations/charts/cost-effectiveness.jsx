@@ -1,58 +1,76 @@
 import FrontendYearFilterableChart from "./frontend-filterable";
-import {response2obj, pluckImm} from "../../tools";
 import {Map} from "immutable";
 
 class CostEffectiveness extends FrontendYearFilterableChart{
-  transform([tenderResponse, awardResponse]){
-    let tender = response2obj('totalTenderAmount', tenderResponse);
-    let award = response2obj('totalAwardAmount', awardResponse);
-    return Object.keys(tender).map(year => ({
-      year: year,
-      tender: tender[year],
-      diff: tender[year] - award[year]
-    }))
+  transform(data){
+    return data.map(datum => ({
+      year: datum._id,
+      tender: datum.totalTenderAmount,
+      diff: datum.diffTenderAwardAmount
+    }));
+  }
+
+  mkTrace(name, colorIndex){
+    let {traceColors, hoverFormatter} = this.props.styling.charts;
+    let trace = {
+      x: [],
+      y: [],
+      text: [],
+      name,
+      type: 'bar',
+      marker: {
+        color: traceColors[colorIndex]
+      }
+    };
+
+    if(hoverFormatter) trace.hoverinfo = "text+name";
+
+    return trace;
   }
 
   getData(){
     let data = super.getData();
     if(!data) return [];
-    var years = data.map(pluckImm('year')).toArray();
+    let traces = [
+      this.mkTrace(this.__('Award Price'), 0),
+      this.mkTrace(this.__('Difference'), 1)
+    ];
 
-    return [{
-      x: years,
-      y: data.map(pluckImm('tender')).toArray(),
-      name: this.__('Bid price'),
-      type: 'bar',
-      marker: {
-        color: this.props.styling.charts.traceColors[0]
+    let {hoverFormatter} = this.props.styling.charts;
+
+    for(let datum of data){
+      let year = datum.get('year');
+      traces.forEach(trace => trace.x.push(year));
+      let tender = datum.get('tender');
+      let diff = datum.get('diff');
+      traces[0].y.push(tender);
+      traces[1].y.push(diff);
+      if(hoverFormatter){
+        traces[0].text.push(hoverFormatter(tender));
+        traces[1].text.push(hoverFormatter(diff));
       }
-    }, {
-      x: years,
-      y: data.map(pluckImm('diff')).toArray(),
-      name: this.__('Difference'),
-      type: 'bar',
-      marker: {
-        color: this.props.styling.charts.traceColors[1]
-      }
-    }];
+    }
+
+    return traces;
   }
 
   getLayout(){
     return {
       barmode: "stack",
       xaxis: {
-        title: this.__("Years"),
+        title: this.__("Year"),
         type: "category"
       },
       yaxis: {
-        title: this.__("Amount")
+        title: this.__("Amount (in VND)")
       }
     }
   }
 }
 
 CostEffectiveness.getName = __ => __('Cost effectiveness');
-CostEffectiveness.endpoints = ['costEffectivenessTenderAmount', 'costEffectivenessAwardAmount'];
+CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
+CostEffectiveness.excelEP = 'costEffectivenessExcelChart';
 CostEffectiveness.getFillerDatum = year => Map({
   year,
   tender: 0,

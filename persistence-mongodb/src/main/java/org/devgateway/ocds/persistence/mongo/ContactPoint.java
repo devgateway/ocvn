@@ -1,11 +1,14 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 /**
@@ -29,6 +32,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("name")
+    @Merge(MergeStrategy.ocdsVersion)
     private String name;
 
     /**
@@ -37,6 +41,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("email")
+    @Merge(MergeStrategy.ocdsVersion)
     private String email;
 
     /**
@@ -45,6 +50,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("telephone")
+    @Merge(MergeStrategy.ocdsVersion)
     private String telephone;
 
     /**
@@ -53,6 +59,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("faxNumber")
+    @Merge(MergeStrategy.ocdsVersion)
     private String faxNumber;
 
     /**
@@ -61,6 +68,7 @@ public class ContactPoint {
      */
     @ExcelExport
     @JsonProperty("url")
+    @Merge(MergeStrategy.ocdsVersion)
     private String url;
 
     /**
