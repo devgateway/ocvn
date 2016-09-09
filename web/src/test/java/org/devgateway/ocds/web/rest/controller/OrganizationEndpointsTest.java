@@ -24,120 +24,120 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class OrganizationEndpointsTest extends AbstractMongoTest {
 
-	@Autowired
-	private OrganizationSearchController organizationSearchController;
+    @Autowired
+    private OrganizationSearchController organizationSearchController;
 
-	@Autowired
-	private ProcuringEntitySearchController procuringEntitySearchController;
+    @Autowired
+    private ProcuringEntitySearchController procuringEntitySearchController;
 
-	@Autowired
-	private BuyerSearchController buyerSearchController;
-	
-	@Autowired
-	private SupplierSearchController supplierSearchController; 
+    @Autowired
+    private BuyerSearchController buyerSearchController;
 
-	@Autowired
-	private OrganizationRepository organizationRepository;
-	
-	@Autowired
+    @Autowired
+    private SupplierSearchController supplierSearchController;
+
+    @Autowired
+    private OrganizationRepository organizationRepository;
+
+    @Autowired
     private MongoTemplateConfiguration mongoTemplateConfiguration;
 
-	
-	private String orgId = "1234";
 
-	@Before
-	public void importTestData() throws IOException, InterruptedException {
+    private String orgId = "1234";
 
-		if (testDataInitialized) {
-			return;
-		}
+    @Before
+    public void importTestData() throws IOException, InterruptedException {
 
-		Organization organization = new Organization();
-		organization.setName("Development Gateway");
-		organization.setId(orgId);
+        if (testDataInitialized) {
+            return;
+        }
 
-		Address address = new Address();
-		address.setCountryName("Romania");
-		address.setLocality("Bucuresti");
-		address.setPostalCode("022671");
-		address.setRegion("Bucuresti");
-		address.setStreetAddress("7 Sos. Iancului");
-		organization.setAddress(address);
+        Organization organization = new Organization();
+        organization.setName("Development Gateway");
+        organization.setId(orgId);
 
-		ContactPoint contactPoint = new ContactPoint();
-		contactPoint.setEmail("mpostelnicu@developmentgateway.org");
-		contactPoint.setFaxNumber("01234567");
-		contactPoint.setTelephone("01234567");
-		contactPoint.setUrl("http://developmentgateway.org");
-		organization.setContactPoint(contactPoint);
+        Address address = new Address();
+        address.setCountryName("Romania");
+        address.setLocality("Bucuresti");
+        address.setPostalCode("022671");
+        address.setRegion("Bucuresti");
+        address.setStreetAddress("7 Sos. Iancului");
+        organization.setAddress(address);
 
-		Identifier identifier = new Identifier();
-		organization.getAdditionalIdentifiers().add(identifier);
-		organization.getTypes().add(Organization.OrganizationType.procuringEntity);
-		organization.getTypes().add(Organization.OrganizationType.buyer);
+        ContactPoint contactPoint = new ContactPoint();
+        contactPoint.setEmail("mpostelnicu@developmentgateway.org");
+        contactPoint.setFaxNumber("01234567");
+        contactPoint.setTelephone("01234567");
+        contactPoint.setUrl("http://developmentgateway.org");
+        organization.setContactPoint(contactPoint);
 
-		Organization savedOrganization = organizationRepository.save(organization);
+        Identifier identifier = new Identifier();
+        organization.getAdditionalIdentifiers().add(identifier);
+        organization.getTypes().add(Organization.OrganizationType.procuringEntity);
+        organization.getTypes().add(Organization.OrganizationType.buyer);
 
-		Assert.assertNotNull(savedOrganization);
-		Assert.assertEquals(orgId, savedOrganization.getId());
+        Organization savedOrganization = organizationRepository.save(organization);
 
-		testDataInitialized = true;
-	}
+        Assert.assertNotNull(savedOrganization);
+        Assert.assertEquals(orgId, savedOrganization.getId());
 
-	@Test
-	public void testOrganizationIdEndpoint() {
-		Organization organizationId = organizationSearchController.byId(orgId);
-		Assert.assertNotNull(organizationId);
-	}
+        testDataInitialized = true;
+    }
 
-	@Test
-	public void testOrganizationSearchText() {
-		OrganizationSearchRequest osr = new OrganizationSearchRequest();
-		osr.setText("Development");
-		List<Organization> organizations = organizationSearchController.searchText(osr);
-		Assert.assertEquals(1, organizations.size(), 0);
-	}
+    @Test
+    public void testOrganizationIdEndpoint() {
+        Organization organizationId = organizationSearchController.byId(orgId);
+        Assert.assertNotNull(organizationId);
+    }
 
-	@Test
-	public void testProcuringEntityIdEndpoint() {
-		Organization organizationId = procuringEntitySearchController.byId(orgId);
-		Assert.assertNotNull(organizationId);
-	}
+    @Test
+    public void testOrganizationSearchText() {
+        OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        osr.setText("Development");
+        List<Organization> organizations = organizationSearchController.searchText(osr);
+        Assert.assertEquals(1, organizations.size(), 0);
+    }
 
-	@Test
-	public void testProcuringEntitySearchText() {
-		OrganizationSearchRequest osr = new OrganizationSearchRequest();
-		osr.setText("Development");
-		List<Organization> organizations = procuringEntitySearchController.searchText(osr);
-		Assert.assertEquals(1, organizations.size(), 0);
-	}
+    @Test
+    public void testProcuringEntityIdEndpoint() {
+        Organization organizationId = procuringEntitySearchController.byId(orgId);
+        Assert.assertNotNull(organizationId);
+    }
 
-	@Test
-	public void testBuyerIdEndpoint() {
-		Organization organizationId = buyerSearchController.byId(orgId);
-		Assert.assertNotNull(organizationId);
-	}
+    @Test
+    public void testProcuringEntitySearchText() {
+        OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        osr.setText("Development");
+        List<Organization> organizations = procuringEntitySearchController.searchText(osr);
+        Assert.assertEquals(1, organizations.size(), 0);
+    }
 
-	@Test
-	public void testBuyerSearchText() {
-		OrganizationSearchRequest osr = new OrganizationSearchRequest();
-		osr.setText("Development");
-		List<Organization> organizations = buyerSearchController.searchText(osr);
-		Assert.assertEquals(1, organizations.size(), 0);
-	}
+    @Test
+    public void testBuyerIdEndpoint() {
+        Organization organizationId = buyerSearchController.byId(orgId);
+        Assert.assertNotNull(organizationId);
+    }
 
-	@Test
-	public void testSupplierIdEndpoint() {
-		Organization organizationId = supplierSearchController.byId(orgId);
-		Assert.assertNull(organizationId);
-	}
+    @Test
+    public void testBuyerSearchText() {
+        OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        osr.setText("Development");
+        List<Organization> organizations = buyerSearchController.searchText(osr);
+        Assert.assertEquals(1, organizations.size(), 0);
+    }
 
-	@Test
-	public void testSupplierSaerchText() {
-		OrganizationSearchRequest osr = new OrganizationSearchRequest();
-		osr.setText("Development");
-		List<Organization> organizations = supplierSearchController.searchText(osr);
-		Assert.assertEquals(0, organizations.size(), 0);
-	}
-	
+    @Test
+    public void testSupplierIdEndpoint() {
+        Organization organizationId = supplierSearchController.byId(orgId);
+        Assert.assertNull(organizationId);
+    }
+
+    @Test
+    public void testSupplierSaerchText() {
+        OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        osr.setText("Development");
+        List<Organization> organizations = supplierSearchController.searchText(osr);
+        Assert.assertEquals(0, organizations.size(), 0);
+    }
+
 }

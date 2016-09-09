@@ -31,152 +31,152 @@ import com.mongodb.DBObject;
 @WebAppConfiguration
 public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
-	@Autowired
-	private ExcelImportService vnExcelImportService;
+    @Autowired
+    private ExcelImportService vnExcelImportService;
 
-	@Autowired
-	private CostEffectivenessVisualsController costEffectivenessVisualsController;
-	
-	@Autowired	
-	private AverageNumberOfTenderersController averageNumberOfTenderersController;
-	
-	@Autowired
-	private AverageTenderAndAwardPeriodsController averageTenderAndAwardPeriodsController;
-	
-	@Autowired
-	private ProcuringEntitySearchController procuringEntitySearchController;
+    @Autowired
+    private CostEffectivenessVisualsController costEffectivenessVisualsController;
 
-	private static boolean initialized = false;
+    @Autowired
+    private AverageNumberOfTenderersController averageNumberOfTenderersController;
 
-	public byte[] loadResourceStreamAsByteArray(String name) throws IOException {
-		return IOUtils.toByteArray(getClass().getResourceAsStream(name));
-	}
+    @Autowired
+    private AverageTenderAndAwardPeriodsController averageTenderAndAwardPeriodsController;
 
-	@Before
-	public void importTestData() throws IOException, InterruptedException {
+    @Autowired
+    private ProcuringEntitySearchController procuringEntitySearchController;
 
-		if (initialized) {
-			return;
-		}
-		vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
-				loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
-				loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
-				loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
-		initialized = true;
-	}
+    private static boolean initialized = false;
 
-	@Test
-	public void testCostEffectivenessAwardAmount() {
-		List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
-				.costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
-		DBObject root = costEffectivenessAwardAmount.get(0);
-		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2014, year);
+    public byte[] loadResourceStreamAsByteArray(String name) throws IOException {
+        return IOUtils.toByteArray(getClass().getResourceAsStream(name));
+    }
 
-		double totalAwardAmount = (double) root.get("totalAwardAmount");
-		Assert.assertEquals(2000, totalAwardAmount, 0);
+    @Before
+    public void importTestData() throws IOException, InterruptedException {
 
-	}
-	
-	@Test
-	public void testCostEffectivenessTenderAmount() {
-		List<DBObject> costEffectivenessTenderAmount = costEffectivenessVisualsController
-				.costEffectivenessTenderAmount(new GroupingFilterPagingRequest());
-		DBObject root = costEffectivenessTenderAmount.get(0);
-		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2012, year);
+        if (initialized) {
+            return;
+        }
+        vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
+                loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
+                loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
+                loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
+        initialized = true;
+    }
 
-		double totalAwardAmount = (double) root.get("totalTenderAmount");
-		Assert.assertEquals(1000, totalAwardAmount, 0);
+    @Test
+    public void testCostEffectivenessAwardAmount() {
+        List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
+                .costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
+        DBObject root = costEffectivenessAwardAmount.get(0);
+        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        Assert.assertEquals(2014, year);
 
-	}
-	
-	@Test
-	public void testAverageNumberOfTenderersController() {
-		List<DBObject> averageNumberOfTenderers = averageNumberOfTenderersController.
-				averageNumberOfTenderers(new DefaultFilterPagingRequest());
-				
-		DBObject root = averageNumberOfTenderers.get(0);
-		int year = (int) root.get("year");
-		Assert.assertEquals(2013, year);
+        double totalAwardAmount = (double) root.get("totalAwardAmount");
+        Assert.assertEquals(2000, totalAwardAmount, 0);
 
-		double averageNoTenderers = (double) root.get("averageNoTenderers");
-		Assert.assertEquals(2, averageNoTenderers, 0);
-	}
-	
-	@Test
-	public void testAverageAwardPeriod() {
-		List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController
-				.averageAwardPeriod(new DefaultFilterPagingRequest());
+    }
 
-		DBObject root = averageAwardPeriod.get(0);
-		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2014, year);
+    @Test
+    public void testCostEffectivenessTenderAmount() {
+        List<DBObject> costEffectivenessTenderAmount = costEffectivenessVisualsController
+                .costEffectivenessTenderAmount(new GroupingFilterPagingRequest());
+        DBObject root = costEffectivenessTenderAmount.get(0);
+        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        Assert.assertEquals(2012, year);
 
-		double n = (double) root.get("averageAwardDays");
-		Assert.assertEquals(536, n, 0);
-	}
-	
-	@Test
-	public void testAverageTenderPeriod() {
-		List<DBObject> averageTenderPeriod = averageTenderAndAwardPeriodsController
-				.averageTenderPeriod(new DefaultFilterPagingRequest());
+        double totalAwardAmount = (double) root.get("totalTenderAmount");
+        Assert.assertEquals(1000, totalAwardAmount, 0);
 
-		DBObject root = averageTenderPeriod.get(0);
-		int year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2012, year);
+    }
 
-		double n = (double) root.get("averageTenderDays");
-		Assert.assertEquals(15, n, 0);
-		
-		root = averageTenderPeriod.get(1);
-		year = (int) root.get(Fields.UNDERSCORE_ID);
-		Assert.assertEquals(2013, year);
+    @Test
+    public void testAverageNumberOfTenderersController() {
+        List<DBObject> averageNumberOfTenderers = averageNumberOfTenderersController.
+                averageNumberOfTenderers(new DefaultFilterPagingRequest());
 
-		n = (double) root.get("averageTenderDays");
-		Assert.assertEquals(15, n, 0);
-	}
-	
-	@Test
-	public void testQualityAverageTenderPeriod() {
-		List<DBObject> qAverageTenderPeriod = averageTenderAndAwardPeriodsController
-				.qualityAverageTenderPeriod(new DefaultFilterPagingRequest());
+        DBObject root = averageNumberOfTenderers.get(0);
+        int year = (int) root.get("year");
+        Assert.assertEquals(2013, year);
 
-		DBObject root = qAverageTenderPeriod.get(0);
+        double averageNoTenderers = (double) root.get("averageNoTenderers");
+        Assert.assertEquals(2, averageNoTenderers, 0);
+    }
 
-		int totalTenderWithStartEndDates = (int) root.get("totalTenderWithStartEndDates");
-		Assert.assertEquals(2, totalTenderWithStartEndDates);
+    @Test
+    public void testAverageAwardPeriod() {
+        List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController
+                .averageAwardPeriod(new DefaultFilterPagingRequest());
 
-		int totalTenders = (int) root.get("totalTenders");
-		Assert.assertEquals(2, totalTenders);
+        DBObject root = averageAwardPeriod.get(0);
+        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        Assert.assertEquals(2014, year);
 
-		double percentageTenderWithStartEndDates = (double) root.get("percentageTenderWithStartEndDates");
-		Assert.assertEquals(100, percentageTenderWithStartEndDates, 0);
-	}
+        double n = (double) root.get("averageAwardDays");
+        Assert.assertEquals(536, n, 0);
+    }
 
-	@Test
-	public void testQualityAverageAwardPeriod() {
-		List<DBObject> qAverageTenderPeriod = averageTenderAndAwardPeriodsController
-				.qualityAverageAwardPeriod(new DefaultFilterPagingRequest());
+    @Test
+    public void testAverageTenderPeriod() {
+        List<DBObject> averageTenderPeriod = averageTenderAndAwardPeriodsController
+                .averageTenderPeriod(new DefaultFilterPagingRequest());
 
-		DBObject root = qAverageTenderPeriod.get(0);
+        DBObject root = averageTenderPeriod.get(0);
+        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        Assert.assertEquals(2012, year);
 
-		int totalAwardWithStartEndDates = (int) root.get("totalAwardWithStartEndDates");
-		Assert.assertEquals(4, totalAwardWithStartEndDates);
+        double n = (double) root.get("averageTenderDays");
+        Assert.assertEquals(15, n, 0);
 
-		int totalAwards = (int) root.get("totalAwards");
-		Assert.assertEquals(4, totalAwards);
+        root = averageTenderPeriod.get(1);
+        year = (int) root.get(Fields.UNDERSCORE_ID);
+        Assert.assertEquals(2013, year);
 
-		double percentageAwardWithStartEndDates = (double) root.get("percentageAwardWithStartEndDates");
-		Assert.assertEquals(100, percentageAwardWithStartEndDates, 0);
-	}
-	
-	
-	@Test
-	public void testProcuringEntitySearchController() {
-		List<Organization> procuringEntities = procuringEntitySearchController.searchText
-				(new OrganizationSearchRequest());
-		Assert.assertEquals(procuringEntities.size(), 1, 0);
-	}
+        n = (double) root.get("averageTenderDays");
+        Assert.assertEquals(15, n, 0);
+    }
+
+    @Test
+    public void testQualityAverageTenderPeriod() {
+        List<DBObject> qAverageTenderPeriod = averageTenderAndAwardPeriodsController
+                .qualityAverageTenderPeriod(new DefaultFilterPagingRequest());
+
+        DBObject root = qAverageTenderPeriod.get(0);
+
+        int totalTenderWithStartEndDates = (int) root.get("totalTenderWithStartEndDates");
+        Assert.assertEquals(2, totalTenderWithStartEndDates);
+
+        int totalTenders = (int) root.get("totalTenders");
+        Assert.assertEquals(2, totalTenders);
+
+        double percentageTenderWithStartEndDates = (double) root.get("percentageTenderWithStartEndDates");
+        Assert.assertEquals(100, percentageTenderWithStartEndDates, 0);
+    }
+
+    @Test
+    public void testQualityAverageAwardPeriod() {
+        List<DBObject> qAverageTenderPeriod = averageTenderAndAwardPeriodsController
+                .qualityAverageAwardPeriod(new DefaultFilterPagingRequest());
+
+        DBObject root = qAverageTenderPeriod.get(0);
+
+        int totalAwardWithStartEndDates = (int) root.get("totalAwardWithStartEndDates");
+        Assert.assertEquals(4, totalAwardWithStartEndDates);
+
+        int totalAwards = (int) root.get("totalAwards");
+        Assert.assertEquals(4, totalAwards);
+
+        double percentageAwardWithStartEndDates = (double) root.get("percentageAwardWithStartEndDates");
+        Assert.assertEquals(100, percentageAwardWithStartEndDates, 0);
+    }
+
+
+    @Test
+    public void testProcuringEntitySearchController() {
+        List<Organization> procuringEntities = procuringEntitySearchController.searchText
+                (new OrganizationSearchRequest());
+        Assert.assertEquals(procuringEntities.size(), 1, 0);
+    }
 
 }

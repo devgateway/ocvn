@@ -20,15 +20,13 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
     protected String ORG_ID = "1234";
 
-	
-    
-	@Before
-	public void importTestData() throws IOException, InterruptedException {
+    @Before
+    public void importTestData() throws IOException, InterruptedException {
 
-		if (testDataInitialized) {
-			return;
-		}
-		
+        if (testDataInitialized) {
+            return;
+        }
+
         Organization organization = new Organization();
         organization.setName("Development Gateway");
         organization.setId(ORG_ID);
@@ -53,14 +51,14 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
         organization.getAdditionalIdentifiers().add(identifier);
         organization.getTypes().add(Organization.OrganizationType.procuringEntity);
         organization.getTypes().add(Organization.OrganizationType.buyer);
-        
+
         Organization savedOrganization = organizationRepository.save(organization);
 
         Assert.assertNotNull(savedOrganization);
         Assert.assertEquals(ORG_ID, savedOrganization.getId());
-        
-		testDataInitialized = true;
-	}
+
+        testDataInitialized = true;
+    }
 
 
     @Test
@@ -68,20 +66,18 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
         Organization foundOrg = organizationRepository.findOne(ORG_ID);
         Assert.assertNotNull(foundOrg);
-        
-        Organization foundOrg2 = organizationRepository.findByIdOrNameAndTypes(ORG_ID, 
-        		Organization.OrganizationType.procuringEntity);
+
+        Organization foundOrg2 = organizationRepository.findByIdOrNameAndTypes(ORG_ID,
+                Organization.OrganizationType.procuringEntity);
         Assert.assertNotNull(foundOrg2);
-        
-        Organization foundOrg3 = organizationRepository.findByIdOrNameAndTypes(ORG_ID, 
-        		Organization.OrganizationType.supplier);
+
+        Organization foundOrg3 = organizationRepository.findByIdOrNameAndTypes(ORG_ID,
+                Organization.OrganizationType.supplier);
         Assert.assertNull(foundOrg3);
-        
+
         Organization foundOrg4 = organizationRepository.findByIdOrNameAllIgnoreCase(ORG_ID, ORG_ID);
         Assert.assertNotNull(foundOrg4);
 
     }
-    
-  
 
 }
