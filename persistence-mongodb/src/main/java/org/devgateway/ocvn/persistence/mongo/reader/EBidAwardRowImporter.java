@@ -6,16 +6,12 @@ import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
-import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
-import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 
 /**
@@ -26,14 +22,12 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
  * @see VNAward
  *
  */
-public class EBidAwardRowImporter extends ReleaseRowImporter {
+public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
-	protected OrganizationRepository organizationRepository;
 
-	public EBidAwardRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-			final OrganizationRepository organizationRepository, final int skipRows) {
-		super(releaseRepository, importService, skipRows);
-		this.organizationRepository = organizationRepository;
+	public EBidAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
+			OrganizationRepository organizationRepository, int skipRows) {
+		super(releaseRepository, importService, organizationRepository, skipRows);
 	}
 
 	@Override
@@ -42,14 +36,9 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
 
 		if (release == null) {
-			release = new Release();
-			release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + getRowCell(row, 0));
-			release.getTag().add(Tag.award);
-			VNPlanning planning = new VNPlanning();
-			release.setPlanning(planning);
-			planning.setBidNo(getRowCell(row, 0));
+			release = newReleaseFromAwardFactory(getRowCell(row, 0));
 		}
-
+		
 		if (release.getTender() == null) {
 			VNTender tender = new VNTender();
 			tender.setId(release.getOcid());
@@ -68,8 +57,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		award.setValue(value);
 
 		Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
-				
-		
+
 		if (supplier == null) {
 			supplier = new Organization();
 			supplier.setName(getRowCellUpper(row, 2));
@@ -84,7 +72,7 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		}
 
 		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
-		
+
 		// active=successful awards have suppliers
 		if (Award.Status.active.equals(award.getStatus())) {
 			award.getSuppliers().add(supplier);
@@ -105,20 +93,22 @@ public class EBidAwardRowImporter extends ReleaseRowImporter {
 		if (getRowCell(row, 10) != null) {
 			award.setDate(getExcelDate(getRowCell(row, 10)));
 		}
-		
+
 		if (getRowCell(row, 9) != null) {
 			award.setPublishedDate(getExcelDate(getRowCell(row, 9)));
 		}
 
-		//regardless if the award is active or not, we add the supplier to tenderers
+		// regardless if the award is active or not, we add the supplier to
+		// tenderers
 		release.getTender().getTenderers().add(supplier);
 
 		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
-		
-		//copy items from tender
+
+		// copy items from tender
 		award.getItems().addAll(release.getTender().getItems());
 
-
+		checkForAwardOutliers(release, award);
+		
 		return release;
 	}
 }
