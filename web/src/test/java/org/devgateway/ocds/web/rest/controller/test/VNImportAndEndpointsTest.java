@@ -174,8 +174,8 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
     @Test
     public void testProcuringEntitySearchController() {
-        List<Organization> procuringEntities = procuringEntitySearchController.searchText
-                (new OrganizationSearchRequest());
+        List<Organization> procuringEntities = procuringEntitySearchController.searchText(
+                new OrganizationSearchRequest());
         Assert.assertEquals(procuringEntities.size(), 1, 0);
     }
 
