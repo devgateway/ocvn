@@ -48,7 +48,7 @@ class BidPeriod extends FrontendYearFilterableChart {
     let data = super.getData();
     if(data){
       annotations = data.map((imm, index) => {
-			  let sum = imm.reduce((sum, val, key) => "year" == key ? sum : sum + ensureNonNegative(val), 0);
+			  let sum = imm.reduce((sum, val, key) => "year" == key ? sum : sum + ensureNonNegative(val), 0).toFixed(2);
         return {
           y: index,
           x: sum,
