@@ -28,7 +28,6 @@ import com.mongodb.DBObject;
  * @author mihai
  *
  */
-@WebAppConfiguration
 public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
     @Autowired
