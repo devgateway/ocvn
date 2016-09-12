@@ -221,7 +221,7 @@ public class Release implements Identifiable {
      *     The ocid
      */
     @JsonProperty("ocid")
-    public void setOcid(String ocid) {
+    public void setOcid(final String ocid) {
         this.ocid = ocid;
     }
 
@@ -252,7 +252,7 @@ public class Release implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -282,7 +282,7 @@ public class Release implements Identifiable {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -316,7 +316,7 @@ public class Release implements Identifiable {
      *     The tag
      */
     @JsonProperty("tag")
-    public void setTag(List<Tag> tag) {
+    public void setTag(final List<Tag> tag) {
         this.tag = tag;
     }
 
@@ -348,7 +348,7 @@ public class Release implements Identifiable {
      *     The initiationType
      */
     @JsonProperty("initiationType")
-    public void setInitiationType(InitiationType initiationType) {
+    public void setInitiationType(final InitiationType initiationType) {
         this.initiationType = initiationType;
     }
 
@@ -378,7 +378,7 @@ public class Release implements Identifiable {
      *     The planning
      */
     @JsonProperty("planning")
-    public void setPlanning(Planning planning) {
+    public void setPlanning(final Planning planning) {
         this.planning = planning;
     }
 
@@ -406,7 +406,7 @@ public class Release implements Identifiable {
      *     The tender
      */
     @JsonProperty("tender")
-    public void setTender(Tender tender) {
+    public void setTender(final Tender tender) {
         this.tender = tender;
     }
 
@@ -432,7 +432,7 @@ public class Release implements Identifiable {
      *     The buyer
      */
     @JsonProperty("buyer")
-    public void setBuyer(Organization buyer) {
+    public void setBuyer(final Organization buyer) {
         this.buyer = buyer;
     }
 
@@ -460,7 +460,7 @@ public class Release implements Identifiable {
      *     The awards
      */
     @JsonProperty("awards")
-    public void setAwards(Set<Award> awards) {
+    public void setAwards(final Set<Award> awards) {
         this.awards = awards;
     }
 
@@ -486,7 +486,7 @@ public class Release implements Identifiable {
      *     The contracts
      */
     @JsonProperty("contracts")
-    public void setContracts(Set<Contract> contracts) {
+    public void setContracts(final Set<Contract> contracts) {
         this.contracts = contracts;
     }
 
@@ -514,7 +514,7 @@ public class Release implements Identifiable {
      *     The language
      */
     @JsonProperty("language")
-    public void setLanguage(String language) {
+    public void setLanguage(final String language) {
         this.language = language;
     }
 
@@ -541,7 +541,7 @@ public class Release implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -577,7 +577,7 @@ public class Release implements Identifiable {
             }
         }
 
-        InitiationType(String value) {
+        InitiationType(final String value) {
             this.value = value;
         }
 
@@ -588,7 +588,7 @@ public class Release implements Identifiable {
         }
 
         @JsonCreator
-        public static InitiationType fromValue(String value) {
+        public static InitiationType fromValue(final String value) {
             InitiationType constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

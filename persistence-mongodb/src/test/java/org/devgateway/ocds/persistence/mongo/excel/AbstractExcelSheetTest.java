@@ -16,16 +16,16 @@ import java.util.List;
  */
 public class AbstractExcelSheetTest {
     private class MockExcelSheet extends AbstractExcelSheet {
-        public MockExcelSheet(Workbook workbook) {
+        MockExcelSheet(final Workbook workbook) {
             super(workbook);
         }
 
         @Override
-        public void writeRow(Object object, Row row) {
+        public void writeRow(final Object object, final Row row) {
         }
 
         @Override
-        public void writeSheet(List<Object> objects) {
+        public void writeSheet(final List<Object> objects) {
         }
 
         @Override

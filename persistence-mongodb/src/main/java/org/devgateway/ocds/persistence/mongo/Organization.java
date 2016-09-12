@@ -93,10 +93,6 @@ public class Organization implements Identifiable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     /**
      *
      * @return
@@ -107,13 +103,17 @@ public class Organization implements Identifiable {
         return identifier;
     }
 
+    public void setId(final String id) {
+        this.id = id;
+    }
+
     /**
      *
      * @param identifier
      *     The identifier
      */
     @JsonProperty("identifier")
-    public void setIdentifier(Identifier identifier) {
+    public void setIdentifier(final Identifier identifier) {
         this.identifier = identifier;
     }
 
@@ -143,7 +143,7 @@ public class Organization implements Identifiable {
      *     The additionalIdentifiers
      */
     @JsonProperty("additionalIdentifiers")
-    public void setAdditionalIdentifiers(Set<Identifier> additionalIdentifiers) {
+    public void setAdditionalIdentifiers(final Set<Identifier> additionalIdentifiers) {
         this.additionalIdentifiers = additionalIdentifiers;
     }
 
@@ -169,7 +169,7 @@ public class Organization implements Identifiable {
      *     The name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -193,7 +193,7 @@ public class Organization implements Identifiable {
      *     The address
      */
     @JsonProperty("address")
-    public void setAddress(Address address) {
+    public void setAddress(final Address address) {
         this.address = address;
     }
 
@@ -206,17 +206,6 @@ public class Organization implements Identifiable {
     @JsonProperty("contactPoint")
     public ContactPoint getContactPoint() {
         return contactPoint;
-    }
-
-    /**
-     * An person, contact point or department to contact in relation to this contracting process.
-     *
-     * @param contactPoint
-     *     The contactPoint
-     */
-    @JsonProperty("contactPoint")
-    public void setContactPoint(ContactPoint contactPoint) {
-        this.contactPoint = contactPoint;
     }
 
     @Override
@@ -235,8 +224,19 @@ public class Organization implements Identifiable {
                 toHashCode();
     }
 
+    /**
+     * An person, contact point or department to contact in relation to this contracting process.
+     *
+     * @param contactPoint
+     *     The contactPoint
+     */
+    @JsonProperty("contactPoint")
+    public void setContactPoint(final ContactPoint contactPoint) {
+        this.contactPoint = contactPoint;
+    }
+
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -271,7 +271,7 @@ public class Organization implements Identifiable {
             }
         }
 
-        OrganizationType(String value) {
+        OrganizationType(final String value) {
             this.value = value;
         }
 
@@ -282,7 +282,7 @@ public class Organization implements Identifiable {
         }
 
         @JsonCreator
-        public static OrganizationType fromValue(String value) {
+        public static OrganizationType fromValue(final String value) {
         	OrganizationType constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
@@ -298,7 +298,7 @@ public class Organization implements Identifiable {
 		return types;
 	}
 
-	public void setTypes(Set<OrganizationType> types) {
+	public void setTypes(final Set<OrganizationType> types) {
 		this.types = types;
 	}
 

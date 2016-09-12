@@ -46,7 +46,7 @@ public class MongoPersistenceApplication {
 		INSTANCE;
 
 		@Override
-		public Double convert(BigDecimal source) {
+		public Double convert(final BigDecimal source) {
 			return source == null ? null : source.doubleValue();
 		}
 	}
@@ -55,7 +55,7 @@ public class MongoPersistenceApplication {
 		INSTANCE;
 
 		@Override
-		public BigDecimal convert(Double source) {
+		public BigDecimal convert(final Double source) {
 			return source != null ? new BigDecimal(source) : null;
 		}
 	}

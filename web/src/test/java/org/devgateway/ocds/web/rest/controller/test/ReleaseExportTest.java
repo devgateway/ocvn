@@ -76,22 +76,22 @@ public class ReleaseExportTest extends AbstractWebTest {
 
     @Test
     public void testReleaseExportIsValid() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
 
-        JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
-        Release release = (Release) releaseJsonImport.importObject();
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
+        final Release release = (Release) releaseJsonImport.importObject();
 
-        MvcResult result = this.mockMvc.perform(
+        final MvcResult result = this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
                         accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andReturn();
-        String content = result.getResponse().getContentAsString();
+        final String content = result.getResponse().getContentAsString();
 
-        JsonNode jsonNodeResponse = JsonLoader.fromString(content);
-        ProcessingReport processingReport = schema.validate(jsonNodeResponse);
+        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
+        final ProcessingReport processingReport = schema.validate(jsonNodeResponse);
 
         if (!processingReport.isSuccess()) {
             for (ProcessingMessage processingMessage : processingReport) {
@@ -103,22 +103,22 @@ public class ReleaseExportTest extends AbstractWebTest {
 
     @Test
     public void testWholeStandardIsImplemented() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("json/full-release.json").getFile());
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final File file = new File(classLoader.getResource("json/full-release.json").getFile());
 
-        JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
-        Release release = (Release) releaseJsonImport.importObject();
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
+        final Release release = (Release) releaseJsonImport.importObject();
 
-        MvcResult result = this.mockMvc.perform(
+        final MvcResult result = this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
                         accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andReturn();
-        String content = result.getResponse().getContentAsString();
+        final String content = result.getResponse().getContentAsString();
 
-        JsonNode jsonNodeResponse = JsonLoader.fromString(content);
-        ProcessingReport processingReport = schemaAllRequired.validate(jsonNodeResponse);
+        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
+        final ProcessingReport processingReport = schemaAllRequired.validate(jsonNodeResponse);
 
         if (!processingReport.isSuccess()) {
             for (ProcessingMessage processingMessage : processingReport) {

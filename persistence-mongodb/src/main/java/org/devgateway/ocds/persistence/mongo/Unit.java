@@ -51,7 +51,7 @@ public class Unit {
      *     The name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -71,7 +71,7 @@ public class Unit {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -89,7 +89,7 @@ public class Unit {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

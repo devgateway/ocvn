@@ -75,7 +75,7 @@ public class ReleaseReference {
      *     The url
      */
     @JsonProperty("url")
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -105,7 +105,7 @@ public class ReleaseReference {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -133,7 +133,7 @@ public class ReleaseReference {
      *     The tag
      */
     @JsonProperty("tag")
-    public void setTag(List<Tag> tag) {
+    public void setTag(final List<Tag> tag) {
         this.tag = tag;
     }
 
@@ -151,7 +151,7 @@ public class ReleaseReference {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

@@ -17,21 +17,21 @@ public class ReleaseJsonImportTest extends AbstractMongoTest {
 
     @Test
     public void importObject() throws Exception {
-        String jsonRelease = "{\n" +
-                "    tag: [\"tender\"],\n" +
-                "    planning: {\n" +
-                "        budget: {\n" +
-                "            description: \"budget desc...\",\n" +
-                "            amount: {\n" +
-                "                amount: 10000,\n" +
-                "                currency: \"USD\"\n" +
-                "            }\n" +
-                "        }\n" +
-                "    }\n" +
-                "}";
-        JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, jsonRelease);
-        Release release = (Release) releaseJsonImport.importObject();
-        Release releaseById = releaseRepository.findById(release.getId());
+        final String jsonRelease = "{\n"
+                + "    tag: [\"tender\"],\n"
+                + "    planning: {\n"
+                + "        budget: {\n"
+                + "            description: \"budget desc...\",\n"
+                + "            amount: {\n"
+                + "                amount: 10000,\n"
+                + "                currency: \"USD\"\n"
+                + "            }\n"
+                + "        }\n"
+                + "    }\n"
+                + "}";
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, jsonRelease);
+        final Release release = (Release) releaseJsonImport.importObject();
+        final Release releaseById = releaseRepository.findById(release.getId());
 
         Assert.assertNotNull("Check if we have something in the database", releaseById);
         Assert.assertEquals("Check if the releases are the same", release, releaseById);

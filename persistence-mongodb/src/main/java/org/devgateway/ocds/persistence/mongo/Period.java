@@ -60,7 +60,7 @@ public class Period {
      *     The startDate
      */
     @JsonProperty("startDate")
-    public void setStartDate(Date startDate) {
+    public void setStartDate(final Date startDate) {
         this.startDate = startDate;
     }
 
@@ -82,7 +82,7 @@ public class Period {
      *     The endDate
      */
     @JsonProperty("endDate")
-    public void setEndDate(Date endDate) {
+    public void setEndDate(final Date endDate) {
         this.endDate = endDate;
     }
 
@@ -100,7 +100,7 @@ public class Period {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

@@ -17,16 +17,14 @@ public class ReleaseRepositoryTest extends AbstractMongoTest {
     @Test
     public void testReleaseSaveAndFind() {
 
-        Release release = new Release();
+        final Release release = new Release();
 
         release.setOcid(ocid);
 
         releaseRepository.insert(release);
 
-        Release byOcid = releaseRepository.findByOcid(ocid);
+        final Release byOcid = releaseRepository.findByOcid(ocid);
 
         Assert.assertEquals(ocid, byOcid.getOcid());
-
     }
-
 }

@@ -86,7 +86,7 @@ public class Address {
      *     The streetAddress
      */
     @JsonProperty("streetAddress")
-    public void setStreetAddress(String streetAddress) {
+    public void setStreetAddress(final String streetAddress) {
         this.streetAddress = streetAddress;
     }
 
@@ -108,7 +108,7 @@ public class Address {
      *     The locality
      */
     @JsonProperty("locality")
-    public void setLocality(String locality) {
+    public void setLocality(final String locality) {
         this.locality = locality;
     }
 
@@ -130,7 +130,7 @@ public class Address {
      *     The region
      */
     @JsonProperty("region")
-    public void setRegion(String region) {
+    public void setRegion(final String region) {
         this.region = region;
     }
 
@@ -152,7 +152,7 @@ public class Address {
      *     The postalCode
      */
     @JsonProperty("postalCode")
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(final String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -174,7 +174,7 @@ public class Address {
      *     The countryName
      */
     @JsonProperty("countryName")
-    public void setCountryName(String countryName) {
+    public void setCountryName(final String countryName) {
         this.countryName = countryName;
     }
 
@@ -195,7 +195,7 @@ public class Address {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

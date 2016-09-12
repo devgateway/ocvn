@@ -28,14 +28,14 @@ public class XMLFileImportTest extends AbstractMongoTest {
 
     @Test
     public void process() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("xml/release.xml").getFile());
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final File file = new File(classLoader.getResource("xml/release.xml").getFile());
         xmlFile.process(file);
 
-        List<Release> releases = releaseRepository.findAll();
+        final List<Release> releases = releaseRepository.findAll();
         Assert.assertNotNull(releases);
 
-        Release release = releaseRepository.findById("xmlimport-123");
+        final Release release = releaseRepository.findById("xmlimport-123");
         Assert.assertNotNull(release);
         Assert.assertEquals("check field", release.getLanguage(), "en");
     }
@@ -45,7 +45,7 @@ public class XMLFileImportTest extends AbstractMongoTest {
 @Transactional
 class XMLFileImportDefault extends XMLFileImport {
     @Override
-    protected Release processRelease(Release release) {
+    protected Release processRelease(final Release release) {
         return release;
     }
 
@@ -60,7 +60,7 @@ class XMLFileImportDefault extends XMLFileImport {
     }
 
     @Override
-    public void logMessage(String message) {
+    public void logMessage(final String message) {
 
     }
 
