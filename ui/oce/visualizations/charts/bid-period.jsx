@@ -14,6 +14,10 @@ class BidPeriod extends FrontendYearFilterableChart {
     }))
   };
 
+  getRawData(){
+    return super.getData();
+  }  
+
   getData() {
     let data = super.getData();
     if (!data) return [];
