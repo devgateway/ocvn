@@ -11,25 +11,28 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller.selector;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
-import io.swagger.annotations.ApiOperation;
+import java.util.List;
 
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import io.swagger.annotations.ApiOperation;
 
 /**
  *
@@ -56,8 +59,8 @@ public class BidSelectionMethodSearchController extends GenericOCDSController {
 
         DBObject project = new BasicDBObject("tender.procurementMethodDetails", 1);
 
-        Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
-                group("$tender.procurementMethodDetails"));
+		Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
+				group("$tender.procurementMethodDetails"), sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 
