@@ -15,6 +15,7 @@ import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
+import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,7 @@ import com.mongodb.DBObject;
  * @author mihai
  *
  */
-public class VNImportAndEndpointsTest extends AbstractMongoTest {
+public class VNImportAndEndpointsTest extends AbstractWebTest {
 
     @Autowired
     private ExcelImportService vnExcelImportService;

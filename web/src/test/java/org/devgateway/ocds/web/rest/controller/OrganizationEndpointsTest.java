@@ -12,6 +12,7 @@ import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchCon
 import org.devgateway.ocds.web.rest.controller.selector.SupplierSearchController;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
 import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
+import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.List;
 
-public class OrganizationEndpointsTest extends AbstractMongoTest {
+public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Autowired
     private OrganizationSearchController organizationSearchController;
@@ -46,9 +47,9 @@ public class OrganizationEndpointsTest extends AbstractMongoTest {
     @Before
     public void importTestData() throws IOException, InterruptedException {
 
-        if (testDataInitialized) {
-            return;
-        }
+        // if (testDataInitialized) {
+        //     return;
+        // }
 
         final Organization organization = new Organization();
         organization.setName("Development Gateway");
@@ -79,7 +80,7 @@ public class OrganizationEndpointsTest extends AbstractMongoTest {
         Assert.assertNotNull(savedOrganization);
         Assert.assertEquals(orgId, savedOrganization.getId());
 
-        testDataInitialized = true;
+        // testDataInitialized = true;
     }
 
     @Test
