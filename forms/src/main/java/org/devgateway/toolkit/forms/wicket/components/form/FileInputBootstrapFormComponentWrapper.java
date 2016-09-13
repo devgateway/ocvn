@@ -28,6 +28,7 @@ import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.link.Link;
@@ -437,6 +438,25 @@ public class FileInputBootstrapFormComponentWrapper<T> extends FormComponentPane
 		};
 
 		add(bootstrapFileInput);
+		
+		
+		/**
+		 * due to an upgrade of FormGroup in wicket7/wicket-bootrap-0.10, the
+		 * visitor that finds inner FormComponentS, will now find two instead of
+		 * one: the FileInputBootstrapFormComponentWrapper and also the
+		 * BootstrapFileInputField. This is the RIGHT result, previously in
+		 * wicket 6.x it only got the first level of children, hence only one
+		 * FormComponent (the FileInputBootstrapFormComponentWrapper). It would then
+		 * read the label from FileInputBootstrapFormComponentWrapper and use it
+		 * for displaying the label of the FormGroup. In
+		 * wicket7/wicket-bootstrap-0.10 this will result in reading the label
+		 * of BootstrapFileInputField which is null. So you will notice no
+		 * labels for FormGroupS. We fix this by forcing the label of the
+		 * underlying fileInput element to the same model as the label used by
+		 * FileInputBootstrapFormComponentWrapper
+		 */
+		FormComponent<?> fileInput = (FormComponent<?>) bootstrapFileInput.get("fileInputForm").get("fileInput");
+		fileInput.setLabel(this.getLabel());
 
 		// there are situation when we want to display the upload file component
 		// only to admins

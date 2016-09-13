@@ -167,6 +167,10 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 
 		tooltipLabel = new TooltipLabel("tooltipLabel", id);
 		border.add(tooltipLabel);
+		
+		if (!labelHidden) {
+			field.setLabel(labelModel);
+		}
 	}
 
 	@Override
@@ -206,10 +210,6 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-
-		if (!labelHidden) {
-			field.setLabel(labelModel);
-		}
 
 		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
 			getAjaxFormChoiceComponentUpdatingBehavior();
