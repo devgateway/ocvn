@@ -14,6 +14,7 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImport;
 import org.devgateway.ocds.persistence.mongo.spring.json.ReleaseJsonImport;
 import org.devgateway.toolkit.web.AbstractWebTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +56,9 @@ public class ReleaseExportTest extends AbstractWebTest {
 
     @Before
     public final void setUp() throws Exception {
+        // just be sure that the release collection is empty
+        releaseRepository.deleteAll();
+
         // use a web app context setup because we want to do an integration test that involves loading of
         // Controllers, Services and Repositories from the Spring configuration.
         // for a more focused unit tests we can use:
@@ -72,6 +76,12 @@ public class ReleaseExportTest extends AbstractWebTest {
                 .setReportProvider(new ListReportProvider(LogLevel.ERROR, LogLevel.FATAL))
                 .freeze()
                 .getJsonSchema(ocdsSchemaNodeAllRequired);
+    }
+
+    @After
+    public final void tearDown() {
+        // be sure to clean up the release collection
+        releaseRepository.deleteAll();
     }
 
     @Test

@@ -10,8 +10,6 @@ import org.devgateway.ocds.web.rest.controller.selector.BuyerSearchController;
 import org.devgateway.ocds.web.rest.controller.selector.OrganizationSearchController;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocds.web.rest.controller.selector.SupplierSearchController;
-import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
-import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
 import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,22 +36,18 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-    @Autowired
-    private MongoTemplateConfiguration mongoTemplateConfiguration;
-
-
-    private String orgId = "1234";
+    private static final String ORG_ID = "1234";
 
     @Before
     public void importTestData() throws IOException, InterruptedException {
-
-        // if (testDataInitialized) {
-        //     return;
-        // }
+        if (testDataInitialized) {
+            return;
+        }
+        organizationRepository.deleteAll();
 
         final Organization organization = new Organization();
         organization.setName("Development Gateway");
-        organization.setId(orgId);
+        organization.setId(ORG_ID);
 
         final Address address = new Address();
         address.setCountryName("Romania");
@@ -78,14 +72,14 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
         final Organization savedOrganization = organizationRepository.save(organization);
 
         Assert.assertNotNull(savedOrganization);
-        Assert.assertEquals(orgId, savedOrganization.getId());
+        Assert.assertEquals(ORG_ID, savedOrganization.getId());
 
         // testDataInitialized = true;
     }
 
     @Test
     public void testOrganizationIdEndpoint() {
-        final Organization organizationId = organizationSearchController.byId(orgId);
+        final Organization organizationId = organizationSearchController.byId(ORG_ID);
         Assert.assertNotNull(organizationId);
     }
 
@@ -99,7 +93,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testProcuringEntityIdEndpoint() {
-        final Organization organizationId = procuringEntitySearchController.byId(orgId);
+        final Organization organizationId = procuringEntitySearchController.byId(ORG_ID);
         Assert.assertNotNull(organizationId);
     }
 
@@ -113,7 +107,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testBuyerIdEndpoint() {
-        final Organization organizationId = buyerSearchController.byId(orgId);
+        final Organization organizationId = buyerSearchController.byId(ORG_ID);
         Assert.assertNotNull(organizationId);
     }
 
@@ -127,7 +121,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testSupplierIdEndpoint() {
-        final Organization organizationId = supplierSearchController.byId(orgId);
+        final Organization organizationId = supplierSearchController.byId(ORG_ID);
         Assert.assertNull(organizationId);
     }
 
