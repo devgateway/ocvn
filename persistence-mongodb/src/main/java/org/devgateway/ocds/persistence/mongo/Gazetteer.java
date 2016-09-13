@@ -53,7 +53,7 @@ public class Gazetteer implements Serializable {
      *     The scheme
      */
     @JsonProperty("scheme")
-    public void setScheme(String scheme) {
+    public void setScheme(final String scheme) {
         this.scheme = scheme;
     }
 
@@ -75,7 +75,7 @@ public class Gazetteer implements Serializable {
      *     The identifiers
      */
     @JsonProperty("identifiers")
-    public void setIdentifiers(Set<String> identifiers) {
+    public void setIdentifiers(final Set<String> identifiers) {
         this.identifiers = identifiers;
     }
 
@@ -93,7 +93,7 @@ public class Gazetteer implements Serializable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

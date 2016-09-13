@@ -18,7 +18,7 @@ import java.util.List;
  * @since 9/8/16
  */
 public class ExcelChartSheetDefaultTest {
-    private static final List<?> categories = Arrays.asList(
+    private static final List<?> CATEGORIES = Arrays.asList(
             "cat 1",
             "cat 2",
             "cat 3",
@@ -26,7 +26,7 @@ public class ExcelChartSheetDefaultTest {
             "cat 5"
     );
 
-    private static final List<List<? extends Number>> values = Arrays.asList(
+    private static final List<List<? extends Number>> VALUES = Arrays.asList(
             Arrays.asList(5, 7, 10, 12, 6),
             Arrays.asList(20, 12, 10, 5, 14)
     );
@@ -110,7 +110,7 @@ public class ExcelChartSheetDefaultTest {
     private void addCategories(final ExcelChartSheet excelChartSheet) {
         final Row row = excelChartSheet.createRow();
         int coll = 0;
-        for (Object category : categories) {
+        for (Object category : CATEGORIES) {
             excelChartSheet.writeCell(category, row, coll);
             coll++;
         }
@@ -120,7 +120,7 @@ public class ExcelChartSheetDefaultTest {
      * Add one or multiple rows with the values.
      */
     private void addValues(final ExcelChartSheet excelChartSheet) {
-        for (List<? extends Number> value : values) {
+        for (List<? extends Number> value : VALUES) {
             final Row row = excelChartSheet.createRow();
             int coll = 0;
             for (Number val : value) {

@@ -3,8 +3,10 @@ package org.devgateway.ocds.persistence.mongo.reader;
 import org.apache.commons.digester3.binder.AbstractRulesModule;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
+import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,16 +28,28 @@ public class XMLFileImportTest extends AbstractMongoTest {
     @Qualifier("XMLFileImportDefault")
     private XMLFile xmlFile;
 
+    @Before
+    public final void setUp() throws Exception {
+        // just be sure that the release collection is empty
+        releaseRepository.deleteAll();
+    }
+
+    @After
+    public final void tearDown() {
+        // be sure to clean up the release collection
+        releaseRepository.deleteAll();
+    }
+
     @Test
     public void process() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("xml/release.xml").getFile());
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final File file = new File(classLoader.getResource("xml/release.xml").getFile());
         xmlFile.process(file);
 
-        List<Release> releases = releaseRepository.findAll();
+        final List<Release> releases = releaseRepository.findAll();
         Assert.assertNotNull(releases);
 
-        Release release = releaseRepository.findById("xmlimport-123");
+        final Release release = releaseRepository.findById("xmlimport-123");
         Assert.assertNotNull(release);
         Assert.assertEquals("check field", release.getLanguage(), "en");
     }
@@ -45,7 +59,7 @@ public class XMLFileImportTest extends AbstractMongoTest {
 @Transactional
 class XMLFileImportDefault extends XMLFileImport {
     @Override
-    protected Release processRelease(Release release) {
+    protected Release processRelease(final Release release) {
         return release;
     }
 
@@ -60,7 +74,7 @@ class XMLFileImportDefault extends XMLFileImport {
     }
 
     @Override
-    public void logMessage(String message) {
+    public void logMessage(final String message) {
 
     }
 

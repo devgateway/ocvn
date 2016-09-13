@@ -132,7 +132,7 @@ public class Budget {
      *     The source
      */
     @JsonProperty("source")
-    public void setSource(String source) {
+    public void setSource(final String source) {
         this.source = source;
     }
 
@@ -156,7 +156,7 @@ public class Budget {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -184,7 +184,7 @@ public class Budget {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -204,7 +204,7 @@ public class Budget {
      *     The amount
      */
     @JsonProperty("amount")
-    public void setAmount(Amount amount) {
+    public void setAmount(final Amount amount) {
         this.amount = amount;
     }
 
@@ -236,7 +236,7 @@ public class Budget {
      *     The project
      */
     @JsonProperty("project")
-    public void setProject(String project) {
+    public void setProject(final String project) {
         this.project = project;
     }
 
@@ -266,7 +266,7 @@ public class Budget {
      *     The projectID
      */
     @JsonProperty("projectID")
-    public void setProjectID(String projectID) {
+    public void setProjectID(final String projectID) {
         this.projectID = projectID;
     }
 
@@ -294,7 +294,7 @@ public class Budget {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -317,7 +317,7 @@ public class Budget {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

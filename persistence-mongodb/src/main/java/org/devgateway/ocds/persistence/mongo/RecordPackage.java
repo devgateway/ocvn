@@ -120,7 +120,7 @@ public class RecordPackage implements Identifiable {
      *            The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -143,7 +143,7 @@ public class RecordPackage implements Identifiable {
      *            The publisher
      */
     @JsonProperty("publisher")
-    public void setPublisher(Publisher publisher) {
+    public void setPublisher(final Publisher publisher) {
         this.publisher = publisher;
     }
 
@@ -170,7 +170,7 @@ public class RecordPackage implements Identifiable {
      *            The license
      */
     @JsonProperty("license")
-    public void setLicense(String license) {
+    public void setLicense(final String license) {
         this.license = license;
     }
 
@@ -191,7 +191,7 @@ public class RecordPackage implements Identifiable {
      *            The publicationPolicy
      */
     @JsonProperty("publicationPolicy")
-    public void setPublicationPolicy(String publicationPolicy) {
+    public void setPublicationPolicy(final String publicationPolicy) {
         this.publicationPolicy = publicationPolicy;
     }
 
@@ -212,7 +212,7 @@ public class RecordPackage implements Identifiable {
      *            The publishedDate
      */
     @JsonProperty("publishedDate")
-    public void setPublishedDate(Date publishedDate) {
+    public void setPublishedDate(final Date publishedDate) {
         this.publishedDate = publishedDate;
     }
 
@@ -235,7 +235,7 @@ public class RecordPackage implements Identifiable {
      *            The packages
      */
     @JsonProperty("packages")
-    public void setPackages(Set<String> packages) {
+    public void setPackages(final Set<String> packages) {
         this.packages = packages;
     }
 
@@ -256,7 +256,7 @@ public class RecordPackage implements Identifiable {
      *            The records
      */
     @JsonProperty("records")
-    public void setRecords(Set<Record> records) {
+    public void setRecords(final Set<Record> records) {
         this.records = records;
     }
 
@@ -282,7 +282,7 @@ public class RecordPackage implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

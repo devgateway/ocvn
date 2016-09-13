@@ -30,7 +30,7 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
         return excelBatchSize;
     }
 
-    public void setExcelBatchSize(Integer excelBatchSize) {
+    public void setExcelBatchSize(final Integer excelBatchSize) {
         this.excelBatchSize = excelBatchSize;
     }
 

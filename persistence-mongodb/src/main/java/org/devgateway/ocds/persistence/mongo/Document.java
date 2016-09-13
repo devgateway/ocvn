@@ -146,7 +146,7 @@ public class Document implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -174,7 +174,7 @@ public class Document implements Identifiable {
      *     The documentType
      */
     @JsonProperty("documentType")
-    public void setDocumentType(String documentType) {
+    public void setDocumentType(final String documentType) {
         this.documentType = documentType;
     }
 
@@ -196,7 +196,7 @@ public class Document implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -222,7 +222,7 @@ public class Document implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -246,7 +246,7 @@ public class Document implements Identifiable {
      *     The url
      */
     @JsonProperty("url")
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -270,7 +270,7 @@ public class Document implements Identifiable {
      *     The datePublished
      */
     @JsonProperty("datePublished")
-    public void setDatePublished(Date datePublished) {
+    public void setDatePublished(final Date datePublished) {
         this.datePublished = datePublished;
     }
 
@@ -292,7 +292,7 @@ public class Document implements Identifiable {
      *     The dateModified
      */
     @JsonProperty("dateModified")
-    public void setDateModified(Date dateModified) {
+    public void setDateModified(final Date dateModified) {
         this.dateModified = dateModified;
     }
 
@@ -322,7 +322,7 @@ public class Document implements Identifiable {
      *     The format
      */
     @JsonProperty("format")
-    public void setFormat(String format) {
+    public void setFormat(final String format) {
         this.format = format;
     }
 
@@ -352,7 +352,7 @@ public class Document implements Identifiable {
      *     The language
      */
     @JsonProperty("language")
-    public void setLanguage(String language) {
+    public void setLanguage(final String language) {
         this.language = language;
     }
 
@@ -377,7 +377,7 @@ public class Document implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

@@ -52,7 +52,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -78,7 +78,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -98,7 +98,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
      *     The gazetteer
      */
     @JsonProperty("gazetteer")
-    public void setGazetteer(Gazetteer gazetteer) {
+    public void setGazetteer(final Gazetteer gazetteer) {
         this.gazetteer = gazetteer;
     }
 
@@ -122,7 +122,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -169,7 +169,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

@@ -113,7 +113,7 @@ public class Transaction implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -143,7 +143,7 @@ public class Transaction implements Identifiable {
      *     The source
      */
     @JsonProperty("source")
-    public void setSource(String source) {
+    public void setSource(final String source) {
         this.source = source;
     }
 
@@ -165,7 +165,7 @@ public class Transaction implements Identifiable {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -185,7 +185,7 @@ public class Transaction implements Identifiable {
      *     The amount
      */
     @JsonProperty("amount")
-    public void setAmount(Amount amount) {
+    public void setAmount(final Amount amount) {
         this.amount = amount;
     }
 
@@ -205,7 +205,7 @@ public class Transaction implements Identifiable {
      *     The providerOrganization
      */
     @JsonProperty("providerOrganization")
-    public void setProviderOrganization(Identifier providerOrganization) {
+    public void setProviderOrganization(final Identifier providerOrganization) {
         this.providerOrganization = providerOrganization;
     }
 
@@ -225,7 +225,7 @@ public class Transaction implements Identifiable {
      *     The receiverOrganization
      */
     @JsonProperty("receiverOrganization")
-    public void setReceiverOrganization(Identifier receiverOrganization) {
+    public void setReceiverOrganization(final Identifier receiverOrganization) {
         this.receiverOrganization = receiverOrganization;
     }
 
@@ -251,7 +251,7 @@ public class Transaction implements Identifiable {
      *     The uri
      */
     @JsonProperty("uri")
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -274,7 +274,7 @@ public class Transaction implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

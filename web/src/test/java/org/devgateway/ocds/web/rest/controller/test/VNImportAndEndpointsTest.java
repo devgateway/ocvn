@@ -1,10 +1,9 @@
 package org.devgateway.ocds.web.rest.controller.test;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.mongodb.DBObject;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
+import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
@@ -14,22 +13,22 @@ import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingReque
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
-import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
+import org.devgateway.toolkit.web.AbstractWebTest;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.mongodb.DBObject;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author mihai
  *
  */
-@WebAppConfiguration
-public class VNImportAndEndpointsTest extends AbstractMongoTest {
+public class VNImportAndEndpointsTest extends AbstractWebTest {
 
     @Autowired
     private ExcelImportService vnExcelImportService;
@@ -46,7 +45,10 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
     @Autowired
     private ProcuringEntitySearchController procuringEntitySearchController;
 
-    private static boolean initialized = false;
+    @Autowired
+    private ReleaseRepository releaseRepository;
+
+    private static ReleaseRepository releaseRepositoryStatic;
 
     public byte[] loadResourceStreamAsByteArray(String name) throws IOException {
         return IOUtils.toByteArray(getClass().getResourceAsStream(name));
@@ -54,15 +56,23 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
     @Before
     public void importTestData() throws IOException, InterruptedException {
-
-        if (initialized) {
+        if (testDataInitialized) {
             return;
         }
+        releaseRepository.deleteAll();
+        releaseRepositoryStatic = releaseRepository;
+
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
                 loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
-        initialized = true;
+        testDataInitialized = true;
+    }
+
+    @AfterClass
+    public static final void tearDown() {
+        // be sure to clean up the release collection
+        releaseRepositoryStatic.deleteAll();
     }
 
     @Test
@@ -174,8 +184,8 @@ public class VNImportAndEndpointsTest extends AbstractMongoTest {
 
     @Test
     public void testProcuringEntitySearchController() {
-        List<Organization> procuringEntities = procuringEntitySearchController.searchText
-                (new OrganizationSearchRequest());
+        List<Organization> procuringEntities = procuringEntitySearchController.searchText(
+                new OrganizationSearchRequest());
         Assert.assertEquals(procuringEntities.size(), 1, 0);
     }
 

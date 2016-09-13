@@ -14,6 +14,7 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImport;
 import org.devgateway.ocds.persistence.mongo.spring.json.ReleaseJsonImport;
 import org.devgateway.toolkit.web.AbstractWebTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +56,9 @@ public class ReleaseExportTest extends AbstractWebTest {
 
     @Before
     public final void setUp() throws Exception {
+        // just be sure that the release collection is empty
+        releaseRepository.deleteAll();
+
         // use a web app context setup because we want to do an integration test that involves loading of
         // Controllers, Services and Repositories from the Spring configuration.
         // for a more focused unit tests we can use:
@@ -74,24 +78,30 @@ public class ReleaseExportTest extends AbstractWebTest {
                 .getJsonSchema(ocdsSchemaNodeAllRequired);
     }
 
+    @After
+    public final void tearDown() {
+        // be sure to clean up the release collection
+        releaseRepository.deleteAll();
+    }
+
     @Test
     public void testReleaseExportIsValid() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
 
-        JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
-        Release release = (Release) releaseJsonImport.importObject();
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
+        final Release release = (Release) releaseJsonImport.importObject();
 
-        MvcResult result = this.mockMvc.perform(
+        final MvcResult result = this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
                         accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andReturn();
-        String content = result.getResponse().getContentAsString();
+        final String content = result.getResponse().getContentAsString();
 
-        JsonNode jsonNodeResponse = JsonLoader.fromString(content);
-        ProcessingReport processingReport = schema.validate(jsonNodeResponse);
+        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
+        final ProcessingReport processingReport = schema.validate(jsonNodeResponse);
 
         if (!processingReport.isSuccess()) {
             for (ProcessingMessage processingMessage : processingReport) {
@@ -103,22 +113,22 @@ public class ReleaseExportTest extends AbstractWebTest {
 
     @Test
     public void testWholeStandardIsImplemented() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("json/full-release.json").getFile());
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final File file = new File(classLoader.getResource("json/full-release.json").getFile());
 
-        JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
-        Release release = (Release) releaseJsonImport.importObject();
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
+        final Release release = (Release) releaseJsonImport.importObject();
 
-        MvcResult result = this.mockMvc.perform(
+        final MvcResult result = this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
                         accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andReturn();
-        String content = result.getResponse().getContentAsString();
+        final String content = result.getResponse().getContentAsString();
 
-        JsonNode jsonNodeResponse = JsonLoader.fromString(content);
-        ProcessingReport processingReport = schemaAllRequired.validate(jsonNodeResponse);
+        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
+        final ProcessingReport processingReport = schemaAllRequired.validate(jsonNodeResponse);
 
         if (!processingReport.isSuccess()) {
             for (ProcessingMessage processingMessage : processingReport) {

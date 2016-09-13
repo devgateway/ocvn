@@ -115,7 +115,7 @@ public class Milestone implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -137,7 +137,7 @@ public class Milestone implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -159,7 +159,7 @@ public class Milestone implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -181,7 +181,7 @@ public class Milestone implements Identifiable {
      *     The dueDate
      */
     @JsonProperty("dueDate")
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(final Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -203,7 +203,7 @@ public class Milestone implements Identifiable {
      *     The dateModified
      */
     @JsonProperty("dateModified")
-    public void setDateModified(Date dateModified) {
+    public void setDateModified(final Date dateModified) {
         this.dateModified = dateModified;
     }
 
@@ -229,7 +229,7 @@ public class Milestone implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Milestone.Status status) {
+    public void setStatus(final Milestone.Status status) {
         this.status = status;
     }
 
@@ -251,7 +251,7 @@ public class Milestone implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -274,7 +274,7 @@ public class Milestone implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -310,7 +310,7 @@ public class Milestone implements Identifiable {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -321,7 +321,7 @@ public class Milestone implements Identifiable {
         }
 
         @JsonCreator
-        public static Milestone.Status fromValue(String value) {
+        public static Milestone.Status fromValue(final String value) {
             Milestone.Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

@@ -112,7 +112,7 @@ public class Item implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -134,7 +134,7 @@ public class Item implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -154,7 +154,7 @@ public class Item implements Identifiable {
      *     The classification
      */
     @JsonProperty("classification")
-    public void setClassification(Classification classification) {
+    public void setClassification(final Classification classification) {
         this.classification = classification;
     }
 
@@ -184,7 +184,7 @@ public class Item implements Identifiable {
      *     The additionalClassifications
      */
     @JsonProperty("additionalClassifications")
-    public void setAdditionalClassifications(Set<Classification> additionalClassifications) {
+    public void setAdditionalClassifications(final Set<Classification> additionalClassifications) {
         this.additionalClassifications = additionalClassifications;
     }
 
@@ -206,7 +206,7 @@ public class Item implements Identifiable {
      *     The quantity
      */
     @JsonProperty("quantity")
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -230,7 +230,7 @@ public class Item implements Identifiable {
      *     The unit
      */
     @JsonProperty("unit")
-    public void setUnit(Unit unit) {
+    public void setUnit(final Unit unit) {
         this.unit = unit;
     }
 
@@ -253,7 +253,7 @@ public class Item implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -276,7 +276,7 @@ public class Item implements Identifiable {
 		return deliveryLocation;
 	}
 
-	public void setDeliveryLocation(Location<?> deliveryLocation) {
+	public void setDeliveryLocation(final Location<?> deliveryLocation) {
 		this.deliveryLocation = deliveryLocation;
 	}
 
