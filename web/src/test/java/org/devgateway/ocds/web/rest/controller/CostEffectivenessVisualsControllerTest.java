@@ -22,15 +22,10 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
     @Autowired
     private CostEffectivenessVisualsController costEffectivenessVisualsController;
 
-    @Autowired
-    private ReleaseRepository releaseRepository;
-
     @Test
     public void costEffectivenessAwardAmount() throws Exception {
         final List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
                 .costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
-        logger.error(costEffectivenessAwardAmount);
-        logger.error(releaseRepository.findAll());
 
         final DBObject first = costEffectivenessAwardAmount.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);

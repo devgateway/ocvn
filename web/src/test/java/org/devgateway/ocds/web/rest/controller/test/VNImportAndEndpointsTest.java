@@ -14,7 +14,7 @@ import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.web.AbstractWebTest;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,31 +48,24 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Autowired
     private ReleaseRepository releaseRepository;
 
-    private static ReleaseRepository releaseRepositoryStatic;
-
     public byte[] loadResourceStreamAsByteArray(String name) throws IOException {
         return IOUtils.toByteArray(getClass().getResourceAsStream(name));
     }
 
     @Before
     public void importTestData() throws IOException, InterruptedException {
-        if (testDataInitialized) {
-            return;
-        }
         releaseRepository.deleteAll();
-        releaseRepositoryStatic = releaseRepository;
 
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
                 loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
-        testDataInitialized = true;
     }
 
-    @AfterClass
-    public static final void tearDown() {
+    @After
+    public void tearDown() {
         // be sure to clean up the release collection
-        releaseRepositoryStatic.deleteAll();
+        releaseRepository.deleteAll();
     }
 
     @Test

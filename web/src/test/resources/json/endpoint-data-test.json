@@ -141,7 +141,7 @@
                 "date": "2016-05-10T09:00:00Z",
                 "value": {
                     "amount": 40000,
-                    "currency": "GBP"
+                    "currency": "USD"
                 },
                 "suppliers": [
                     {
@@ -198,7 +198,7 @@
                 },
                 "value": {
                     "amount": 70000,
-                    "currency": "GBP"
+                    "currency": "USD"
                 },
                 "items": [
                     {
@@ -221,7 +221,7 @@
                             "date": "2016-08-01T00:00:00Z",
                             "amount": {
                                 "amount": 500000,
-                                "currency": "GBP"
+                                "currency": "USD"
                             },
                             "providerOrganization": {
                                 "scheme": "GB-LAC",
@@ -365,7 +365,7 @@
                 "date": "2015-03-16T09:00:00Z",
                 "value": {
                     "amount": 6000000,
-                    "currency": "GBP"
+                    "currency": "USD"
                 },
                 "suppliers": [
                     {
@@ -422,7 +422,7 @@
                 },
                 "value": {
                     "amount": 6000000,
-                    "currency": "GBP"
+                    "currency": "USD"
                 },
                 "items": [
                     {
@@ -445,7 +445,7 @@
                             "date": "2016-08-01T00:00:00Z",
                             "amount": {
                                 "amount": 500000,
-                                "currency": "GBP"
+                                "currency": "USD"
                             },
                             "providerOrganization": {
                                 "scheme": "GB-LAC",
@@ -588,7 +588,7 @@
                 "date": "2016-02-10T09:30:00Z",
                 "value": {
                     "amount": 500000,
-                    "currency": "GBP"
+                    "currency": "USD"
                 },
                 "suppliers": [
                     {
@@ -645,7 +645,7 @@
                 },
                 "value": {
                     "amount": 30000,
-                    "currency": "GBP"
+                    "currency": "USD"
                 },
                 "items": [
                     {
@@ -668,7 +668,7 @@
                             "date": "2016-08-01T00:00:00Z",
                             "amount": {
                                 "amount": 500000,
-                                "currency": "GBP"
+                                "currency": "USD"
                             },
                             "providerOrganization": {
                                 "scheme": "GB-LAC",

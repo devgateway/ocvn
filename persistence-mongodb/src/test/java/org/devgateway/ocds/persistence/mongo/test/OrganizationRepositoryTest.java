@@ -22,9 +22,6 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
     @Before
     public void importTestData() throws IOException, InterruptedException {
-        if (testDataInitialized) {
-            return;
-        }
         // be sure that the organization collection is empty
         organizationRepository.deleteAll();
 
@@ -57,8 +54,6 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
         Assert.assertNotNull(savedOrganization);
         Assert.assertEquals(ORG_ID, savedOrganization.getId());
-
-        testDataInitialized = true;
     }
 
 
