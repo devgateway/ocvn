@@ -97,11 +97,11 @@ public class ExcelChartSheetDefaultTest {
         Assert.assertEquals("check count of values", 5, valuesChartDataSource.get(0).getPointCount());
         Assert.assertEquals("check count of values", 5, valuesChartDataSource.get(1).getPointCount());
 
-        Assert.assertEquals("check first category", 5.0, valuesChartDataSource.get(0).getPointAt(0));
-        Assert.assertEquals("check last category", 6.0, valuesChartDataSource.get(0).getPointAt(4));
+        Assert.assertEquals("check first value", 5.0, valuesChartDataSource.get(0).getPointAt(0));
+        Assert.assertEquals("check last value", 6.0, valuesChartDataSource.get(0).getPointAt(4));
 
-        Assert.assertEquals("check first category", 20.0, valuesChartDataSource.get(1).getPointAt(0));
-        Assert.assertEquals("check last category", 14.0, valuesChartDataSource.get(1).getPointAt(4));
+        Assert.assertEquals("check first value", 20.0, valuesChartDataSource.get(1).getPointAt(0));
+        Assert.assertEquals("check last value", 14.0, valuesChartDataSource.get(1).getPointAt(4));
     }
 
     /**
