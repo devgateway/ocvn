@@ -25,6 +25,7 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
     public void costEffectivenessAwardAmount() throws Exception {
         final List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
                 .costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
+        logger.error(costEffectivenessAwardAmount);
 
         final DBObject first = costEffectivenessAwardAmount.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
