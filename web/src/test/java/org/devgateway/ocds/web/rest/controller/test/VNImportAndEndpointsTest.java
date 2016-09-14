@@ -19,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import java.io.IOException;
@@ -48,6 +49,9 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Autowired
     private ReleaseRepository releaseRepository;
 
+    @Autowired
+    private CacheManager cacheManager;
+
     public byte[] loadResourceStreamAsByteArray(String name) throws IOException {
         return IOUtils.toByteArray(getClass().getResourceAsStream(name));
     }
@@ -55,6 +59,11 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Before
     public void importTestData() throws IOException, InterruptedException {
         releaseRepository.deleteAll();
+
+        // clean the cache (we need this especially for endpoints cache)
+        if (cacheManager != null) {
+            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+        }
 
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
                 loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
