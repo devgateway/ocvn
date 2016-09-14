@@ -27,7 +27,7 @@ public class AverageNumberOfTenderersControllerTest extends AbstractEndPointCont
         int year = (int) first.get(AverageNumberOfTenderersController.Keys.YEAR);
         double averageNoTenderers = (double) first.get(AverageNumberOfTenderersController.Keys.AVERAGE_NO_OF_TENDERERS);
         Assert.assertEquals(2015, year);
-        Assert.assertEquals(7.0, averageNoTenderers, 0);
+        Assert.assertEquals(5.5, averageNoTenderers, 0);
 
         final DBObject second = averageNumberOfTenderers.get(1);
         year = (int) second.get(AverageNumberOfTenderersController.Keys.YEAR);

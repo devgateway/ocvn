@@ -62,6 +62,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
         public static final String AVERAGE_AWARD_DAYS = "averageAwardDays";
         public static final String TOTAL_AWARD_WITH_START_END_DATES = "totalAwardWithStartEndDates";
         public static final String PERCENTAGE_AWARD_WITH_START_END_DATES = "percentageAwardWithStartEndDates";
+        public static final String PERCENTAGE_TENDER_WITH_START_END_DATES = "percentageTenderWithStartEndDates";
         public static final String YEAR = "year";
     }
 
@@ -118,9 +119,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject project1 = new BasicDBObject();
         project1.put(Fields.UNDERSCORE_ID, 0);
-        project1.put("totalTenderWithStartEndDates", 1);
-        project1.put("totalTenders", 1);
-        project1.put("percentageTenderWithStartEndDates",
+        project1.put(Keys.TOTAL_TENDER_WITH_START_END_DATES, 1);
+        project1.put(Keys.TOTAL_TENDERS, 1);
+        project1.put(Keys.PERCENTAGE_TENDER_WITH_START_END_DATES,
                 new BasicDBObject("$multiply", Arrays.asList(
                         new BasicDBObject("$divide", Arrays.asList("$totalTenderWithStartEndDates", "$totalTenders")),
                         100)));

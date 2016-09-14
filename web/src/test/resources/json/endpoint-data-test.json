@@ -20,7 +20,8 @@
                 "amount": {
                     "amount": 1000.00,
                     "currency": "USD"
-                }
+                },
+                "projectID": "SP001"
             },
             "rationale": "[ocds-endpoint-001] - planning rationale"
         },
@@ -32,17 +33,25 @@
             "items": [
                 {
                     "id": "0001",
-                    "description": "[0001] - description 1",
+                    "description": "description 1",
                     "classification": {
                         "scheme": "CPV",
-                        "id": "45233130",
-                        "description": "Construction work for highways",
-                        "uri": "http://cpv.data.ac.uk/code-45233130"
+                        "id": "09100000",
+                        "description": "Fuels",
+                        "uri": "http://cpv.data.ac.uk/code-09100000"
+                    },
+                    "deliveryLocation" : {
+                        "geometry" : {
+                            "coordinates" : [
+                                45.9432,
+                                24.9668
+                            ]
+                        }
                     }
                 }
             ],
             "value": {
-                "amount": 1100000,
+                "amount": 9000.00,
                 "currency": "USD"
             },
             "procurementMethod": "open",
@@ -50,7 +59,7 @@
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-001/",
             "tenderPeriod": {
                 "startDate": "2015-03-01T09:00:00Z",
-                "endDate": "2016-04-01T18:00:00Z"
+                "endDate": "2015-04-01T09:00:00Z"
 
             },
             "numberOfTenderers": 10,
@@ -128,10 +137,10 @@
             {
                 "id": "ocds-endpoint-001-awards",
                 "title": "Award of contract to build...",
-                "status": "pending",
-                "date": "2016-05-10T09:30:00Z",
+                "status": "active",
+                "date": "2016-05-10T09:00:00Z",
                 "value": {
-                    "amount": 11000000,
+                    "amount": 40000,
                     "currency": "GBP"
                 },
                 "suppliers": [
@@ -165,9 +174,9 @@
                         "description": "desc",
                         "classification": {
                             "scheme": "CPV",
-                            "id": "45233130",
-                            "description": "Construction work for highways",
-                            "uri": "http://cpv.data.ac.uk/code-45233130"
+                            "id": "09100000",
+                            "description": "Fuels",
+                            "uri": "http://cpv.data.ac.uk/code-09100000"
                         }
                     }
                 ],
@@ -188,7 +197,7 @@
                     "endDate": "2016-08-01T23:59:00Z"
                 },
                 "value": {
-                    "amount": 11000000,
+                    "amount": 70000,
                     "currency": "GBP"
                 },
                 "items": [
@@ -197,9 +206,9 @@
                         "description": "desc 2",
                         "classification": {
                             "scheme": "CPV",
-                            "id": "45233130",
-                            "description": "Construction work for highways",
-                            "uri": "http://cpv.data.ac.uk/code-45233130"
+                            "id": "09100000",
+                            "description": "Fuels",
+                            "uri": "http://cpv.data.ac.uk/code-09100000"
                         }
                     }
                 ],
@@ -269,12 +278,12 @@
                 "amount": 600000,
                 "currency": "USD"
             },
-            "procurementMethod": "open",
+            "procurementMethod": "selective",
             "submissionMethod": [ "electronicSubmission" ],
             "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-002/",
             "tenderPeriod": {
                 "startDate": "2014-03-01T09:00:00Z",
-                "endDate": "2016-04-01T18:00:00Z"
+                "endDate": "2014-03-16T09:00:00Z"
 
             },
             "numberOfTenderers": 5,
@@ -352,8 +361,8 @@
             {
                 "id": "ocds-endpoint-002-awards",
                 "title": "Award of contract to build...",
-                "status": "pending",
-                "date": "2016-05-10T09:30:00Z",
+                "status": "active",
+                "date": "2015-03-16T09:00:00Z",
                 "value": {
                     "amount": 6000000,
                     "currency": "GBP"
@@ -494,14 +503,13 @@
                 "currency": "USD"
             },
             "procurementMethod": "open",
-            "submissionMethod": [ "electronicSubmission" ],
-            "submissionMethodDetails": "Submit through the online portal at http://example.com/submissions/ocds-endpoint-003/",
+            "submissionMethod": [ "inPerson" ],
+            "submissionMethodDetails": "Submit in person",
             "tenderPeriod": {
                 "startDate": "2015-06-01T09:00:00Z",
-                "endDate": "2016-12-01T18:00:00Z"
-
+                "endDate": "2015-08-01T09:00:00Z"
             },
-            "numberOfTenderers": 4,
+            "numberOfTenderers": 1,
             "procuringEntity": {
                 "identifier": {
                     "id": "E09000003",
@@ -577,9 +585,9 @@
                 "id": "ocds-endpoint-003-awards",
                 "title": "Award of contract to build...",
                 "status": "pending",
-                "date": "2016-05-10T09:30:00Z",
+                "date": "2016-02-10T09:30:00Z",
                 "value": {
-                    "amount": 11000000,
+                    "amount": 500000,
                     "currency": "GBP"
                 },
                 "suppliers": [
@@ -636,7 +644,7 @@
                     "endDate": "2016-08-01T23:59:00Z"
                 },
                 "value": {
-                    "amount": 11000000,
+                    "amount": 30000,
                     "currency": "GBP"
                 },
                 "items": [
