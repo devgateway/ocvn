@@ -1,6 +1,7 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
+import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.junit.Assert;
@@ -21,11 +22,15 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
     @Autowired
     private CostEffectivenessVisualsController costEffectivenessVisualsController;
 
+    @Autowired
+    private ReleaseRepository releaseRepository;
+
     @Test
     public void costEffectivenessAwardAmount() throws Exception {
         final List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
                 .costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
         logger.error(costEffectivenessAwardAmount);
+        logger.error(releaseRepository.findAll());
 
         final DBObject first = costEffectivenessAwardAmount.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);

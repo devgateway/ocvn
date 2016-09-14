@@ -24,8 +24,6 @@ public class NumberOfTendersByItemClassificationTest extends AbstractEndPointCon
         final List<DBObject> numberOfTendersByItem = numberOfTendersByItemClassification
                 .numberOfTendersByItemClassification(new YearFilterPagingRequest());
 
-        logger.error(numberOfTendersByItem);
-
         final DBObject first = numberOfTendersByItem.get(0);
         String id = (String) first.get(Fields.UNDERSCORE_ID);
         String description = (String) first.get(NumberOfTendersByItemClassification.Keys.DESCRIPTION);
