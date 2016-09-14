@@ -10,15 +10,6 @@ import {Map} from "immutable";
 import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
-function getBidTypeDescription(__, {id, description}){
-  //switch(+id){
-    //case 12: return __("Unspecified") + " #1";
-    //case 15: return __("Unspecified") + " #2";
-    //default: return description;
-  //}
-  return description;
-}
-
 class OCVN extends OCApp{
   constructor(props) {
     super(props);
@@ -33,7 +24,7 @@ class OCVN extends OCApp{
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-            map.set(datum.id, getBidTypeDescription(this.__.bind(this), datum)), Map())
+            map.set(datum.id, datum.description), Map())
         })
     );
   }
