@@ -40,9 +40,6 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Before
     public void importTestData() throws IOException, InterruptedException {
-        if (testDataInitialized) {
-            return;
-        }
         organizationRepository.deleteAll();
 
         final Organization organization = new Organization();
@@ -73,8 +70,6 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
         Assert.assertNotNull(savedOrganization);
         Assert.assertEquals(ORG_ID, savedOrganization.getId());
-
-        // testDataInitialized = true;
     }
 
     @Test

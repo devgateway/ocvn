@@ -14,11 +14,12 @@ import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.web.AbstractWebTest;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import java.io.IOException;
@@ -48,7 +49,8 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Autowired
     private ReleaseRepository releaseRepository;
 
-    private static ReleaseRepository releaseRepositoryStatic;
+    @Autowired
+    private CacheManager cacheManager;
 
     public byte[] loadResourceStreamAsByteArray(String name) throws IOException {
         return IOUtils.toByteArray(getClass().getResourceAsStream(name));
@@ -56,23 +58,23 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
 
     @Before
     public void importTestData() throws IOException, InterruptedException {
-        if (testDataInitialized) {
-            return;
-        }
         releaseRepository.deleteAll();
-        releaseRepositoryStatic = releaseRepository;
+
+        // clean the cache (we need this especially for endpoints cache)
+        if (cacheManager != null) {
+            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+        }
 
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
                 loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
-        testDataInitialized = true;
     }
 
-    @AfterClass
-    public static final void tearDown() {
+    @After
+    public void tearDown() {
         // be sure to clean up the release collection
-        releaseRepositoryStatic.deleteAll();
+        releaseRepository.deleteAll();
     }
 
     @Test

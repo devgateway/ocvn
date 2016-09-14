@@ -6,11 +6,12 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImportPackage;
 import org.devgateway.ocds.persistence.mongo.spring.json.ReleasePackageJsonImport;
 import org.devgateway.toolkit.web.AbstractWebTest;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 
 import java.io.File;
 import java.util.List;
@@ -27,30 +28,30 @@ public abstract class AbstractEndPointControllerTest extends AbstractWebTest {
     @Autowired
     private ReleaseRepository releaseRepository;
 
-    private static ReleaseRepository releaseRepositoryStatic;
+    @Autowired
+    private CacheManager cacheManager;
 
     @Before
     public final void setUp() throws Exception {
-        // just run the setUp only once and be sure that the release collection is empty
-        if (testDataInitialized) {
-            return;
-        }
+        // be sure that the release collection is empty
         releaseRepository.deleteAll();
-        releaseRepositoryStatic = releaseRepository;
+
+        // clean the cache (we need this especially for endpoints cache)
+        if (cacheManager != null) {
+            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+        }
 
         final ClassLoader classLoader = getClass().getClassLoader();
 
         final File file = new File(classLoader.getResource("json/endpoint-data-test.json").getFile());
         final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
         releasePackageJsonImport.importObjects();
-
-        testDataInitialized = true;
     }
 
-    @AfterClass
-    public static final void tearDown() {
+    @After
+    public void tearDown() {
         // be sure to clean up the release collection
-        releaseRepositoryStatic.deleteAll();
+        releaseRepository.deleteAll();
     }
 
     @Test

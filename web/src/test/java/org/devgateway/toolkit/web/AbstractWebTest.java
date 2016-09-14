@@ -16,5 +16,5 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @TestPropertySource("classpath:test.properties")
 @WebIntegrationTest
 public abstract class AbstractWebTest {
-    protected boolean testDataInitialized;
+
 }

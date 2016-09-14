@@ -1,8 +1,5 @@
 package org.devgateway.toolkit.web.excelcharts;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFChart;
@@ -18,6 +15,9 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTLineSer;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTNumDataSource;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STLegendPos;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author idobre
