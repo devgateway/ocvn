@@ -15,6 +15,7 @@
         "tag": ["award"],
         "initiationType": "tender",
         "planning": {
+            "bidPlanProjectDateApprove" : "2016-01-10T09:30:00Z",
             "budget": {
                 "description": "[ocds-endpoint-001] planning - budget",
                 "amount": {

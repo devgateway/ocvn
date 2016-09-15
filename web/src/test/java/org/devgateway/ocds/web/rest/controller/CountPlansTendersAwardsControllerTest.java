@@ -28,7 +28,7 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
         int year = (int) first.get(Fields.UNDERSCORE_ID);
         int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2014, year);
-        Assert.assertEquals(1, count, 0);
+        Assert.assertEquals(1, count);
 
         final DBObject second = countTendersByYear.get(1);
         year = (int) second.get(Fields.UNDERSCORE_ID);
@@ -46,13 +46,24 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
         int year = (int) first.get(Fields.UNDERSCORE_ID);
         int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2015, year);
-        Assert.assertEquals(1, count, 0);
+        Assert.assertEquals(1, count);
 
         final DBObject second = countAwardsByYear.get(1);
         year = (int) second.get(Fields.UNDERSCORE_ID);
         count = (int) second.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2016, year);
-        Assert.assertEquals(2, count, 0);
+        Assert.assertEquals(2, count);
     }
 
+    @Test
+    public void countBidPlansByYear() throws Exception {
+        final List<DBObject> countBidPlansByYear = countPlansTendersAwardsController
+                .countBidPlansByYear(new DefaultFilterPagingRequest());
+
+        final DBObject first = countBidPlansByYear.get(0);
+        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
+        Assert.assertEquals(2016, year);
+        Assert.assertEquals(1, count);
+    }
 }

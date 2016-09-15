@@ -38,7 +38,7 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
 
         Assert.assertEquals(2015, year);
         Assert.assertEquals("Point", geometryType);
-        Assert.assertEquals(new ArrayList<>(Arrays.asList(45.9432 , 24.9668)), coordinates);
+        Assert.assertEquals(new ArrayList<>(Arrays.asList(45.9432, 24.9668)), coordinates);
         Assert.assertEquals(9000.0, totalTendersAmount, 0);
         Assert.assertEquals(1, tendersCount);
     }

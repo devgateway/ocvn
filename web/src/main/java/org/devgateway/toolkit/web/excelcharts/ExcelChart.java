@@ -13,5 +13,5 @@ import java.util.List;
 public interface ExcelChart {
     Workbook createWorkbook();
 
-    void configureSeriesTitle(final List<String> seriesTitle);
+    void configureSeriesTitle(List<String> seriesTitle);
 }

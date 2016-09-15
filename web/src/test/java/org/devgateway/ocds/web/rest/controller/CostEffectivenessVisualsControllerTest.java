@@ -32,7 +32,8 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
         double totalAwardAmount = (double) first.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARD_AMOUNT);
         int totalAwards = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS);
         int totalAwardsWithTender = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS_WITH_TENDER);
-        double percentageAwardsWithTender = (double) first.get(CostEffectivenessVisualsController.Keys.PERCENTAGE_AWARDS_WITH_TENDER);
+        double percentageAwardsWithTender = (double) first.
+                get(CostEffectivenessVisualsController.Keys.PERCENTAGE_AWARDS_WITH_TENDER);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(6000000.0, totalAwardAmount, 0);
         Assert.assertEquals(1, totalAwards);
@@ -44,7 +45,8 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
         totalAwardAmount = (double) second.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARD_AMOUNT);
         totalAwards = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS);
         totalAwardsWithTender = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_AWARDS_WITH_TENDER);
-        percentageAwardsWithTender = (double) second.get(CostEffectivenessVisualsController.Keys.PERCENTAGE_AWARDS_WITH_TENDER);
+        percentageAwardsWithTender = (double) second.
+                get(CostEffectivenessVisualsController.Keys.PERCENTAGE_AWARDS_WITH_TENDER);
         Assert.assertEquals(2016, year);
         Assert.assertEquals(40000.0, totalAwardAmount, 0);
         Assert.assertEquals(1, totalAwards);
@@ -62,7 +64,8 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
         double totalTenderAmount = (double) first.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         int totalTenders = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDERS);
         int totalTenderWithAwards = (int) first.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_WITH_AWARDS);
-        double percentageTendersWithAwards = (double) first.get(CostEffectivenessVisualsController.Keys.PERCENTAGE_TENDERS_WITH_AWARDS);
+        double percentageTendersWithAwards = (double) first.
+                get(CostEffectivenessVisualsController.Keys.PERCENTAGE_TENDERS_WITH_AWARDS);
         Assert.assertEquals(2014, year);
         Assert.assertEquals(600000.0, totalTenderAmount, 0);
         Assert.assertEquals(1, totalTenders);
@@ -74,7 +77,8 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
         totalTenderAmount = (double) second.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         totalTenders = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDERS);
         totalTenderWithAwards = (int) second.get(CostEffectivenessVisualsController.Keys.TOTAL_TENDER_WITH_AWARDS);
-        percentageTendersWithAwards = (double) second.get(CostEffectivenessVisualsController.Keys.PERCENTAGE_TENDERS_WITH_AWARDS);
+        percentageTendersWithAwards = (double) second
+                .get(CostEffectivenessVisualsController.Keys.PERCENTAGE_TENDERS_WITH_AWARDS);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(9000.0, totalTenderAmount, 0);
         Assert.assertEquals(2, totalTenders);
@@ -89,19 +93,22 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
 
         final DBObject first = costEffectivenessTenderAwardAmount.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
-        BigDecimal diffTenderAwardAmount = (BigDecimal) first.get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+        BigDecimal diffTenderAwardAmount = (BigDecimal) first
+                .get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         Assert.assertEquals(-5991000, diffTenderAwardAmount.doubleValue(), 0);
         Assert.assertEquals(2015, year);
 
         final DBObject second = costEffectivenessTenderAwardAmount.get(1);
         year = (int) second.get(Fields.UNDERSCORE_ID);
-        diffTenderAwardAmount = (BigDecimal) second.get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+        diffTenderAwardAmount = (BigDecimal) second
+                .get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         Assert.assertEquals(2016, year);
         Assert.assertEquals(-40000, diffTenderAwardAmount.doubleValue(), 0);
 
         final DBObject third = costEffectivenessTenderAwardAmount.get(2);
         year = (int) third.get(Fields.UNDERSCORE_ID);
-        diffTenderAwardAmount = (BigDecimal) third.get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+        diffTenderAwardAmount = (BigDecimal) third
+                .get(CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         Assert.assertEquals(2014, year);
         Assert.assertEquals(600000, diffTenderAwardAmount.doubleValue(), 0);
     }

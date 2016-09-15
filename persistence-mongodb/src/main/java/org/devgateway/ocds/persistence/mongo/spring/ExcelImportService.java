@@ -13,7 +13,7 @@ public interface ExcelImportService extends ImportService {
 
     StringBuffer getMsgBuffer();
 
-    void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-                                final byte[] publicInstitutionsSuppliers,
-                                final Boolean purgeDatabase, final Boolean validateData) throws InterruptedException;
+    void importAllSheets(List<String> fileTypes, byte[] prototypeDatabase, byte[] locations,
+                                byte[] publicInstitutionsSuppliers,
+                                Boolean purgeDatabase, Boolean validateData) throws InterruptedException;
 }

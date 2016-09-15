@@ -16,5 +16,5 @@ public interface CustomChartSeries extends ChartSeries {
      *
      * @param ctChart - chart created from a {@link CTPlotArea}
      */
-    void addToChart(final XmlObject ctChart);
+    void addToChart(XmlObject ctChart);
 }

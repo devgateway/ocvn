@@ -1,4 +1,4 @@
-package org.devgateway.ocds.web.rest.controller;
+package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -12,18 +12,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.File;
 import java.util.List;
 
 /**
  * @author idobre
- * @since 9/9/16
+ * @since 9/14/16
  *
- * Class that imports some test releases from 'endpoint-data-test.json' file and is used to test each endpoint.
+ * Class that imports some test releases from 'endpoint-data-test.json' file
+ * and is used to test each excel chart endpoint.
  */
-public abstract class AbstractEndPointControllerTest extends AbstractWebTest {
-    protected static Logger logger = Logger.getLogger(AbstractEndPointControllerTest.class);
+public abstract class AbstractExcelControllerTest extends AbstractWebTest {
+    protected static Logger logger = Logger.getLogger(AbstractExcelControllerTest.class);
+
+    protected MockHttpServletResponse mockHttpServletResponse;
 
     @Autowired
     private ReleaseRepository releaseRepository;
@@ -46,6 +50,8 @@ public abstract class AbstractEndPointControllerTest extends AbstractWebTest {
         final File file = new File(classLoader.getResource("json/endpoint-data-test.json").getFile());
         final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file, true);
         releasePackageJsonImport.importObjects();
+
+        mockHttpServletResponse = new MockHttpServletResponse();
     }
 
     @After

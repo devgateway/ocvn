@@ -7,5 +7,5 @@ package org.devgateway.ocds.persistence.mongo.spring;
  * Service that imports data in OCDS format
  */
 public interface ImportService {
-    void logMessage(final String message);
+    void logMessage(String message);
 }
