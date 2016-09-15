@@ -2,10 +2,10 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TenderPercentagesController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,10 +52,18 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
 
         final List<Number> percentCancelled = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
                 TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENT_CANCELLED);
-        values.add(percentCancelled);
+        if (!percentCancelled.isEmpty()) {
+            values.add(percentCancelled);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Percent");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Percent");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
@@ -83,10 +91,18 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
 
         final List<Number> percentUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
                 TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
-        values.add(percentUsingEBid);
+        if (!percentUsingEBid.isEmpty()) {
+            values.add(percentUsingEBid);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Percent");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Percent");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

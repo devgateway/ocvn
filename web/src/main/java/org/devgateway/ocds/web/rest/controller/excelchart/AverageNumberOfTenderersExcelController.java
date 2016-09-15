@@ -2,10 +2,10 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,10 +54,18 @@ public class AverageNumberOfTenderersExcelController extends GenericOCDSControll
         final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(averageNumberOfTenderers,
                 categories, AverageNumberOfTenderersController.Keys.YEAR,
                 AverageNumberOfTenderersController.Keys.AVERAGE_NO_OF_TENDERERS);
-        values.add(totalTenderAmount);
+        if (!totalTenderAmount.isEmpty()) {
+            values.add(totalTenderAmount);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Average Number");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Average Number");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

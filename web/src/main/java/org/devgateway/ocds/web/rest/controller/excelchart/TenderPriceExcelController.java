@@ -75,7 +75,7 @@ public class TenderPriceExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Procurement method* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/procurementMethodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
     public void procurementMethodExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
-                                       final HttpServletResponse response) throws IOException {
+                                            final HttpServletResponse response) throws IOException {
         final String chartTitle = "Procurement method";
 
         // fetch the data that will be displayed in the chart
@@ -89,10 +89,18 @@ public class TenderPriceExcelController extends GenericOCDSController {
         final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(tenderPriceByBidSelection,
                 categories, TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD,
                 TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
-        values.add(totalTenderAmount);
+        if (!totalTenderAmount.isEmpty()) {
+            values.add(totalTenderAmount);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Procurement method");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Procurement method");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

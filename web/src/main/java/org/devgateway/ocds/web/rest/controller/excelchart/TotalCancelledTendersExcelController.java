@@ -57,10 +57,18 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
         for (int i = 0; i < cancelledAmount.size(); i++) {
             cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
         }
-        values.add(cancelledAmount);
+        if (!cancelledAmount.isEmpty()) {
+            values.add(cancelledAmount);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Amount (trillions)");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Amount (trillions)");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
@@ -95,10 +103,18 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
         for (int i = 0; i < cancelledAmount.size(); i++) {
             cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
         }
-        values.add(cancelledAmount);
+        if (!cancelledAmount.isEmpty()) {
+            values.add(cancelledAmount);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Amount (trillions)");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Amount (trillions)");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

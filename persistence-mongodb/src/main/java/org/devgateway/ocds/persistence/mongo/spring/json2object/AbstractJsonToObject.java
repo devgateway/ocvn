@@ -3,7 +3,10 @@ package org.devgateway.ocds.persistence.mongo.spring.json2object;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.io.IOUtils;
+import org.devgateway.ocds.persistence.mongo.spring.json2object.deserializer.GeoJsonPointDeserializer;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +27,9 @@ public abstract class AbstractJsonToObject<T> implements JsonToObject<T> {
     public AbstractJsonToObject(final String jsonObject) {
         this.jsonObject = jsonObject;
         this.mapper = new ObjectMapper();
+        SimpleModule geoJsonPointDeserializer = new SimpleModule()
+                .addDeserializer(GeoJsonPoint.class, new GeoJsonPointDeserializer());
+        mapper.registerModule(geoJsonPointDeserializer);
 
         // this are non-standard features that are disabled by default.
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
