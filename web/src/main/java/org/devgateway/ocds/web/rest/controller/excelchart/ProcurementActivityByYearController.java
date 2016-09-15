@@ -58,9 +58,6 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
                 Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueBidPlans = excelChartHelper.getValuesFromDBObject(countBidPlansByYear, categories,
                 Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
-        values.add(valueAwards);
-        values.add(valueTenders);
-        values.add(valueBidPlans);
         if (!valueAwards.isEmpty()) {
             values.add(valueAwards);
         }

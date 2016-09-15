@@ -20,7 +20,7 @@ public class ReleaseExportFileTest {
     public void createWorkbook() throws Exception {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("json/release-excel-export.json").getFile());
-        final JsonToObject releasePackageJsonToObject = new ReleasePackageJsonToObject(file);
+        final JsonToObject releasePackageJsonToObject = new ReleasePackageJsonToObject(file, false);
 
         final ReleasePackage releasePackage = (ReleasePackage) releasePackageJsonToObject.toObject();
 

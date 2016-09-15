@@ -55,7 +55,9 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
                 Fields.UNDERSCORE_ID, TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < cancelledAmount.size(); i++) {
-            cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+            if (cancelledAmount.get(i) != null) {
+                cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+            }
         }
         if (!cancelledAmount.isEmpty()) {
             values.add(cancelledAmount);
@@ -101,7 +103,9 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
                 TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < cancelledAmount.size(); i++) {
-            cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+            if (cancelledAmount.get(i) != null) {
+                cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+            }
         }
         if (!cancelledAmount.isEmpty()) {
             values.add(cancelledAmount);

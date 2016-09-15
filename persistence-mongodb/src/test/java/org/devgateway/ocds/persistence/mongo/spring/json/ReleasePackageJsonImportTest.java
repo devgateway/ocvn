@@ -1,9 +1,5 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Set;
-
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Contract;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -17,6 +13,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author idobre
@@ -44,7 +44,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         final File file = new File(classLoader
                 .getResource("json/fictional-example/ocds-213czf-000-00001-01-planning.json").getFile());
-        final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file, false);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
         final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-01-planning");
 
@@ -59,7 +59,8 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         final File file = new File(classLoader
                 .getResource("json/fictional-example/ocds-213czf-000-00001-02-tender.json").getFile());
-        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(
+                releaseRepository, file, false);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
         final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-02-tender");
 
@@ -74,7 +75,8 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         final File file = new File(classLoader
                 .getResource("json/fictional-example/ocds-213czf-000-00001-03-tenderAmendment.json").getFile());
-        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(
+                releaseRepository, file, false);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
         final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-03-tenderAmendment");
 
@@ -90,7 +92,8 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         final File file = new File(classLoader.getResource("json/fictional-example/ocds-213czf-000-00001-04-award.json")
                 .getFile());
-        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(
+                releaseRepository, file, false);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
         final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-04-award");
 
@@ -106,7 +109,8 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         final File file = new File(classLoader
                 .getResource("json/fictional-example/ocds-213czf-000-00001-05-contract.json").getFile());
-        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(
+                releaseRepository, file, false);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
         final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-05-contract");
 
@@ -122,7 +126,8 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         final File file = new File(classLoader
                 .getResource("json/fictional-example/ocds-213czf-000-00001-06-implementation.json").getFile());
-        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final ReleasePackageJsonImport releasePackageJsonImport = new ReleasePackageJsonImport(
+                releaseRepository, file, false);
         final Collection<Release> releases = releasePackageJsonImport.importObjects();
         final Release importedRelease = releaseRepository.findById("ocds-213czf-000-00001-06-implementation");
 
