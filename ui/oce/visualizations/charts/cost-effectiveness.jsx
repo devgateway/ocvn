@@ -56,7 +56,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
 
   getLayout(){
     return {
-      barmode: "stack",
+      barmode: "relative",
       xaxis: {
         title: this.__("Year"),
         type: "category"
