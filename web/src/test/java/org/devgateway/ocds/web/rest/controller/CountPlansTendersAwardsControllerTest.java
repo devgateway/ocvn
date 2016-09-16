@@ -34,7 +34,7 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
         year = (int) second.get(Fields.UNDERSCORE_ID);
         count = (int) second.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2015, year);
-        Assert.assertEquals(2, count, 0);
+        Assert.assertEquals(2, count);
     }
 
     @Test
