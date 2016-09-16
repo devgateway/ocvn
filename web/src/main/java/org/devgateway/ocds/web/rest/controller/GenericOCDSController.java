@@ -255,6 +255,13 @@ public class GenericOCDSController {
                 getByAwardAmountIntervalCriteria(filter));
     }
 
+	protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, String dateProperty) {
+		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+				getSupplierIdCriteria(filter),
+				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
+				getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(dateProperty, filter));
+	}
+    
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
         return match(getDefaultFilterCriteria(filter));
     }
