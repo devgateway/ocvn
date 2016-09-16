@@ -59,6 +59,10 @@ public class FundingByLocationController extends GenericOCDSController {
         public static final String TOTAL_TENDERS_WITH_START_DATE = "totalTendersWithStartDate";
         public static final String PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION =
                 "percentTendersWithStartDateAndLocation";
+        public static final String TOTAL_PLANS_WITH_AMOUNTS = "totalPlansWithAmounts";
+        public static final String TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION = "totalPlansWithAmountsAndLocation";
+        public static final String PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION = "percentPlansWithAmountsAndLocation";
+        public static final String TOTAL_PLANNED_AMOUNT = "totalPlannedAmount";
         public static final String YEAR = "year";
     }
 
@@ -135,7 +139,7 @@ public class FundingByLocationController extends GenericOCDSController {
     }
 
 
-	@ApiOperation(value = "Planned funding by location by year. Returns the total amount of planning.budget"
+    @ApiOperation(value = "Planned funding by location by year. Returns the total amount of planning.budget"
             + " available per planning.budget.projectLocation, grouped by year. "
             + "This will return full location information, including geocoding data."
             + "Responds only to the procuring entity id filter: tender.procuringEntity._id")
@@ -166,7 +170,7 @@ public class FundingByLocationController extends GenericOCDSController {
                         .andOperator(getProcuringEntityIdCriteria(filter))),
                 new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
-                group("year", "planning.budget.projectLocation").sum("$dividedTotal").as("totalPlannedAmount")
+                group("year", "planning.budget.projectLocation").sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
                         .sum("$cntprj").as("recordsCount"),
                 sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
 
@@ -194,15 +198,17 @@ public class FundingByLocationController extends GenericOCDSController {
 
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, null);
-        group.put("totalPlansWithAmounts", new BasicDBObject("$sum", 1));
-        group.put("totalPlansWithAmountsAndLocation", new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
-                .asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
+        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, new BasicDBObject("$sum", 1));
+        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
+                new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
+                        .asList(new BasicDBObject("$gt",
+                                Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
-        project2.put("totalPlansWithAmounts", 1);
-        project2.put("totalPlansWithAmountsAndLocation", 1);
-        project2.put("percentPlansWithAmountsAndLocation",
+        project2.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, 1);
+        project2.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION, 1);
+        project2.put(Keys.PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION,
                 new BasicDBObject("$multiply",
                         Arrays.asList(
                                 new BasicDBObject("$divide",

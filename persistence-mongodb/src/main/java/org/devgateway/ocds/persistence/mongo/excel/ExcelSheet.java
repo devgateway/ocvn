@@ -14,11 +14,11 @@ import java.util.List;
  * @since 6/7/16
  */
 public interface ExcelSheet {
-    void writeCell(final Object value, final Row row, final int column);
+    void writeCell(Object value, Row row, int column);
 
-    void writeRow(final Object object, final Row row);
+    void writeRow(Object object, Row row);
 
-    void writeSheet(final List<Object> objects);
+    void writeSheet(List<Object> objects);
 
     void emptySheet();
 }

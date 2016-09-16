@@ -89,7 +89,7 @@ public class ReleaseExportTest extends AbstractWebTest {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
 
-        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file, false);
         final Release release = (Release) releaseJsonImport.importObject();
 
         final MvcResult result = this.mockMvc.perform(
@@ -116,7 +116,7 @@ public class ReleaseExportTest extends AbstractWebTest {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("json/full-release.json").getFile());
 
-        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file, false);
         final Release release = (Release) releaseJsonImport.importObject();
 
         final MvcResult result = this.mockMvc.perform(

@@ -38,7 +38,7 @@ public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepos
         location.setDescription(getRowCell(row, 0));
 
         GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(getRowCell(row, 2)), getDouble(getRowCell(row, 1)));
-        location.setGeometry((VNLocation.DefaultGeoJsonPoint) coordinates);
+        location.setGeometry(coordinates);
 
         Gazetteer gazetteer = new Gazetteer();
         gazetteer.getIdentifiers().add(getRowCell(row, 3));

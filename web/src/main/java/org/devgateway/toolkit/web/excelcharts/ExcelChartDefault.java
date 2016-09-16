@@ -125,6 +125,11 @@ public class ExcelChartDefault implements ExcelChart {
      */
     private void addCategories(final ExcelChartSheet excelChartSheet) {
         final Row row = excelChartSheet.createRow();
+        if (categories.isEmpty()) {
+            excelChartSheet.writeCell("No data", row, 0);
+            return;
+        }
+
         int coll = 0;
         for (Object category : categories) {
             excelChartSheet.writeCell(category, row, coll);
@@ -137,6 +142,12 @@ public class ExcelChartDefault implements ExcelChart {
      * Add one or multiple rows with the values.
      */
     private void addValues(final ExcelChartSheet excelChartSheet) {
+        if (values.isEmpty()) {
+            final Row row = excelChartSheet.createRow();
+            excelChartSheet.writeCell(0, row, 0);
+            return;
+        }
+
         for (List<? extends Number> value : values) {
             final Row row = excelChartSheet.createRow();
             int coll = 0;

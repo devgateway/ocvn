@@ -26,5 +26,5 @@ public abstract class ReleaseRowImporter extends RowImporter<Release, ReleaseRep
         }
     }
 
-    public abstract Release createReleaseFromReleaseRow(final String[] row) throws ParseException;
+    public abstract Release createReleaseFromReleaseRow(String[] row) throws ParseException;
 }

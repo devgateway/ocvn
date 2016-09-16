@@ -88,6 +88,6 @@ public class ExcelChartDefaultTest {
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());
         Assert.assertTrue("category axis", axis.get(0) instanceof XSSFCategoryAxis);
-        Assert.assertTrue("category axis", axis.get(1) instanceof XSSFValueAxis);
+        Assert.assertTrue("value axis", axis.get(1) instanceof XSSFValueAxis);
     }
 }
