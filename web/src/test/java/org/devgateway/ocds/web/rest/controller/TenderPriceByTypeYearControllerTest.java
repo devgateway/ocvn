@@ -43,7 +43,8 @@ public class TenderPriceByTypeYearControllerTest extends AbstractEndPointControl
 
         final DBObject first = tenderPriceByBidSelectionMethod.get(0);
         double totalTenderAmount = (double) first.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
-        String procurementMethodDetails = (String) first.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
+        String procurementMethodDetails = (String) first
+                .get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
         Assert.assertNull(procurementMethodDetails);
         Assert.assertEquals(600000.0, totalTenderAmount, 0);
 
@@ -61,7 +62,8 @@ public class TenderPriceByTypeYearControllerTest extends AbstractEndPointControl
 
         final DBObject first = tenderPriceByAllBidSelectionMethods.get(0);
         double totalTenderAmount = (double) first.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
-        String procurementMethodDetails = (String) first.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
+        String procurementMethodDetails = (String) first
+                .get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
         Assert.assertEquals("Competitive offers", procurementMethodDetails);
         Assert.assertEquals(9000.0, totalTenderAmount, 0);
 

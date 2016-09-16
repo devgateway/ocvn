@@ -195,7 +195,8 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
         final DBObject first = avgTimeFromPlanToTenderPhase.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
-        double avgTimeFromPlanToTender = (double) first.get(TenderPercentagesController.Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE);
+        double avgTimeFromPlanToTender = (double) first
+                .get(TenderPercentagesController.Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(-315.00, avgTimeFromPlanToTender, 0);
     }

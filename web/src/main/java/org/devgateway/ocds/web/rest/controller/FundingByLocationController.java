@@ -199,8 +199,10 @@ public class FundingByLocationController extends GenericOCDSController {
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, null);
         group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, new BasicDBObject("$sum", 1));
-        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION, new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
-                .asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
+        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
+                new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
+                        .asList(new BasicDBObject("$gt",
+                                Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
