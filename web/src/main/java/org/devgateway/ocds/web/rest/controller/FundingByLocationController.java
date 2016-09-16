@@ -11,9 +11,21 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -28,18 +40,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import io.swagger.annotations.ApiOperation;
 
 /**
  *
@@ -109,7 +113,7 @@ public class FundingByLocationController extends GenericOCDSController {
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put("tenderItemsDeliveryLocation", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt",
-                        Arrays.asList("$tender.items.deliveryLocation", null)), 1, 0)));
+                        Arrays.asList("$tender.items.deliveryLocation", 0)), 1, 0)));
 
 
         DBObject project1 = new BasicDBObject();
@@ -199,10 +203,15 @@ public class FundingByLocationController extends GenericOCDSController {
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, null);
         group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, new BasicDBObject("$sum", 1));
-        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
-                new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays
-                        .asList(new BasicDBObject("$gt",
-                                Arrays.asList("$planning.budget.projectLocation", null)), 1, 0))));
+		group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
+				new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays.asList(
+						new BasicDBObject("$gt",
+								Arrays.asList(
+										new BasicDBObject("$size",
+												new BasicDBObject("$ifNull", Arrays.asList(
+														"$planning.budget.projectLocation", ArrayUtils.toArray()))),
+										0)),
+						1, 0))));
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
@@ -219,6 +228,8 @@ public class FundingByLocationController extends GenericOCDSController {
                 match(where("planning.budget.amount").exists(true).andOperator(getProcuringEntityIdCriteria(filter))),
                 new CustomGroupingOperation(group), new CustomProjectionOperation(project2), skip(filter.getSkip()),
                 limit(filter.getPageSize()));
+        
+        System.out.println(agg);
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();

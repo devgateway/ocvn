@@ -92,7 +92,7 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
                 .get(FundingByLocationController.Keys.PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION);
 
         Assert.assertEquals(3, totalPlansWithAmounts);
-        Assert.assertEquals(3, totalPlansWithAmountsAndLocation);
-        Assert.assertEquals(100.00, percentPlansWithAmountsAndLocation, 0);
+        Assert.assertEquals(1, totalPlansWithAmountsAndLocation);
+        Assert.assertEquals(33.33, percentPlansWithAmountsAndLocation, 1E-2);
     }
 }
