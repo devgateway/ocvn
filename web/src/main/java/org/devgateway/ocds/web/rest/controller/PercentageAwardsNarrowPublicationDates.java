@@ -43,7 +43,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
-public class NumberOfDaysUntilAwardPosted extends GenericOCDSController {
+public class PercentageAwardsNarrowPublicationDates extends GenericOCDSController {
 
 	public static final class Keys {
 		public static final String TOTAL_AWARDS = "totalAwards";
