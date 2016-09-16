@@ -92,9 +92,10 @@ OCVN.STYLING = {
     traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
-      if(number >= BILLION) return (number/BILLION).toFixed(2) + "B";
-      if(number >= MILLION) return (number/MILLION).toFixed(2) + "M";
-      if(number >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
+      let abs = Math.abs(number);
+      if(abs >= BILLION) return (number/BILLION).toFixed(2) + "B";
+      if(abs >= MILLION) return (number/MILLION).toFixed(2) + "M";
+      if(abs >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
       return number.toFixed(2);
     }
   }
