@@ -5,6 +5,7 @@ import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingReques
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import java.util.List;
 
@@ -109,8 +110,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
         final DBObject first = percentTendersUsingEBid.get(0);
         int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
-        int totalTenders = (int) first
-                .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        int totalTenders = (int) first.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
         int totalTendersUsingEbid = (int) first.get(TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
         double percentageTendersUsingEbid = (double) first
                 .get(TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
@@ -121,8 +121,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
 
         final DBObject second = percentTendersUsingEBid.get(1);
         year = (int) second.get(TenderPercentagesController.Keys.YEAR);
-        totalTenders = (int) second
-                .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        totalTenders = (int) second.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
         totalTendersUsingEbid = (int) second.get(TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
         percentageTendersUsingEbid = (double) second
                 .get(TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
@@ -130,5 +129,74 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(1, totalTenders);
         Assert.assertEquals(1, totalTendersUsingEbid);
         Assert.assertEquals(100.0, percentageTendersUsingEbid, 0);
+    }
+
+
+    @Test
+    public void percentTendersUsingEgp() throws Exception {
+        final List<DBObject> percentTendersUsingEgp = tenderPercentagesController
+                .percentTendersUsingEgp(new DefaultFilterPagingRequest());
+
+        final DBObject first = percentTendersUsingEgp.get(0);
+        int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
+        int totalTenders = (int) first.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        int totalEgp = (int) first.get(TenderPercentagesController.Keys.TOTAL_EGP);
+        double percentEgp = (double) first.get(TenderPercentagesController.Keys.PERCENTAGE_EGP);
+        Assert.assertEquals(2014, year);
+        Assert.assertEquals(1, totalTenders);
+        Assert.assertEquals(0, totalEgp);
+        Assert.assertEquals(0.0, percentEgp, 0);
+
+        final DBObject second = percentTendersUsingEgp.get(1);
+        year = (int) second.get(TenderPercentagesController.Keys.YEAR);
+        totalTenders = (int) second.get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        totalEgp = (int) second.get(TenderPercentagesController.Keys.TOTAL_EGP);
+        percentEgp = (double) second.get(TenderPercentagesController.Keys.PERCENTAGE_EGP);
+        Assert.assertEquals(2015, year);
+        Assert.assertEquals(2, totalTenders);
+        Assert.assertEquals(1, totalEgp);
+        Assert.assertEquals(50.0, percentEgp, 0);
+    }
+
+    @Test
+    public void percentTendersWithLinkedProcurementPlan() throws Exception {
+        final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
+                .percentTendersWithLinkedProcurementPlan(new DefaultFilterPagingRequest());
+
+        final DBObject first = percentTendersWithLinkedProcurementPlan.get(0);
+        int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
+        int totalTendersWithLinkedProcurementPlan = (int) first
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN);
+        int totalTenders = (int) first
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        double percentTenders = (double) first.get(TenderPercentagesController.Keys.PERCENT_TENDERS);
+        Assert.assertEquals(2014, year);
+        Assert.assertEquals(1, totalTendersWithLinkedProcurementPlan);
+        Assert.assertEquals(1, totalTenders);
+        Assert.assertEquals(100.0, percentTenders, 0);
+
+        final DBObject second = percentTendersWithLinkedProcurementPlan.get(1);
+        year = (int) second.get(TenderPercentagesController.Keys.YEAR);
+        totalTendersWithLinkedProcurementPlan = (int) second
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN);
+        totalTenders = (int) second
+                .get(TenderPercentagesController.Keys.TOTAL_TENDERS);
+        percentTenders = (double) second.get(TenderPercentagesController.Keys.PERCENT_TENDERS);
+        Assert.assertEquals(2015, year);
+        Assert.assertEquals(2, totalTendersWithLinkedProcurementPlan);
+        Assert.assertEquals(2, totalTenders);
+        Assert.assertEquals(100.0, percentTenders, 0);
+    }
+
+    @Test
+    public void avgTimeFromPlanToTenderPhase() throws Exception {
+        final List<DBObject> avgTimeFromPlanToTenderPhase = tenderPercentagesController
+                .avgTimeFromPlanToTenderPhase(new DefaultFilterPagingRequest());
+
+        final DBObject first = avgTimeFromPlanToTenderPhase.get(0);
+        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        double avgTimeFromPlanToTender = (double) first.get(TenderPercentagesController.Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE);
+        Assert.assertEquals(2015, year);
+        Assert.assertEquals(-315.00, avgTimeFromPlanToTender, 0);
     }
 }

@@ -23,6 +23,16 @@ public class TotalCancelledTendersByYearControllerTest extends AbstractEndPointC
         final List<DBObject> totalCancelledTendersByYear = totalCancelledTendersByYearController
                 .totalCancelledTendersByYear(new DefaultFilterPagingRequest());
 
+        // no cancelled tenders
         Assert.assertEquals(0, totalCancelledTendersByYear.size());
+    }
+
+    @Test
+    public void totalCancelledTendersByYearByRationale() throws Exception {
+        final List<DBObject> totalCancelledTendersByYearByRationale = totalCancelledTendersByYearController
+                .totalCancelledTendersByYearByRationale(new DefaultFilterPagingRequest());
+
+        // no cancelled tenders
+        Assert.assertEquals(0, totalCancelledTendersByYearByRationale.size());
     }
 }

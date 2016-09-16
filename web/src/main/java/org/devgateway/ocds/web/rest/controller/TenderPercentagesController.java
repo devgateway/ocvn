@@ -66,6 +66,7 @@ public class TenderPercentagesController extends GenericOCDSController {
         public static final String PERCENTAGE_EGP = "percentEgp";
         public static final String TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN = "totalTendersWithLinkedProcurementPlan";
         public static final String AVG_TIME_FROM_PLAN_TO_TENDER_PHASE = "avgTimeFromPlanToTenderPhase";
+        public static final String TOTAL_EGP = "totalEgp";
     }
 
     @ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
@@ -255,14 +256,14 @@ public class TenderPercentagesController extends GenericOCDSController {
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, "$year");
         group.put("totalTenders", new BasicDBObject("$sum", 1));
-        group.put("totalEgp", new BasicDBObject("$sum", new BasicDBObject("$cond",
+        group.put(Keys.TOTAL_EGP, new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$tender.publicationMethod", "eGP")), 1, 0))));
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);
         project2.put("year", Fields.UNDERSCORE_ID_REF);
         project2.put("totalTenders", 1);
-        project2.put("totalEgp", 1);
+        project2.put(Keys.TOTAL_EGP, 1);
         project2.put("percentEgp", new BasicDBObject("$multiply",
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalEgp", "$totalTenders")), 100)));
 
