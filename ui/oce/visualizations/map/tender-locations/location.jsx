@@ -95,6 +95,8 @@ export class ChartTab extends Tab{
     }
   }
 
+  getChartClass(){return ""}
+
   render(){
     let {filters, styling, years, translations, data} = this.props;
     let decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
@@ -104,7 +106,7 @@ export class ChartTab extends Tab{
       years,
       __: this.__.bind(this)
     });
-    return <div className="map-chart">
+    return <div className={cn("map-chart", this.getChartClass())}>
       <this.constructor.Chart
           filters={decoratedFilters}
           styling={styling}
@@ -138,6 +140,10 @@ export class OverviewChartTab extends ChartTab{
   static getName(__){
     return __('Overview chart');
   }
+
+  getChartClass(){
+    return "overview";
+  }  
 }
 
 OverviewChartTab.Chart = OverviewChart;
