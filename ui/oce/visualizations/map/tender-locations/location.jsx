@@ -86,6 +86,15 @@ export class ChartTab extends Tab{
     }
   }
 
+  getMargins(){
+    return {
+      t: 0,
+      l: 50,
+      r: 50,
+      b: 50
+    }
+  }
+
   render(){
     let {filters, styling, years, translations, data} = this.props;
     let decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
@@ -105,12 +114,8 @@ export class ChartTab extends Tab{
           requestNewData={(_, chartData) => this.setState({chartData})}
           width={500}
           height={350}
-          margin={{
-            t: 0,
-            l: 50,
-            r: 50,
-            b: 50
-          }}
+          margin={this.getMargins()}
+          legend="h"
       />
       <div className="chart-toolbar">
         <div className="btn btn-default" onClick={doExcelExport}>
@@ -145,9 +150,16 @@ export class CostEffectivenessTab extends ChartTab{
 
 CostEffectivenessTab.Chart = CostEffectiveness;
 
-class ProcurementMethodTab extends ChartTab{
+export class ProcurementMethodTab extends ChartTab{
   static getName(__){
     return __('Procurement method');
+  }
+
+  getMargins(){
+    let margins = super.getMargins();
+    margins.r = 100;
+    margins.b = 100;
+    return margins;
   }
 }
 
