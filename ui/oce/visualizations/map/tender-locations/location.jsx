@@ -24,8 +24,11 @@ class LocationWrapper extends translatable(Component){
     let CurrentTab = this.constructor.TABS[currentTab];
     return (
         <Marker {...this.props}>
-          <Popup>
+          <Popup className="tender-locations-popup">
             <div>
+              <header>
+                {data.name}
+              </header>
               <ul className="nav nav-tabs">
                 {this.constructor.TABS.map((Tab, index) =>
                     <li key={index}
@@ -59,9 +62,8 @@ export class OverviewTab extends Tab{
 
   render(){
     let {data} = this.props;
-    let {name, count, amount} = data;
+    let {count, amount} = data;
     return <div>
-      <h3>{name}</h3>
       <p>
         <strong>{this.__('Number of Tenders:')}</strong> {count}
       </p>
