@@ -29,16 +29,16 @@ class LocationWrapper extends translatable(Component){
               <header>
                 {data.name}
               </header>
-              <ul className="nav nav-tabs">
+              <section className="tabs-bar row">
                 {this.constructor.TABS.map((Tab, index) =>
-                    <li key={index}
-                        className={cn({active: index == currentTab})}
+                    <div key={index}
+                        className={cn("col-sm-3 text-center", {active: index == currentTab})}
                         onClick={e => this.setState({currentTab: index})}
                     >
                       <a href="javascript:void(0);">{Tab.getName(this.__.bind(this))}</a>
-                    </li>
+                    </div>
                 )}
-              </ul>
+              </section>
               <CurrentTab
                   data={data}
                   translations={translations}
