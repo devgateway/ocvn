@@ -2,19 +2,15 @@ package org.devgateway.toolkit.persistence.mongo;
 
 import org.devgateway.toolkit.persistence.mongo.spring.MongoPersistenceApplication;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@Configuration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { MongoPersistenceApplication.class })
+@RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
+@SpringBootTest(classes = {MongoPersistenceApplication.class})
 @TestPropertySource("classpath:test.properties")
-@WebIntegrationTest
 /**
  * Superclass for all integration tests that use MongoDB.
  * Adding this as a superclass will ensure the tests are run with the "integration" spring profile.
