@@ -94,9 +94,9 @@ public class ReleaseExportTest extends AbstractWebTest {
 
         final MvcResult result = this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
-                        accept(MediaType.APPLICATION_JSON)).
+                        accept(MediaType.APPLICATION_JSON_UTF8)).
                 andExpect(status().isOk()).
-                andExpect(content().contentType(MediaType.APPLICATION_JSON)).
+                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
                 andReturn();
         final String content = result.getResponse().getContentAsString();
 
@@ -121,9 +121,9 @@ public class ReleaseExportTest extends AbstractWebTest {
 
         final MvcResult result = this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
-                        accept(MediaType.APPLICATION_JSON)).
+                        accept(MediaType.APPLICATION_JSON_UTF8)).
                 andExpect(status().isOk()).
-                andExpect(content().contentType(MediaType.APPLICATION_JSON)).
+                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
                 andReturn();
         final String content = result.getResponse().getContentAsString();
 
