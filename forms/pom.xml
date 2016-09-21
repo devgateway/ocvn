@@ -342,19 +342,16 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-ehcache</artifactId>
-                <version>${hibernate.core.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>
-                <version>${hibernate.core.version}</version>
+                <artifactId>hibernate-entitymanager</artifactId>                
             </dependency>
 
             <dependency>
                 <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-envers</artifactId>
-                <version>${hibernate.core.version}</version>
+                <artifactId>hibernate-envers</artifactId>                
             </dependency>
         </dependencies>
     </dependencyManagement>
