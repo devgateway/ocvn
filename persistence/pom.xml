@@ -125,13 +125,11 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.core.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
-            <version>${hibernate.core.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>hibernate-entitymanager</artifactId>
@@ -143,7 +141,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>${hibernate.core.version}</version>
         </dependency>
 
         <dependency>
