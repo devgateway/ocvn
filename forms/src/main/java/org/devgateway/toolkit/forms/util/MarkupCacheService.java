@@ -135,8 +135,11 @@ public class MarkupCacheService {
 
         // get the reports cache "reportsCache", declared in ehcache.xml
         Cache cache = cm.getCache("reportsCache");
+        
+		if (cache != null) {
+			cache.removeAll();
+		}
 
-        cache.removeAll();
     }
 
     private String createCacheKey(final String outputType, final String reportName, final String parameters) {

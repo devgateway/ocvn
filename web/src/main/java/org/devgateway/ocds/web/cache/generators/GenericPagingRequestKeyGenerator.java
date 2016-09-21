@@ -6,7 +6,7 @@ import org.devgateway.ocds.web.rest.controller.request.GenericPagingRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.integration.http.inbound.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

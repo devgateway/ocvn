@@ -72,7 +72,19 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-remote-shell</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
         </dependency>
 
         <!--
@@ -182,6 +194,7 @@
                     <include>**/*.xml</include>
                     <include>**/*.html</include>
                     <include>**/*.xlsx</include>
+                    <include>**/*.gif</include>
                 </includes>
             </resource>
         </resources>
