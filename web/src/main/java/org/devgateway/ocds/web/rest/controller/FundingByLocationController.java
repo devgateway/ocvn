@@ -12,10 +12,8 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -86,13 +84,15 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
-                        .and("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"), match(
                         where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
                 group(Keys.YEAR, "tender." + Keys.ITEMS_DELIVERY_LOCATION).sum("$tender.value.amount")
                         .as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
-                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
+                sort(Direction.ASC, Keys.YEAR)
+                //,skip(filter.getSkip()), limit(filter.getPageSize())
+                );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -134,8 +134,9 @@ public class FundingByLocationController extends GenericOCDSController {
                 group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
                 group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
                         .as(Keys.TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION),
-                new CustomProjectionOperation(project1), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+                new CustomProjectionOperation(project1)
+                //,skip(filter.getSkip()),limit(filter.getPageSize())
+               );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -176,7 +177,9 @@ public class FundingByLocationController extends GenericOCDSController {
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
                 group("year", "planning.budget.projectLocation").sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
                         .sum("$cntprj").as("recordsCount"),
-                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
+                sort(Direction.ASC, Keys.YEAR)
+                //, skip(filter.getSkip()), limit(filter.getPageSize())
+                );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -226,8 +229,9 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(new CustomProjectionOperation(project),
                 match(where("planning.budget.amount").exists(true).andOperator(getProcuringEntityIdCriteria(filter))),
-                new CustomGroupingOperation(group), new CustomProjectionOperation(project2), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+                new CustomGroupingOperation(group), new CustomProjectionOperation(project2)
+                //, skip(filter.getSkip()),limit(filter.getPageSize())
+                );
         
         System.out.println(agg);
 
