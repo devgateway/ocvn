@@ -86,13 +86,15 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
-                        .and("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"), match(
                         where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
                 group(Keys.YEAR, "tender." + Keys.ITEMS_DELIVERY_LOCATION).sum("$tender.value.amount")
                         .as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
-                sort(Direction.ASC, Keys.YEAR), skip(filter.getSkip()), limit(filter.getPageSize()));
+                sort(Direction.ASC, Keys.YEAR)
+                //,skip(filter.getSkip()), limit(filter.getPageSize())
+                );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -134,8 +136,9 @@ public class FundingByLocationController extends GenericOCDSController {
                 group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
                 group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
                         .as(Keys.TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION),
-                new CustomProjectionOperation(project1), skip(filter.getSkip()),
-                limit(filter.getPageSize()));
+                new CustomProjectionOperation(project1)
+                //,skip(filter.getSkip()),limit(filter.getPageSize())
+               );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
