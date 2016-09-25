@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.devgateway.ocvn</groupId>
         <artifactId>ocvn</artifactId>
-        <version>0.7.0</version>
+        <version>0.7.1-SNAPSHOT</version>
     </parent>
 
     <repositories>
