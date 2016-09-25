@@ -24,18 +24,21 @@ class LocationWrapper extends translatable(Component){
     let CurrentTab = this.constructor.TABS[currentTab];
     return (
         <Marker {...this.props}>
-          <Popup>
+          <Popup className="tender-locations-popup">
             <div>
-              <ul className="nav nav-tabs">
+              <header>
+                {data.name}
+              </header>
+              <section className="tabs-bar row">
                 {this.constructor.TABS.map((Tab, index) =>
-                    <li key={index}
-                        className={cn({active: index == currentTab})}
+                    <div key={index}
+                        className={cn("col-sm-3 text-center", {active: index == currentTab})}
                         onClick={e => this.setState({currentTab: index})}
                     >
                       <a href="javascript:void(0);">{Tab.getName(this.__.bind(this))}</a>
-                    </li>
+                    </div>
                 )}
-              </ul>
+              </section>
               <CurrentTab
                   data={data}
                   translations={translations}
@@ -59,9 +62,8 @@ export class OverviewTab extends Tab{
 
   render(){
     let {data} = this.props;
-    let {name, count, amount} = data;
+    let {count, amount} = data;
     return <div>
-      <h3>{name}</h3>
       <p>
         <strong>{this.__('Number of Tenders:')}</strong> {count}
       </p>
@@ -84,6 +86,17 @@ export class ChartTab extends Tab{
     }
   }
 
+  getMargins(){
+    return {
+      t: 0,
+      l: 50,
+      r: 50,
+      b: 50
+    }
+  }
+
+  getChartClass(){return ""}
+
   render(){
     let {filters, styling, years, translations, data} = this.props;
     let decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
@@ -93,7 +106,7 @@ export class ChartTab extends Tab{
       years,
       __: this.__.bind(this)
     });
-    return <div className="map-chart">
+    return <div className={cn("map-chart", this.getChartClass())}>
       <this.constructor.Chart
           filters={decoratedFilters}
           styling={styling}
@@ -103,12 +116,8 @@ export class ChartTab extends Tab{
           requestNewData={(_, chartData) => this.setState({chartData})}
           width={500}
           height={350}
-          margin={{
-            t: 0,
-            l: 50,
-            r: 50,
-            b: 50
-          }}
+          margin={this.getMargins()}
+          legend="h"
       />
       <div className="chart-toolbar">
         <div className="btn btn-default" onClick={doExcelExport}>
@@ -131,6 +140,10 @@ export class OverviewChartTab extends ChartTab{
   static getName(__){
     return __('Overview chart');
   }
+
+  getChartClass(){
+    return "overview";
+  }  
 }
 
 OverviewChartTab.Chart = OverviewChart;
@@ -143,9 +156,16 @@ export class CostEffectivenessTab extends ChartTab{
 
 CostEffectivenessTab.Chart = CostEffectiveness;
 
-class ProcurementMethodTab extends ChartTab{
+export class ProcurementMethodTab extends ChartTab{
   static getName(__){
     return __('Procurement method');
+  }
+
+  getMargins(){
+    let margins = super.getMargins();
+    margins.r = 100;
+    margins.b = 100;
+    return margins;
   }
 }
 

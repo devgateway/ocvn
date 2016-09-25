@@ -2,31 +2,26 @@ package org.devgateway.ocds.persistence.mongo.test;
 
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.toolkit.persistence.mongo.test.AbstractMongoTest;
+import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ReleaseRepositoryTest extends AbstractMongoTest {
 
-	private String ocid = "release-1";
+    private String ocid = "release-1";
 
-	@Autowired
-	private ReleaseRepository releaseRepository;
+    @Autowired
+    private ReleaseRepository releaseRepository;
 
-	@Test
-	public void testReleaseSaveAndFind() {
+    @Test
+    public void testReleaseSaveAndFind() {
+        final Release release = new Release();
 
-		Release release = new Release();
+        release.setOcid(ocid);
+        releaseRepository.insert(release);
 
-		release.setOcid(ocid);
-
-		releaseRepository.insert(release);
-
-		Release byOcid = releaseRepository.findByOcid(ocid);
-
-		Assert.assertEquals(ocid, byOcid.getOcid());
-
-	}
-
+        final Release byOcid = releaseRepository.findByOcid(ocid);
+        Assert.assertEquals(ocid, byOcid.getOcid());
+    }
 }

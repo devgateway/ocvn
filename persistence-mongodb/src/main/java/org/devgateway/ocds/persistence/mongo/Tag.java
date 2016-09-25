@@ -47,7 +47,7 @@ public enum Tag {
         }
     }
 
-    Tag(String value) {
+    Tag(final String value) {
         this.value = value;
     }
 
@@ -58,7 +58,7 @@ public enum Tag {
     }
 
     @JsonCreator
-    public static Tag fromValue(String value) {
+    public static Tag fromValue(final String value) {
         Tag constant = CONSTANTS.get(value);
         if (constant == null) {
             throw new IllegalArgumentException(value);

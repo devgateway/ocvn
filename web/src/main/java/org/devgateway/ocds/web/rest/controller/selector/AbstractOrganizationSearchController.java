@@ -45,9 +45,9 @@ public abstract class AbstractOrganizationSearchController extends GenericOCDSCo
 		return orgs;
 	}
 	
-	public abstract Organization byId(@PathVariable final String id);
+	public abstract Organization byId(@PathVariable String id);
 	
-	public abstract List<Organization> searchText(@Valid final OrganizationSearchRequest request);
+	public abstract List<Organization> searchText(@Valid OrganizationSearchRequest request);
 	
 
 }

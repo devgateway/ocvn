@@ -13,5 +13,5 @@ public interface CustomChartDataFactory {
     /**
      * @return an appropriate CustomChartData instance
      */
-    CustomChartData createChartData(final ChartType type, final String title);
+    CustomChartData createChartData(ChartType type, String title);
 }

@@ -1,6 +1,6 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce, download} from "./tools";
+import {fetchJson, debounce, download, pluck} from "./tools";
 import URI from "urijs";
 import Filters from "./filters";
 import OCEStyle from "./style.less";
@@ -27,7 +27,8 @@ class OCApp extends React.Component{
       filters: fromJS({}),
       data: fromJS({}),
       comparisonData: fromJS({}),
-      bidTypes: fromJS({})
+      bidTypes: fromJS({}),
+      years: fromJS([])
     }
   }
 
@@ -61,8 +62,15 @@ class OCApp extends React.Component{
     );
   }
 
+  fetchYears(){
+    fetchJson('/api/tendersAwardsYears').then(data => this.setState({
+      years: fromJS(data.map(pluck('_id')))
+    }))
+  }
+
   componentDidMount(){
     this.fetchBidTypes();
+    this.fetchYears();
 
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth - 30
@@ -163,15 +171,9 @@ class OCApp extends React.Component{
     />;
   }
 
-  yearsBar(){
-    let {currentTab, compareBy, data, selectedYears, comparisonData} = this.state;
-    let tab = this.tabs[currentTab];
-    let years = (compareBy && tab.computeComparisonYears ?
-            tab.computeComparisonYears(comparisonData.get(currentTab)) :
-            tab.computeYears(data.get(currentTab))
-    );
-
-    return years.sort().map(year =>
+    yearsBar(){
+    let {years, selectedYears} = this.state;
+    return this.state.years.sort().map(year =>
         <a
             key={year}
             href="javascript:void(0);"

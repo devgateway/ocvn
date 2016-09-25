@@ -226,7 +226,7 @@ public class VNImportService implements ExcelImportService {
 
         String tempDirPath = null;
 
-        clearAllCaches();
+		clearAllCaches(); //clears caches before import starts
 
         try {
             newMsgBuffer();
@@ -291,6 +291,7 @@ public class VNImportService implements ExcelImportService {
             logger.error(e.getMessage());
             e.printStackTrace();
         } finally {
+			clearAllCaches(); //always clears caches post import
             if (tempDirPath != null) {
                 try {
                     FileUtils.deleteDirectory(Paths.get(new URL(tempDirPath).toURI()).toFile());

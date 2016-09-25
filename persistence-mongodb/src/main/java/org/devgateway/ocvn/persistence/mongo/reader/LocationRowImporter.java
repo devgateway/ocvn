@@ -19,32 +19,32 @@ import java.text.ParseException;
  */
 public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepository> {
 
-	public LocationRowImporter(final VNLocationRepository locationRepository, final ImportService importService,
-			final int skipRows) {
-		super(locationRepository, importService, skipRows);
-	}
+    public LocationRowImporter(final VNLocationRepository locationRepository, final ImportService importService,
+                               final int skipRows) {
+        super(locationRepository, importService, skipRows);
+    }
 
-	@Override
-	public void importRow(final String[] row) throws ParseException {
+    @Override
+    public void importRow(final String[] row) throws ParseException {
 
-		VNLocation location = repository.findByDescription(getRowCell(row, 0));
-		if (location != null) {
-			throw new RuntimeException("Duplicate location name " + getRowCell(row, 0));
-		}
+        VNLocation location = repository.findByDescription(getRowCell(row, 0));
+        if (location != null) {
+            throw new RuntimeException("Duplicate location name " + getRowCell(row, 0));
+        }
 
-		location = new VNLocation();
+        location = new VNLocation();
 
-		location.setId(getRowCell(row, 3));
-		location.setDescription(getRowCell(row, 0));
+        location.setId(getRowCell(row, 3));
+        location.setDescription(getRowCell(row, 0));
 
-		GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(getRowCell(row, 2)), getDouble(getRowCell(row, 1)));
-		location.setGeometry(coordinates);
+        GeoJsonPoint coordinates = new GeoJsonPoint(getDouble(getRowCell(row, 2)), getDouble(getRowCell(row, 1)));
+        location.setGeometry(coordinates);
 
-		Gazetteer gazetteer = new Gazetteer();
-		gazetteer.getIdentifiers().add(getRowCell(row, 3));
-		location.setGazetteer(gazetteer);
-		location.setUri(location.getGazetteerPrefix() + getRowCell(row, 3));
+        Gazetteer gazetteer = new Gazetteer();
+        gazetteer.getIdentifiers().add(getRowCell(row, 3));
+        location.setGazetteer(gazetteer);
+        location.setUri(location.getGazetteerPrefix() + getRowCell(row, 3));
 
-		repository.insert(location);
-	}
+        repository.insert(location);
+    }
 }

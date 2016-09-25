@@ -24,14 +24,18 @@ public class ReleaseJsonImport implements JsonImport<Release> {
 
     private final JsonToObject releaseJsonToObject;
 
-    public ReleaseJsonImport(final ReleaseRepository releaseRepository, final String releaseJsonToObject) {
+    public ReleaseJsonImport(final ReleaseRepository releaseRepository,
+                             final String releaseJsonToObject,
+                             final Boolean mapDeserializer) {
         this.releaseRepository = releaseRepository;
-        this.releaseJsonToObject = new ReleaseJsonToObject(releaseJsonToObject);
+        this.releaseJsonToObject = new ReleaseJsonToObject(releaseJsonToObject, mapDeserializer);
     }
 
-    public ReleaseJsonImport(final ReleaseRepository releaseRepository, final File file) throws IOException {
+    public ReleaseJsonImport(final ReleaseRepository releaseRepository,
+                             final File file,
+                             final Boolean mapDeserializer) throws IOException {
         this.releaseRepository = releaseRepository;
-        this.releaseJsonToObject = new ReleaseJsonToObject(file);
+        this.releaseJsonToObject = new ReleaseJsonToObject(file, mapDeserializer);
     }
 
     @Override

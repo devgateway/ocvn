@@ -61,7 +61,7 @@ public class Amount {
      *     The amount
      */
     @JsonProperty("amount")
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -83,7 +83,7 @@ public class Amount {
      *     The currency
      */
     @JsonProperty("currency")
-    public void setCurrency(String currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
@@ -101,7 +101,7 @@ public class Amount {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

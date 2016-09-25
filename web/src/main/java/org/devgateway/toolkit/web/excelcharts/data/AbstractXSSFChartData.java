@@ -59,7 +59,7 @@ public abstract class AbstractXSSFChartData implements CustomChartData {
     /**
      * Add a new Serie specific to each AbstractXSSFChartData implementation.
      */
-    protected abstract CustomChartSeries createNewSerie(final int id, final int order,
-                                                        final ChartDataSource<?> categories,
-                                                        final ChartDataSource<? extends Number> values);
+    protected abstract CustomChartSeries createNewSerie(int id, int order,
+                                                        ChartDataSource<?> categories,
+                                                        ChartDataSource<? extends Number> values);
 }

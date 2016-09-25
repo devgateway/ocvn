@@ -55,10 +55,18 @@ public class NumberOfTendersByItemExcelController extends GenericOCDSController 
         final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(numberOfTendersByItem,
                 categories, NumberOfTendersByItemClassification.Keys.DESCRIPTION,
                 NumberOfTendersByItemClassification.Keys.TOTAL_TENDERS);
-        values.add(totalTenderAmount);
+        if (!totalTenderAmount.isEmpty()) {
+            values.add(totalTenderAmount);
+        }
 
-        final List<String> seriesTitle = Arrays.asList(
-                "Item");
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    "Item");
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

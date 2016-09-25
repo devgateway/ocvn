@@ -6,16 +6,12 @@ import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
-import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
-import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
 
@@ -26,14 +22,11 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
  * @author mihai
  * @see VNAward
  */
-public class OfflineAwardRowImporter extends ReleaseRowImporter {
+public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
-	private OrganizationRepository organizationRepository;
-
-	public OfflineAwardRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-			final OrganizationRepository organizationRepository, final int skipRows) {
-		super(releaseRepository, importService, skipRows);
-		this.organizationRepository = organizationRepository;
+	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
+			OrganizationRepository organizationRepository, int skipRows) {
+		super(releaseRepository, importService, organizationRepository, skipRows);
 	}
 
 	@Override
@@ -42,12 +35,7 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 		Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
 
 		if (release == null) {
-			release = new Release();
-			release.getTag().add(Tag.award);
-			release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + getRowCell(row, 0));
-			VNPlanning planning = new VNPlanning();
-			release.setPlanning(planning);
-			planning.setBidNo(getRowCell(row, 0));
+			release = newReleaseFromAwardFactory(getRowCell(row, 0));
 		}
 
 		if (release.getTender() == null) {
@@ -136,6 +124,9 @@ public class OfflineAwardRowImporter extends ReleaseRowImporter {
 		
 		//copy items from tender
 		award.getItems().addAll(release.getTender().getItems());
+		
+
+		checkForAwardOutliers(release, award);
 
 		return release;
 	}

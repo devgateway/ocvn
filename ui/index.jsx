@@ -10,15 +10,6 @@ import {Map} from "immutable";
 import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
-function getBidTypeDescription(__, {id, description}){
-  //switch(+id){
-    //case 12: return __("Unspecified") + " #1";
-    //case 15: return __("Unspecified") + " #2";
-    //default: return description;
-  //}
-  return description;
-}
-
 class OCVN extends OCApp{
   constructor(props) {
     super(props);
@@ -33,7 +24,7 @@ class OCVN extends OCApp{
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-            map.set(datum.id, getBidTypeDescription(this.__.bind(this), datum)), Map())
+            map.set(datum.id, datum.description), Map())
         })
     );
   }
@@ -101,9 +92,10 @@ OCVN.STYLING = {
     traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
-      if(number >= BILLION) return (number/BILLION).toFixed(2) + "B";
-      if(number >= MILLION) return (number/MILLION).toFixed(2) + "M";
-      if(number >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
+      let abs = Math.abs(number);
+      if(abs >= BILLION) return (number/BILLION).toFixed(2) + "B";
+      if(abs >= MILLION) return (number/MILLION).toFixed(2) + "M";
+      if(abs >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
       return number.toFixed(2);
     }
   }

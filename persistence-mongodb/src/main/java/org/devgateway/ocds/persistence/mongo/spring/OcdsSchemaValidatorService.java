@@ -134,7 +134,7 @@ public class OcdsSchemaValidatorService {
         return values.stream().map(this::validate).collect(Collectors.toList());
     }
     
-    public JsonNode findValueInOcdsSchema(String fieldName) {
+    public JsonNode findValueInOcdsSchema(final String fieldName) {
     	return ocdsSchemaNode.findValue(fieldName);
     }
     

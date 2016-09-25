@@ -78,7 +78,7 @@ public class Amendment {
      *     The date
      */
     @JsonProperty("date")
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
@@ -104,7 +104,7 @@ public class Amendment {
      *     The changes
      */
     @JsonProperty("changes")
-    public void setChanges(List<Change> changes) {
+    public void setChanges(final List<Change> changes) {
         this.changes = changes;
     }
 
@@ -126,7 +126,7 @@ public class Amendment {
      *     The rationale
      */
     @JsonProperty("rationale")
-    public void setRationale(String rationale) {
+    public void setRationale(final String rationale) {
         this.rationale = rationale;
     }
 
@@ -145,7 +145,7 @@ public class Amendment {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

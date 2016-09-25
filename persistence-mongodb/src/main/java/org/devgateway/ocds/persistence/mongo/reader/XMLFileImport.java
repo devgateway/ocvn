@@ -60,7 +60,7 @@ public abstract class XMLFileImport implements XMLFile {
      * @param release
      * @return
      */
-    protected abstract Release processRelease(final Release release);
+    protected abstract Release processRelease(Release release);
 
     protected abstract AbstractRulesModule getAbstractRulesModule();
 }

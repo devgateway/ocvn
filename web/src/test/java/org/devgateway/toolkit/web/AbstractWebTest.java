@@ -2,19 +2,17 @@ package org.devgateway.toolkit.web;
 
 import org.devgateway.toolkit.web.spring.WebApplication;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@Configuration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { WebApplication.class })
+@RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
+@SpringBootTest(classes = {WebApplication.class},
+        webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:test.properties")
-@WebIntegrationTest
 public abstract class AbstractWebTest {
 
 }

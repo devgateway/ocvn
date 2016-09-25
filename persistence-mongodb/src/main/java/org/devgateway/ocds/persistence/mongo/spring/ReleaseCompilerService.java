@@ -194,7 +194,7 @@ public class ReleaseCompilerService {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	protected <S> Object mergeFieldFromOcdsBeans(Field field, final S leftBean, final S rightBean)
+	protected <S> Object mergeFieldFromOcdsBeans(final Field field, final S leftBean, final S rightBean)
 			throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Object rightFieldValue = PropertyUtils.getProperty(rightBean, field.getName());
 		Object leftFieldValue = PropertyUtils.getProperty(leftBean, field.getName());
@@ -248,7 +248,7 @@ public class ReleaseCompilerService {
 		return left;
 	}
 
-	public void createSaveCompiledReleaseAndSaveRecord(Record record) {
+	public void createSaveCompiledReleaseAndSaveRecord(final Record record) {
 		Release compiledRelease = createCompiledRelease(record);
 		record.setCompiledRelease(releaseRepository.save(compiledRelease));
 		recordRepository.save(record);

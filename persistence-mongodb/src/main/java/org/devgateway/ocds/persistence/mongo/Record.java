@@ -93,7 +93,7 @@ public class Record implements Identifiable {
      *            The ocid
      */
     @JsonProperty("ocid")
-    public void setOcid(String ocid) {
+    public void setOcid(final String ocid) {
         this.ocid = ocid;
     }
 
@@ -104,7 +104,7 @@ public class Record implements Identifiable {
     }
 
     @JsonProperty("releaseReferences")
-    public void setReleaseReferences(List<ReleaseReference> releaseReferences) {
+    public void setReleaseReferences(final List<ReleaseReference> releaseReferences) {
         this.releaseReferences = releaseReferences;
     }
 
@@ -133,7 +133,7 @@ public class Record implements Identifiable {
      *            The releases
      */
     @JsonProperty("releases")
-    public void setReleases(List<Release> releases) {
+    public void setReleases(final List<Release> releases) {
         this.releases = releases;
     }
 
@@ -158,7 +158,7 @@ public class Record implements Identifiable {
      *            The compiledRelease
      */
     @JsonProperty("compiledRelease")
-    public void setCompiledRelease(Release compiledRelease) {
+    public void setCompiledRelease(final Release compiledRelease) {
         this.compiledRelease = compiledRelease;
     }
 
@@ -176,7 +176,7 @@ public class Record implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

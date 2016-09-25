@@ -1,3 +1,56 @@
 .leaflet-popup-content{
   width: 500px!important;
 }
+
+.tender-locations-popup{
+  header{
+    background: #ca3d3f;
+    margin-top: -14px;
+    margin-left: -20px;
+    margin-right: -20px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    padding: 15px;
+    color: white;
+    font-size: 2em;
+    font-weight: bolder;
+  }
+
+  a.leaflet-popup-close-button{
+    top: 1em;
+    right: 15px;
+    padding-top: 7px;
+  }
+
+  section.tabs-bar{
+    background: #272727;
+    font-size: 1.2em;
+    margin-left: -20px;
+    margin-right: -20px;
+    div{
+      padding: 10px;
+      padding-bottom: 7px;
+      border-bottom: 3px solid transparent;
+      &.active{
+        border-bottom-color: #ca3d3f;
+        a{
+          color: #d4d4d4;
+        }
+      }
+    }
+    a{
+      color: #848c98;
+      text-decoration: none;
+    }
+  }
+
+  .map-chart.overview{
+    .legendsymbols{
+      display: none;
+    }
+
+    .legendtext{
+      text-transform: uppercase;
+    }
+  }
+}

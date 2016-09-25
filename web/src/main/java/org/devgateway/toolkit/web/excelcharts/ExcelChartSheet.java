@@ -13,13 +13,13 @@ import java.util.List;
  * Sheet used to export Dashboards.
  */
 public interface ExcelChartSheet {
-    void writeCell(final Object value, final Row row, final int column);
+    void writeCell(Object value, Row row, int column);
 
-    Row createRow(final int rowNumber);
+    Row createRow(int rowNumber);
 
     Row createRow();
 
-    void setColumnWidth(final int collNumber, final int size);
+    void setColumnWidth(int collNumber, int size);
 
     Chart createChartAndLegend();
 

@@ -95,7 +95,7 @@ public class Planning {
      *     The budget
      */
     @JsonProperty("budget")
-    public void setBudget(Budget budget) {
+    public void setBudget(final Budget budget) {
         this.budget = budget;
     }
 
@@ -117,7 +117,7 @@ public class Planning {
      *     The rationale
      */
     @JsonProperty("rationale")
-    public void setRationale(String rationale) {
+    public void setRationale(final String rationale) {
         this.rationale = rationale;
     }
 
@@ -139,7 +139,7 @@ public class Planning {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(List<Document> documents) {
+    public void setDocuments(final List<Document> documents) {
         this.documents = documents;
     }
 
@@ -158,7 +158,7 @@ public class Planning {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

@@ -197,7 +197,7 @@ public class Contract implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -225,7 +225,7 @@ public class Contract implements Identifiable {
      *     The awardID
      */
     @JsonProperty("awardID")
-    public void setAwardID(String awardID) {
+    public void setAwardID(final String awardID) {
         this.awardID = awardID;
     }
 
@@ -247,7 +247,7 @@ public class Contract implements Identifiable {
      *     The title
      */
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -269,7 +269,7 @@ public class Contract implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -299,7 +299,7 @@ public class Contract implements Identifiable {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -325,7 +325,7 @@ public class Contract implements Identifiable {
      *     The period
      */
     @JsonProperty("period")
-    public void setPeriod(Period period) {
+    public void setPeriod(final Period period) {
         this.period = period;
     }
 
@@ -345,7 +345,7 @@ public class Contract implements Identifiable {
      *     The value
      */
     @JsonProperty("value")
-    public void setValue(Amount value) {
+    public void setValue(final Amount value) {
         this.value = value;
     }
 
@@ -373,7 +373,7 @@ public class Contract implements Identifiable {
      *     The items
      */
     @JsonProperty("items")
-    public void setItems(Set<Item> items) {
+    public void setItems(final Set<Item> items) {
         this.items = items;
     }
 
@@ -395,7 +395,7 @@ public class Contract implements Identifiable {
      *     The dateSigned
      */
     @JsonProperty("dateSigned")
-    public void setDateSigned(Date dateSigned) {
+    public void setDateSigned(final Date dateSigned) {
         this.dateSigned = dateSigned;
     }
 
@@ -417,7 +417,7 @@ public class Contract implements Identifiable {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -443,7 +443,7 @@ public class Contract implements Identifiable {
      *     The amendment
      */
     @JsonProperty("amendment")
-    public void setAmendment(Amendment amendment) {
+    public void setAmendment(final Amendment amendment) {
         this.amendment = amendment;
     }
 
@@ -469,7 +469,7 @@ public class Contract implements Identifiable {
      *     The implementation
      */
     @JsonProperty("implementation")
-    public void setImplementation(Implementation implementation) {
+    public void setImplementation(final Implementation implementation) {
         this.implementation = implementation;
     }
 
@@ -497,7 +497,7 @@ public class Contract implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -540,7 +540,7 @@ public class Contract implements Identifiable {
             }
         }
 
-        Status(String value) {
+        Status(final String value) {
             this.value = value;
         }
 
@@ -551,7 +551,7 @@ public class Contract implements Identifiable {
         }
 
         @JsonCreator
-        public static Status fromValue(String value) {
+        public static Status fromValue(final String value) {
             Status constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);

@@ -76,7 +76,7 @@ public class Implementation {
      *     The transactions
      */
     @JsonProperty("transactions")
-    public void setTransactions(Set<Transaction> transactions) {
+    public void setTransactions(final Set<Transaction> transactions) {
         this.transactions = transactions;
     }
 
@@ -98,7 +98,7 @@ public class Implementation {
      *     The milestones
      */
     @JsonProperty("milestones")
-    public void setMilestones(Set<Milestone> milestones) {
+    public void setMilestones(final Set<Milestone> milestones) {
         this.milestones = milestones;
     }
 
@@ -120,7 +120,7 @@ public class Implementation {
      *     The documents
      */
     @JsonProperty("documents")
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(final Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -139,7 +139,7 @@ public class Implementation {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }

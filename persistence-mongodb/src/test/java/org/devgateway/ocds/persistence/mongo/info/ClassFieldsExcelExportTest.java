@@ -40,14 +40,14 @@ public class ClassFieldsExcelExportTest {
     public void getFields() throws Exception {
         final String[] expectedFields = {"id", "label"};
 
-        ClassFields classFields = new ClassFieldsExcelExport(
+        final ClassFields classFields = new ClassFieldsExcelExport(
                 new ClassFieldsDefault(TestClass.class)
         );
-        Iterator<Field> fields = classFields.getFields();
+        final Iterator<Field> fields = classFields.getFields();
 
-        List<String> actualFields = new ArrayList<>();
-        while(fields.hasNext()) {
-            Field f = fields.next();
+        final List<String> actualFields = new ArrayList<>();
+        while (fields.hasNext()) {
+            final Field f = fields.next();
             actualFields.add(f.getName());
         }
 
@@ -58,14 +58,14 @@ public class ClassFieldsExcelExportTest {
     public void getInheritedFields() throws Exception {
         final String[] expectedFields = {"id", "label", "valid"};
 
-        ClassFields classFields = new ClassFieldsExcelExport(
+        final ClassFields classFields = new ClassFieldsExcelExport(
                 new ClassFieldsDefault(TestClassImproved.class, true)
         );
-        Iterator<Field> fields = classFields.getFields();
+        final Iterator<Field> fields = classFields.getFields();
 
-        List<String> actualFields = new ArrayList<>();
-        while(fields.hasNext()) {
-            Field f = fields.next();
+        final List<String> actualFields = new ArrayList<>();
+        while (fields.hasNext()) {
+            final Field f = fields.next();
             actualFields.add(f.getName());
         }
 

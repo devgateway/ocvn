@@ -51,7 +51,7 @@ public class ReleaseRecordMonitor {
 	 * @param releases
 	 * @return
 	 */
-	public List<Record> saveRecordsForReleases(Iterable<Release> releases) {
+	public List<Record> saveRecordsForReleases(final Iterable<Release> releases) {
 		return StreamSupport.stream(releases.spliterator(), false).map(this::saveRecordForRelease)
 				.collect(Collectors.toList());
 	}
@@ -68,7 +68,7 @@ public class ReleaseRecordMonitor {
 	 */
 //	@AfterReturning(value = "execution(*"
 //			+ " org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository+.insert(..))", returning = "release")
-	public Record saveRecordForRelease(JoinPoint jp, Release release) {
+	public Record saveRecordForRelease(final JoinPoint jp, final Release release) {
 		logger.debug("Release record archival triggered by " + jp);
 		return saveRecordForRelease(release);
 	}
@@ -89,7 +89,7 @@ public class ReleaseRecordMonitor {
 	 * @param release
 	 * @return the saved {@link Record}
 	 */
-	protected Record saveRecordForRelease(Release release) {
+	protected Record saveRecordForRelease(final Release release) {
 		Record record = recordRepository.findByOcid(release.getOcid());
 		if (record == null) {
 			record = new Record();

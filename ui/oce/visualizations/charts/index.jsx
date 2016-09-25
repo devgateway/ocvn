@@ -15,7 +15,7 @@ class Chart extends Visualization{
   }
 
   getDecoratedLayout(){
-    var {title, xAxisRange, yAxisRange, styling, width, height, margin} = this.props;
+    var {title, xAxisRange, yAxisRange, styling, width, height, margin, legend} = this.props;
     var layout = this.getLayout();
     layout.width = width;
     layout.height = height;
@@ -31,6 +31,11 @@ class Chart extends Visualization{
       layout.yaxis.titlefont = {
         color: styling.charts.axisLabelColor
       }
+    }
+    if("h" == legend){
+      layout.legend = layout.legend || {};
+      layout.legend.orientation="h";
+      layout.legend.y=1.1;
     }
     return layout;
   }

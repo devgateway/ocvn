@@ -1,18 +1,18 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * A good, service, or work to be contracted.
@@ -31,14 +31,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 })
 public class Item implements Identifiable {
 
-	/**
-	 * This is part of the OCDS location extension. We have decided to plug this
-	 * into the OCDS standard since it seems this will be rolled into OCDS 1.1
-	 * see https://jira.dgfoundation.org/browse/OCE-35
-	 */
-	@SuppressWarnings("rawtypes")	
-	private Location deliveryLocation;
-	
+    /**
+     * This is part of the OCDS location extension. We have decided to plug this
+     * into the OCDS standard since it seems this will be rolled into OCDS 1.1
+     * see https://jira.dgfoundation.org/browse/OCE-35
+     */
+    @SuppressWarnings("rawtypes")
+    private VNLocation deliveryLocation;
+
     /**
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
      * (Required)
@@ -112,7 +112,7 @@ public class Item implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -134,7 +134,7 @@ public class Item implements Identifiable {
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -154,7 +154,7 @@ public class Item implements Identifiable {
      *     The classification
      */
     @JsonProperty("classification")
-    public void setClassification(Classification classification) {
+    public void setClassification(final Classification classification) {
         this.classification = classification;
     }
 
@@ -184,7 +184,7 @@ public class Item implements Identifiable {
      *     The additionalClassifications
      */
     @JsonProperty("additionalClassifications")
-    public void setAdditionalClassifications(Set<Classification> additionalClassifications) {
+    public void setAdditionalClassifications(final Set<Classification> additionalClassifications) {
         this.additionalClassifications = additionalClassifications;
     }
 
@@ -206,7 +206,7 @@ public class Item implements Identifiable {
      *     The quantity
      */
     @JsonProperty("quantity")
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -230,7 +230,7 @@ public class Item implements Identifiable {
      *     The unit
      */
     @JsonProperty("unit")
-    public void setUnit(Unit unit) {
+    public void setUnit(final Unit unit) {
         this.unit = unit;
     }
 
@@ -253,7 +253,7 @@ public class Item implements Identifiable {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (other == this) {
             return true;
         }
@@ -272,12 +272,11 @@ public class Item implements Identifiable {
                 isEquals();
     }
 
-	public Location<?> getDeliveryLocation() {
-		return deliveryLocation;
-	}
+    public VNLocation getDeliveryLocation() {
+        return deliveryLocation;
+    }
 
-	public void setDeliveryLocation(Location<?> deliveryLocation) {
-		this.deliveryLocation = deliveryLocation;
-	}
-
+    public void setDeliveryLocation(VNLocation deliveryLocation) {
+        this.deliveryLocation = deliveryLocation;
+    }
 }
