@@ -55,7 +55,7 @@
   "result": "kết quả",
   "results": "các kết quả",
   "type search query": "gõ lệnh truy vấn tìm kiếm",
-  "The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).": "Cổng thử nghiệm GSĐG đấu thầu là nền tảng tương tác để phân tích, theo dõi và đánh giá thông tin về đấu thầu tại Việt Nam. Mọi dữ liệu trong Bảng này đều được thu thập từ hệ thống đấu thầu qua mạng quốc gia của Chính phủ Việt Nam (eGP)\"",
+  "The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP). These data are published on a pilot basis and do not represent official government statistics.": "Cổng thông tin Giám sát Đánh giá đấu thầu là nền tảng tương tác nhằm phân tích, giám sát và đánh giá thông tin về đấu thầu tại Việt Nam. Mọi dữ liệu trong bảng điều khiển của Cổng thông tin đều được thu thập từ hệ thống mạng đấu thầu quốc gia (eGP). Việc công khai các dữ liệu này mang tính thí điểm và không đại diện cho dữ liệu chính thức của Chính phủ.",
   "Method": "Phương pháp",
   "Amount (in VND)": "Số tiền (VNĐ)",
   "Overview": "Tổng quan",
