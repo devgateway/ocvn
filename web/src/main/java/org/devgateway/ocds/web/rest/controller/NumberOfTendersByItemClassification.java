@@ -18,6 +18,7 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -67,7 +69,8 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
                         .andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
                 match(getDefaultFilterCriteria(filter)), new CustomProjectionOperation(project),
                 unwind("tender.items"),
-                group("$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS)
+                group("$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS),
+				sort(Direction.ASC, Fields.UNDERSCORE_ID)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
