@@ -18,7 +18,6 @@ import javax.management.MBeanServer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +32,7 @@ import net.sf.ehcache.management.ManagementService;
  *
  */
 @Configuration
-@EnableCaching
+@Profile("!integration")
 public class CacheConfiguration {
 
 	@Autowired(required = false)
@@ -53,7 +52,6 @@ public class CacheConfiguration {
 	}
 
 	@Bean(destroyMethod = "dispose", initMethod = "init")
-	@Profile("!integration")
 	public ManagementService ehCacheManagementService(final EhCacheManagerFactoryBean factory) {
 		ManagementService managementService = new ManagementService(factory.getObject(), mbeanServer, true, true, true,
 				true);

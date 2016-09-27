@@ -20,16 +20,16 @@ import java.util.List;
 public class ExcelChartHelperTest extends AbstractWebTest {
     private static Logger logger = Logger.getLogger(ExcelChartHelperTest.class);
 
-    @Autowired
-    private CacheManager cacheManager;
+//    @Autowired
+//    private CacheManager cacheManager;
 
-    @Before
-    public final void setUp() throws Exception {
-        // clean the cache (we need this especially for endpoints cache)
-        if (cacheManager != null) {
-            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
-        }
-    }
+//    @Before
+//    public final void setUp() throws Exception {
+//        // clean the cache (we need this especially for endpoints cache)
+//        if (cacheManager != null) {
+//            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+//        }
+//    }
 
     @Test
     public void getCategoriesValuesFromDBObject() throws Exception {

@@ -13,6 +13,7 @@ package org.devgateway.toolkit.web.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication
 @PropertySource("classpath:/org/devgateway/toolkit/web/application.properties")
 @ComponentScan({ "org.devgateway" })
+@EnableCaching
 public class WebApplication {
 
 	public static void main(final String[] args) {
