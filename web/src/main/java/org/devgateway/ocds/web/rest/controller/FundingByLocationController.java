@@ -232,8 +232,6 @@ public class FundingByLocationController extends GenericOCDSController {
                 new CustomGroupingOperation(group), new CustomProjectionOperation(project2)
                 //, skip(filter.getSkip()),limit(filter.getPageSize())
                 );
-        
-        System.out.println(agg);
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
