@@ -37,6 +37,7 @@ import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
@@ -71,6 +72,7 @@ import nl.dries.wicket.hibernate.dozer.SessionFinderHolder;
 @SpringBootApplication
 @ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
+@EnableCaching
 public class FormsWebApplication extends AuthenticatedWebApplication {
 
     public static final String STORAGE_ID = "fileStorage";

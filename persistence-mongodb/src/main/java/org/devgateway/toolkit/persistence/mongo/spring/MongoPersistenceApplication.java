@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
@@ -36,6 +37,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
 @EnableMongoRepositories(basePackages = "org.devgateway")
 @EnableMongoAuditing
+@EnableCaching
 public class MongoPersistenceApplication {
 
 	public static void main(final String[] args) {

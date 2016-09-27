@@ -36,10 +36,10 @@ public abstract class AbstractEndPointControllerTest extends AbstractWebTest {
         // be sure that the release collection is empty
         releaseRepository.deleteAll();
 
-        // clean the cache (we need this especially for endpoints cache)
-        if (cacheManager != null) {
-            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
-        }
+//        // clean the cache (we need this especially for endpoints cache)
+//        if (cacheManager != null) {
+//            cacheManager.getCacheNames().forEach(c -> cacheManager.getCache(c).clear());
+//        }
 
         final ClassLoader classLoader = getClass().getClassLoader();
 
