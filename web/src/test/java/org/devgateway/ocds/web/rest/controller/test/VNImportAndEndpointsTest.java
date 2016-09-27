@@ -110,9 +110,17 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
 
         DBObject root = averageNumberOfTenderers.get(0);
         int year = (int) root.get("year");
-        Assert.assertEquals(2013, year);
+        Assert.assertEquals(2012, year);
 
         double averageNoTenderers = (double) root.get("averageNoTenderers");
+        Assert.assertEquals(2, averageNoTenderers, 0);
+        
+
+        root = averageNumberOfTenderers.get(1);
+        year = (int) root.get("year");
+        Assert.assertEquals(2013, year);
+
+        averageNoTenderers = (double) root.get("averageNoTenderers");
         Assert.assertEquals(2, averageNoTenderers, 0);
     }
 
