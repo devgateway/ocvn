@@ -104,8 +104,8 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				group("tender." + Keys.PROCUREMENT_METHOD_DETAILS).sum("$tender.value.amount")
 						.as(Keys.TOTAL_TENDER_AMOUNT),
-				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD_DETAILS).andInclude(Keys.TOTAL_TENDER_AMOUNT)
-						.andExclude(Fields.UNDERSCORE_ID),
+				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD_DETAILS)
+						.andInclude(Keys.TOTAL_TENDER_AMOUNT).andExclude(Fields.UNDERSCORE_ID),
 				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
