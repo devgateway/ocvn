@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway.ocvn</groupId>
     <artifactId>ocvn</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
     <packaging>pom</packaging>
     <name>OCVN</name>
     <description>OCVN Open Contracting Vietnam</description>
@@ -56,7 +56,7 @@
         </developerConnection>
         <connection>git@github.com:devgateway/ocvn.git
         </connection>
-        <tag>0.0.3-SNAPSHOT</tag>
+        <tag>0.7.1</tag>
     </scm>
 
     <distributionManagement>
