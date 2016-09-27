@@ -75,8 +75,10 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
                         .andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
                 getMatchDefaultFilterOperation(filter),
-                new CustomProjectionOperation(project), group("year", "tender." + Keys.PROCUREMENT_METHOD)
+                new CustomProjectionOperation(project), group("tender." + Keys.PROCUREMENT_METHOD)
                         .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
+						.andExclude(Fields.UNDERSCORE_ID),
                 sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -127,8 +129,8 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
         // add them all to sorted set
         for (DBObject o : tenderPriceByBidSelectionMethod) {
-            if (o.containsField(Keys.PROCUREMENT_METHOD_DETAILS)) {
-                ret.add(o);
+			if (o.containsField(Keys.PROCUREMENT_METHOD_DETAILS) && o.get(Keys.PROCUREMENT_METHOD_DETAILS) != null) {
+				ret.add(o);
             } else {
                 o.put(Keys.PROCUREMENT_METHOD_DETAILS, UNSPECIFIED);
                 ret.add(o);
