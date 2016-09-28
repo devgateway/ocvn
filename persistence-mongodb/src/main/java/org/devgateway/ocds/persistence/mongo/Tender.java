@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -1052,4 +1053,9 @@ public class Tender implements Identifiable {
         }
 
     }
+
+	@Override
+	public Serializable getIdProperty() {
+		return id;
+	}
 }

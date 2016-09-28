@@ -11,6 +11,7 @@ import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -279,4 +280,9 @@ public class Item implements Identifiable {
     public void setDeliveryLocation(VNLocation deliveryLocation) {
         this.deliveryLocation = deliveryLocation;
     }
+    
+	@Override
+	public Serializable getIdProperty() {
+		return id;
+	}
 }
