@@ -11,13 +11,19 @@ class MapVisual extends frontendYearFilterable(Visualization){
     return Math.max(0, ...this.getData().map(pluck('amount')));
   }
 
-  render(){
-    let {translations, filters, years, styling} = this.props;
-    return <Map center={[14.5, 105]} zoom={5}>
-      <TileLayer
+  getTiles(){
+      return (
+        <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
+    )
+  }
+
+  render(){
+    let {translations, filters, years, styling} = this.props;
+    return <Map center={[14.5, 105]} zoom={5}>
+      {this.getTiles()}
       <Cluster maxAmount={this.getMaxAmount()}>
         {this.getData().map(location => (
             <this.constructor.Location

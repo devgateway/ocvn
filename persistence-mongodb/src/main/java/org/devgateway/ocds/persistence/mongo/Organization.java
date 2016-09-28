@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -88,7 +89,6 @@ public class Organization implements Identifiable {
     @JsonProperty("contactPoint")
     private ContactPoint contactPoint;
 
-    @Override
     public String getId() {
         return id;
     }
@@ -300,6 +300,11 @@ public class Organization implements Identifiable {
 
 	public void setTypes(final Set<OrganizationType> types) {
 		this.types = types;
+	}
+
+	@Override
+	public Serializable getIdProperty() {
+		return id;
 	}
 
 
