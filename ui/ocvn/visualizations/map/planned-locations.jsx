@@ -1,4 +1,4 @@
-import Map from "../../../oce/visualizations/map";
+import Map from "./index.jsx";
 
 class PlannedLocations extends Map{
   getData(){
