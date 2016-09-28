@@ -190,9 +190,9 @@ public class Record implements Identifiable {
                 append(compiledRelease, rhs.compiledRelease).isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return ocid;
-	}
+    @Override
+    public Serializable getId() {
+        return ocid;
+    }
 
 }

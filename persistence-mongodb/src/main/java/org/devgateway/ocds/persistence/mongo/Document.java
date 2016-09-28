@@ -1,6 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -398,10 +397,5 @@ public class Document implements Identifiable {
                 append(language, rhs.language).
                 isEquals();
     }
-
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
 
 }

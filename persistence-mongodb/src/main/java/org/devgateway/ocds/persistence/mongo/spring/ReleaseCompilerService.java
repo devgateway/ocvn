@@ -96,7 +96,7 @@ public class ReleaseCompilerService {
 
 	protected Identifiable getIdentifiableById(final Serializable id, final Collection<Identifiable> col) {
 		for (Identifiable identifiable : col) {
-			if (identifiable.getIdProperty().equals(id)) {
+			if (identifiable.getId().equals(id)) {
 				return identifiable;
 			}
 		}
@@ -129,7 +129,7 @@ public class ReleaseCompilerService {
 
 			// if there is an existing element with the same id, perform merge
 			// on the children and replace existing left element
-			Identifiable leftIdentifiable = getIdentifiableById(rightIdentifiable.getIdProperty(), leftCollection);
+			Identifiable leftIdentifiable = getIdentifiableById(rightIdentifiable.getId(), leftCollection);
 			if (leftIdentifiable != null) {
 				target.remove(leftIdentifiable);
 				target.add(mergeOcdsBeans(leftIdentifiable, rightIdentifiable));

@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -275,9 +274,8 @@ public class ReleasePackage implements Identifiable {
                 append(publicationPolicy, rhs.publicationPolicy).isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return uri;
-	}
+    public String getId() {
+        return uri;
+    }
 
 }

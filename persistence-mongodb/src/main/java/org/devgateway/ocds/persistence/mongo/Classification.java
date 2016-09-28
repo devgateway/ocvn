@@ -1,7 +1,5 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -105,6 +103,7 @@ public class Classification implements Identifiable {
      *     The id
      */
     @JsonProperty("id")
+    @Override
     public String getId() {
         return id;
     }
@@ -196,9 +195,4 @@ public class Classification implements Identifiable {
                 append(description, rhs.description).
                 append(uri, rhs.uri).isEquals();
     }
-    
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
 }
