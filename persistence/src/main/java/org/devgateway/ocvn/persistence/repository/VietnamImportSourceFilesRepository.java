@@ -16,6 +16,7 @@ import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepo
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,6 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface VietnamImportSourceFilesRepository extends TextSearchableRepository<VietnamImportSourceFiles, Long> {
 
     @Override
-    @Query("select a from  #{#entityName} a where lower(a.name) like %?1%")
-    Page<VietnamImportSourceFiles> searchText(String code, Pageable page);
+    @Query("select a from  #{#entityName} a where lower(a.name) like %:code%")
+    Page<VietnamImportSourceFiles> searchText(@Param("code") String code, Pageable page);
 }
