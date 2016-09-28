@@ -8,8 +8,8 @@ cache:
         - ui/node
 env:
     global:
-        - MAVEN_OPTS="-XX:MaxMetaspaceSize=256m -Xmx4g"
-        - JAVA_OPTS="-XX:MaxMetaspaceSize=256m -Xmx4g"
+        - MAVEN_OPTS="-XX:MaxMetaspaceSize=256m -Xmx4g -Xverify:none -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -DdependencyLocationsEnabled=false"
+        - JAVA_OPTS="-XX:MaxMetaspaceSize=256m -Xmx4g -Xverify:none -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 install: mvn install -T 64C -Dskip.frontend.build=true -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script: mvn test -T 64C -Dskip.frontend.build=true -B --quiet
 jdk:
