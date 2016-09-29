@@ -169,12 +169,14 @@ public class VNImportService implements ExcelImportService {
                 rows = reader.readRows(importRowBatch);
             }
 
-        } catch (Exception e) {
-            logMessage(e.getMessage());
-            e.printStackTrace();
-        } finally {
-            reader.close();
-        }
+		} catch (Exception e) {
+			logMessage("<font style='color:red'>" + e + "</font>");
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
     }
 
 
@@ -202,18 +204,25 @@ public class VNImportService implements ExcelImportService {
                                             final byte[] publicInstitutionsSuppliers)
             throws FileNotFoundException, IOException {
         File tempDir = Files.createTempDir();
-        FileOutputStream prototypeDatabaseOutputStream = new FileOutputStream(new File(tempDir, DATABASE_FILE_NAME));
-        prototypeDatabaseOutputStream.write(prototypeDatabase);
-        prototypeDatabaseOutputStream.close();
+		if (prototypeDatabase != null) {
+			FileOutputStream prototypeDatabaseOutputStream = new FileOutputStream(
+					new File(tempDir, DATABASE_FILE_NAME));
+			prototypeDatabaseOutputStream.write(prototypeDatabase);
+			prototypeDatabaseOutputStream.close();
+		}
 
-        FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
-        locationsOutputStream.write(locations);
-        locationsOutputStream.close();
+		if (locations != null) {
+			FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
+			locationsOutputStream.write(locations);
+			locationsOutputStream.close();
+		}
 
-        FileOutputStream publicInstitutionsSuppliersOutputStream = new FileOutputStream(
-                new File(tempDir, ORGS_FILE_NAME));
-        publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
-        publicInstitutionsSuppliersOutputStream.close();
+		if (publicInstitutionsSuppliers != null) {
+			FileOutputStream publicInstitutionsSuppliersOutputStream = new FileOutputStream(
+					new File(tempDir, ORGS_FILE_NAME));
+			publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
+			publicInstitutionsSuppliersOutputStream.close();
+		}
 
         return tempDir.toURI().toURL().toString();
     }
@@ -228,54 +237,56 @@ public class VNImportService implements ExcelImportService {
 
 		clearAllCaches(); //clears caches before import starts
 
-        try {
-            newMsgBuffer();
-            if (purgeDatabase) {
-                purgeDatabase();
-            }
+		try {
+			newMsgBuffer();
+			if (purgeDatabase) {
+				purgeDatabase();
+			}
 
-            tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers);
+			tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers);
 
-            if (fileTypes.contains(ImportFileTypes.LOCATIONS)) {
-                importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
-                        new LocationRowImporter(locationRepository, this, 1), 1);
-            }
+			if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
+				importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
+						new LocationRowImporter(locationRepository, this, 1), 1);
+			}
 
-            if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS)) {
-                importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
-                        new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
-            }
+			if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
+				importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
+						new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
+			}
 
-            if (fileTypes.contains(ImportFileTypes.SUPPLIERS)) {
-                importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, this, 2), 1);
-            }
+			if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
+				importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
+						new SupplierRowImporter(organizationRepository, this, 2), 1);
+			}
 
-            if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
-                        new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 1));
-            }
+			if (prototypeDatabase != null) {
+				if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
+					importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
+							new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 1));
+				}
 
-            if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
-                        new BidPlansRowImporter(releaseRepository, this, 1));
-            }
+				if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
+					importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
+							new BidPlansRowImporter(releaseRepository, this, 1));
+				}
 
-            if (fileTypes.contains(ImportFileTypes.TENDERS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
-                        new TenderRowImporter(releaseRepository, this, organizationRepository, classificationRepository,
-                                contrMethodRepository, locationRepository, 1));
-            }
+				if (fileTypes.contains(ImportFileTypes.TENDERS)) {
+					importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
+							new TenderRowImporter(releaseRepository, this, organizationRepository,
+									classificationRepository, contrMethodRepository, locationRepository, 1));
+				}
 
-            if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
-                        new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 1));
-            }
+				if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
+					importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
+							new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+				}
 
-            if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
-                        new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1));
-            }
+				if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
+					importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
+							new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+				}
+			}
 
             if (purgeDatabase) {
                 postImportStage();
