@@ -14,13 +14,13 @@ package org.devgateway.toolkit.forms.wicket.events;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public class AjaxUpdateEvent {
-	private final AjaxRequestTarget target;
+    private final AjaxRequestTarget target;
 
-	public AjaxUpdateEvent(final AjaxRequestTarget target) {
-		this.target = target;
-	}
+    public AjaxUpdateEvent(final AjaxRequestTarget target) {
+        this.target = target;
+    }
 
-	public AjaxRequestTarget getAjaxRequestTarget() {
-		return target;
-	}
+    public AjaxRequestTarget getAjaxRequestTarget() {
+        return target;
+    }
 }

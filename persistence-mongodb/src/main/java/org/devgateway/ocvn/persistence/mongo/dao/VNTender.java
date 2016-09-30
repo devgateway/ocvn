@@ -29,30 +29,30 @@ public class VNTender extends Tender {
     private String procurementMethodDetails;
 
     @ExcelExport
-    private String publicationMethod; 
-    
+    private String publicationMethod;
+
     private String cancellationRationale;
 
     @ExcelExport
     private Date bidOpenDt;
 
     public String getCancellationRationale() {
-		return cancellationRationale;
-	}
+        return cancellationRationale;
+    }
 
-	public void setCancellationRationale(String cancellationRationale) {
-		this.cancellationRationale = cancellationRationale;
-	}
+    public void setCancellationRationale(String cancellationRationale) {
+        this.cancellationRationale = cancellationRationale;
+    }
 
-	public String getPublicationMethod() {
-		return publicationMethod;
-	}
+    public String getPublicationMethod() {
+        return publicationMethod;
+    }
 
-	public void setPublicationMethod(String publicationMethod) {
-		this.publicationMethod = publicationMethod;
-	}
+    public void setPublicationMethod(String publicationMethod) {
+        this.publicationMethod = publicationMethod;
+    }
 
-	public ContrMethod getContrMethod() {
+    public ContrMethod getContrMethod() {
         return contrMethod;
     }
 

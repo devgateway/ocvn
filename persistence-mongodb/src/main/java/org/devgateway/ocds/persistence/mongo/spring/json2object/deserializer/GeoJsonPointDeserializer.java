@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class GeoJsonPointDeserializer extends JsonDeserializer<GeoJsonPoint> {
     @Override
-    public GeoJsonPoint deserialize(JsonParser jsonParser, DeserializationContext ctxt)
+    public GeoJsonPoint deserialize(final JsonParser jsonParser, final DeserializationContext ctxt)
             throws IOException {
 
         ObjectCodec objectCodec = jsonParser.getCodec();

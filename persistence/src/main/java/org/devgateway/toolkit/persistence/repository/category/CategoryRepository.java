@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface CategoryRepository<T extends Category> extends TextSearchableRepository<T, Long> {
 
-	@Override
-	@Query("select cat from  #{#entityName} cat where lower(cat.label) like %:code%")
-	Page<T> searchText(@Param("code") String code, Pageable page);
+    @Override
+    @Query("select cat from  #{#entityName} cat where lower(cat.label) like %:code%")
+    Page<T> searchText(@Param("code") String code, Pageable page);
 }

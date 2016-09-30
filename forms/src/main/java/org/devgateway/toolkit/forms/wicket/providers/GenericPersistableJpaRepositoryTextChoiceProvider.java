@@ -26,39 +26,39 @@ import org.devgateway.toolkit.persistence.repository.category.TextSearchableRepo
  *
  */
 public class GenericPersistableJpaRepositoryTextChoiceProvider<T extends GenericPersistable & Labelable>
-		extends AbstractJpaRepositoryTextChoiceProvider<T> {
-	private static final long serialVersionUID = -643286578944834690L;
+        extends AbstractJpaRepositoryTextChoiceProvider<T> {
+    private static final long serialVersionUID = -643286578944834690L;
 
-	public GenericPersistableJpaRepositoryTextChoiceProvider(
-			final TextSearchableRepository<T, Long> textSearchableRepository) {
-		super(textSearchableRepository);
-	}
+    public GenericPersistableJpaRepositoryTextChoiceProvider(
+            final TextSearchableRepository<T, Long> textSearchableRepository) {
+        super(textSearchableRepository);
+    }
 
-	public GenericPersistableJpaRepositoryTextChoiceProvider(
-			final TextSearchableRepository<T, Long> textSearchableRepository,
-			final IModel<Collection<T>> restrictedToItemsModel) {
-		super(textSearchableRepository, restrictedToItemsModel);
-	}
+    public GenericPersistableJpaRepositoryTextChoiceProvider(
+            final TextSearchableRepository<T, Long> textSearchableRepository,
+            final IModel<Collection<T>> restrictedToItemsModel) {
+        super(textSearchableRepository, restrictedToItemsModel);
+    }
 
-	public GenericPersistableJpaRepositoryTextChoiceProvider(
-			final TextSearchableRepository<T, Long> textSearchableRepository, final Class<T> clazz,
-			final Boolean addNewElements) {
-		super(textSearchableRepository, clazz, addNewElements);
-	}
+    public GenericPersistableJpaRepositoryTextChoiceProvider(
+            final TextSearchableRepository<T, Long> textSearchableRepository, final Class<T> clazz,
+            final Boolean addNewElements) {
+        super(textSearchableRepository, clazz, addNewElements);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.
-	 * Object)
-	 */
-	@Override
-	public String getDisplayValue(final T choice) {
-		if (addNewElements && choice.getId() == null) {
-			return choice.toString() + " ---> (press enter to create new element)";
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.vaynberg.wicket.select2.TextChoiceProvider#getDisplayText(java.lang.
+     * Object)
+     */
+    @Override
+    public String getDisplayValue(final T choice) {
+        if (addNewElements && choice.getId() == null) {
+            return choice.toString() + " ---> (press enter to create new element)";
+        }
 
-		return choice.toString();
-	}
+        return choice.toString();
+    }
 }

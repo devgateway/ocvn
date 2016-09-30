@@ -30,20 +30,20 @@ import java.util.List;
  */
 
 public class AjaxFallbackBootstrapDataTable<T, S> extends DataTable<T, S> {
-	private static final long serialVersionUID = -4423767033850245605L;
+    private static final long serialVersionUID = -4423767033850245605L;
 
-	public AjaxFallbackBootstrapDataTable(final String id, final List<? extends IColumn<T, S>> columns,
-			final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage) {
-		super(id, columns, dataProvider, rowsPerPage);
-		this.setOutputMarkupId(true);
-		this.setVersioned(false);
-		this.addTopToolbar(new AjaxFallbackHeadersToolbar<S>(this, dataProvider));
-		this.addBottomToolbar(new AjaxBootstrapNavigationToolbar(this));
-		this.addBottomToolbar(new NoRecordsToolbar(this));
-	}
+    public AjaxFallbackBootstrapDataTable(final String id, final List<? extends IColumn<T, S>> columns,
+            final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage) {
+        super(id, columns, dataProvider, rowsPerPage);
+        this.setOutputMarkupId(true);
+        this.setVersioned(false);
+        this.addTopToolbar(new AjaxFallbackHeadersToolbar<S>(this, dataProvider));
+        this.addBottomToolbar(new AjaxBootstrapNavigationToolbar(this));
+        this.addBottomToolbar(new NoRecordsToolbar(this));
+    }
 
-	@Override
-	protected Item<T> newRowItem(final String id, final int index, final IModel<T> model) {
-		return new OddEvenItem<T>(id, index, model);
-	}
+    @Override
+    protected Item<T> newRowItem(final String id, final int index, final IModel<T> model) {
+        return new OddEvenItem<T>(id, index, model);
+    }
 }

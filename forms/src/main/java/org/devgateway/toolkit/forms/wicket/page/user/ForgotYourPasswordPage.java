@@ -28,7 +28,7 @@ public class ForgotYourPasswordPage extends BasePage {
     @SpringBean
     private SendEmailService sendEmailService;
 
-	public static final int RANDOM_PASSWORD_LENGTH = 16;
+    public static final int RANDOM_PASSWORD_LENGTH = 16;
 
     public ForgotYourPasswordPage(final PageParameters parameters) {
         super(parameters);
@@ -54,10 +54,9 @@ public class ForgotYourPasswordPage extends BasePage {
         protected void onInitialize() {
             super.onInitialize();
 
-            final TextFieldBootstrapFormComponent<String> emailAddressField =
-                    new TextFieldBootstrapFormComponent<>("emailAddress",
-                            new StringResourceModel("emailMessage", ForgotYourPasswordPage.this, null),
-                            new PropertyModel<>(this, "emailAddress"));
+            final TextFieldBootstrapFormComponent<String> emailAddressField = new TextFieldBootstrapFormComponent<>(
+                    "emailAddress", new StringResourceModel("emailMessage", ForgotYourPasswordPage.this, null),
+                    new PropertyModel<>(this, "emailAddress"));
             emailAddressField.required();
             emailAddressField.setOutputMarkupId(true);
             add(emailAddressField);
@@ -109,6 +108,7 @@ public class ForgotYourPasswordPage extends BasePage {
             goBack = new IndicatingAjaxButton("goBack",
                     new StringResourceModel("back", ForgotYourPasswordPage.this, null)) {
                 private static final long serialVersionUID = 1L;
+
                 @Override
                 protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
                     setResponsePage(LoginPage.class);

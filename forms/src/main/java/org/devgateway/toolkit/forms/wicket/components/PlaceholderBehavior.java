@@ -20,9 +20,8 @@ import org.apache.wicket.markup.ComponentTag;
  */
 public class PlaceholderBehavior extends Behavior {
 
-
-	private static final long serialVersionUID = -5721230717164734414L;
-	private final String placeholder;
+    private static final long serialVersionUID = -5721230717164734414L;
+    private final String placeholder;
 
     public PlaceholderBehavior(final String placeholder) {
         this.placeholder = placeholder;

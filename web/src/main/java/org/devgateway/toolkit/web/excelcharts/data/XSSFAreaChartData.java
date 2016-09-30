@@ -19,7 +19,7 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
  * @author idobre
  * @since 8/8/16
  *
- * Holds data for a XSSF Area Chart.
+ *        Holds data for a XSSF Area Chart.
  */
 public class XSSFAreaChartData extends AbstractXSSFChartData {
     public XSSFAreaChartData(final String title) {
@@ -28,7 +28,7 @@ public class XSSFAreaChartData extends AbstractXSSFChartData {
 
     @Override
     protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
-                                               final ChartDataSource<? extends Number> values) {
+            final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {

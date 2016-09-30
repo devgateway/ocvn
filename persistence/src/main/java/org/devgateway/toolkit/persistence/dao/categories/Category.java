@@ -36,48 +36,48 @@ import org.hibernate.envers.Audited;
 @Table(indexes = { @Index(columnList = "label"), @Index(columnList = "DTYPE") })
 public class Category extends AbstractAuditableEntity implements Serializable, Labelable {
 
-	static final int DTYPE_COLUMN_LENGTH = 100;
+    static final int DTYPE_COLUMN_LENGTH = 100;
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected String label;
+    protected String label;
 
-	protected String description;
+    protected String description;
 
-	public Category(final String label) {
-		this.label = label;
-	}
+    public Category(final String label) {
+        this.label = label;
+    }
 
-	public Category() {
+    public Category() {
 
-	}
+    }
 
-	@Override
-	public String getLabel() {
-		return label;
-	}
+    @Override
+    public String getLabel() {
+        return label;
+    }
 
-	@Override
-	public void setLabel(final String label) {
-		this.label = label;
-	}
+    @Override
+    public void setLabel(final String label) {
+        this.label = label;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(final String description) {
-		this.description = description;
-	}
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
-	@Override
-	public String toString() {
-		return getLabel();
-	}
+    @Override
+    public String toString() {
+        return getLabel();
+    }
 
-	@Override
-	public AbstractAuditableEntity getParent() {
-		return null;
-	}
+    @Override
+    public AbstractAuditableEntity getParent() {
+        return null;
+    }
 
 }

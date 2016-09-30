@@ -26,18 +26,18 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath(value = "/listusers")
 public class ListUserPage extends AbstractListPage<Person> {
 
-	private static final long serialVersionUID = 3529738250403399032L;
+    private static final long serialVersionUID = 3529738250403399032L;
 
-	@SpringBean
-	protected PersonRepository userRepository;
+    @SpringBean
+    protected PersonRepository userRepository;
 
-	public ListUserPage(final PageParameters pageParameters) {
-		super(pageParameters);
-		this.jpaRepository = userRepository;
-		this.editPageClass = EditUserPageElevated.class;
-		columns.add(new PropertyColumn<Person, String>(new Model<String>("Name"), "username", "username"));
-		columns.add(new PropertyColumn<Person, String>(new Model<String>("Group"), "group", "group"));
-		columns.add(new PropertyColumn<Person, String>(new Model<String>("Roles"), "roles", "roles"));
-	}
+    public ListUserPage(final PageParameters pageParameters) {
+        super(pageParameters);
+        this.jpaRepository = userRepository;
+        this.editPageClass = EditUserPageElevated.class;
+        columns.add(new PropertyColumn<Person, String>(new Model<String>("Name"), "username", "username"));
+        columns.add(new PropertyColumn<Person, String>(new Model<String>("Group"), "group", "group"));
+        columns.add(new PropertyColumn<Person, String>(new Model<String>("Roles"), "roles", "roles"));
+    }
 
 }

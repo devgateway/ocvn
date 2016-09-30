@@ -27,9 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface RoleRepository extends TextSearchableRepository<Role, Long>, JpaRepository<Role, Long> {
 
-	@Override
-	@Query("select role from  Role role where lower(role.authority) like %?1%")
-	Page<Role> searchText(String code, Pageable page);
+    @Override
+    @Query("select role from  Role role where lower(role.authority) like %?1%")
+    Page<Role> searchText(String code, Pageable page);
 
-	Role findByAuthority(String authority);
+    Role findByAuthority(String authority);
 }

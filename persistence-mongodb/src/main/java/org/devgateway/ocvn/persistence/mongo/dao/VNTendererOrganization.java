@@ -13,27 +13,27 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
  */
 public class VNTendererOrganization extends Organization {
     @ExcelExport
-	private Amount bidValue;
+    private Amount bidValue;
 
     public VNTendererOrganization() {
 
     }
 
-	public VNTendererOrganization(Organization organization) {
-		this.setId(organization.getId());
-		this.setAddress(organization.getAddress());
-		this.setContactPoint(organization.getContactPoint());
-		this.setIdentifier(organization.getIdentifier());
-		this.setName(organization.getName());
-		this.setTypes(organization.getTypes());
-	}
+    public VNTendererOrganization(Organization organization) {
+        this.setId(organization.getId());
+        this.setAddress(organization.getAddress());
+        this.setContactPoint(organization.getContactPoint());
+        this.setIdentifier(organization.getIdentifier());
+        this.setName(organization.getName());
+        this.setTypes(organization.getTypes());
+    }
 
-	public Amount getBidValue() {
-		return bidValue;
-	}
+    public Amount getBidValue() {
+        return bidValue;
+    }
 
-	public void setBidValue(Amount bidValue) {
-		this.bidValue = bidValue;
-	}
+    public void setBidValue(Amount bidValue) {
+        this.bidValue = bidValue;
+    }
 
 }

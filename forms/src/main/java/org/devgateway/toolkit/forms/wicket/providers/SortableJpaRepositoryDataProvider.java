@@ -34,71 +34,70 @@ import org.springframework.data.domain.Sort.Direction;
  *         Smart generic {@link SortableDataProvider} that binds to
  *         {@link BaseJpaRepository}
  */
-public class SortableJpaRepositoryDataProvider<T extends GenericPersistable>
-		extends SortableDataProvider<T, String>
-		implements IFilterStateLocator<JpaFilterState<T>> {
+public class SortableJpaRepositoryDataProvider<T extends GenericPersistable> extends SortableDataProvider<T, String>
+        implements IFilterStateLocator<JpaFilterState<T>> {
 
-	private static final long serialVersionUID = 6507887810859971417L;
+    private static final long serialVersionUID = 6507887810859971417L;
 
-	protected BaseJpaRepository<T, Long> jpaRepository;
+    protected BaseJpaRepository<T, Long> jpaRepository;
 
-	private JpaFilterState<T> filterState;
+    private JpaFilterState<T> filterState;
 
-	/**
-	 * Always provide a proxy jpaRepository here! For example one coming from a
-	 * {@link SpringBean}
-	 *
-	 * @param jpaRepository
-	 */
-	public SortableJpaRepositoryDataProvider(final BaseJpaRepository<T, Long> jpaRepository) {
-		this.jpaRepository = jpaRepository;
-	}
+    /**
+     * Always provide a proxy jpaRepository here! For example one coming from a
+     * {@link SpringBean}
+     *
+     * @param jpaRepository
+     */
+    public SortableJpaRepositoryDataProvider(final BaseJpaRepository<T, Long> jpaRepository) {
+        this.jpaRepository = jpaRepository;
+    }
 
-	/**
-	 * Translates from a {@link SortParam} to a Spring {@link Sort}
-	 *
-	 * @return
-	 */
-	protected Sort translateSort() {
-		if (getSort() == null) {
-			return null;
-		}
-		return new Sort(getSort().isAscending() ? Direction.ASC : Direction.DESC, getSort().getProperty());
-	}
+    /**
+     * Translates from a {@link SortParam} to a Spring {@link Sort}
+     *
+     * @return
+     */
+    protected Sort translateSort() {
+        if (getSort() == null) {
+            return null;
+        }
+        return new Sort(getSort().isAscending() ? Direction.ASC : Direction.DESC, getSort().getProperty());
+    }
 
-	/**
-	 * @see SortableDataProvider#iterator(long, long)
-	 */
-	@Override
-	public Iterator<? extends T> iterator(final long first, final long count) {
-		int page = (int) ((double) first / WebConstants.PAGE_SIZE);
-		Page<T> findAll = jpaRepository.findAll(filterState.getSpecification(),
-				new PageRequest(page, WebConstants.PAGE_SIZE, translateSort()));
-		return findAll.iterator();
-	}
+    /**
+     * @see SortableDataProvider#iterator(long, long)
+     */
+    @Override
+    public Iterator<? extends T> iterator(final long first, final long count) {
+        int page = (int) ((double) first / WebConstants.PAGE_SIZE);
+        Page<T> findAll = jpaRepository.findAll(filterState.getSpecification(),
+                new PageRequest(page, WebConstants.PAGE_SIZE, translateSort()));
+        return findAll.iterator();
+    }
 
-	@Override
-	public long size() {
-		return jpaRepository.count(filterState.getSpecification());
-	}
+    @Override
+    public long size() {
+        return jpaRepository.count(filterState.getSpecification());
+    }
 
-	/**
-	 * This ensures that the object is detached and reloaded after
-	 * deserialization of the page, since the
-	 * {@link PersistableJpaRepositoryModel} is also loadabledetachable
-	 */
-	@Override
-	public IModel<T> model(final T object) {
-		return new PersistableJpaRepositoryModel<T>(object, jpaRepository);
-	}
+    /**
+     * This ensures that the object is detached and reloaded after
+     * deserialization of the page, since the
+     * {@link PersistableJpaRepositoryModel} is also loadabledetachable
+     */
+    @Override
+    public IModel<T> model(final T object) {
+        return new PersistableJpaRepositoryModel<T>(object, jpaRepository);
+    }
 
-	@Override
-	public JpaFilterState<T> getFilterState() {
-		return filterState;
-	}
+    @Override
+    public JpaFilterState<T> getFilterState() {
+        return filterState;
+    }
 
-	@Override
-	public void setFilterState(final JpaFilterState<T> filterState) {
-		this.filterState = filterState;
-	}
+    @Override
+    public void setFilterState(final JpaFilterState<T> filterState) {
+        this.filterState = filterState;
+    }
 }

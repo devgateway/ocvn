@@ -13,6 +13,7 @@
         <java.version>1.8</java.version>
         <start-class>org.devgateway.toolkit.ui.UIWebApplication</start-class>
         <skip.frontend.build>false</skip.frontend.build>
+        <checkstyle.skip>true</checkstyle.skip>
     </properties>
 
     <parent>

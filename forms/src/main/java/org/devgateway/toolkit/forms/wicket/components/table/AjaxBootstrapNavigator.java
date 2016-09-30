@@ -25,74 +25,74 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
  */
 
 public class AjaxBootstrapNavigator extends AjaxPagingNavigator {
-	protected static Logger logger = Logger.getLogger(AjaxBootstrapNavigator.class);
+    protected static Logger logger = Logger.getLogger(AjaxBootstrapNavigator.class);
 
-	private static final long serialVersionUID = -5572869834775798502L;
+    private static final long serialVersionUID = -5572869834775798502L;
 
-	private boolean hideFastPagination;
+    private boolean hideFastPagination;
 
-	private Component first;
-	private Component next;
-	private Component prev;
-	private Component last;
+    private Component first;
+    private Component next;
+    private Component prev;
+    private Component last;
 
-	public AjaxBootstrapNavigator(final String id, final IPageable pageable) {
-		this(id, pageable, null);
-	}
+    public AjaxBootstrapNavigator(final String id, final IPageable pageable) {
+        this(id, pageable, null);
+    }
 
-	public AjaxBootstrapNavigator(final String id, final IPageable pageable, final boolean hideFastPagination) {
-		this(id, pageable, null, hideFastPagination);
-	}
+    public AjaxBootstrapNavigator(final String id, final IPageable pageable, final boolean hideFastPagination) {
+        this(id, pageable, null, hideFastPagination);
+    }
 
-	public AjaxBootstrapNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider,
-			final boolean hideFastPagination) {
-		this(id, pageable, labelProvider);
+    public AjaxBootstrapNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider,
+            final boolean hideFastPagination) {
+        this(id, pageable, labelProvider);
 
-		this.hideFastPagination = hideFastPagination;
-	}
+        this.hideFastPagination = hideFastPagination;
+    }
 
-	public AjaxBootstrapNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
-		super(id, pageable, labelProvider);
-	}
+    public AjaxBootstrapNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
+        super(id, pageable, labelProvider);
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		// hide the first/next/prev/last links
-		if (hideFastPagination) {
-			first = get("first");
-			first.setVisibilityAllowed(false);
+        // hide the first/next/prev/last links
+        if (hideFastPagination) {
+            first = get("first");
+            first.setVisibilityAllowed(false);
 
-			next = get("next");
-			next.setVisibilityAllowed(false);
+            next = get("next");
+            next.setVisibilityAllowed(false);
 
-			prev = get("prev");
-			prev.setVisibilityAllowed(false);
+            prev = get("prev");
+            prev.setVisibilityAllowed(false);
 
-			last = get("last");
-			last.setVisibilityAllowed(false);
-		}
-	}
+            last = get("last");
+            last.setVisibilityAllowed(false);
+        }
+    }
 
-	@Override
-	protected PagingNavigation newNavigation(final String id, final IPageable pageable,
-			final IPagingLabelProvider labelProvider) {
-		return new BootstrapPagingNavigation(id, pageable, labelProvider);
-	}
+    @Override
+    protected PagingNavigation newNavigation(final String id, final IPageable pageable,
+            final IPagingLabelProvider labelProvider) {
+        return new BootstrapPagingNavigation(id, pageable, labelProvider);
+    }
 
-	@Override
-	protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable,
-			final int increment) {
-		AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
-		// TODO:disable link
-		return link;
-	}
+    @Override
+    protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable,
+            final int increment) {
+        AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
+        // TODO:disable link
+        return link;
+    }
 
-	@Override
-	protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageNumber) {
-		AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
-		// TODO:disable link
-		return link;
-	}
+    @Override
+    protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageNumber) {
+        AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
+        // TODO:disable link
+        return link;
+    }
 }

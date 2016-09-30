@@ -208,7 +208,7 @@ public abstract class GenericOCDSController {
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
         tmpMap.put("tender.procuringEntity._id", 1);
-		tmpMap.put("awards.suppliers._id", 1);
+        tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
         tmpMap.put("tender.procurementMethodDetails", 1);
@@ -255,13 +255,13 @@ public abstract class GenericOCDSController {
                 getByAwardAmountIntervalCriteria(filter));
     }
 
-	protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, String dateProperty) {
-		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-				getSupplierIdCriteria(filter),
-				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
-                getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(filter, dateProperty));
-	}
-    
+    protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
+        return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+                getSupplierIdCriteria(filter), getByTenderDeliveryLocationIdentifier(filter),
+                getByTenderAmountIntervalCriteria(filter), getByAwardAmountIntervalCriteria(filter),
+                getYearFilterCriteria(filter, dateProperty));
+    }
+
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
         return match(getDefaultFilterCriteria(filter));
     }

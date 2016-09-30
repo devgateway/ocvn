@@ -29,68 +29,68 @@ import de.agilecoders.wicket.core.util.Attributes;
  * 
  */
 public class TextFieldBootstrapFormComponent<TYPE> extends GenericBootstrapFormComponent<TYPE, TextField<TYPE>> {
-	private static final long serialVersionUID = 8062663141536130313L;
-	private StringValidator validator = WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT;
-	private Boolean isFloatedInput = false;
+    private static final long serialVersionUID = 8062663141536130313L;
+    private StringValidator validator = WebConstants.StringValidators.MAXIMUM_LENGTH_VALIDATOR_ONE_LINE_TEXT;
+    private Boolean isFloatedInput = false;
 
-	public TextFieldBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
-		super(id, labelModel, model);
-	}
+    public TextFieldBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
+        super(id, labelModel, model);
+    }
 
-	public TextFieldBootstrapFormComponent(final String id, final IModel<TYPE> model) {
-		super(id, model);
-	}
+    public TextFieldBootstrapFormComponent(final String id, final IModel<TYPE> model) {
+        super(id, model);
+    }
 
-	/**
-	 * @param id
-	 */
-	public TextFieldBootstrapFormComponent(final String id) {
-		super(id);
-	}
+    /**
+     * @param id
+     */
+    public TextFieldBootstrapFormComponent(final String id) {
+        super(id);
+    }
 
-	@Override
-	protected TextField<TYPE> inputField(final String id, final IModel<TYPE> model) {
-		return new TextField<TYPE>(id, initFieldModel());
-	}
+    @Override
+    protected TextField<TYPE> inputField(final String id, final IModel<TYPE> model) {
+        return new TextField<TYPE>(id, initFieldModel());
+    }
 
-	@Override
-	protected void onComponentTag(final ComponentTag tag) {
-		super.onComponentTag(tag);
+    @Override
+    protected void onComponentTag(final ComponentTag tag) {
+        super.onComponentTag(tag);
 
-		if (getIsFloatedInput()) {
-			Attributes.addClass(tag, "floated-input");
-		}
-	}
+        if (getIsFloatedInput()) {
+            Attributes.addClass(tag, "floated-input");
+        }
+    }
 
-	public TextFieldBootstrapFormComponent<TYPE> integer() {
-		field.setType(Integer.class);
-		return this;
-	}
+    public TextFieldBootstrapFormComponent<TYPE> integer() {
+        field.setType(Integer.class);
+        return this;
+    }
 
-	public TextFieldBootstrapFormComponent<TYPE> decimal() {
-		field.setType(BigDecimal.class);
-		return this;
-	}
+    public TextFieldBootstrapFormComponent<TYPE> decimal() {
+        field.setType(BigDecimal.class);
+        return this;
+    }
 
-	public TextFieldBootstrapFormComponent<TYPE> asDouble() {
-		field.setType(Double.class);
-		return this;
-	}
+    public TextFieldBootstrapFormComponent<TYPE> asDouble() {
+        field.setType(Double.class);
+        return this;
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		if (getField().getType() == null || !Number.class.isAssignableFrom(getField().getType())) {
-			getField().add(validator);
-		}
-	}
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (getField().getType() == null || !Number.class.isAssignableFrom(getField().getType())) {
+            getField().add(validator);
+        }
+    }
 
-	public Boolean getIsFloatedInput() {
-		return isFloatedInput;
-	}
+    public Boolean getIsFloatedInput() {
+        return isFloatedInput;
+    }
 
-	public void setIsFloatedInput(final Boolean isFloatedInput) {
-		this.isFloatedInput = isFloatedInput;
-	}
+    public void setIsFloatedInput(final Boolean isFloatedInput) {
+        this.isFloatedInput = isFloatedInput;
+    }
 
 }

@@ -26,6 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long> {
 
-	@Query("select file from FileMetadata file where file.isUserSupportDocument = cast('true' as boolean)")
-	Set<FileMetadata> findByIsUserSupportDocumentTrue();
+    @Query("select file from FileMetadata file where file.isUserSupportDocument = cast('true' as boolean)")
+    Set<FileMetadata> findByIsUserSupportDocumentTrue();
 }

@@ -35,14 +35,14 @@ import org.apache.wicket.util.convert.converter.BigDecimalConverter;
  */
 public class NonNumericFilteredBigDecimalConverter extends BigDecimalConverter {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public BigDecimal convertToObject(final String value, final Locale locale) {
-		String newValue = value;
-		if (newValue != null) {
-			newValue = newValue.replaceAll("[^\\d\\.]", "");
-		}
-		return super.convertToObject(newValue, locale);
-	}
+    @Override
+    public BigDecimal convertToObject(final String value, final Locale locale) {
+        String newValue = value;
+        if (newValue != null) {
+            newValue = newValue.replaceAll("[^\\d\\.]", "");
+        }
+        return super.convertToObject(newValue, locale);
+    }
 }

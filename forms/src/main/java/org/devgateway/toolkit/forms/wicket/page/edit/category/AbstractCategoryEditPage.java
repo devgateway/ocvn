@@ -21,20 +21,20 @@ import org.devgateway.toolkit.persistence.dao.categories.Category;
  */
 
 public abstract class AbstractCategoryEditPage<T extends Category> extends AbstractEditPage<T> {
-	private static final long serialVersionUID = 6571076983713857766L;
-	protected TextFieldBootstrapFormComponent<String> label;
+    private static final long serialVersionUID = 6571076983713857766L;
+    protected TextFieldBootstrapFormComponent<String> label;
 
-	public AbstractCategoryEditPage(final PageParameters parameters) {
-		super(parameters);
-	}
+    public AbstractCategoryEditPage(final PageParameters parameters) {
+        super(parameters);
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		label = new TextFieldBootstrapFormComponent<>("label");
-		label.required();
-		editForm.add(label);
+        label = new TextFieldBootstrapFormComponent<>("label");
+        label.required();
+        editForm.add(label);
 
-	}
+    }
 }

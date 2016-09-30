@@ -24,7 +24,7 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath(value = "/adminsettings")
 public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
 
-	private static final long serialVersionUID = 5742724046825803877L;
+    private static final long serialVersionUID = 5742724046825803877L;
 
     private TextFieldBootstrapFormComponent<Integer> excelBatchSize;
 

@@ -37,23 +37,21 @@ import java.util.Collection;
 /**
  * AuthenticatedWebSession implementation using Spring Security.
  *
- * Based on: https://cwiki.apache.org/confluence/display/WICKET/Spring+Security+and+Wicket-auth-roles
+ * Based on:
+ * https://cwiki.apache.org/confluence/display/WICKET/Spring+Security+and+Wicket-auth-roles
  *
  * @author Marcin Zajączkowski, 2011-02-05
  */
 public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
 
-	private static final long serialVersionUID = 7496424885650965870L;
+    private static final long serialVersionUID = 7496424885650965870L;
 
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-	protected final Logger log = LoggerFactory.getLogger(getClass());
-	
-	private AuthenticationException ae;
+    private AuthenticationException ae;
 
-
-	@SpringBean(required = false)
+    @SpringBean(required = false)
     private RememberMeServices rememberMeServices;
-
 
     @SpringBean
     private AuthenticationManager authenticationManager;
@@ -61,63 +59,66 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
     @SpringBean
     private RoleHierarchy roleHierarchy;
 
-//    @SpringBean
-//    private SessionRegistry sessionRegistry;
-	
-	/* (non-Javadoc)
-	 * @see org.apache.wicket.Session#replaceSession()
-	 */
-	@Override
-	public void replaceSession() {
-		//do nothing here, this breaks spring security in wicket 6.19
-	}
-	
-	private void ensureDependenciesNotNull() {
-		if (authenticationManager == null) {
-			throw new IllegalStateException("An authenticationManager is required.");
-		}
-	}
+    // @SpringBean
+    // private SessionRegistry sessionRegistry;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Session#replaceSession()
+     */
+    @Override
+    public void replaceSession() {
+        // do nothing here, this breaks spring security in wicket 6.19
+    }
+
+    private void ensureDependenciesNotNull() {
+        if (authenticationManager == null) {
+            throw new IllegalStateException("An authenticationManager is required.");
+        }
+    }
 
     public SSAuthenticatedWebSession(final Request request) {
         super(request);
         Injector.get().inject(this);
-        ensureDependenciesNotNull();        
+        ensureDependenciesNotNull();
         if (authenticationManager == null) {
             throw new IllegalStateException("Injection of AuthenticationManager failed.");
         }
-        
+
     }
 
     public static SSAuthenticatedWebSession getSSAuthenticatedWebSession() {
         return (SSAuthenticatedWebSession) Session.get();
     }
-    
+
     @Override
     public boolean authenticate(final String username, final String password) {
         boolean authenticated;
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password));
-            SecurityContextHolder.getContext().setAuthentication(authentication);      
-//        	httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-//        			SecurityContextHolder.getContext());
+            Authentication authentication =
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+            // SecurityContextHolder.getContext());
             authenticated = authentication.isAuthenticated();
-   
-			if (authenticated && rememberMeServices != null) {
-				rememberMeServices.loginSuccess(
-						(HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
-						(HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse(), authentication);
-			}
-            
+
+            if (authenticated && rememberMeServices != null) {
+                rememberMeServices.loginSuccess(
+                        (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
+                        (HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse(), authentication);
+            }
+
         } catch (AuthenticationException e) {
-        	this.setAe(e);
+            this.setAe(e);
             log.warn("User '{}' failed to login. Reason: {}", username, e.getMessage());
             authenticated = false;
         }
         return authenticated;
     }
 
-    //FIXME: MZA: Modification of returning object - it would be better if roles were returned
+    // FIXME: MZA: Modification of returning object - it would be better if
+    // roles were returned
     @Override
     public Roles getRoles() {
         Roles roles = new Roles();
@@ -126,21 +127,24 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
     }
 
     /**
-     * Gets the Spring roles and dumps them into Wicket's {@link Roles} object, only if the user is signed in
-     * @see {@link #isSignedIn()} 
+     * Gets the Spring roles and dumps them into Wicket's {@link Roles} object,
+     * only if the user is signed in
+     * 
+     * @see {@link #isSignedIn()}
      * @see #addRolesFromAuthentication(Roles, Authentication)
      * @param roles
      */
-	private void getRolesIfSignedIn(final Roles roles) {
-		if (isSignedIn()) {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			addRolesFromAuthentication(roles, authentication);
-		}
-	}
+    private void getRolesIfSignedIn(final Roles roles) {
+        if (isSignedIn()) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            addRolesFromAuthentication(roles, authentication);
+        }
+    }
 
     /**
-     * Adds effective roles to Wicket {@link Roles} object. It does so by getting authorities from
-     * {@link Authentication#getAuthorities()} and building effective roles list by taking in account role hierarchy.
+     * Adds effective roles to Wicket {@link Roles} object. It does so by
+     * getting authorities from {@link Authentication#getAuthorities()} and
+     * building effective roles list by taking in account role hierarchy.
      *
      * @param roles
      * @param authentication
@@ -152,12 +156,12 @@ public class SSAuthenticatedWebSession extends AuthenticatedWebSession {
         }
     }
 
-	public AuthenticationException getAe() {
-		return ae;
-	}
+    public AuthenticationException getAe() {
+        return ae;
+    }
 
-	public void setAe(final AuthenticationException ae) {
-		this.ae = ae;
-	}
+    public void setAe(final AuthenticationException ae) {
+        this.ae = ae;
+    }
 
 }

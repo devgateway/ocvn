@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.FormGroup;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
+import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -29,214 +34,199 @@ import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.FieldPanel;
 import org.devgateway.toolkit.forms.wicket.components.TooltipLabel;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.FormGroup;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.form.InputBehavior.Size;
-import de.agilecoders.wicket.core.util.Attributes;
-
 /**
  * @author mpostelnicu
  *
  */
 public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComponent<TYPE>> extends FieldPanel<TYPE> {
+    private static final long serialVersionUID = -7051128382707812456L;
 
-	private static final long serialVersionUID = -7051128382707812456L;
+    protected static Logger logger = Logger.getLogger(GenericBootstrapFormComponent.class);
 
-	protected static Logger logger = Logger.getLogger(GenericBootstrapFormComponent.class);
+    protected FormGroup border;
 
-	protected FormGroup border;
-	protected FIELD field;
+    protected FIELD field;
 
-	protected Label viewModeField;
+    protected Label viewModeField;
 
-	protected InputBehavior sizeBehavior;
+    protected InputBehavior sizeBehavior;
 
-	private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
-	protected TooltipLabel tooltipLabel;
-	protected IModel<String> labelModel;
-	protected boolean nextYear = false;
-	protected boolean labelHidden;
+    private TooltipConfig.OpenTrigger configWithTrigger = TooltipConfig.OpenTrigger.hover;
 
-	@Override
-	public void onEvent(final IEvent<?> event) {
-		ComponentUtil.enableDisableEvent(this, event);
-	}
+    protected TooltipLabel tooltipLabel;
 
-	@SuppressWarnings("unchecked")
-	protected IModel<TYPE> initFieldModel() {
-		if (getDefaultModel() == null) {
-			return new SubComponentWrapModel<TYPE>(this);
-		}
-		return (IModel<TYPE>) getDefaultModel();
-	}
+    protected IModel<String> labelModel;
 
-	/**
-	 * use this behavior for choices/groups that are not one component in the
-	 * html but many.
-	 */
-	protected void getAjaxFormChoiceComponentUpdatingBehavior() {
-		updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
-			private static final long serialVersionUID = 1L;
+    @Override
+    public void onEvent(final IEvent<?> event) {
+        ComponentUtil.enableDisableEvent(this, event);
+    }
 
-			@Override
-			protected void onUpdate(final AjaxRequestTarget target) {
-				GenericBootstrapFormComponent.this.onUpdate(target);
-			}
-		});
-	}
+    @SuppressWarnings("unchecked")
+    protected IModel<TYPE> initFieldModel() {
+        if (getDefaultModel() == null) {
+            return new SubComponentWrapModel<TYPE>(this);
+        }
+        return (IModel<TYPE>) getDefaultModel();
+    }
 
-	/**
-	 * This is the component that has to be updated with the
-	 * {@link #getAjaxFormChoiceComponentUpdatingBehavior()} or with
-	 * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
-	 * but the field may be a wrapper, in which case you should override this
-	 * and provide the wrapped field.
-	 * 
-	 * @return
-	 */
-	protected FormComponent<TYPE> updatingBehaviorComponent() {
-		return field;
-	}
+    /**
+     * use this behavior for choices/groups that are not one component in the
+     * html but many.
+     */
+    protected void getAjaxFormChoiceComponentUpdatingBehavior() {
+        updatingBehaviorComponent().add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            private static final long serialVersionUID = 1L;
 
-	protected void getAjaxFormComponentUpdatingBehavior() {
-		updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                GenericBootstrapFormComponent.this.onUpdate(target);
+            }
+        });
+    }
 
-			private static final long serialVersionUID = -2696538086634114609L;
+    /**
+     * This is the component that has to be updated with the
+     * {@link #getAjaxFormChoiceComponentUpdatingBehavior()} or with
+     * {@link #getAjaxFormComponentUpdatingBehavior()}. It usuall is the field,
+     * but the field may be a wrapper, in which case you should override this
+     * and provide the wrapped field.
+     *
+     * @return
+     */
+    protected FormComponent<TYPE> updatingBehaviorComponent() {
+        return field;
+    }
 
-			@Override
-			protected void onUpdate(final AjaxRequestTarget target) {
-				target.add(border);
-				GenericBootstrapFormComponent.this.onUpdate(target);
-			}
+    protected void getAjaxFormComponentUpdatingBehavior() {
+        updatingBehaviorComponent().add(new AjaxFormComponentUpdatingBehavior(getUpdateEvent()) {
 
-			@Override
-			protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
-				target.add(border);
-			}
-		});
-	}
+            private static final long serialVersionUID = -2696538086634114609L;
 
-	public String getUpdateEvent() {
-		return "blur";
-	}
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                target.add(border);
+                GenericBootstrapFormComponent.this.onUpdate(target);
+            }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> type(final Class<?> clazz) {
-		field.setType(clazz);
-		return this;
-	}
+            @Override
+            protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
+                target.add(border);
+            }
+        });
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
-		sizeBehavior.size(size);
-		return this;
-	}
+    public String getUpdateEvent() {
+        return "blur";
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> nextYear() {
-		nextYear = true;
-		return this;
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> type(final Class<?> clazz) {
+        field.setType(clazz);
+        return this;
+    }
 
-	public GenericBootstrapFormComponent(final String id) {
-		this(id, null);
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> size(final Size size) {
+        sizeBehavior.size(size);
+        return this;
+    }
 
-	public String getLabelKey() {
-		return this.getId() + ".label";
-	}
+    public GenericBootstrapFormComponent(final String id) {
+        this(id, null);
+    }
 
-	public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
-		this(id, new ResourceModel(id + ".label"), model);
-	}
+    public String getLabelKey() {
+        return this.getId() + ".label";
+    }
 
-	public GenericBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
-		super(id, model);
-		this.labelModel = labelModel;
-		setOutputMarkupId(true);
-		setOutputMarkupPlaceholderTag(true);
+    public GenericBootstrapFormComponent(final String id, final IModel<TYPE> model) {
+        this(id, new ResourceModel(id + ".label"), model);
+    }
 
-		border = new FormGroup("enclosing-field-group");
-		border.setOutputMarkupId(true);
-		add(border);
+    public GenericBootstrapFormComponent(final String id, final IModel<String> labelModel, final IModel<TYPE> model) {
+        super(id, model);
+        this.labelModel = labelModel;
+        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
 
-		field = inputField("field", model);
-		field.setVisibilityAllowed(!ComponentUtil.isViewMode());
-		field.setOutputMarkupId(true);
-		sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
-		field.add(sizeBehavior);
-		border.add(field);
+        border = new FormGroup("enclosing-field-group");
+        border.setOutputMarkupId(true);
+        add(border);
 
-		tooltipLabel = new TooltipLabel("tooltipLabel", id);
-		border.add(tooltipLabel);
-		
-		if (!labelHidden) {
-			field.setLabel(labelModel);
-		}
-	}
+        field = inputField("field", model);
+        field.setVisibilityAllowed(!ComponentUtil.isViewMode());
+        field.setOutputMarkupId(true);
+        sizeBehavior = new InputBehavior(InputBehavior.Size.Medium);
+        field.add(sizeBehavior);
+        border.add(field);
 
-	@Override
-	protected void onComponentTag(final ComponentTag tag) {
-		super.onComponentTag(tag);
+        tooltipLabel = new TooltipLabel("tooltipLabel", id);
+        border.add(tooltipLabel);
+    }
 
-		// add a new class for required fields
-		if (field.isRequired()) {
-			Attributes.addClass(tag, "required");
-		}
-	}
+    @Override
+    protected void onComponentTag(final ComponentTag tag) {
+        super.onComponentTag(tag);
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
-		labelHidden = true;
-		return this;
-	}
+        // add a new class for required fields
+        if (field.isRequired()) {
+            Attributes.addClass(tag, "required");
+        }
+    }
 
-	protected abstract FIELD inputField(String id, IModel<TYPE> model);
+    public GenericBootstrapFormComponent<TYPE, FIELD> hideLabel() {
+        field.setLabel(null);
+        return this;
+    }
 
-	public GenericBootstrapFormComponent<TYPE, FIELD> required() {
-		field.setRequired(true);
-		return this;
-	}
+    protected abstract FIELD inputField(String id, IModel<TYPE> model);
 
-	protected void onUpdate(final AjaxRequestTarget target) {
-	}
+    public GenericBootstrapFormComponent<TYPE, FIELD> required() {
+        field.setRequired(true);
+        return this;
+    }
 
-	public FIELD getField() {
-		return field;
-	}
+    protected void onUpdate(final AjaxRequestTarget target) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.wicket.Component#onConfigure()
-	 */
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    public FIELD getField() {
+        return field;
+    }
 
-		if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
-			getAjaxFormChoiceComponentUpdatingBehavior();
-		} else {
-			getAjaxFormComponentUpdatingBehavior();
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Component#onConfigure()
+     */
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
-		viewModeField.setEscapeModelStrings(false);
-		viewModeField.setVisibilityAllowed(ComponentUtil.isViewMode());
-		border.add(viewModeField);
+        if ((field instanceof RadioGroup) || (field instanceof CheckGroup)) {
+            getAjaxFormChoiceComponentUpdatingBehavior();
+        } else {
+            getAjaxFormComponentUpdatingBehavior();
+        }
 
-		tooltipLabel.setConfigWithTrigger(configWithTrigger);
-	}
+        viewModeField = new Label("viewModeField", new ViewModeConverterModel<TYPE>(getModel()));
+        viewModeField.setEscapeModelStrings(false);
+        viewModeField.setVisibilityAllowed(ComponentUtil.isViewMode());
+        border.add(viewModeField);
 
-	/**
-	 * @return the border
-	 */
-	public FormGroup getBorder() {
-		return border;
-	}
+        tooltipLabel.setConfigWithTrigger(configWithTrigger);
+    }
 
-	public TooltipConfig.OpenTrigger getConfigWithTrigger() {
-		return configWithTrigger;
-	}
+    /**
+     * @return the border
+     */
+    public FormGroup getBorder() {
+        return border;
+    }
 
-	public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
-		this.configWithTrigger = configWithTrigger;
-	}
+    public TooltipConfig.OpenTrigger getConfigWithTrigger() {
+        return configWithTrigger;
+    }
+
+    public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
+        this.configWithTrigger = configWithTrigger;
+    }
 }

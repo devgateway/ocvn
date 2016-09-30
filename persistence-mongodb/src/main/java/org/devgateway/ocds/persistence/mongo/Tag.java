@@ -7,35 +7,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Tag {
-	planning("planning"),
+    planning("planning"),
 
-	tender("tender"),
+    tender("tender"),
 
-	tenderAmendment("tenderAmendment"),
+    tenderAmendment("tenderAmendment"),
 
-	tenderUpdate("tenderUpdate"),
+    tenderUpdate("tenderUpdate"),
 
-	tenderCancellation("tenderCancellation"),
+    tenderCancellation("tenderCancellation"),
 
-	award("award"),
+    award("award"),
 
-	awardUpdate("awardUpdate"),
+    awardUpdate("awardUpdate"),
 
-	awardCancellation("awardCancellation"),
+    awardCancellation("awardCancellation"),
 
-	contract("contract"),
+    contract("contract"),
 
-	contractUpdate("contractUpdate"),
+    contractUpdate("contractUpdate"),
 
-	contractAmendment("contractAmendment"),
+    contractAmendment("contractAmendment"),
 
-	implementation("implementation"),
+    implementation("implementation"),
 
-	implementationUpdate("implementationUpdate"),
+    implementationUpdate("implementationUpdate"),
 
-	contractTermination("contractTermination"),
+    contractTermination("contractTermination"),
 
-	compiled("compiled");
+    compiled("compiled");
 
     private final String value;
 

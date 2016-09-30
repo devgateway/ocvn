@@ -40,34 +40,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LocationSearchController extends GenericOCDSController {
 
-	@Autowired
-	private VNLocationRepository locationRepository;
+    @Autowired
+    private VNLocationRepository locationRepository;
 
-	@RequestMapping(value = "/api/ocds/location/all", 
-			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-	public List<VNLocation> locationsAll() {
+    @RequestMapping(value = "/api/ocds/location/all", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    public List<VNLocation> locationsAll() {
 
-		return locationRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));
+        return locationRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
-	}
+    }
 
-	@RequestMapping(value = "/api/ocds/location/search", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<VNLocation> locationsSearch(@ModelAttribute @Valid final TextSearchRequest request) {
-		PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
+    @RequestMapping(value = "/api/ocds/location/search", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    public List<VNLocation> locationsSearch(@ModelAttribute @Valid final TextSearchRequest request) {
+        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
 
-		Query query = null;
+        Query query = null;
 
-		if (request.getText() == null) {
-			query = new Query();
-		} else {
-			query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-		}
+        if (request.getText() == null) {
+            query = new Query();
+        } else {
+            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
+        }
 
-		query.with(pageRequest);
+        query.with(pageRequest);
 
-		return mongoTemplate.find(query, VNLocation.class);
+        return mongoTemplate.find(query, VNLocation.class);
 
-	}
+    }
 
 }

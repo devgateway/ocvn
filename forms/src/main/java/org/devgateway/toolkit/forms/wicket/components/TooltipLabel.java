@@ -27,9 +27,9 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig
  *
  */
 public class TooltipLabel extends Label {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private StringResourceModel helpModelText;
+    private StringResourceModel helpModelText;
 
     private String fieldId;
 
@@ -39,59 +39,59 @@ public class TooltipLabel extends Label {
 
     private static CustomTooltipConfig tooltipConfig;
 
-	public class CustomTooltipConfig extends TooltipConfig {
-		private static final long serialVersionUID = 1L;
+    public class CustomTooltipConfig extends TooltipConfig {
+        private static final long serialVersionUID = 1L;
 
-		public CustomTooltipConfig() {
-			if (configWithHtml) {
-				withHtml(true);
-			}
-			withTrigger(configWithTrigger);
-		}
-	}
+        public CustomTooltipConfig() {
+            if (configWithHtml) {
+                withHtml(true);
+            }
+            withTrigger(configWithTrigger);
+        }
+    }
 
-	/**
-	 * @param id
-	 */
-	public TooltipLabel(final String id, final String fieldId) {
-		super(id, Model.of(""));
-		this.fieldId = fieldId;
-		add(AttributeModifier.append("class", "fa fa-question-circle"));
-	}
+    /**
+     * @param id
+     */
+    public TooltipLabel(final String id, final String fieldId) {
+        super(id, Model.of(""));
+        this.fieldId = fieldId;
+        add(AttributeModifier.append("class", "fa fa-question-circle"));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.wicket.Component#onConfigure()
-	 */
-	@Override
-	protected void onConfigure() {
-		super.onConfigure();
-		helpModelText = new StringResourceModel(fieldId + ".help", this);
-		helpModelText.setDefaultValue("");
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Component#onConfigure()
+     */
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        helpModelText = new StringResourceModel(fieldId + ".help", this);
+        helpModelText.setDefaultValue("");
 
-		if (!helpModelText.getString().isEmpty()) {
-			tooltipConfig = new CustomTooltipConfig();
-			add(new TooltipBehavior(helpModelText, tooltipConfig));
-			setVisibilityAllowed(!ComponentUtil.isViewMode());
-		} else {
-			setVisibilityAllowed(false);
-		}
-	}
+        if (!helpModelText.getString().isEmpty()) {
+            tooltipConfig = new CustomTooltipConfig();
+            add(new TooltipBehavior(helpModelText, tooltipConfig));
+            setVisibilityAllowed(!ComponentUtil.isViewMode());
+        } else {
+            setVisibilityAllowed(false);
+        }
+    }
 
-	public TooltipConfig.OpenTrigger getConfigWithTrigger() {
-		return configWithTrigger;
-	}
+    public TooltipConfig.OpenTrigger getConfigWithTrigger() {
+        return configWithTrigger;
+    }
 
-	public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
-		this.configWithTrigger = configWithTrigger;
-	}
+    public void setConfigWithTrigger(final TooltipConfig.OpenTrigger configWithTrigger) {
+        this.configWithTrigger = configWithTrigger;
+    }
 
-	public boolean isConfigWithHtml() {
-		return configWithHtml;
-	}
+    public boolean isConfigWithHtml() {
+        return configWithHtml;
+    }
 
-	public void setConfigWithHtml(final boolean configWithHtml) {
-		this.configWithHtml = configWithHtml;
-	}
+    public void setConfigWithHtml(final boolean configWithHtml) {
+        this.configWithHtml = configWithHtml;
+    }
 }

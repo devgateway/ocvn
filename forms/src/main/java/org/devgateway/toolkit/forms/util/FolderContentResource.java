@@ -33,29 +33,28 @@ import org.apache.wicket.util.resource.FileResourceStream;
  *         Adapted after http://stackoverflow.com/a/9232848
  */
 public class FolderContentResource implements IResource {
-	/**
-	 * 
-	 */
+    /**
+     * 
+     */
 
-	public static final String PARAM_FILE_NAME = "fileName";
+    public static final String PARAM_FILE_NAME = "fileName";
 
-	private static final long serialVersionUID = 1L;
-	private final File rootFolder;
+    private static final long serialVersionUID = 1L;
+    private final File rootFolder;
 
-	public FolderContentResource(final File rootFolder) {
-		this.rootFolder = rootFolder;
-	}
+    public FolderContentResource(final File rootFolder) {
+        this.rootFolder = rootFolder;
+    }
 
-	public void respond(final Attributes attributes) {
-		PageParameters parameters = attributes.getParameters();
-		String fileName = parameters.get(PARAM_FILE_NAME).toString();
+    public void respond(final Attributes attributes) {
+        PageParameters parameters = attributes.getParameters();
+        String fileName = parameters.get(PARAM_FILE_NAME).toString();
 
-		// we use FilenameUtils to prevent "security tricks", only a file name
-		// without path is allowed
-		File file = new File(rootFolder, FilenameUtils.getName(fileName));
-		FileResourceStream fileResourceStream = new FileResourceStream(file);
-		ResourceStreamResource resource = new ResourceStreamResource(
-				fileResourceStream);
-		resource.respond(attributes);
-	}
+        // we use FilenameUtils to prevent "security tricks", only a file name
+        // without path is allowed
+        File file = new File(rootFolder, FilenameUtils.getName(fileName));
+        FileResourceStream fileResourceStream = new FileResourceStream(file);
+        ResourceStreamResource resource = new ResourceStreamResource(fileResourceStream);
+        resource.respond(attributes);
+    }
 }

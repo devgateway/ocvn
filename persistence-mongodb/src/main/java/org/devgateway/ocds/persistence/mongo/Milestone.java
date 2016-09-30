@@ -295,11 +295,11 @@ public class Milestone implements Identifiable {
     }
 
     public enum Status {
-    	met("met"),
+        met("met"),
 
-    	notMet("notMet"),
+        notMet("notMet"),
 
-    	partiallyMet("partiallyMet");
+        partiallyMet("partiallyMet");
 
         private final String value;
 
@@ -332,9 +332,9 @@ public class Milestone implements Identifiable {
         }
 
     }
-    
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

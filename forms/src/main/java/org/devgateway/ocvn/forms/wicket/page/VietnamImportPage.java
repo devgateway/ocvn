@@ -191,7 +191,6 @@ public class VietnamImportPage extends BasePage {
         importForm.add(validateData);
     }
 
-
     protected void addFileTypesSelect() {
         fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>("fileTypes",
                 new GenericChoiceProvider<String>(ImportFileTypes.ALL_FILE_TYPES) {
@@ -239,24 +238,24 @@ public class VietnamImportPage extends BasePage {
                 target.add(importContainer);
                 target.add(form);
 
-				try {
+                try {
 
-					vnExcelImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
-							importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().isEmpty() ? null
-									: importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator()
-											.next().getContent().getBytes(),
-							importForm.getModelObject().getSourceFiles().getLocationsFile().isEmpty() ? null
-									: importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next()
-											.getContent().getBytes(),
-							importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().isEmpty()
-									? null
-									: importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile()
-											.iterator().next().getContent().getBytes(),
-							importForm.getModelObject().getDropData(), importForm.getModelObject().getValidateData());
-				} catch (Exception e) {
-					logger.error(e);
-					e.printStackTrace();
-				} finally {
+                    vnExcelImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
+                            importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().isEmpty() ? null
+                                    : importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator()
+                                            .next().getContent().getBytes(),
+                            importForm.getModelObject().getSourceFiles().getLocationsFile().isEmpty() ? null
+                                    : importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next()
+                                            .getContent().getBytes(),
+                            importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().isEmpty()
+                                    ? null
+                                    : importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile()
+                                            .iterator().next().getContent().getBytes(),
+                            importForm.getModelObject().getDropData(), importForm.getModelObject().getValidateData());
+                } catch (Exception e) {
+                    logger.error(e);
+                    e.printStackTrace();
+                } finally {
                     target.add(logText);
                     target.add(feedbackPanel);
                     this.setEnabled(false);

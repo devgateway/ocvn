@@ -90,21 +90,20 @@ public class VNAward extends Award {
         this.ineligibleRson = ineligibleRson;
     }
 
-	public Date getAlternateDate() {
-		return alternateDate;
-	}
+    public Date getAlternateDate() {
+        return alternateDate;
+    }
 
-	public void setAlternateDate(Date alternateDate) {
-		this.alternateDate = alternateDate;
-	}
+    public void setAlternateDate(Date alternateDate) {
+        this.alternateDate = alternateDate;
+    }
 
-	public Date getPublishedDate() {
-		return publishedDate;
-	}
+    public Date getPublishedDate() {
+        return publishedDate;
+    }
 
-	public void setPublishedDate(Date publishedDate) {
-		this.publishedDate = publishedDate;
-	}
-    
+    public void setPublishedDate(Date publishedDate) {
+        this.publishedDate = publishedDate;
+    }
 
 }

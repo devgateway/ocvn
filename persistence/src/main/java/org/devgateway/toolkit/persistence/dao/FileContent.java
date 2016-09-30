@@ -26,27 +26,27 @@ import javax.persistence.Lob;
 
 @Entity
 public class FileContent extends AbstractAuditableEntity implements Serializable {
-	private static final int LOB_LENGTH = 10000000;
+    private static final int LOB_LENGTH = 10000000;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Lob
-	@Column(length = LOB_LENGTH)
-	private byte[] bytes;
+    @Lob
+    @Column(length = LOB_LENGTH)
+    private byte[] bytes;
 
-	public byte[] getBytes() {
-		return bytes;
-	}
+    public byte[] getBytes() {
+        return bytes;
+    }
 
-	public void setBytes(final byte[] bytes) {
-		this.bytes = bytes;
-	}
+    public void setBytes(final byte[] bytes) {
+        this.bytes = bytes;
+    }
 
-	@Override
-	public AbstractAuditableEntity getParent() {
-		return null;
-	}
+    @Override
+    public AbstractAuditableEntity getParent() {
+        return null;
+    }
 }

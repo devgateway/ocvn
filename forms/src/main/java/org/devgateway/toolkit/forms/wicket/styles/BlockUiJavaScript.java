@@ -25,25 +25,25 @@ import com.google.common.collect.Lists;
  * @since 1/29/15
  */
 public class BlockUiJavaScript extends JavaScriptResourceReference {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final BlockUiJavaScript INSTANCE = new BlockUiJavaScript();
+    public static final BlockUiJavaScript INSTANCE = new BlockUiJavaScript();
 
-	/**
-	 * Construct.
-	 */
-	public BlockUiJavaScript() {
-		super(BlockUiJavaScript.class, "/assets/js/block-ui.js");
-	}
+    /**
+     * Construct.
+     */
+    public BlockUiJavaScript() {
+        super(BlockUiJavaScript.class, "/assets/js/block-ui.js");
+    }
 
-	@Override
-	public List<HeaderItem> getDependencies() {
-		final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
+    @Override
+    public List<HeaderItem> getDependencies() {
+        final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
 
-		dependencies.add(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
-		dependencies.add(JavaScriptHeaderItem
-				.forReference(new JavaScriptResourceReference(EmptyCss.class, "/assets/js/jquery.blockUI.js")));
+        dependencies.add(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
+        dependencies.add(JavaScriptHeaderItem
+                .forReference(new JavaScriptResourceReference(EmptyCss.class, "/assets/js/jquery.blockUI.js")));
 
-		return dependencies;
-	}
+        return dependencies;
+    }
 }

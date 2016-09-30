@@ -294,9 +294,9 @@ public class Transaction implements Identifiable {
                 isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 
 }

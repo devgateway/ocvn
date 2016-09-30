@@ -281,8 +281,8 @@ public class Item implements Identifiable {
         this.deliveryLocation = deliveryLocation;
     }
     
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

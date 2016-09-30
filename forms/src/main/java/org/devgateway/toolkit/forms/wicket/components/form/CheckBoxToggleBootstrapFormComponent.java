@@ -27,94 +27,94 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkbox.boot
  * 
  */
 public class CheckBoxToggleBootstrapFormComponent
-		extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapToggle> {
-	private static final long serialVersionUID = -4032850928243673675L;
+        extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapToggle> {
+    private static final long serialVersionUID = -4032850928243673675L;
 
-	private Boolean isFloatedInput = false;
+    private Boolean isFloatedInput = false;
 
-	private BootstrapToggleConfig config;
-	private CheckBox wrappedCheckbox;
+    private BootstrapToggleConfig config;
+    private CheckBox wrappedCheckbox;
 
-	public CheckBoxToggleBootstrapFormComponent(final String id, final IModel<String> labelModel,
-			final IModel<Boolean> model) {
-		super(id, labelModel, model);
-	}
+    public CheckBoxToggleBootstrapFormComponent(final String id, final IModel<String> labelModel,
+            final IModel<Boolean> model) {
+        super(id, labelModel, model);
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public CheckBoxToggleBootstrapFormComponent(final String id, final IModel<Boolean> model) {
-		super(id, model);
-	}
+    /**
+     * @param id
+     * @param model
+     */
+    public CheckBoxToggleBootstrapFormComponent(final String id, final IModel<Boolean> model) {
+        super(id, model);
+    }
 
-	public CheckBoxToggleBootstrapFormComponent(final String id) {
-		super(id);
-	}
+    public CheckBoxToggleBootstrapFormComponent(final String id) {
+        super(id);
+    }
 
-	@Override
-	protected void onComponentTag(final ComponentTag tag) {
-		super.onComponentTag(tag);
+    @Override
+    protected void onComponentTag(final ComponentTag tag) {
+        super.onComponentTag(tag);
 
-		if (isFloatedInput) {
-			Attributes.addClass(tag, "floated-input");
-		}
-	}
+        if (isFloatedInput) {
+            Attributes.addClass(tag, "floated-input");
+        }
+    }
 
-	@Override
-	protected FormComponent<Boolean> updatingBehaviorComponent() {
-		return wrappedCheckbox;
-	}
+    @Override
+    protected FormComponent<Boolean> updatingBehaviorComponent() {
+        return wrappedCheckbox;
+    }
 
-	@Override
-	protected BootstrapToggle inputField(final String id, final IModel<Boolean> model) {
+    @Override
+    protected BootstrapToggle inputField(final String id, final IModel<Boolean> model) {
 
-		config = new BootstrapToggleConfig();
-		config.withOnStyle(BootstrapToggleConfig.Style.info).withOffStyle(BootstrapToggleConfig.Style.warning)
-				.withStyle("customCssClass");
+        config = new BootstrapToggleConfig();
+        config.withOnStyle(BootstrapToggleConfig.Style.info).withOffStyle(BootstrapToggleConfig.Style.warning)
+                .withStyle("customCssClass");
 
-		final BootstrapToggle checkBoxToggle = new BootstrapToggle("field", initFieldModel(), config) {
+        final BootstrapToggle checkBoxToggle = new BootstrapToggle("field", initFieldModel(), config) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected CheckBox newCheckBox(final String id, final IModel<Boolean> model) {
-				wrappedCheckbox = super.newCheckBox(id, model);
-				wrappedCheckbox.add(new AjaxFormComponentUpdatingBehavior("change") {
+            @Override
+            protected CheckBox newCheckBox(final String id, final IModel<Boolean> model) {
+                wrappedCheckbox = super.newCheckBox(id, model);
+                wrappedCheckbox.add(new AjaxFormComponentUpdatingBehavior("change") {
 
-					private static final long serialVersionUID = 1L;
+                    private static final long serialVersionUID = 1L;
 
-					@Override
-					protected void onUpdate(final AjaxRequestTarget target) {
-						CheckBoxToggleBootstrapFormComponent.this.onUpdate(target);
-					}
-				});
-				return wrappedCheckbox;
-			}
-		};
+                    @Override
+                    protected void onUpdate(final AjaxRequestTarget target) {
+                        CheckBoxToggleBootstrapFormComponent.this.onUpdate(target);
+                    }
+                });
+                return wrappedCheckbox;
+            }
+        };
 
-		return checkBoxToggle;
-	}
+        return checkBoxToggle;
+    }
 
-	@Override
-	public String getUpdateEvent() {
-		return "change";
-	}
+    @Override
+    public String getUpdateEvent() {
+        return "change";
+    }
 
-	public Boolean getIsFloatedInput() {
-		return isFloatedInput;
-	}
+    public Boolean getIsFloatedInput() {
+        return isFloatedInput;
+    }
 
-	public void setIsFloatedInput(final Boolean isFloatedInput) {
-		this.isFloatedInput = isFloatedInput;
-	}
+    public void setIsFloatedInput(final Boolean isFloatedInput) {
+        this.isFloatedInput = isFloatedInput;
+    }
 
-	@Override
-	protected boolean boundComponentsVisibilityAllowed(final Boolean selectedValue) {
-		return selectedValue;
-	}
+    @Override
+    protected boolean boundComponentsVisibilityAllowed(final Boolean selectedValue) {
+        return selectedValue;
+    }
 
-	public BootstrapToggleConfig getConfig() {
-		return config;
-	}
+    public BootstrapToggleConfig getConfig() {
+        return config;
+    }
 }

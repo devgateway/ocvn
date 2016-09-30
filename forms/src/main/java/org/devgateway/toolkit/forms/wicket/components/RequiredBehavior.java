@@ -20,9 +20,9 @@ import org.apache.wicket.markup.ComponentTag;
  */
 public class RequiredBehavior extends Behavior {
 
-	private static final long serialVersionUID = -2205308796433011875L;
+    private static final long serialVersionUID = -2205308796433011875L;
 
-	@Override
+    @Override
     public void onComponentTag(final Component component, final ComponentTag tag) {
         super.onComponentTag(component, tag);
         tag.put("required", "required");

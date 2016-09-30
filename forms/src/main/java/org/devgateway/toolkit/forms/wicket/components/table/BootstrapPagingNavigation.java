@@ -24,39 +24,39 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
  */
 
 public class BootstrapPagingNavigation extends AjaxPagingNavigation {
-	private static final long serialVersionUID = 5153575341725990502L;
+    private static final long serialVersionUID = 5153575341725990502L;
 
-	public BootstrapPagingNavigation(final String id, final IPageable pageable) {
-		super(id, pageable);
-	}
+    public BootstrapPagingNavigation(final String id, final IPageable pageable) {
+        super(id, pageable);
+    }
 
-	public BootstrapPagingNavigation(final String id, final IPageable pageable,
-			final IPagingLabelProvider labelProvider) {
-		super(id, pageable, labelProvider);
-	}
+    public BootstrapPagingNavigation(final String id, final IPageable pageable,
+            final IPagingLabelProvider labelProvider) {
+        super(id, pageable, labelProvider);
+    }
 
-	@Override
-	protected void populateItem(final LoopItem loopItem) {
-		super.populateItem(loopItem);
+    @Override
+    protected void populateItem(final LoopItem loopItem) {
+        super.populateItem(loopItem);
 
-		final long pageIndex = getStartIndex() + loopItem.getIndex();
+        final long pageIndex = getStartIndex() + loopItem.getIndex();
 
-		// Add disabled class to enclosing list item.
-		loopItem.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-			private static final long serialVersionUID = 1L;
+        // Add disabled class to enclosing list item.
+        loopItem.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getObject() {
-				if (pageable.getCurrentPage() == pageIndex) {
-					return "active";
-				} else {
-					return "";
-				}
-			}
-		}));
+            @Override
+            public String getObject() {
+                if (pageable.getCurrentPage() == pageIndex) {
+                    return "active";
+                } else {
+                    return "";
+                }
+            }
+        }));
 
-		// Do not mask disabled link by em tag.
-		// ((AbstractLink)
-		// loopItem.get("pageLink")).setBeforeDisabledLink("").setAfterDisabledLink("");
-	}
+        // Do not mask disabled link by em tag.
+        // ((AbstractLink)
+        // loopItem.get("pageLink")).setBeforeDisabledLink("").setAfterDisabledLink("");
+    }
 }

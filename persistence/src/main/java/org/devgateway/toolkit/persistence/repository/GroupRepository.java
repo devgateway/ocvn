@@ -23,5 +23,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface GroupRepository extends CategoryRepository<Group> {
 
-	Group findByLabel(String label);
+    Group findByLabel(String label);
 }

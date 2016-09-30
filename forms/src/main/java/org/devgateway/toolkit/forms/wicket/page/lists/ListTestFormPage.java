@@ -28,20 +28,20 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath(value = "/listTestForm")
 public class ListTestFormPage extends AbstractListPage<TestForm> {
 
-	private static final long serialVersionUID = -324298525712620234L;
-	@SpringBean
-	protected TestFormRepository testComponentsRepository;
+    private static final long serialVersionUID = -324298525712620234L;
+    @SpringBean
+    protected TestFormRepository testComponentsRepository;
 
-	public ListTestFormPage(final PageParameters pageParameters) {
-		super(pageParameters);
-		this.jpaRepository = testComponentsRepository;
-		this.editPageClass = EditTestFormPage.class;
+    public ListTestFormPage(final PageParameters pageParameters) {
+        super(pageParameters);
+        this.jpaRepository = testComponentsRepository;
+        this.editPageClass = EditTestFormPage.class;
 
-		columns.add(new TextFilteredBootstrapPropertyColumn<>(new Model<>("Text Field"), "textField", "textField"));
-	}
+        columns.add(new TextFilteredBootstrapPropertyColumn<>(new Model<>("Text Field"), "textField", "textField"));
+    }
 
-	@Override
-	public JpaFilterState<TestForm> newFilterState() {
-		return new TestFormFilterState();
-	}
+    @Override
+    public JpaFilterState<TestForm> newFilterState() {
+        return new TestFormFilterState();
+    }
 }

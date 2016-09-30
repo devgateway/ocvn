@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.web.rest.controller.selector;
 
@@ -37,40 +37,40 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 public class TendersAwardsValueIntervals extends GenericOCDSController {
-	@ApiOperation(value = "Returns the min and max of tender.value.amount")
-	@RequestMapping(value = "/api/tenderValueInterval", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tenderValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    @ApiOperation(value = "Returns the min and max of tender.value.amount")
+    @RequestMapping(value = "/api/tenderValueInterval", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> tenderValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-		Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true).
-		        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-				project().and("tender.value.amount").as("tender.value.amount"),
-				group().min("tender.value.amount").as("minTenderValue").max("tender.value.amount").as("maxTenderValue"),
-				project().andInclude("minTenderValue", "maxTenderValue").andExclude(Fields.UNDERSCORE_ID));
+        Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true).
+                        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                project().and("tender.value.amount").as("tender.value.amount"),
+                group().min("tender.value.amount").as("minTenderValue").max("tender.value.amount").as("maxTenderValue"),
+                project().andInclude("minTenderValue", "maxTenderValue").andExclude(Fields.UNDERSCORE_ID));
 
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();
-		return tagCount;
-	}
-	
-	
-	@ApiOperation(value = "Returns the min and max of awards.value.amount")
-	@RequestMapping(value = "/api/awardValueInterval", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> awardValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+    }
 
-		Aggregation agg = Aggregation.newAggregation(
-				unwind("awards"),
-				match(where("awards.value.amount").exists(true).
-				andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
-				project().and("awards.value.amount").as("awards.value.amount"),
-				group().min("awards.value.amount").as("minAwardValue").max("awards.value.amount").as("maxAwardValue"),
-				project().andInclude("minAwardValue", "maxAwardValue").andExclude(Fields.UNDERSCORE_ID));
 
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();
-		return tagCount;
-	}
-	
-	
+    @ApiOperation(value = "Returns the min and max of awards.value.amount")
+    @RequestMapping(value = "/api/awardValueInterval", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> awardValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        Aggregation agg = Aggregation.newAggregation(
+                unwind("awards"),
+                match(where("awards.value.amount").exists(true).
+                        andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
+                project().and("awards.value.amount").as("awards.value.amount"),
+                group().min("awards.value.amount").as("minAwardValue").max("awards.value.amount").as("maxAwardValue"),
+                project().andInclude("minAwardValue", "maxAwardValue").andExclude(Fields.UNDERSCORE_ID));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+    }
+
+
 }
