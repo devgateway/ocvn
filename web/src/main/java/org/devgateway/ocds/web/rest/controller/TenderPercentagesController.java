@@ -333,7 +333,7 @@ public class TenderPercentagesController extends GenericOCDSController {
             + "and creates the average. Groups results by tender year, calculatedfrom tender.tenderPeriod.startDate")
     @RequestMapping(value = "/api/avgTimeFromPlanToTenderPhase", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> avgTimeFromPlanToTenderPhase(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> avgTimeFromPlanToTenderPhase(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject timeFromPlanToTenderPhase = new BasicDBObject("$divide",
                 Arrays.asList(
@@ -348,7 +348,7 @@ public class TenderPercentagesController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true).and("planning.budget.amount").exists(true)
                         .and("planning.bidPlanProjectDateApprove").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1),
                 group("year").avg("timeFromPlanToTenderPhase").as(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
                 sort(Direction.ASC, Fields.UNDERSCORE_ID), skip(filter.getSkip()), limit(filter.getPageSize()));

@@ -151,7 +151,7 @@ public class FundingByLocationController extends GenericOCDSController {
             + "Responds only to the procuring entity id filter: tender.procuringEntity._id")
     @RequestMapping(value = "/api/plannedFundingByLocation",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject vars = new BasicDBObject();
         vars.put("numberOfLocations", new BasicDBObject("$size", "$planning.budget.projectLocation"));
@@ -171,9 +171,11 @@ public class FundingByLocationController extends GenericOCDSController {
         project.put("dividedTotal", dividedTotal);
         project.put(Keys.YEAR, new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
-        Aggregation agg = newAggregation(
-                match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
-                        .andOperator(getProcuringEntityIdCriteria(filter))),
+        Aggregation agg =
+                newAggregation(
+                        match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
+                                .andOperator(getProcuringEntityIdCriteria(filter),
+                                        getYearFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
                 new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
                 group("year", "planning.budget.projectLocation").sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
