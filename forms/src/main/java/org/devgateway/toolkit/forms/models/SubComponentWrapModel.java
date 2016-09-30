@@ -24,40 +24,40 @@ import org.apache.wicket.model.IWrapModel;
  */
 public class SubComponentWrapModel<T> implements IWrapModel<T> {
 
-	private static final long serialVersionUID = 4054354057335519754L;
-	private Component parent;
+    private static final long serialVersionUID = 4054354057335519754L;
+    private Component parent;
 
-	public SubComponentWrapModel(final Component parent) {
-		this.parent = parent;
-	}
+    public SubComponentWrapModel(final Component parent) {
+        this.parent = parent;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.wicket.model.IWrapModel#getWrappedModel()
-	 */
-	@Override
-	public IModel<?> getWrappedModel() {
-		return parent.getDefaultModel();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.model.IWrapModel#getWrappedModel()
+     */
+    @Override
+    public IModel<?> getWrappedModel() {
+        return parent.getDefaultModel();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public T getObject() {
-		return (T) parent.getDefaultModelObject();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public T getObject() {
+        return (T) parent.getDefaultModelObject();
+    }
 
-	@Override
-	public void setObject(final T object) {
-		parent.setDefaultModelObject(object);
-	}
+    @Override
+    public void setObject(final T object) {
+        parent.setDefaultModelObject(object);
+    }
 
-	@Override
-	public void detach() {
-		IModel<?> wrappedModel = getWrappedModel();
-		if (wrappedModel != null) {
-			wrappedModel.detach();
-		}
-	}
+    @Override
+    public void detach() {
+        IModel<?> wrappedModel = getWrappedModel();
+        if (wrappedModel != null) {
+            wrappedModel.detach();
+        }
+    }
 
 }

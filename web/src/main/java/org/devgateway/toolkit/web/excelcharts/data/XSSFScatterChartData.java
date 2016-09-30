@@ -17,12 +17,11 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTScatterStyle;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTValAx;
 import org.openxmlformats.schemas.drawingml.x2006.chart.STScatterStyle;
 
-
 /**
  * @author idobre
  * @since 8/12/16
  *
- * Holds data for a XSSF Scatter Chart.
+ *        Holds data for a XSSF Scatter Chart.
  */
 public class XSSFScatterChartData extends AbstractXSSFChartData {
     public XSSFScatterChartData(final String title) {
@@ -31,7 +30,7 @@ public class XSSFScatterChartData extends AbstractXSSFChartData {
 
     @Override
     protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
-                                               final ChartDataSource<? extends Number> values) {
+            final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {

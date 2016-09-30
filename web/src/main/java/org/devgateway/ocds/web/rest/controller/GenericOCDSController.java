@@ -255,7 +255,7 @@ public abstract class GenericOCDSController {
                 getByAwardAmountIntervalCriteria(filter));
     }
 
-	protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, String dateProperty) {
+    protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
 		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
 				getSupplierIdCriteria(filter),
 				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),

@@ -28,52 +28,52 @@ import org.devgateway.toolkit.forms.wicket.components.form.GenericBootstrapFormC
  */
 public class ViewModeConverterModel<T> extends AbstractReadOnlyModel<String> {
 
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private IModel<T> originalModel;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private IModel<T> originalModel;
 
-	/**
-	 * 
-	 */
-	public ViewModeConverterModel(final IModel<T> originalModel) {
-		this.originalModel = originalModel;
-	}
+    /**
+     * 
+     */
+    public ViewModeConverterModel(final IModel<T> originalModel) {
+        this.originalModel = originalModel;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.wicket.model.IModel#getObject()
-	 */
-	@Override
-	public String getObject() {
-		T object = originalModel.getObject();
-		if (object == null) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.model.IModel#getObject()
+     */
+    @Override
+    public String getObject() {
+        T object = originalModel.getObject();
+        if (object == null) {
             return "";
         }
 
-		// for booleans we return yes/no
-		if (object instanceof Boolean) {
+        // for booleans we return yes/no
+        if (object instanceof Boolean) {
             return ((Boolean) object).booleanValue() ? "Yes" : "No";
         }
 
-		// for collections that are empty, we return empty
-		if (object instanceof Collection<?>) {
-			if (((Collection<?>) object).size() == 0) {
-				return "";
-			}
-		}
+        // for collections that are empty, we return empty
+        if (object instanceof Collection<?>) {
+            if (((Collection<?>) object).size() == 0) {
+                return "";
+            }
+        }
 
-		// convert date to a nicer format
-		if (object instanceof Date) {
+        // convert date to a nicer format
+        if (object instanceof Date) {
             return sdf.format((Date) object);
         }
 
-		// alas just return the string value of the object
-		return object.toString();
-	}
+        // alas just return the string value of the object
+        return object.toString();
+    }
 
 }

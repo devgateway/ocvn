@@ -12,20 +12,20 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class AsyncConfiguration implements AsyncConfigurer {
 
-	@Bean	
-	@Override
-	public ThreadPoolTaskExecutor getAsyncExecutor() {
-		ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-		taskExecutor.setMaxPoolSize(1);
-		taskExecutor.setThreadNamePrefix("VNImportServiceExecutor-");		
-		return taskExecutor;
-	}
+    @Bean
+    @Override
+    public ThreadPoolTaskExecutor getAsyncExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setMaxPoolSize(1);
+        taskExecutor.setThreadNamePrefix("VNImportServiceExecutor-");
+        return taskExecutor;
+    }
 
-	
-	@Bean
-	@Override
-	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-		return new SimpleAsyncUncaughtExceptionHandler();
-	}
+
+    @Bean
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return new SimpleAsyncUncaughtExceptionHandler();
+    }
 
 }

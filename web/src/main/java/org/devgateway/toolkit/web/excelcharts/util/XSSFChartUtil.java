@@ -14,7 +14,8 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTStrVal;
  * @author idobre
  * @since 8/8/16
  *
- * Package private class with utility methods. It's based on org.apache.poi.xssf.usermodel.charts.XSSFChartUtil class
+ *        Package private class with utility methods. It's based on
+ *        org.apache.poi.xssf.usermodel.charts.XSSFChartUtil class
  */
 public final class XSSFChartUtil {
     private XSSFChartUtil() {
@@ -23,8 +24,11 @@ public final class XSSFChartUtil {
 
     /**
      * Builds CTAxDataSource object content from POI ChartDataSource.
-     * @param ctAxDataSource OOXML data source to build
-     * @param dataSource POI data source to use
+     * 
+     * @param ctAxDataSource
+     *            OOXML data source to build
+     * @param dataSource
+     *            POI data source to use
      */
     public static void buildAxDataSource(final CTAxDataSource ctAxDataSource, final ChartDataSource<?> dataSource) {
         if (dataSource.isNumeric()) {
@@ -44,11 +48,14 @@ public final class XSSFChartUtil {
 
     /**
      * Builds CTNumDataSource object content from POI ChartDataSource
-     * @param ctNumDataSource OOXML data source to build
-     * @param dataSource POI data source to use
+     * 
+     * @param ctNumDataSource
+     *            OOXML data source to build
+     * @param dataSource
+     *            POI data source to use
      */
     public static void buildNumDataSource(final CTNumDataSource ctNumDataSource,
-                                          final ChartDataSource<? extends Number> dataSource) {
+            final ChartDataSource<? extends Number> dataSource) {
         if (dataSource.isReference()) {
             buildNumRef(ctNumDataSource.addNewNumRef(), dataSource);
         } else {

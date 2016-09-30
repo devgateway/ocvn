@@ -33,7 +33,7 @@ public class Record implements Identifiable {
      *
      */
     @JsonProperty("ocid")
-    @Id    
+    @Id
     private String ocid;
     /**
      * Linked releases
@@ -43,7 +43,7 @@ public class Record implements Identifiable {
      * from oldest (at position 0) to newest (last). (Required)
      *
      */
-    @JsonProperty("releases")    
+    @JsonProperty("releases")
     private List<Release> releases = new ArrayList<Release>();
 
     /**
@@ -190,9 +190,9 @@ public class Record implements Identifiable {
                 append(compiledRelease, rhs.compiledRelease).isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return ocid;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return ocid;
+    }
 
 }

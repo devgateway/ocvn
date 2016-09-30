@@ -11,11 +11,11 @@ import com.mongodb.BasicDBObject;
  */
 public class CustomUnwindOperation extends CustomOperation {
 
-	/**
-	 * @param operation
-	 */
-	public CustomUnwindOperation(final String field) {
-		super(new BasicDBObject("$unwind", field));
-	}
+    /**
+     * @param operation
+     */
+    public CustomUnwindOperation(final String field) {
+        super(new BasicDBObject("$unwind", field));
+    }
 
 }

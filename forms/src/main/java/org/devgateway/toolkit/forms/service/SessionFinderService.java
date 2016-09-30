@@ -30,19 +30,19 @@ import nl.dries.wicket.hibernate.dozer.SessionFinder;
 @Component
 public class SessionFinderService implements SessionFinder {
 
-	@PersistenceContext
-	private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * nl.dries.wicket.hibernate.dozer.SessionFinder#getHibernateSession(java
-	 * .lang.Class)
-	 */
-	@Override
-	public Session getHibernateSession(final Class<?> clazz) {
-		return em.unwrap(Session.class);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * nl.dries.wicket.hibernate.dozer.SessionFinder#getHibernateSession(java
+     * .lang.Class)
+     */
+    @Override
+    public Session getHibernateSession(final Class<?> clazz) {
+        return em.unwrap(Session.class);
+    }
 
 }

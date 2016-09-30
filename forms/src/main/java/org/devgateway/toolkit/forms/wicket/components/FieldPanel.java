@@ -23,20 +23,21 @@ import org.apache.wicket.model.IModel;
  */
 public class FieldPanel<T> extends GenericPanel<T> {
 
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public FieldPanel(final String id) {
-		super(id);
-	}
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public FieldPanel(final String id, final IModel<T> model) {
-		super(id,  model);
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    public FieldPanel(final String id) {
+        super(id);
+    }
+
+    /**
+     * @param id
+     * @param model
+     */
+    public FieldPanel(final String id, final IModel<T> model) {
+        super(id, model);
+    }
 
 }

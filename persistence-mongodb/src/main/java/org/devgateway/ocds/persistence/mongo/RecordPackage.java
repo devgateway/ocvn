@@ -297,9 +297,9 @@ public class RecordPackage implements Identifiable {
                 append(records, rhs.records).isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return uri;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return uri;
+    }
 
 }

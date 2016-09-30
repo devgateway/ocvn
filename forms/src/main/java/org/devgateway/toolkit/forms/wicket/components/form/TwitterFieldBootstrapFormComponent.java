@@ -19,44 +19,44 @@ import org.apache.wicket.model.IModel;
  * @since 5/6/15
  */
 public class TwitterFieldBootstrapFormComponent extends TextFieldBootstrapFormComponent<String> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public TwitterFieldBootstrapFormComponent(final String id) {
-		super(id);
-	}
+    public TwitterFieldBootstrapFormComponent(final String id) {
+        super(id);
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		// add a '@' if it's not present yet
-		String twitter = this.getModelObject();
-		if (twitter != null && !twitter.startsWith("@")) {
-			twitter = "@" + twitter;
-			this.setModelObject(twitter);
-		}
-	}
+        // add a '@' if it's not present yet
+        String twitter = this.getModelObject();
+        if (twitter != null && !twitter.startsWith("@")) {
+            twitter = "@" + twitter;
+            this.setModelObject(twitter);
+        }
+    }
 
-	@Override
-	protected TextField<String> inputField(final String id, final IModel<String> model) {
-		return new TextField<String>(id, initFieldModel()) {
+    @Override
+    protected TextField<String> inputField(final String id, final IModel<String> model) {
+        return new TextField<String>(id, initFieldModel()) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void convertInput() {
-				super.convertInput();
+            @Override
+            public void convertInput() {
+                super.convertInput();
 
-				this.updateModel();
+                this.updateModel();
 
-				// add a '@' in front of the field value
-				String twitter = this.getModelObject();
-				if (twitter != null && !twitter.startsWith("@")) {
-					twitter = "@" + twitter;
-				}
+                // add a '@' in front of the field value
+                String twitter = this.getModelObject();
+                if (twitter != null && !twitter.startsWith("@")) {
+                    twitter = "@" + twitter;
+                }
 
-				setConvertedInput(twitter);
-			}
-		};
-	}
+                setConvertedInput(twitter);
+            }
+        };
+    }
 }

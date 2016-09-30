@@ -20,7 +20,7 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
  * @author idobre
  * @since 8/8/16
  *
- * Holds data for a XSSF Bar Chart.
+ *        Holds data for a XSSF Bar Chart.
  */
 public class XSSFBarChartData extends AbstractXSSFChartData {
     protected STBarDir.Enum barDir = STBarDir.COL;
@@ -31,7 +31,7 @@ public class XSSFBarChartData extends AbstractXSSFChartData {
 
     @Override
     protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
-                                               final ChartDataSource<? extends Number> values) {
+            final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.web.rest.controller;
 
@@ -37,40 +37,40 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(cacheNames = "tendersAwardsYears")
 public class TendersAwardsYears extends GenericOCDSController {
 
-	@ApiOperation(value = "")
-	@RequestMapping(value = "/api/tendersAwardsYears", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tendersAwardsYears() {
+    @ApiOperation(value = "")
+    @RequestMapping(value = "/api/tendersAwardsYears", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> tendersAwardsYears() {
 
-		BasicDBObject project1 = new BasicDBObject();
+        BasicDBObject project1 = new BasicDBObject();
 
-		project1.put("tenderYear",
-				new BasicDBObject("$cond",
-						Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
-								new BasicDBObject("$year", "$tender.tenderPeriod.startDate"), null)));
+        project1.put("tenderYear",
+                new BasicDBObject("$cond",
+                        Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
+                                new BasicDBObject("$year", "$tender.tenderPeriod.startDate"), null)));
 
-		project1.put("awardYear",
-				new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
-						new BasicDBObject("$year", "$awards.date"), null)));
-		project1.put(Fields.UNDERSCORE_ID, 0);
+        project1.put("awardYear",
+                new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
+                        new BasicDBObject("$year", "$awards.date"), null)));
+        project1.put(Fields.UNDERSCORE_ID, 0);
 
-		BasicDBObject project2 = new BasicDBObject();
-		project2.put("year", Arrays.asList("$tenderYear", "$awardYear"));
+        BasicDBObject project2 = new BasicDBObject();
+        project2.put("year", Arrays.asList("$tenderYear", "$awardYear"));
 
-		Aggregation agg = Aggregation.newAggregation(
-				project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").and("awards.date")
-						.as("awards.date"),
-				match(new Criteria().orOperator(where("tender.tenderPeriod.startDate").exists(true),
-						where("awards.date").exists(true))),
-				new CustomUnwindOperation("$awards"), new CustomProjectionOperation(project1),
-				new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
-				match(where("year").ne(null)),
-				new CustomGroupingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, "$year")),
-				new CustomSortingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, 1)));
+        Aggregation agg = Aggregation.newAggregation(
+                project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").and("awards.date")
+                        .as("awards.date"),
+                match(new Criteria().orOperator(where("tender.tenderPeriod.startDate").exists(true),
+                        where("awards.date").exists(true))),
+                new CustomUnwindOperation("$awards"), new CustomProjectionOperation(project1),
+                new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
+                match(where("year").ne(null)),
+                new CustomGroupingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, "$year")),
+                new CustomSortingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, 1)));
 
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();
-		return tagCount;
-	}
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+    }
 
 }

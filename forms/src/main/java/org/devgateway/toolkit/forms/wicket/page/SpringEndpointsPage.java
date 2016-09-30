@@ -25,17 +25,17 @@ import org.devgateway.toolkit.forms.security.SecurityConstants;
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 public class SpringEndpointsPage extends BasePage {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param parameters
-	 */
-	public SpringEndpointsPage(final PageParameters parameters) {
-		super(parameters);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parameters
+     */
+    public SpringEndpointsPage(final PageParameters parameters) {
+        super(parameters);
+        // TODO Auto-generated constructor stub
+    }
 
 }

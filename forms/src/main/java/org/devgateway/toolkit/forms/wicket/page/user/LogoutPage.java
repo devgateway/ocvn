@@ -29,18 +29,18 @@ import org.wicketstuff.annotation.mount.MountPath;
  */
 @MountPath("/preLogout")
 public class LogoutPage extends RedirectPage {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean(required = false)
-	private RememberMeServices rememberMeServices;
+    @SpringBean(required = false)
+    private RememberMeServices rememberMeServices;
 
-	public LogoutPage() {
-		super("/logout");
+    public LogoutPage() {
+        super("/logout");
 
-		if (rememberMeServices != null) {
-			rememberMeServices.loginFail((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
-					(HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse());
-		}
+        if (rememberMeServices != null) {
+            rememberMeServices.loginFail((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest(),
+                    (HttpServletResponse) RequestCycle.get().getResponse().getContainerResponse());
+        }
 
-	}
+    }
 }

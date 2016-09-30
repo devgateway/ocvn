@@ -50,89 +50,89 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath("/editTestForm")
 public class EditTestFormPage extends AbstractEditPage<TestForm> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	private TestFormRepository testComponentsRepository;
+    @SpringBean
+    private TestFormRepository testComponentsRepository;
 
-	@SpringBean
-	private RoleRepository roleRepository;
+    @SpringBean
+    private RoleRepository roleRepository;
 
-	@SpringBean
-	private GroupRepository groupRepository;
+    @SpringBean
+    private GroupRepository groupRepository;
 
-	/**
-	 * @param parameters
-	 */
-	public EditTestFormPage(final PageParameters parameters) {
-		super(parameters);
+    /**
+     * @param parameters
+     */
+    public EditTestFormPage(final PageParameters parameters) {
+        super(parameters);
 
-		this.jpaRepository = testComponentsRepository;
-		this.listPageClass = ListTestFormPage.class;
-	}
+        this.jpaRepository = testComponentsRepository;
+        this.listPageClass = ListTestFormPage.class;
+    }
 
-	@Override
-	protected TestForm newInstance() {
-		return new TestForm();
-	}
+    @Override
+    protected TestForm newInstance() {
+        return new TestForm();
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>("textField");
-		textField.required();
-		editForm.add(textField);
+        TextFieldBootstrapFormComponent<String> textField = new TextFieldBootstrapFormComponent<>("textField");
+        textField.required();
+        editForm.add(textField);
 
-		TextAreaFieldBootstrapFormComponent<String> textArea = new TextAreaFieldBootstrapFormComponent<>("textArea");
-		textArea.required();
-		editForm.add(textArea);
+        TextAreaFieldBootstrapFormComponent<String> textArea = new TextAreaFieldBootstrapFormComponent<>("textArea");
+        textArea.required();
+        editForm.add(textArea);
 
-		SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
-		summernote.required();
-		editForm.add(summernote);
+        SummernoteBootstrapFormComponent summernote = new SummernoteBootstrapFormComponent("summernote");
+        summernote.required();
+        editForm.add(summernote);
 
-		Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
-				"entitySelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Group>(groupRepository));
-		entitySelect.required();
-		editForm.add(entitySelect);
+        Select2ChoiceBootstrapFormComponent<Group> entitySelect = new Select2ChoiceBootstrapFormComponent<Group>(
+                "entitySelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Group>(groupRepository));
+        entitySelect.required();
+        editForm.add(entitySelect);
 
-		Select2MultiChoiceBootstrapFormComponent<Role> entityMultiSelect =
-				new Select2MultiChoiceBootstrapFormComponent<Role>(
-				"entityMultiSelect", new GenericPersistableJpaRepositoryTextChoiceProvider<Role>(roleRepository));
-		entityMultiSelect.required();
-		editForm.add(entityMultiSelect);
+        Select2MultiChoiceBootstrapFormComponent<Role> entityMultiSelect =
+                new Select2MultiChoiceBootstrapFormComponent<Role>("entityMultiSelect",
+                        new GenericPersistableJpaRepositoryTextChoiceProvider<Role>(roleRepository));
+        entityMultiSelect.required();
+        editForm.add(entityMultiSelect);
 
-		CheckBoxBootstrapFormComponent checkbox = new CheckBoxBootstrapFormComponent("checkbox");
-		checkbox.required();
-		editForm.add(checkbox);
+        CheckBoxBootstrapFormComponent checkbox = new CheckBoxBootstrapFormComponent("checkbox");
+        checkbox.required();
+        editForm.add(checkbox);
 
-		CheckBoxPickerBootstrapFormComponent checkboxPicker = new CheckBoxPickerBootstrapFormComponent(
-				"checkboxPicker");
-		checkboxPicker.required();
-		editForm.add(checkboxPicker);
+        CheckBoxPickerBootstrapFormComponent checkboxPicker =
+                new CheckBoxPickerBootstrapFormComponent("checkboxPicker");
+        checkboxPicker.required();
+        editForm.add(checkboxPicker);
 
-		CheckBoxToggleBootstrapFormComponent checkboxToggle = new CheckBoxToggleBootstrapFormComponent(
-				"checkboxToggle");
-		checkboxToggle.required();
-		editForm.add(checkboxToggle);
+        CheckBoxToggleBootstrapFormComponent checkboxToggle =
+                new CheckBoxToggleBootstrapFormComponent("checkboxToggle");
+        checkboxToggle.required();
+        editForm.add(checkboxToggle);
 
-		DateFieldBootstrapFormComponent date = new DateFieldBootstrapFormComponent("date");
-		date.required();
-		editForm.add(date);
+        DateFieldBootstrapFormComponent date = new DateFieldBootstrapFormComponent("date");
+        date.required();
+        editForm.add(date);
 
-		DateTimeFieldBootstrapFormComponent dateTime = new DateTimeFieldBootstrapFormComponent("dateTime");
-		dateTime.required();
-		editForm.add(dateTime);
+        DateTimeFieldBootstrapFormComponent dateTime = new DateTimeFieldBootstrapFormComponent("dateTime");
+        dateTime.required();
+        editForm.add(dateTime);
 
-		FileInputBootstrapFormComponent fileInput = new FileInputBootstrapFormComponent("fileInput");
-		fileInput.required();
-		editForm.add(fileInput);
+        FileInputBootstrapFormComponent fileInput = new FileInputBootstrapFormComponent("fileInput");
+        fileInput.required();
+        editForm.add(fileInput);
 
-		Select2ChoiceBootstrapFormComponent<Group> preloadedEntitySelect = new Select2ChoiceBootstrapFormComponent<>(
-				"preloadedEntitySelect", new ListChoiceProvider<>(groupRepository.findAll()));
-		preloadedEntitySelect.required();
-		editForm.add(preloadedEntitySelect);
-	}
+        Select2ChoiceBootstrapFormComponent<Group> preloadedEntitySelect = new Select2ChoiceBootstrapFormComponent<>(
+                "preloadedEntitySelect", new ListChoiceProvider<>(groupRepository.findAll()));
+        preloadedEntitySelect.required();
+        editForm.add(preloadedEntitySelect);
+    }
 
 }

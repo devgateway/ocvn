@@ -24,80 +24,80 @@ import de.agilecoders.wicket.core.util.Attributes;
  * 
  */
 public class CheckBoxBootstrapFormComponent extends GenericEnablingBootstrapFormComponent<Boolean, BootstrapCheckbox> {
-	private static final long serialVersionUID = -4032850928243673675L;
+    private static final long serialVersionUID = -4032850928243673675L;
 
-	private Boolean isFloatedInput = false;
+    private Boolean isFloatedInput = false;
 
-	protected CheckBox wrappedCheckbox;
+    protected CheckBox wrappedCheckbox;
 
-	public CheckBoxBootstrapFormComponent(final String id, final IModel<String> labelModel,
-			final IModel<Boolean> model) {
-		super(id, labelModel, model);
-	}
+    public CheckBoxBootstrapFormComponent(final String id, final IModel<String> labelModel,
+            final IModel<Boolean> model) {
+        super(id, labelModel, model);
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public CheckBoxBootstrapFormComponent(final String id, final IModel<Boolean> model) {
-		super(id, model);
-	}
+    /**
+     * @param id
+     * @param model
+     */
+    public CheckBoxBootstrapFormComponent(final String id, final IModel<Boolean> model) {
+        super(id, model);
+    }
 
-	public CheckBoxBootstrapFormComponent(final String id) {
-		super(id);
-	}
+    public CheckBoxBootstrapFormComponent(final String id) {
+        super(id);
+    }
 
-	@Override
-	protected void onComponentTag(final ComponentTag tag) {
-		super.onComponentTag(tag);
+    @Override
+    protected void onComponentTag(final ComponentTag tag) {
+        super.onComponentTag(tag);
 
-		if (isFloatedInput) {
-			Attributes.addClass(tag, "floated-input");
-		}
-	}
+        if (isFloatedInput) {
+            Attributes.addClass(tag, "floated-input");
+        }
+    }
 
-	@Override
-	protected FormComponent<Boolean> updatingBehaviorComponent() {
-		return wrappedCheckbox;
-	}
+    @Override
+    protected FormComponent<Boolean> updatingBehaviorComponent() {
+        return wrappedCheckbox;
+    }
 
-	@Override
-	protected BootstrapCheckbox inputField(final String id, final IModel<Boolean> model) {
-		return new BootstrapCheckbox(id, initFieldModel()) {
-			private static final long serialVersionUID = 1L;
+    @Override
+    protected BootstrapCheckbox inputField(final String id, final IModel<Boolean> model) {
+        return new BootstrapCheckbox(id, initFieldModel()) {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected CheckBox newCheckBox(final String id, final IModel<Boolean> model) {
-				wrappedCheckbox = super.newCheckBox(id, model);
-				wrappedCheckbox.setOutputMarkupId(true);
-				return wrappedCheckbox;
-			}
-		};
-	}
+            @Override
+            protected CheckBox newCheckBox(final String id, final IModel<Boolean> model) {
+                wrappedCheckbox = super.newCheckBox(id, model);
+                wrappedCheckbox.setOutputMarkupId(true);
+                return wrappedCheckbox;
+            }
+        };
+    }
 
-	@Override
-	public String getUpdateEvent() {
-		return "click";
-	}
+    @Override
+    public String getUpdateEvent() {
+        return "click";
+    }
 
-	public Boolean getIsFloatedInput() {
-		return isFloatedInput;
-	}
+    public Boolean getIsFloatedInput() {
+        return isFloatedInput;
+    }
 
-	public void setIsFloatedInput(final Boolean isFloatedInput) {
-		this.isFloatedInput = isFloatedInput;
-	}
+    public void setIsFloatedInput(final Boolean isFloatedInput) {
+        this.isFloatedInput = isFloatedInput;
+    }
 
-	@Override
-	protected boolean boundComponentsVisibilityAllowed(final Boolean selectedValue) {
-		return selectedValue;
-	}
+    @Override
+    protected boolean boundComponentsVisibilityAllowed(final Boolean selectedValue) {
+        return selectedValue;
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		if (field.isRequired()) {
-			wrappedCheckbox.setRequired(true);
-		}
-	}
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (field.isRequired()) {
+            wrappedCheckbox.setRequired(true);
+        }
+    }
 }

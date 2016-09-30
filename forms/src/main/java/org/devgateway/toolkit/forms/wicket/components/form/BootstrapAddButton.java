@@ -31,37 +31,35 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxBut
  */
 public abstract class BootstrapAddButton extends LaddaAjaxButton {
 
-	private static final long serialVersionUID = 8306451874943978003L;
+    private static final long serialVersionUID = 8306451874943978003L;
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public BootstrapAddButton(final String id, final IModel<String> model) {
-		super(id, model, Buttons.Type.Info);
-		setIconType(FontAwesomeIconType.save);	
-		setDefaultFormProcessing(false);
-		setIconType(FontAwesomeIconType.plus).setSize(Size.Medium).setLabel(model);
-		setOutputMarkupPlaceholderTag(true);
-	}
+    /**
+     * @param id
+     * @param model
+     */
+    public BootstrapAddButton(final String id, final IModel<String> model) {
+        super(id, model, Buttons.Type.Info);
+        setIconType(FontAwesomeIconType.save);
+        setDefaultFormProcessing(false);
+        setIconType(FontAwesomeIconType.plus).setSize(Size.Medium).setLabel(model);
+        setOutputMarkupPlaceholderTag(true);
+    }
 
-	
-	@Override
-	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
-	
-	@Override
-	public void onEvent(final IEvent<?> event) {
+    @Override
+    protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+
+    @Override
+    public void onEvent(final IEvent<?> event) {
         ComponentUtil.enableDisableEvent(this, event);
-	}
-	
-	
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
         if (ComponentUtil.isViewMode()) {
             setVisibilityAllowed(false);
         }
-	}
+    }
 
 }

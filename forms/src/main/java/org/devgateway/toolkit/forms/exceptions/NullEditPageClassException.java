@@ -20,16 +20,16 @@ package org.devgateway.toolkit.forms.exceptions;
  */
 public class NullEditPageClassException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8455626306350234992L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8455626306350234992L;
 
-	/**
-	 * 
-	 */
-	public NullEditPageClassException() {
-		super("editPageClass is null! Please set the editPageClass in your constructor");
-	}
+    /**
+     * 
+     */
+    public NullEditPageClassException() {
+        super("editPageClass is null! Please set the editPageClass in your constructor");
+    }
 
 }

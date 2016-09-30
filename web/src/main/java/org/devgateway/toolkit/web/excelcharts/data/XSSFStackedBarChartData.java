@@ -14,7 +14,7 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.STCrossBetween;
  * @author idobre
  * @since 8/8/16
  *
- * Holds data for a XSSF Stacked Bar Chart.
+ *        Holds data for a XSSF Stacked Bar Chart.
  */
 public class XSSFStackedBarChartData extends XSSFBarChartData {
     private STBarGrouping.Enum barGrouping = STBarGrouping.STACKED;

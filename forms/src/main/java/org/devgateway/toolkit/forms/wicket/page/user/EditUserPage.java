@@ -70,11 +70,9 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
     protected TextFieldBootstrapFormComponent<String> userName = new TextFieldBootstrapFormComponent<>("username");
 
-    protected TextFieldBootstrapFormComponent<String> firstName = new TextFieldBootstrapFormComponent<>(
-            "firstName");
+    protected TextFieldBootstrapFormComponent<String> firstName = new TextFieldBootstrapFormComponent<>("firstName");
 
-    protected TextFieldBootstrapFormComponent<String> lastName = new TextFieldBootstrapFormComponent<>(
-            "lastName");
+    protected TextFieldBootstrapFormComponent<String> lastName = new TextFieldBootstrapFormComponent<>("lastName");
 
     protected TextFieldBootstrapFormComponent<String> email = new TextFieldBootstrapFormComponent<>("email");
 
@@ -90,11 +88,11 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
     protected CheckBoxBootstrapFormComponent changePassword = new CheckBoxBootstrapFormComponent("changePassword");
 
-    protected final PasswordFieldBootstrapFormComponent password = new PasswordFieldBootstrapFormComponent(
-            "plainPassword");
+    protected final PasswordFieldBootstrapFormComponent password =
+            new PasswordFieldBootstrapFormComponent("plainPassword");
 
-    protected final PasswordFieldBootstrapFormComponent cpassword = new PasswordFieldBootstrapFormComponent(
-            "plainPasswordCheck", new Model<>());
+    protected final PasswordFieldBootstrapFormComponent cpassword =
+            new PasswordFieldBootstrapFormComponent("plainPasswordCheck", new Model<>());
 
     protected CheckBoxBootstrapFormComponent changePass = new CheckBoxBootstrapFormComponent("changePass") {
         private static final long serialVersionUID = -1591795804543610117L;
@@ -287,8 +285,8 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         changePassword.setIsFloatedInput(true);
         editForm.add(changePassword);
-        MetaDataRoleAuthorizationStrategy.authorize(changePassword,
-                Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
+        MetaDataRoleAuthorizationStrategy.authorize(changePassword, Component.RENDER,
+                SecurityConstants.Roles.ROLE_ADMIN);
 
         MetaDataRoleAuthorizationStrategy.authorize(deleteButton, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
     }
@@ -318,7 +316,8 @@ public class EditUserPage extends AbstractEditPage<Person> {
                     }
                 }
 
-                // user just changed his password so don't force him to change it again next time
+                // user just changed his password so don't force him to change
+                // it again next time
                 if (isChangePassPage()) {
                     saveable.setChangePassword(false);
                 }

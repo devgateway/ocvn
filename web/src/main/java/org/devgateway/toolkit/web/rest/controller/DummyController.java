@@ -26,11 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DummyController {
 
-	private static final String TEMPLATE = "Hello, %s!";
-	private final AtomicLong counter = new AtomicLong();
+    private static final String TEMPLATE = "Hello, %s!";
+    private final AtomicLong counter = new AtomicLong();
 
-	@RequestMapping("/dummy")
-	public Dummy greeting(@RequestParam(value = "name", defaultValue = "World") final String name) {
-		return new Dummy(counter.incrementAndGet(), String.format(TEMPLATE, name));
-	}
+    @RequestMapping("/dummy")
+    public Dummy greeting(@RequestParam(value = "name", defaultValue = "World") final String name) {
+        return new Dummy(counter.incrementAndGet(), String.format(TEMPLATE, name));
+    }
 }

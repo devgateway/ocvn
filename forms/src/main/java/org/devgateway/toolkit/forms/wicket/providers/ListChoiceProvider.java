@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A simple choice provider that uses toString() for names. The list must not change since its indexes are used as
- * values.
+ * A simple choice provider that uses toString() for names. The list must not
+ * change since its indexes are used as values.
  *
  * Created by octavian on 8/11/16.
  */

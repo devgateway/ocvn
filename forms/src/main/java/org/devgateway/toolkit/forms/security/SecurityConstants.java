@@ -19,14 +19,14 @@ package org.devgateway.toolkit.forms.security;
  *
  */
 public final class SecurityConstants {
-	
-	public final class Roles {
-		
-		private Roles() {
-			
-		}
 
-		public static final String ROLE_ADMIN = "ROLE_ADMIN";
-		public static final String ROLE_USER = "ROLE_USER";
-	}
+    public final class Roles {
+
+        private Roles() {
+
+        }
+
+        public static final String ROLE_ADMIN = "ROLE_ADMIN";
+        public static final String ROLE_USER = "ROLE_USER";
+    }
 }

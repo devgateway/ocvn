@@ -26,30 +26,30 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath("/editgroup")
 public class EditGroupPage extends AbstractEditPage<Group> {
 
-	private static final long serialVersionUID = -6069250112046118104L;
+    private static final long serialVersionUID = -6069250112046118104L;
 
-	@Override
-	protected Group newInstance() {
-		return new Group();
-	}
+    @Override
+    protected Group newInstance() {
+        return new Group();
+    }
 
-	@SpringBean
-	private GroupRepository groupRepository;
+    @SpringBean
+    private GroupRepository groupRepository;
 
-	public EditGroupPage(final PageParameters parameters) {
-		super(parameters);
-		this.jpaRepository = groupRepository;
-		this.listPageClass = ListGroupPage.class;
+    public EditGroupPage(final PageParameters parameters) {
+        super(parameters);
+        this.jpaRepository = groupRepository;
+        this.listPageClass = ListGroupPage.class;
 
-	}
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		TextFieldBootstrapFormComponent<String> gname = new TextFieldBootstrapFormComponent<>("label");
-		gname.required();
-		editForm.add(gname);
+        TextFieldBootstrapFormComponent<String> gname = new TextFieldBootstrapFormComponent<>("label");
+        gname.required();
+        editForm.add(gname);
 
-	}
+    }
 }

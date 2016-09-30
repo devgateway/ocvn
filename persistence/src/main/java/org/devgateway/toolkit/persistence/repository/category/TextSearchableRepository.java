@@ -28,8 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface TextSearchableRepository<T, ID extends Serializable> extends BaseJpaRepository<T, ID> {
 
-	@Override
-	Page<T> findAll(Pageable pageable);
+    @Override
+    Page<T> findAll(Pageable pageable);
 
-	Page<T> searchText(String code, Pageable page);
+    Page<T> searchText(String code, Pageable page);
 }

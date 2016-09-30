@@ -41,23 +41,23 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 @CacheConfig(cacheNames = "procurementMethodsJson")
 public class ProcurementMethodSearchController extends GenericOCDSController {
 
-	@ApiOperation(value = "Display the available procurement methods. "
-			+ "These are taken from tender.procurementMethod")
-	@RequestMapping(value = "/api/ocds/procurementMethod/all", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> procurementMethods() {
+    @ApiOperation(value = "Display the available procurement methods. "
+            + "These are taken from tender.procurementMethod")
+    @RequestMapping(value = "/api/ocds/procurementMethod/all", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> procurementMethods() {
 
-		DBObject project = new BasicDBObject("tender.procurementMethod", 1);
+        DBObject project = new BasicDBObject("tender.procurementMethod", 1);
 
-		Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
-				group("$tender.procurementMethod"));
+        Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
+                group("$tender.procurementMethod"));
 
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 
-		List<DBObject> mappedResults = results.getMappedResults();
+        List<DBObject> mappedResults = results.getMappedResults();
 
-		return mappedResults;
+        return mappedResults;
 
-	}
+    }
 
 }

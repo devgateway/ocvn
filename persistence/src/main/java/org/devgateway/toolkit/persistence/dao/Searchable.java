@@ -18,7 +18,7 @@ package org.devgateway.toolkit.persistence.dao;
  *        An entity that has a {@link String} designation property
  */
 public interface Searchable {
-	String getDesignation();
+    String getDesignation();
 
-	void setDesignation(String designation);
+    void setDesignation(String designation);
 }

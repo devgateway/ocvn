@@ -14,33 +14,33 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 
+ *
  * @author mpostelnicu
- * 
+ *
  */
 @RestController
 public class OrganizationSearchController extends AbstractOrganizationSearchController {
 
-	/**
-	 * Searches organizations based on ID. Returns only one result, if the id
-	 * exactly matches
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	@ApiOperation(value = "Finds organization entity by the given id")
-	public Organization byId(@PathVariable final String id) {
-		return organizationRepository.findOne(id);
-	}
+    /**
+     * Searches organizations based on ID. Returns only one result, if the id
+     * exactly matches
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/api/ocds/organization/id/{id:^[a-zA-Z0-9]*$}", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    @ApiOperation(value = "Finds organization entity by the given id")
+    public Organization byId(@PathVariable final String id) {
+        return organizationRepository.findOne(id);
+    }
 
-	@RequestMapping(value = "/api/ocds/organization/all", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	@ApiOperation(value = "Lists all organizations in the database. "
-			+ "Allows full text search using the text parameter.")
-	public List<Organization> searchText(@Valid final OrganizationSearchRequest request) {
-		return organizationSearchTextByType(request, null);
-	}
+    @RequestMapping(value = "/api/ocds/organization/all", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    @ApiOperation(value = "Lists all organizations in the database. "
+            + "Allows full text search using the text parameter.")
+    public List<Organization> searchText(@Valid final OrganizationSearchRequest request) {
+        return organizationSearchTextByType(request, null);
+    }
 
 }

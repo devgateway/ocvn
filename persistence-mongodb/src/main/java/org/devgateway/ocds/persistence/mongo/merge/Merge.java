@@ -13,32 +13,32 @@ import java.lang.annotation.RetentionPolicy;
  * <p>
  * <a href="http://standard.open-contracting.org/latest/en/schema/merging/">OCDS Merging</a>
  * <p>
- * 
+ *
  * @see MergeStrategy
- * 
+ *
  * @author mihai
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Merge {
 
-	/**
-	 * Optional merge options. 
-	 * One example is to specify the id reference in case the selected strategy
-	 * is {@link MergeStrategy#arrayMergeById}. Example: mergeOptions={"idref","id"}
-	 * jsonmerge says this is the default behavior, to assume the idref is "id", 
-	 * so we have implement this as the default
-	 * 
-	 * @return
-	 */
-	String[] mergeOptions() default "";
-	
-	
-	/**
-	 * The applied merge strategy
-	 * @see MergeStrategy
-	 * 
-	 * @return
-	 */
-	MergeStrategy value();
+    /**
+     * Optional merge options.
+     * One example is to specify the id reference in case the selected strategy
+     * is {@link MergeStrategy#arrayMergeById}. Example: mergeOptions={"idref","id"}
+     * jsonmerge says this is the default behavior, to assume the idref is "id",
+     * so we have implement this as the default
+     *
+     * @return
+     */
+    String[] mergeOptions() default "";
+
+
+    /**
+     * The applied merge strategy
+     * @see MergeStrategy
+     *
+     * @return
+     */
+    MergeStrategy value();
 }

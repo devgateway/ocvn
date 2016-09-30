@@ -275,9 +275,9 @@ public class ReleasePackage implements Identifiable {
                 append(publicationPolicy, rhs.publicationPolicy).isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return uri;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return uri;
+    }
 
 }

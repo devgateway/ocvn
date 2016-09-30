@@ -17,37 +17,37 @@ import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * 
+ *
  * @author mpostelnicu
- * 
+ *
  */
 public abstract class AbstractOrganizationSearchController extends GenericOCDSController {
 
-	@Autowired
-	protected OrganizationRepository organizationRepository;
+    @Autowired
+    protected OrganizationRepository organizationRepository;
 
-	protected List<Organization> organizationSearchTextByType(final OrganizationSearchRequest request,
-			Organization.OrganizationType type) {
-		Query query = null;
+    protected List<Organization> organizationSearchTextByType(final OrganizationSearchRequest request,
+                                                              Organization.OrganizationType type) {
+        Query query = null;
 
-		if (request.getText() == null) {
-			query = new Query();
-		} else {
-			query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
-		}
-		if (type != null) {
-			query.addCriteria(Criteria.where("types").is(type))
-					.with(new PageRequest(request.getPageNumber(), request.getPageSize()));
-		}
+        if (request.getText() == null) {
+            query = new Query();
+        } else {
+            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
+        }
+        if (type != null) {
+            query.addCriteria(Criteria.where("types").is(type))
+                    .with(new PageRequest(request.getPageNumber(), request.getPageSize()));
+        }
 
-		List<Organization> orgs = mongoTemplate.find(query, Organization.class);
+        List<Organization> orgs = mongoTemplate.find(query, Organization.class);
 
-		return orgs;
-	}
-	
-	public abstract Organization byId(@PathVariable String id);
-	
-	public abstract List<Organization> searchText(@Valid OrganizationSearchRequest request);
-	
+        return orgs;
+    }
+
+    public abstract Organization byId(@PathVariable String id);
+
+    public abstract List<Organization> searchText(@Valid OrganizationSearchRequest request);
+
 
 }

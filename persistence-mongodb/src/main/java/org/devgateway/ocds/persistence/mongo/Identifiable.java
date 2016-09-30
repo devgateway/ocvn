@@ -6,6 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public interface Identifiable {
 
-	@JsonIgnore
+    @JsonIgnore
     Serializable getIdProperty();
 }

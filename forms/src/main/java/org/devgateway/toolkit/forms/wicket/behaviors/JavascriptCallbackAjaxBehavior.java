@@ -22,32 +22,31 @@ import org.apache.wicket.util.template.PackageTextTemplate;
 
 public abstract class JavascriptCallbackAjaxBehavior extends AbstractDefaultAjaxBehavior {
 
+    private static final long serialVersionUID = 1L;
+    protected PackageTextTemplate scriptTemplate;
 
-	private static final long serialVersionUID = 1L;
-	protected PackageTextTemplate scriptTemplate;
+    public JavascriptCallbackAjaxBehavior(final PackageTextTemplate scriptTemplate) {
+        this.scriptTemplate = scriptTemplate;
+    }
 
-	public JavascriptCallbackAjaxBehavior(final PackageTextTemplate scriptTemplate) {
-		this.scriptTemplate = scriptTemplate;
-	}
+    public abstract String getCallbackArguments();
 
-	public abstract String getCallbackArguments();
-	
-	@Override
-	public void renderHead(final Component component, final IHeaderResponse response) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("callbackUrl", getCallbackUrl().toString());
-		map.put("args", getCallbackArguments());
-		map.put("componentMarkupId", component.getMarkupId());
+    @Override
+    public void renderHead(final Component component, final IHeaderResponse response) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("callbackUrl", getCallbackUrl().toString());
+        map.put("args", getCallbackArguments());
+        map.put("componentMarkupId", component.getMarkupId());
 
-		try {
-			if (scriptTemplate != null) {
-				OnDomReadyHeaderItem onDomReadyHeaderItem = OnDomReadyHeaderItem
-						.forScript(scriptTemplate.asString(map));
-				scriptTemplate.close();
-				response.render(onDomReadyHeaderItem);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            if (scriptTemplate != null) {
+                OnDomReadyHeaderItem onDomReadyHeaderItem =
+                        OnDomReadyHeaderItem.forScript(scriptTemplate.asString(map));
+                scriptTemplate.close();
+                response.render(onDomReadyHeaderItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.styles;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import com.google.common.collect.Lists;
+import java.util.List;
 
 /**
  * @author idobre
@@ -24,20 +23,20 @@ import com.google.common.collect.Lists;
  */
 
 public class MainCss extends CssResourceReference {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final MainCss INSTANCE = new MainCss();
+    public static final MainCss INSTANCE = new MainCss();
 
-	/**
-	 * Construct.
-	 */
-	public MainCss() {
-		super(MainCss.class, "main.css");
-	}
+    /**
+     * Construct.
+     */
+    public MainCss() {
+        super(MainCss.class, "main.css");
+    }
 
-	@Override
-	public List<HeaderItem> getDependencies() {
-		final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
-		return dependencies;
-	}
+    @Override
+    public List<HeaderItem> getDependencies() {
+        final List<HeaderItem> dependencies = Lists.newArrayList(super.getDependencies());
+        return dependencies;
+    }
 }

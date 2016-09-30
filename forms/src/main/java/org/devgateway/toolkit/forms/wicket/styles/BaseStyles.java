@@ -19,14 +19,14 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * TODO: Convert to LESS; Bootstrap also uses LESS.
  */
 public class BaseStyles extends CssResourceReference {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final BaseStyles INSTANCE = new BaseStyles();
+    public static final BaseStyles INSTANCE = new BaseStyles();
 
-	/**
-	 * Construct.
-	 */
-	public BaseStyles() {
-		super(BaseStyles.class, "BaseStyles.css");
-	}
+    /**
+     * Construct.
+     */
+    public BaseStyles() {
+        super(BaseStyles.class, "BaseStyles.css");
+    }
 }

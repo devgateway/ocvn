@@ -196,9 +196,9 @@ public class Classification implements Identifiable {
                 append(description, rhs.description).
                 append(uri, rhs.uri).isEquals();
     }
-    
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

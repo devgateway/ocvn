@@ -399,9 +399,9 @@ public class Document implements Identifiable {
                 isEquals();
     }
 
-	@Override
-	public Serializable getIdProperty() {
-		return id;
-	}
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 
 }

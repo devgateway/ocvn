@@ -26,26 +26,25 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class YearValidator implements IValidator<Integer> {
 
-	private static final long serialVersionUID = 1L;
-	private boolean maxCurrentYear = false;
+    private static final long serialVersionUID = 1L;
+    private boolean maxCurrentYear = false;
 
+    public YearValidator maxCurrentYear() {
+        this.maxCurrentYear = true;
+        return this;
+    }
 
-	public YearValidator maxCurrentYear() {
-		this.maxCurrentYear = true;
-		return this;
-	}
+    @Override
+    public void validate(final IValidatable<Integer> validatable) {
+        if (validatable.getValue() == null) {
+            return;
+        }
 
-	@Override
-	public void validate(final IValidatable<Integer> validatable) {
-		if (validatable.getValue() == null) {
-			return;
-		}
-
-		if (maxCurrentYear && validatable.getValue() > Calendar.getInstance().get(Calendar.YEAR)) {
-			ValidationError error = new ValidationError();
-			error.addKey(this, "maxCurrentYear");
-			validatable.error(error);
-		}
-	}
+        if (maxCurrentYear && validatable.getValue() > Calendar.getInstance().get(Calendar.YEAR)) {
+            ValidationError error = new ValidationError();
+            error.addKey(this, "maxCurrentYear");
+            validatable.error(error);
+        }
+    }
 
 }

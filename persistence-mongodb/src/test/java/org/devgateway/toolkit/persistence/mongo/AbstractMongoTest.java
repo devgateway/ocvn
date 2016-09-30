@@ -10,13 +10,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
-@SpringBootTest(classes = {MongoPersistenceApplication.class})
+@SpringBootTest(classes = { MongoPersistenceApplication.class })
 @TestPropertySource("classpath:test.properties")
 @AutoConfigureCache
 /**
- * Superclass for all integration tests that use MongoDB.
- * Adding this as a superclass will ensure the tests are run with the "integration" spring profile.
- * This will enable a special embedded mongodb server that can be used just during the test. 
+ * Superclass for all integration tests that use MongoDB. Adding this as a
+ * superclass will ensure the tests are run with the "integration" spring
+ * profile. This will enable a special embedded mongodb server that can be used
+ * just during the test.
  *
  * @author mihai
  *

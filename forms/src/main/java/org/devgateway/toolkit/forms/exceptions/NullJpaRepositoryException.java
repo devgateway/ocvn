@@ -20,16 +20,16 @@ package org.devgateway.toolkit.forms.exceptions;
  */
 public class NullJpaRepositoryException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2779145093766288562L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2779145093766288562L;
 
-	/**
-	 * 
-	 */
-	public NullJpaRepositoryException() {
-		super("jpaRepository is null! Please set the jpaRepository in your constructor");
-	}
+    /**
+     * 
+     */
+    public NullJpaRepositoryException() {
+        super("jpaRepository is null! Please set the jpaRepository in your constructor");
+    }
 
 }

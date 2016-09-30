@@ -20,33 +20,33 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class AsyncControllerLookupServiceTest extends AbstractWebTest {
 
-	@Autowired
-	private AsyncControllerLookupService lookupService;
+    @Autowired
+    private AsyncControllerLookupService lookupService;
 
-	@Autowired
-	private DummyController dummyController;
+    @Autowired
+    private DummyController dummyController;
 
-	@Test
-	public void testThreadedLookup() throws InterruptedException, ExecutionException {
+    @Test
+    public void testThreadedLookup() throws InterruptedException, ExecutionException {
 
-		Future<Dummy> joe = lookupService.asyncInvoke(new AsyncBeanParamControllerMethodCallable<Dummy, String>() {
-			@Override
-			public Dummy invokeControllerMethod(final String filter) {
-				return dummyController.greeting(filter);
-			}
-		}, "Joe");
+        Future<Dummy> joe = lookupService.asyncInvoke(new AsyncBeanParamControllerMethodCallable<Dummy, String>() {
+            @Override
+            public Dummy invokeControllerMethod(final String filter) {
+                return dummyController.greeting(filter);
+            }
+        }, "Joe");
 
-		Future<Dummy> wendy = lookupService.asyncInvoke(new AsyncBeanParamControllerMethodCallable<Dummy, String>() {
-			@Override
-			public Dummy invokeControllerMethod(final String filter) {
-				return dummyController.greeting(filter);
-			}
-		}, "Wendy");
+        Future<Dummy> wendy = lookupService.asyncInvoke(new AsyncBeanParamControllerMethodCallable<Dummy, String>() {
+            @Override
+            public Dummy invokeControllerMethod(final String filter) {
+                return dummyController.greeting(filter);
+            }
+        }, "Wendy");
 
-		lookupService.waitTillDone(joe, wendy);
+        lookupService.waitTillDone(joe, wendy);
 
-		Assert.assertEquals("Hello, Joe!", joe.get().getContent());
-		Assert.assertEquals("Hello, Wendy!", wendy.get().getContent());
-	}
+        Assert.assertEquals("Hello, Joe!", joe.get().getContent());
+        Assert.assertEquals("Hello, Wendy!", wendy.get().getContent());
+    }
 
 }

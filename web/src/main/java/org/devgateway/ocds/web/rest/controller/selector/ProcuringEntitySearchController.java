@@ -15,38 +15,38 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 
+ *
  * @author mpostelnicu
- * 
+ *
  */
 @RestController
 public class ProcuringEntitySearchController extends AbstractOrganizationSearchController {
 
-	
-	@RequestMapping(value = "/api/ocds/organization/procuringEntity/id/{id:^[a-zA-Z0-9]*$}",
-			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")	
-	@ApiOperation(value = "Finds procuringEntities by the given id")
-	public Organization byId(@PathVariable final String id) {
-		return organizationRepository.findByIdAndTypes(id, Organization.OrganizationType.procuringEntity);	
-	}
-	
-	/**
-	 * Searches {@link Organization} entities of {@link Organization.OrganizationType} 
-	 * {@link Organization.OrganizationType#procuringEntity} by the given text
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/api/ocds/organization/procuringEntity/all",
-			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-	@ApiOperation(value = "Lists all procuring entities in the database. "
-			+ "Procuring entities are organizations that have the label 'procuringEntity' "
-			+ "assigned to organization.types array"
-			+ "Allows full text search using the text parameter.")
-	public List<Organization> searchText(@Valid final OrganizationSearchRequest request) {
 
-		return organizationSearchTextByType(request, OrganizationType.procuringEntity);
+    @RequestMapping(value = "/api/ocds/organization/procuringEntity/id/{id:^[a-zA-Z0-9]*$}",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    @ApiOperation(value = "Finds procuringEntities by the given id")
+    public Organization byId(@PathVariable final String id) {
+        return organizationRepository.findByIdAndTypes(id, Organization.OrganizationType.procuringEntity);
+    }
 
-	}
+    /**
+     * Searches {@link Organization} entities of {@link Organization.OrganizationType}
+     * {@link Organization.OrganizationType#procuringEntity} by the given text
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/api/ocds/organization/procuringEntity/all",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    @ApiOperation(value = "Lists all procuring entities in the database. "
+            + "Procuring entities are organizations that have the label 'procuringEntity' "
+            + "assigned to organization.types array"
+            + "Allows full text search using the text parameter.")
+    public List<Organization> searchText(@Valid final OrganizationSearchRequest request) {
+
+        return organizationSearchTextByType(request, OrganizationType.procuringEntity);
+
+    }
 
 }
