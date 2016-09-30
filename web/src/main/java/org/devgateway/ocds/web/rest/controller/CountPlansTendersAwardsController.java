@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -141,13 +140,14 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 			+ "The year grouping is taken from planning.bidPlanProjectDateApprove")
 	@RequestMapping(value = "/api/countBidPlansByYear", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		DBObject project = new BasicDBObject();
 		project.put("year", new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
-		Aggregation agg = Aggregation.newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)),
-				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
+		Aggregation agg = Aggregation.newAggregation(match(where("planning.bidPlanProjectDateApprove").exists(true)
+		        .andOperator(getYearDefaultFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
+		        new CustomOperation(new BasicDBObject("$project", project)),
 				group("$year").count().as("count"), sort(Direction.DESC, Fields.UNDERSCORE_ID), skip(filter.getSkip()),
 				limit(filter.getPageSize()));
 
