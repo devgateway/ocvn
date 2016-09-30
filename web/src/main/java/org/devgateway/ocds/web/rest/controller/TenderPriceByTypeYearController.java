@@ -73,8 +73,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-                        .andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
-                getMatchDefaultFilterOperation(filter),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),     
                 new CustomProjectionOperation(project), group("tender." + Keys.PROCUREMENT_METHOD)
                         .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
 				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
@@ -100,7 +99,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
 		Aggregation agg = newAggregation(
 				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-						.andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
+                        .andOperator(getYearFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
 				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
 				group("tender." + Keys.PROCUREMENT_METHOD_DETAILS).sum("$tender.value.amount")
 						.as(Keys.TOTAL_TENDER_AMOUNT),

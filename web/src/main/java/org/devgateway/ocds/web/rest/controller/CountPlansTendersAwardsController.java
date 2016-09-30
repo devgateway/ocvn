@@ -11,10 +11,20 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,16 +37,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import io.swagger.annotations.ApiOperation;
 
 /**
  *
@@ -65,13 +69,14 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 			+ "tender.tenderPeriod.startDate.")
 	@RequestMapping(value = "/api/countTendersByYear", 
 	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> countTendersByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
 
-        Aggregation agg = Aggregation.newAggregation(match(where("tender.tenderPeriod.startDate").exists(true)),
-                getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project)),
+        Aggregation agg = Aggregation.newAggregation(match(where("tender.tenderPeriod.startDate").exists(true).
+                andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomOperation(new BasicDBObject("$project", project)),
                 group("$year").count().as(Keys.COUNT), sort(Direction.ASC, Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
 
@@ -92,7 +97,7 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
 			+ "The year is calculated from the awards.date field.")
 	@RequestMapping(value = "/api/countAwardsByYear", 
 	method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project0 = new BasicDBObject();
         project0.put("awards", 1);
@@ -108,9 +113,11 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         DBObject sort = new BasicDBObject();
         sort.put(Fields.UNDERSCORE_ID, 1);
 
-        Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)),
-				getMatchDefaultFilterOperation(filter), new CustomOperation(new BasicDBObject("$project", project0)),
-				unwind("$awards"), match(where("awards.date").exists(true)),
+        Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true).
+                andOperator(getDefaultFilterCriteria(filter))),
+                new CustomOperation(new BasicDBObject("$project", project0)),
+                unwind("$awards"), match(where("awards.date").exists(true).
+                        andOperator(getYearFilterCriteria(filter, "awards.date"))),
 				new CustomOperation(new BasicDBObject("$project", project)),
                 new CustomOperation(new BasicDBObject("$group", group)),
                 new CustomOperation(new BasicDBObject("$sort", sort)), skip(filter.getSkip()),

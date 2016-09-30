@@ -4,9 +4,9 @@
 package org.devgateway.ocds.web.rest.controller.selector;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -40,10 +40,11 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
 	@ApiOperation(value = "Returns the min and max of tender.value.amount")
 	@RequestMapping(value = "/api/tenderValueInterval", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> tenderValueInterval(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	public List<DBObject> tenderValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-		Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true)),
-				getMatchDefaultFilterOperation(filter), project().and("tender.value.amount").as("tender.value.amount"),
+		Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true).
+		        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+				project().and("tender.value.amount").as("tender.value.amount"),
 				group().min("tender.value.amount").as("minTenderValue").max("tender.value.amount").as("maxTenderValue"),
 				project().andInclude("minTenderValue", "maxTenderValue").andExclude(Fields.UNDERSCORE_ID));
 
@@ -56,12 +57,13 @@ public class TendersAwardsValueIntervals extends GenericOCDSController {
 	@ApiOperation(value = "Returns the min and max of awards.value.amount")
 	@RequestMapping(value = "/api/awardValueInterval", method = { RequestMethod.POST,
 			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> awardValueInterval(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+	public List<DBObject> awardValueInterval(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 		Aggregation agg = Aggregation.newAggregation(
-				getMatchDefaultFilterOperation(filter), unwind("awards"),
+				unwind("awards"),
+				match(where("awards.value.amount").exists(true).
+				andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
 				project().and("awards.value.amount").as("awards.value.amount"),
-				match(where("awards.value.amount").exists(true)),				
 				group().min("awards.value.amount").as("minAwardValue").max("awards.value.amount").as("maxAwardValue"),
 				project().andInclude("minAwardValue", "maxAwardValue").andExclude(Fields.UNDERSCORE_ID));
 

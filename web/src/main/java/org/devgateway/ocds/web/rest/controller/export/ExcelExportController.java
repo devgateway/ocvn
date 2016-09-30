@@ -55,8 +55,7 @@ public class ExcelExportController extends GenericOCDSController {
         filter.setPageSize(settingsUtils.getExcelBatchSize());
 
         long numberOfReleases = mongoTemplate
-                .count(query(getYearFilterCriteria("tender.tenderPeriod.startDate", filter)
-                        .andOperator(getDefaultFilterCriteria(filter))), Release.class);
+                .count(query(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate")), Release.class);
 
         // if we need to export just one file then we don't create an archive
         if (numberOfReleases <= settingsUtils.getExcelBatchSize()) {

@@ -25,6 +25,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -75,7 +76,7 @@ public class FundingByLocationController extends GenericOCDSController {
     @RequestMapping(value = "/api/fundingByTenderDeliveryLocation", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> fundingByTenderDeliveryLocation(
-            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put("tender.items.deliveryLocation", 1);
@@ -84,7 +85,7 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"), match(
                         where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
@@ -106,7 +107,7 @@ public class FundingByLocationController extends GenericOCDSController {
     @RequestMapping(value = "/api/qualityFundingByTenderDeliveryLocation", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> qualityFundingByTenderDeliveryLocation(
-            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.putAll(filterProjectMap);
@@ -129,7 +130,7 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 unwind("$tender.items"), new CustomProjectionOperation(project),
                 group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
                 group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")

@@ -1,15 +1,16 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 /**
  * @author idobre
@@ -24,7 +25,7 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
     @Test
     public void fundingByTenderDeliveryLocation() throws Exception {
         final List<DBObject> fundingByTenderDeliveryLocation = fundingByLocationController
-                .fundingByTenderDeliveryLocation(new DefaultFilterPagingRequest());
+                .fundingByTenderDeliveryLocation(new YearFilterPagingRequest());
 
         final DBObject first = fundingByTenderDeliveryLocation.get(0);
         int year = (int) first.get(FundingByLocationController.Keys.YEAR);
@@ -46,7 +47,7 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
     @Test
     public void qualityFundingByTenderDeliveryLocation() throws Exception {
         final List<DBObject> qualityFundingByTenderDeliveryLocation = fundingByLocationController
-                .qualityFundingByTenderDeliveryLocation(new DefaultFilterPagingRequest());
+                .qualityFundingByTenderDeliveryLocation(new YearFilterPagingRequest());
 
         final DBObject first = qualityFundingByTenderDeliveryLocation.get(0);
         int totalTendersWithStartDate = (int) first.get(FundingByLocationController.Keys.TOTAL_TENDERS_WITH_START_DATE);
@@ -63,7 +64,7 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
     @Test
     public void plannedFundingByLocation() throws Exception {
         final List<DBObject> plannedFundingByLocation = fundingByLocationController
-                .plannedFundingByLocation(new DefaultFilterPagingRequest());
+                .plannedFundingByLocation(new YearFilterPagingRequest());
 
         final DBObject first = plannedFundingByLocation.get(0);
         int year = (int) first.get(FundingByLocationController.Keys.YEAR);
@@ -82,7 +83,7 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
     @Test
     public void qualityPlannedFundingByLocation() throws Exception {
         final List<DBObject> qualityPlannedFundingByLocation = fundingByLocationController
-                .qualityPlannedFundingByLocation(new DefaultFilterPagingRequest());
+                .qualityPlannedFundingByLocation(new YearFilterPagingRequest());
 
         final DBObject first = qualityPlannedFundingByLocation.get(0);
         int totalPlansWithAmounts = (int) first.get(FundingByLocationController.Keys.TOTAL_PLANS_WITH_AMOUNTS);

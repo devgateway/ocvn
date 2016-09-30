@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomSortingOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -62,7 +62,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 
     @RequestMapping(value = "/api/averageNumberOfTenderers",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
@@ -70,7 +70,7 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.numberOfTenderers").gt(0).and("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project),
                 group("$year").avg("tender.numberOfTenderers").as(Keys.AVERAGE_NO_OF_TENDERERS),
                 project(Fields.from(Fields.field("year", Fields.UNDERSCORE_ID_REF)))
