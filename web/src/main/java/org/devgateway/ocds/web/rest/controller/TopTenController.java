@@ -89,7 +89,7 @@ public class TopTenController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("awards.value.amount").exists(true).and("awards.status").is("active")
                         .andOperator(getDefaultFilterCriteria(filter))),
-                unwind("$awards"), match(getYearFilterCriteria("awards.date", filter)),
+                unwind("$awards"), match(getYearFilterCriteria(filter, "awards.date")),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "awards.value.amount"), limit(10));
 
@@ -123,8 +123,8 @@ public class TopTenController extends GenericOCDSController {
         project.put("tender.procuringEntity.name", 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
-                match(getYearFilterCriteria("tender.tenderPeriod.startDate", filter)),
+                match(where("tender.value.amount").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "tender.value.amount"), limit(10));
 

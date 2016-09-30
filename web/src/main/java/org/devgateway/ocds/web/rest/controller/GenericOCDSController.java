@@ -34,7 +34,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  * @author mpostelnicu
  *
  */
-public class GenericOCDSController {
+public abstract class GenericOCDSController {
 
     private static final int LAST_DAY = 31;
 
@@ -218,7 +218,7 @@ public class GenericOCDSController {
         filterProjectMap = Collections.unmodifiableMap(tmpMap);
     }
 
-    protected Criteria getYearFilterCriteria(final String dateProperty, final YearFilterPagingRequest filter) {
+    protected Criteria getYearFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
         Criteria[] yearCriteria = null;
         Criteria criteria = new Criteria();
 
@@ -259,7 +259,7 @@ public class GenericOCDSController {
 		return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
 				getSupplierIdCriteria(filter),
 				getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
-				getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(dateProperty, filter));
+                getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(filter, dateProperty));
 	}
     
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {

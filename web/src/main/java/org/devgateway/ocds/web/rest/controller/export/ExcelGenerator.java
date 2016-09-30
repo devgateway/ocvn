@@ -41,10 +41,9 @@ public class ExcelGenerator extends GenericOCDSController {
         PageRequest pageRequest = new PageRequest(filter.getPageNumber(), filter.getPageSize(),
                 Sort.Direction.ASC, "id");
 
-        List<Release> releases = mongoTemplate
-                .find(query(getYearFilterCriteria("tender.tenderPeriod.startDate", filter)
-                        .andOperator(getDefaultFilterCriteria(filter)))
-                        .with(pageRequest), Release.class);
+        List<Release> releases = mongoTemplate.find(
+                query(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate")).with(pageRequest),
+                Release.class);
 
         ExcelFile releaseExcelFile = new ReleaseExportFile(releases);
         Workbook workbook = releaseExcelFile.createWorkbook();

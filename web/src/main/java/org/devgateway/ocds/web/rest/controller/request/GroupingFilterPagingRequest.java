@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author mpostelnicu
  *
  */
-public class GroupingFilterPagingRequest extends DefaultFilterPagingRequest {
+public class GroupingFilterPagingRequest extends YearFilterPagingRequest {
 
 	@ApiModelProperty(value = "This parameter specified which category can be used for grouping the results."
 			+ " Possible values here are: bidSelectionMethod, bidTypeId, procuringEntityId.")
