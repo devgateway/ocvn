@@ -74,24 +74,24 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     protected static Logger logger = Logger.getLogger(BasePage.class);
 
-	protected TransparentWebMarkupContainer mainContainer;
+    protected TransparentWebMarkupContainer mainContainer;
 
-	protected Header mainHeader;
+    protected Header mainHeader;
 
-	protected Footer mainFooter;
+    protected Footer mainFooter;
 
     protected Label pageTitle;
 
     private Navbar navbar;
 
-	protected NotificationPanel feedbackPanel;
+    protected NotificationPanel feedbackPanel;
 
-	/**
-	 * Determines if this page has a fluid container for the content or not.
-	 */
-	public Boolean fluidContainer() {
-		return false;
-	}
+    /**
+     * Determines if this page has a fluid container for the content or not.
+     */
+    public Boolean fluidContainer() {
+        return false;
+    }
 
     public static class HALRedirectPage extends RedirectPage {
         private static final long serialVersionUID = -750983217518258464L;
@@ -102,15 +102,15 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
     }
 
-	public static class JminixRedirectPage extends RedirectPage {
-		private static final long serialVersionUID = -750983217518258464L;
+    public static class JminixRedirectPage extends RedirectPage {
+        private static final long serialVersionUID = -750983217518258464L;
 
-		public JminixRedirectPage() {
-			super(WebApplication.get().getServletContext().getContextPath() + "/jminix/");
-		}
+        public JminixRedirectPage() {
+            super(WebApplication.get().getServletContext().getContextPath() + "/jminix/");
+        }
 
-	}
-	
+    }
+
     public static class UIRedirectPage extends RedirectPage {
         private static final long serialVersionUID = -750983217518258464L;
 
@@ -121,19 +121,19 @@ public abstract class BasePage extends GenericWebPage<Void> {
     }
 
     /**
-	 * Selects/changes the default language in the current session. If the
-	 * {@link WebConstants#LANGUAGE_PARAM} is found in the
-	 * {@link PageParameters} then its contents is set as language in the
-	 * session object.
-	 */
-	protected void selectLanguage() {
-		StringValue lang = this.getPageParameters().get(WebConstants.LANGUAGE_PARAM);
-		if (!lang.isEmpty()) {
-			WebSession.get().setLocale(new Locale(lang.toString()));
-		}
-	}
+     * Selects/changes the default language in the current session. If the
+     * {@link WebConstants#LANGUAGE_PARAM} is found in the
+     * {@link PageParameters} then its contents is set as language in the
+     * session object.
+     */
+    protected void selectLanguage() {
+        StringValue lang = this.getPageParameters().get(WebConstants.LANGUAGE_PARAM);
+        if (!lang.isEmpty()) {
+            WebSession.get().setLocale(new Locale(lang.toString()));
+        }
+    }
 
-	/**
+    /**
      * Construct.
      *
      * @param parameters
@@ -142,42 +142,42 @@ public abstract class BasePage extends GenericWebPage<Void> {
     public BasePage(final PageParameters parameters) {
         super(parameters);
 
-		selectLanguage();
+        selectLanguage();
 
         add(new HtmlTag("html"));
 
-		// Add javascript files.
+        // Add javascript files.
         add(new HeaderResponseContainer("scripts-container", "scripts-bucket"));
 
         feedbackPanel = createFeedbackPanel();
         add(feedbackPanel);
 
-		mainContainer = new TransparentWebMarkupContainer("mainContainer");
-		add(mainContainer);
+        mainContainer = new TransparentWebMarkupContainer("mainContainer");
+        add(mainContainer);
 
-		// Set the bootstrap container class.
-		// @see https://getbootstrap.com/css/#grid
-		if (fluidContainer()) {
-			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.containerFluid));
-		} else {
-			mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.container));
-		}
+        // Set the bootstrap container class.
+        // @see https://getbootstrap.com/css/#grid
+        if (fluidContainer()) {
+            mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.containerFluid));
+        } else {
+            mainContainer.add(new CssClassNameAppender(CssClassNames.Grid.container));
+        }
 
-		mainHeader = new Header("mainHeader", this.getPageParameters());
-		add(mainHeader);
+        mainHeader = new Header("mainHeader", this.getPageParameters());
+        add(mainHeader);
 
         navbar = newNavbar("navbar");
-		mainHeader.add(navbar);
+        mainHeader.add(navbar);
 
-		// Add information about navbar position on mainHeader element.
-		if (navbar.getPosition().equals(Navbar.Position.DEFAULT)) {
-			mainHeader.add(new CssClassNameAppender("with-navbar-default"));
-		} else {
-			mainHeader.add(new CssClassNameAppender("with-" + navbar.getPosition().cssClassName()));
-		}
+        // Add information about navbar position on mainHeader element.
+        if (navbar.getPosition().equals(Navbar.Position.DEFAULT)) {
+            mainHeader.add(new CssClassNameAppender("with-navbar-default"));
+        } else {
+            mainHeader.add(new CssClassNameAppender("with-" + navbar.getPosition().cssClassName()));
+        }
 
-		mainFooter = new Footer("mainFooter");
-		add(mainFooter);
+        mainFooter = new Footer("mainFooter");
+        add(mainFooter);
 
         pageTitle = new Label("pageTitle", new ResourceModel("page.title"));
         add(pageTitle);
@@ -189,70 +189,67 @@ public abstract class BasePage extends GenericWebPage<Void> {
         return notificationPanel;
     }
 
-	public NavbarDropDownButton newLanguageMenu() {
-		final NavbarDropDownButton languageDropDown = new NavbarDropDownButton(
-				new StringResourceModel("navbar.lang", this,
-				null)) {
-				
-			private static final long serialVersionUID = 319842753824102674L;
-				
-			@Override
-			protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
-				final List<AbstractLink> list = new ArrayList<>();
-		
-				for (final Locale l : WebConstants.AVAILABLE_LOCALES) {
-					final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
-					params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
-					list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params, Model.of(l
-							.getDisplayName())));
-				}
+    public NavbarDropDownButton newLanguageMenu() {
+        final NavbarDropDownButton languageDropDown =
+                new NavbarDropDownButton(new StringResourceModel("navbar.lang", this, null)) {
 
-				return list;
-			}
-		};
-		languageDropDown.setIconType(GlyphIconType.flag);		
-		return languageDropDown;
-	}
+                    private static final long serialVersionUID = 319842753824102674L;
 
+                    @Override
+                    protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
+                        final List<AbstractLink> list = new ArrayList<>();
 
-	protected NavbarButton<LogoutPage> newLogoutMenu() {
+                        for (final Locale l : WebConstants.AVAILABLE_LOCALES) {
+                            final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
+                            params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
+                            list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params,
+                                    Model.of(l.getDisplayName())));
+                        }
+
+                        return list;
+                    }
+                };
+        languageDropDown.setIconType(GlyphIconType.flag);
+        return languageDropDown;
+    }
+
+    protected NavbarButton<LogoutPage> newLogoutMenu() {
         // logout menu
-        NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
-                new StringResourceModel("navbar.logout", this, null));
+        NavbarButton<LogoutPage> logoutMenu =
+                new NavbarButton<LogoutPage>(LogoutPage.class, new StringResourceModel("navbar.logout", this, null));
         logoutMenu.setIconType(GlyphIconType.logout);
-		MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
+        MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
-		return logoutMenu;
-	}
+        return logoutMenu;
+    }
 
-	protected NavbarButton<EditUserPage> newAccountMenu() {
-		PageParameters pageParametersForAccountPage = new PageParameters();
+    protected NavbarButton<EditUserPage> newAccountMenu() {
+        PageParameters pageParametersForAccountPage = new PageParameters();
         Person person = SecurityUtil.getCurrentAuthenticatedPerson();
         // account menu
         Model<String> account = null;
         if (person != null) {
             account = Model.of(person.getFirstName());
-			pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
+            pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
         }
 
-        NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
-                account);
+        NavbarButton<EditUserPage> accountMenu =
+                new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage, account);
         accountMenu.setIconType(GlyphIconType.user);
-		MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
-		return accountMenu;
-	}
+        MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
+        return accountMenu;
+    }
 
-
-	protected NavbarButton<Homepage> newHomeMenu() {
+    protected NavbarButton<Homepage> newHomeMenu() {
         // home
-        NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, this.getPageParameters(),
-                new ResourceModel("home"));
+        NavbarButton<Homepage> homeMenu =
+                new NavbarButton<>(Homepage.class, this.getPageParameters(), new ResourceModel("home"));
         homeMenu.setIconType(GlyphIconType.home);
-		MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
-		return homeMenu;
-	}
+        MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
+        return homeMenu;
+    }
 
-	protected NavbarDropDownButton newAdminMenu() {
+    protected NavbarDropDownButton newAdminMenu() {
 
         // admin menu
         NavbarDropDownButton adminMenu = new NavbarDropDownButton(new StringResourceModel("navbar.admin", this, null)) {
@@ -272,23 +269,21 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(new MenuBookmarkablePageLink<ListVietnamImportSourceFiles>(ListVietnamImportSourceFiles.class,
                         null, new StringResourceModel("navbar.importfiles", this, null))
-                        .setIconType(FontAwesomeIconType.file_archive_o));
+                                .setIconType(FontAwesomeIconType.file_archive_o));
 
                 list.add(new MenuBookmarkablePageLink<VietnamImportPage>(VietnamImportPage.class, null,
                         new StringResourceModel("navbar.import", this, null))
-                        .setIconType(FontAwesomeIconType.cloud_upload));
+                                .setIconType(FontAwesomeIconType.cloud_upload));
 
                 list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
                         new StringResourceModel("navbar.users", this, null)).setIconType(FontAwesomeIconType.users));
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
-                        .setIconType(FontAwesomeIconType.anchor));
-                        
-				list.add(new MenuBookmarkablePageLink<JminixRedirectPage>(JminixRedirectPage.class, null,
-						new StringResourceModel("navbar.jminix", this, null))
-								.setIconType(FontAwesomeIconType.bug));
-                        
+                                .setIconType(FontAwesomeIconType.anchor));
+
+                list.add(new MenuBookmarkablePageLink<JminixRedirectPage>(JminixRedirectPage.class, null,
+                        new StringResourceModel("navbar.jminix", this, null)).setIconType(FontAwesomeIconType.bug));
 
                 // MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
                 // new MenuBookmarkablePageLink<HALRedirectPage>(
@@ -319,8 +314,8 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 uiBrowserLink.setIconType(FontAwesomeIconType.dashboard).setEnabled(true);
 
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
-						new StringResourceModel("navbar.adminSettings", BasePage.this, null))
-								.setIconType(FontAwesomeIconType.briefcase));
+                        new StringResourceModel("navbar.adminSettings", BasePage.this, null))
+                                .setIconType(FontAwesomeIconType.briefcase));
 
                 list.add(uiBrowserLink);
 
@@ -331,31 +326,32 @@ public abstract class BasePage extends GenericWebPage<Void> {
         adminMenu.setIconType(GlyphIconType.cog);
         MetaDataRoleAuthorizationStrategy.authorize(adminMenu, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
-		return adminMenu;
-	}
+        return adminMenu;
+    }
 
-	/**
-	 * creates a new {@link Navbar} instance
-	 *
-	 * @param markupId
-	 *            The components markup id.
-	 * @return a new {@link Navbar} instance
-	 */
-	protected Navbar newNavbar(final String markupId) {
+    /**
+     * creates a new {@link Navbar} instance
+     *
+     * @param markupId
+     *            The components markup id.
+     * @return a new {@link Navbar} instance
+     */
+    protected Navbar newNavbar(final String markupId) {
 
-		Navbar navbar = new Navbar(markupId);
+        Navbar navbar = new Navbar(markupId);
 
-		/**
-		 * Make sure to update the BaseStyles when the navbar position changes.
-		 * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
-		 */
-		navbar.setPosition(Navbar.Position.TOP);
-		navbar.setInverted(true);
-	
-		navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(), newAdminMenu(),
-				newAccountMenu(), newLogoutMenu()));
+        /**
+         * Make sure to update the BaseStyles when the navbar position changes.
+         * 
+         * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
+         */
+        navbar.setPosition(Navbar.Position.TOP);
+        navbar.setInverted(true);
 
-		navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT, newLanguageMenu()));
+        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(), newAdminMenu(),
+                newAccountMenu(), newLogoutMenu()));
+
+        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT, newLanguageMenu()));
 
         return navbar;
     }
@@ -364,14 +360,14 @@ public abstract class BasePage extends GenericWebPage<Void> {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-		// Load Styles.
-		response.render(CssHeaderItem.forReference(BaseStyles.INSTANCE));
-		response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
-		response.render(CssHeaderItem.forReference(BootstrapCssReference.instance()));
-		response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
+        // Load Styles.
+        response.render(CssHeaderItem.forReference(BaseStyles.INSTANCE));
+        response.render(CssHeaderItem.forReference(MainCss.INSTANCE));
+        response.render(CssHeaderItem.forReference(BootstrapCssReference.instance()));
+        response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
 
-		// Load Scripts.
-		response.render(RespondJavaScriptReference.headerItem());
+        // Load Scripts.
+        response.render(RespondJavaScriptReference.headerItem());
         response.render(JavaScriptHeaderItem.forReference(JQueryResourceReference.get()));
     }
 }

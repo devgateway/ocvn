@@ -50,17 +50,16 @@ public class BidSelectionMethodSearchController extends GenericOCDSController {
      *
      * @return
      */
-	@ApiOperation(value = "Display the available bid selection methods. "
-			+ "These are taken from tender.procurementMethodDetails")
-    @RequestMapping(value = "/api/ocds/bidSelectionMethod/all", 
-    method = { RequestMethod.POST, RequestMethod.GET },
+    @ApiOperation(value = "Display the available bid selection methods. "
+            + "These are taken from tender.procurementMethodDetails")
+    @RequestMapping(value = "/api/ocds/bidSelectionMethod/all", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> bidSelectionMethods() {
 
         DBObject project = new BasicDBObject("tender.procurementMethodDetails", 1);
 
-		Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
-				group("$tender.procurementMethodDetails"), sort(Direction.ASC, Fields.UNDERSCORE_ID));
+        Aggregation agg = newAggregation(new CustomOperation(new BasicDBObject("$project", project)),
+                group("$tender.procurementMethodDetails"), sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
 

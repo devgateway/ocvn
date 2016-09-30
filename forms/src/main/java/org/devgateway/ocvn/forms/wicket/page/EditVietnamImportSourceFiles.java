@@ -39,68 +39,68 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath("/editImportSourceFiles")
 public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImportSourceFiles> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@SpringBean
-	private VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
+    @SpringBean
+    private VietnamImportSourceFilesRepository vietnamImportSourceFilesRepository;
 
-	/**
-	 * @param parameters
-	 */
-	public EditVietnamImportSourceFiles(final PageParameters parameters) {
-		super(parameters);
+    /**
+     * @param parameters
+     */
+    public EditVietnamImportSourceFiles(final PageParameters parameters) {
+        super(parameters);
 
-		this.jpaRepository = vietnamImportSourceFilesRepository;
-		this.listPageClass = ListVietnamImportSourceFiles.class;
+        this.jpaRepository = vietnamImportSourceFilesRepository;
+        this.listPageClass = ListVietnamImportSourceFiles.class;
 
-	}
+    }
 
-	@Override
-	protected VietnamImportSourceFiles newInstance() {
-		return new VietnamImportSourceFiles();
-	}
+    @Override
+    protected VietnamImportSourceFiles newInstance() {
+        return new VietnamImportSourceFiles();
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-		TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
-		name.required();
-		editForm.add(name);
+        TextFieldBootstrapFormComponent<String> name = new TextFieldBootstrapFormComponent<>("name");
+        name.required();
+        editForm.add(name);
 
-		TextAreaFieldBootstrapFormComponent<String> description = new TextAreaFieldBootstrapFormComponent<>(
-				"description");
-		editForm.add(description);
+        TextAreaFieldBootstrapFormComponent<String> description =
+                new TextAreaFieldBootstrapFormComponent<>("description");
+        editForm.add(description);
 
-		FileInputBootstrapFormComponent prototypeDatabaseFile = new FileInputBootstrapFormComponent(
-				"prototypeDatabaseFile");
-		prototypeDatabaseFile.maxFiles(1);
-		prototypeDatabaseFile.required();
-		editForm.add(prototypeDatabaseFile);
+        FileInputBootstrapFormComponent prototypeDatabaseFile =
+                new FileInputBootstrapFormComponent("prototypeDatabaseFile");
+        prototypeDatabaseFile.maxFiles(1);
+        prototypeDatabaseFile.required();
+        editForm.add(prototypeDatabaseFile);
 
-		FileInputBootstrapFormComponent publicInstitutionsSuppliersFile = new FileInputBootstrapFormComponent(
-				"publicInstitutionsSuppliersFile");
-		publicInstitutionsSuppliersFile.maxFiles(1);
-		publicInstitutionsSuppliersFile.required();
-		editForm.add(publicInstitutionsSuppliersFile);
+        FileInputBootstrapFormComponent publicInstitutionsSuppliersFile =
+                new FileInputBootstrapFormComponent("publicInstitutionsSuppliersFile");
+        publicInstitutionsSuppliersFile.maxFiles(1);
+        publicInstitutionsSuppliersFile.required();
+        editForm.add(publicInstitutionsSuppliersFile);
 
-		ResourceLink locationsTemplate = new ResourceLink("locationsTemplate",
-				new PackageResourceReference(RootXlsx.class, "Location_Table_SO.xlsx"));
-		editForm.add(locationsTemplate);
+        ResourceLink locationsTemplate = new ResourceLink("locationsTemplate",
+                new PackageResourceReference(RootXlsx.class, "Location_Table_SO.xlsx"));
+        editForm.add(locationsTemplate);
 
-		ResourceLink suppliersTemplate = new ResourceLink("suppliersTemplate",
-				new PackageResourceReference(RootXlsx.class, "UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"));
-		editForm.add(suppliersTemplate);
+        ResourceLink suppliersTemplate = new ResourceLink("suppliersTemplate",
+                new PackageResourceReference(RootXlsx.class, "UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"));
+        editForm.add(suppliersTemplate);
 
-		ResourceLink prototypeDatabase = new ResourceLink("prototypeDatabase",
-				new PackageResourceReference(RootXlsx.class, "Prototype_Database_OCDSCore.xlsx"));
-		editForm.add(prototypeDatabase);
+        ResourceLink prototypeDatabase = new ResourceLink("prototypeDatabase",
+                new PackageResourceReference(RootXlsx.class, "Prototype_Database_OCDSCore.xlsx"));
+        editForm.add(prototypeDatabase);
 
-		FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
-		locationsFile.maxFiles(1);
-		locationsFile.required();
-		editForm.add(locationsFile);
+        FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
+        locationsFile.maxFiles(1);
+        locationsFile.required();
+        editForm.add(locationsFile);
 
-	}
+    }
 
 }

@@ -21,41 +21,42 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
  */
 public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {
 
-	protected OrganizationRepository organizationRepository;
+    protected OrganizationRepository organizationRepository;
 
-	public AwardReleaseRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-			final OrganizationRepository organizationRepository, final int skipRows) {
-		super(releaseRepository, importService, skipRows);
-		this.organizationRepository = organizationRepository;
-	}
+    public AwardReleaseRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
+            final OrganizationRepository organizationRepository, final int skipRows) {
+        super(releaseRepository, importService, skipRows);
+        this.organizationRepository = organizationRepository;
+    }
 
-	public Release newReleaseFromAwardFactory(String planningBidNo) {
-		Release release = new Release();
-		release.getTag().add(Tag.award);
-		release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + planningBidNo);
-		VNPlanning planning = new VNPlanning();
-		release.setPlanning(planning);
-		planning.setBidNo(planningBidNo);
-		return release;
-	}
+    public Release newReleaseFromAwardFactory(String planningBidNo) {
+        Release release = new Release();
+        release.getTag().add(Tag.award);
+        release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + planningBidNo);
+        VNPlanning planning = new VNPlanning();
+        release.setPlanning(planning);
+        planning.setBidNo(planningBidNo);
+        return release;
+    }
 
-	/**
-	 * see OCVN-283 <p>
-	 * We should not allow import of awards records where award
-	 * value (BID_PRICE_SUCC) is more than 4x the value of tender value
-	 * (ESTI_PRICE). Import validation should reject these records and generate
-	 * a log. Note that this does not apply for records where the tender value
-	 * (ESTI_PRICE) is null or 0.
-	 * 
-	 * @param release
-	 * @param award
-	 */
-	public void checkForAwardOutliers(Release release, Award award) {
-		if (release.getTender().getValue() != null && award.getValue() != null
-				&& !release.getTender().getValue().getAmount().equals(BigDecimal.ZERO) && release.getTender().getValue()
-						.getAmount().multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
-			throw new RuntimeException("Award value is more than 4x larger than the tender value!");
-		}
-	}
+    /**
+     * see OCVN-283
+     * <p>
+     * We should not allow import of awards records where award value
+     * (BID_PRICE_SUCC) is more than 4x the value of tender value (ESTI_PRICE).
+     * Import validation should reject these records and generate a log. Note
+     * that this does not apply for records where the tender value (ESTI_PRICE)
+     * is null or 0.
+     * 
+     * @param release
+     * @param award
+     */
+    public void checkForAwardOutliers(Release release, Award award) {
+        if (release.getTender().getValue() != null && award.getValue() != null
+                && !release.getTender().getValue().getAmount().equals(BigDecimal.ZERO) && release.getTender().getValue()
+                        .getAmount().multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
+            throw new RuntimeException("Award value is more than 4x larger than the tender value!");
+        }
+    }
 
 }

@@ -24,110 +24,109 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
  */
 public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
-	public OfflineAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-			OrganizationRepository organizationRepository, int skipRows) {
-		super(releaseRepository, importService, organizationRepository, skipRows);
-	}
+    public OfflineAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
+            OrganizationRepository organizationRepository, int skipRows) {
+        super(releaseRepository, importService, organizationRepository, skipRows);
+    }
 
-	@Override
-	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
+    @Override
+    public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
-		Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
+        Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
 
-		if (release == null) {
-			release = newReleaseFromAwardFactory(getRowCell(row, 0));
-		}
+        if (release == null) {
+            release = newReleaseFromAwardFactory(getRowCell(row, 0));
+        }
 
-		if (release.getTender() == null) {
-			VNTender tender = new VNTender();
-			tender.setId(release.getOcid());
-			release.setTender(tender);
-		}
+        if (release.getTender() == null) {
+            VNTender tender = new VNTender();
+            tender.setId(release.getOcid());
+            release.setTender(tender);
+        }
 
-		release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written.toString());	
+        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written.toString());
 
-		VNAward award = new VNAward();
-		award.setId(release.getOcid() + "-award-" + release.getAwards().size());
+        VNAward award = new VNAward();
+        award.setId(release.getOcid() + "-award-" + release.getAwards().size());
 
-		release.getAwards().add(award);
+        release.getAwards().add(award);
 
-		award.setTitle(getRowCell(row, 1));
+        award.setTitle(getRowCell(row, 1));
 
-		if (getRowCell(row, 2) != null) {
-			Amount value = new Amount();
-			value.setCurrency("VND");
-			value.setAmount(getDecimal(getRowCell(row, 2)));
-			award.setValue(value);
-		}
-		
-		Organization supplier = null;
-		if (getRowCell(row, 3) != null) {
-			
-			supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 3));
+        if (getRowCell(row, 2) != null) {
+            Amount value = new Amount();
+            value.setCurrency("VND");
+            value.setAmount(getDecimal(getRowCell(row, 2)));
+            award.setValue(value);
+        }
 
-			if (supplier == null) {
-				supplier = new Organization();
-				supplier.setName(getRowCellUpper(row, 3));
-				supplier.setId(getRowCellUpper(row, 3));
-				supplier.getTypes().add(Organization.OrganizationType.supplier);
-				supplier = organizationRepository.insert(supplier);
-			} else {
-				if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
-					supplier.getTypes().add(Organization.OrganizationType.supplier);
-					supplier = organizationRepository.save(supplier);
-				}
-			}
-		}
+        Organization supplier = null;
+        if (getRowCell(row, 3) != null) {
 
-		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
+            supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 3));
 
-		// active=successful awards have suppliers
-		if (supplier != null && Award.Status.active.equals(award.getStatus())) {
-			award.getSuppliers().add(supplier);
-		}
+            if (supplier == null) {
+                supplier = new Organization();
+                supplier.setName(getRowCellUpper(row, 3));
+                supplier.setId(getRowCellUpper(row, 3));
+                supplier.getTypes().add(Organization.OrganizationType.supplier);
+                supplier = organizationRepository.insert(supplier);
+            } else {
+                if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
+                    supplier.getTypes().add(Organization.OrganizationType.supplier);
+                    supplier = organizationRepository.save(supplier);
+                }
+            }
+        }
 
-		award.setContractTime(getRowCell(row, 4));
+        award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
 
-		
-		award.setInelibigleYN(getRowCell(row, 6));
-	
-		award.setIneligibleRson(getRowCell(row, 7));
-	
-		award.setBidType(getInteger(getRowCell(row, 8)));
+        // active=successful awards have suppliers
+        if (supplier != null && Award.Status.active.equals(award.getStatus())) {
+            award.getSuppliers().add(supplier);
+        }
 
-		award.setBidSuccMethod(getInteger(getRowCell(row, 9)));
-		
-		Organization supplierOrganization = supplier;
-		if (supplierOrganization != null && getRowCell(row, 10) != null) {
-			Amount value2 = new Amount();
-			value2.setCurrency("VND");
-			value2.setAmount(getDecimal(getRowCell(row, 10)));
-			VNTendererOrganization tendererOrganization = new VNTendererOrganization(supplier);
-			tendererOrganization.setBidValue(value2);
-			supplierOrganization = tendererOrganization;
-		}
+        award.setContractTime(getRowCell(row, 4));
 
-		if (getRowCell(row, 12) != null) {
-			award.setDate(getExcelDate(getRowCell(row, 12)));
-		}
+        award.setInelibigleYN(getRowCell(row, 6));
 
-		if (getRowCell(row, 11) != null) {
-			award.setAlternateDate(getExcelDate(getRowCell(row, 11)));
-		}
-		
-		//regardless if the award is active or not, we add the supplier to tenderers
-		if (supplierOrganization != null) {
-			release.getTender().getTenderers().add(supplierOrganization);
-		}
+        award.setIneligibleRson(getRowCell(row, 7));
 
-		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
-		
-		//copy items from tender
-		award.getItems().addAll(release.getTender().getItems());
-		
+        award.setBidType(getInteger(getRowCell(row, 8)));
 
-		checkForAwardOutliers(release, award);
+        award.setBidSuccMethod(getInteger(getRowCell(row, 9)));
 
-		return release;
-	}
+        Organization supplierOrganization = supplier;
+        if (supplierOrganization != null && getRowCell(row, 10) != null) {
+            Amount value2 = new Amount();
+            value2.setCurrency("VND");
+            value2.setAmount(getDecimal(getRowCell(row, 10)));
+            VNTendererOrganization tendererOrganization = new VNTendererOrganization(supplier);
+            tendererOrganization.setBidValue(value2);
+            supplierOrganization = tendererOrganization;
+        }
+
+        if (getRowCell(row, 12) != null) {
+            award.setDate(getExcelDate(getRowCell(row, 12)));
+        }
+
+        if (getRowCell(row, 11) != null) {
+            award.setAlternateDate(getExcelDate(getRowCell(row, 11)));
+        }
+
+        // regardless if the award is active or not, we add the supplier to
+        // tenderers
+        if (supplierOrganization != null) {
+            release.getTender().getTenderers().add(supplierOrganization);
+        }
+
+        release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
+
+        // copy items from tender
+        award.getItems().addAll(release.getTender().getItems());
+
+        checkForAwardOutliers(release, award);
+
+        return release;
+    }
 }

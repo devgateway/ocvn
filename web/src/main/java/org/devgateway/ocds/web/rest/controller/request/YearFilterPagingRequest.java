@@ -14,10 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
 
-	@ApiModelProperty(value = "This parameter will filter the content based on year. " + "The minimum year allowed is "
-			+ MIN_REQ_YEAR + " and the maximum allowed is " + MAX_REQ_YEAR
-			+ ".It will check if the startDate and endDate are within the year range. "
-			+ "To check which fields are used to read start/endDate from, have a look at each endpoint definition.")
+    @ApiModelProperty(value = "This parameter will filter the content based on year. " + "The minimum year allowed is "
+            + MIN_REQ_YEAR + " and the maximum allowed is " + MAX_REQ_YEAR
+            + ".It will check if the startDate and endDate are within the year range. "
+            + "To check which fields are used to read start/endDate from, have a look at each endpoint definition.")
     @EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
     protected List<Integer> year;
 
