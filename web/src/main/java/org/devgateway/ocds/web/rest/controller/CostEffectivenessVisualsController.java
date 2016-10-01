@@ -208,7 +208,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 }, filter);
 
 
-        controllerLookupService.waitTillDone(costEffectivenessAwardAmountFuture, costEffectivenessTenderAmountFuture);
+        //this is completely unnecessary since the #get methods are blocking
+        //controllerLookupService.waitTillDone(costEffectivenessAwardAmountFuture, costEffectivenessTenderAmountFuture);
 
 
         LinkedHashMap<Integer, DBObject> response = new LinkedHashMap<>();
