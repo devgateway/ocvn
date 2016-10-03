@@ -7,7 +7,8 @@
     "start": "node server.js",
     "test": "jest",
     "build": "gulp",
-    "extract-translatables": "extract-gettext -o languages/en_US.json components/"
+    "extract-translatables": "extract-gettext -o languages/en_US.json components/",
+    "lint": "eslint index.jsx"
   },
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",
@@ -46,6 +47,9 @@
     "css-loader": "^0.17.0",
     "d3": "^3.5.13",
     "exports-loader": "^0.6.2",
+    "eslint": "^3.7.0",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-import-resolver-webpack": "^0.6.0",
     "gulp": "^3.9.0",
     "gulp-npm-files": "^0.1.2",
     "gulp-util": "^3.0.7",

@@ -17,7 +17,8 @@ module.exports = {
         test: /\.(jsx|es6)$/,
         loaders: [
           'react-hot',
-          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,cacheDirectory'
+          'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,cacheDirectory',
+          'eslint-loader'
         ],
         exclude: /node_modules/
       },
@@ -36,5 +37,8 @@ module.exports = {
       fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch',
       React: "react"
     })
-  ]
+  ],
+  eslint:{
+    configFile: "./.eslintrc"
+  }
 };
