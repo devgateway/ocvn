@@ -1,6 +1,8 @@
 package org.devgateway.ocds.web.rest.controller.test;
 
-import com.mongodb.DBObject;
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
@@ -11,6 +13,7 @@ import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsControlle
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.toolkit.web.AbstractWebTest;
@@ -22,8 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
-import java.io.IOException;
-import java.util.List;
+import com.mongodb.DBObject;
 
 /**
  * @author mihai
@@ -80,7 +82,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Test
     public void testCostEffectivenessAwardAmount() {
         List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
-                .costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
+                .costEffectivenessAwardAmount(new YearFilterPagingRequest());
         DBObject root = costEffectivenessAwardAmount.get(0);
         int year = (int) root.get(Fields.UNDERSCORE_ID);
         Assert.assertEquals(2014, year);
@@ -106,7 +108,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Test
     public void testAverageNumberOfTenderersController() {
         List<DBObject> averageNumberOfTenderers = averageNumberOfTenderersController.
-                averageNumberOfTenderers(new DefaultFilterPagingRequest());
+                averageNumberOfTenderers(new YearFilterPagingRequest());
 
         DBObject root = averageNumberOfTenderers.get(0);
         int year = (int) root.get("year");
@@ -127,7 +129,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Test
     public void testAverageAwardPeriod() {
         List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController
-                .averageAwardPeriod(new DefaultFilterPagingRequest());
+                .averageAwardPeriod(new YearFilterPagingRequest());
 
         DBObject root = averageAwardPeriod.get(0);
         int year = (int) root.get(Fields.UNDERSCORE_ID);
@@ -140,7 +142,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Test
     public void testAverageTenderPeriod() {
         List<DBObject> averageTenderPeriod = averageTenderAndAwardPeriodsController
-                .averageTenderPeriod(new DefaultFilterPagingRequest());
+                .averageTenderPeriod(new YearFilterPagingRequest());
 
         DBObject root = averageTenderPeriod.get(0);
         int year = (int) root.get(Fields.UNDERSCORE_ID);

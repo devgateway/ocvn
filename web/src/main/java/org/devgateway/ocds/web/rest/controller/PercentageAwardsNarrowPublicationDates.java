@@ -45,60 +45,60 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class PercentageAwardsNarrowPublicationDates extends GenericOCDSController {
 
-	public static final class Keys {
-		public static final String TOTAL_AWARDS = "totalAwards";
-		public static final String TOTAL_AWARDS_NARROW_PUBLICATION_DATES = "totalAwardsNarrowPublicationDates";
-		public static final String PERCENT_NARROW_AWARD_PUBLICATION_DATES = "percentNarrowAwardPublicationDates";
-		public static final String YEAR = "year";
-	}
+    public static final class Keys {
+        public static final String TOTAL_AWARDS = "totalAwards";
+        public static final String TOTAL_AWARDS_NARROW_PUBLICATION_DATES = "totalAwardsNarrowPublicationDates";
+        public static final String PERCENT_NARROW_AWARD_PUBLICATION_DATES = "percentNarrowAwardPublicationDates";
+        public static final String YEAR = "year";
+    }
 
-	@ApiOperation(value = "Percentage of awards where award publication date - award.date is less than 7 days."
-			+ " Percentage should be by year. The denominator for the percentage is the "
-			+ "number of awards that have both awards.date and awards.publishedDate")
-	@RequestMapping(value = "/api/percentageAwardsNarrowPublicationDates", method = { RequestMethod.POST,
-			RequestMethod.GET }, produces = "application/json")
-	public List<DBObject> percentageAwardsNarrowPublicationDates(
-			@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    @ApiOperation(value = "Percentage of awards where award publication date - award.date is less than 7 days."
+            + " Percentage should be by year. The denominator for the percentage is the "
+            + "number of awards that have both awards.date and awards.publishedDate")
+    @RequestMapping(value = "/api/percentageAwardsNarrowPublicationDates",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject>
+            percentageAwardsNarrowPublicationDates(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-		BasicDBObject project = new BasicDBObject();
-		project.put("year", new BasicDBObject("$year", "$awards.date"));
-		project.put("narrowAwardPublicationDates",
-				new BasicDBObject("$cond",
-						Arrays.asList(new BasicDBObject("$and", Arrays
-								.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
-										new BasicDBObject("$gt",
-												Arrays.asList("$awards.publishedDate",
-														null)),
-										new BasicDBObject("$lt",
-												Arrays.asList(new BasicDBObject("$divide",
-														Arrays.asList(
-																new BasicDBObject("$subtract",
-																		Arrays.asList("$awards.publishedDate",
-																				"$awards.date")),
-																MongoConstants.DAY_MS)),
-														7)))),
-								1, 0)));
+        BasicDBObject project = new BasicDBObject();
+        project.put("year", new BasicDBObject("$year", "$awards.date"));
+        project.put("narrowAwardPublicationDates",
+                new BasicDBObject("$cond",
+                        Arrays.asList(new BasicDBObject("$and", Arrays
+                                .asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
+                                        new BasicDBObject("$gt",
+                                                Arrays.asList("$awards.publishedDate",
+                                                        null)),
+                                        new BasicDBObject("$lt",
+                                                Arrays.asList(new BasicDBObject("$divide",
+                                                        Arrays.asList(
+                                                                new BasicDBObject("$subtract",
+                                                                        Arrays.asList("$awards.publishedDate",
+                                                                                "$awards.date")),
+                                                                MongoConstants.DAY_MS)),
+                                                        7)))),
+                                1, 0)));
 
-		DBObject project2 = new BasicDBObject();
-		project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
-		project2.put(Fields.UNDERSCORE_ID, 0);
-		project2.put(Keys.TOTAL_AWARDS, 1);
-		project2.put(Keys.TOTAL_AWARDS_NARROW_PUBLICATION_DATES, 1);
-		project2.put(Keys.PERCENT_NARROW_AWARD_PUBLICATION_DATES, new BasicDBObject("$multiply", Arrays.asList(
-				new BasicDBObject("$divide", Arrays.asList("$totalAwardsNarrowPublicationDates", "$totalAwards")),
-				100)));
+        DBObject project2 = new BasicDBObject();
+        project2.put(Keys.YEAR, Fields.UNDERSCORE_ID_REF);
+        project2.put(Fields.UNDERSCORE_ID, 0);
+        project2.put(Keys.TOTAL_AWARDS, 1);
+        project2.put(Keys.TOTAL_AWARDS_NARROW_PUBLICATION_DATES, 1);
+        project2.put(Keys.PERCENT_NARROW_AWARD_PUBLICATION_DATES, new BasicDBObject("$multiply", Arrays.asList(
+                new BasicDBObject("$divide", Arrays.asList("$totalAwardsNarrowPublicationDates", "$totalAwards")),
+                100)));
 
-		Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)), unwind("$awards"),
-				match(where("awards.date").exists(true).and("awards.publishedDate").exists(true)
-						.andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
-				new CustomProjectionOperation(project),
-				group("$year").count().as(Keys.TOTAL_AWARDS).sum("narrowAwardPublicationDates")
-						.as(Keys.TOTAL_AWARDS_NARROW_PUBLICATION_DATES),
-				new CustomProjectionOperation(project2), sort(Direction.ASC, Fields.UNDERSCORE_ID),
-				skip(filter.getSkip()), limit(filter.getPageSize()));
+        Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true)), unwind("$awards"),
+                match(where("awards.date").exists(true).and("awards.publishedDate").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
+                new CustomProjectionOperation(project),
+                group("$year").count().as(Keys.TOTAL_AWARDS).sum("narrowAwardPublicationDates")
+                        .as(Keys.TOTAL_AWARDS_NARROW_PUBLICATION_DATES),
+                new CustomProjectionOperation(project2), sort(Direction.ASC, Fields.UNDERSCORE_ID),
+                skip(filter.getSkip()), limit(filter.getPageSize()));
 
-		AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
-		List<DBObject> tagCount = results.getMappedResults();
-		return tagCount;
-	}
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+    }
 }

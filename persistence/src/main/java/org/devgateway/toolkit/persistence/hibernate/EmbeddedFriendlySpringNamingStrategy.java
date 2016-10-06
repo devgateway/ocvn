@@ -9,47 +9,59 @@ import org.springframework.util.Assert;
 import javax.persistence.Embeddable;
 
 /**
- * <p>An extension to {@link SpringNamingStrategy} that allows to repeat {@link Embeddable}
- * entities of same type in one entity.</p>
+ * <p>
+ * An extension to {@link SpringNamingStrategy} that allows to repeat
+ * {@link Embeddable} entities of same type in one entity.
+ * </p>
  *
- * Hibernate naming strategy used by default by Spring Boot does not allow to repeat an @Embedded field with same type.
- * For example this case will fail:
+ * Hibernate naming strategy used by default by Spring Boot does not allow to
+ * repeat an @Embedded field with same type. For example this case will fail:
  *
  * <pre>
- * {@code
+ * {
+ *     &#64;code
  *
- *@literal @Entity
- * public class Employee {
+ *     &#64;literal
+ *     &#64;Entity
+ *     public class Employee {
  *
- *    @literal @Embedded
- *     private EmploymentPeriod spring;
+ *         &#64;literal
+ *         &#64;Embedded
+ *         private EmploymentPeriod spring;
  *
- *    @literal @Embedded
- *     private EmploymentPeriod fall;
- * }
+ *         &#64;literal
+ *         &#64;Embedded
+ *         private EmploymentPeriod fall;
+ *     }
  *
- *@literal @Embeddable
- * public class EmploymentPeriod {
+ *     &#64;literal
+ *     &#64;Embeddable
+ *     public class EmploymentPeriod {
  *
- *     private java.sql.Date startDate;
+ *         private java.sql.Date startDate;
  *
- *     private java.sql.Date endDate;
- * }
+ *         private java.sql.Date endDate;
+ *     }
  *
  * }
  * </pre>
  *
- * <p>Hibernate fails because it will try to use start_date and end_date columns two times. New strategy avoids this
- * by assigning qualified names to embedded properties (spring_start_date vs fall_start_date).</p>
+ * <p>
+ * Hibernate fails because it will try to use start_date and end_date columns
+ * two times. New strategy avoids this by assigning qualified names to embedded
+ * properties (spring_start_date vs fall_start_date).
+ * </p>
  *
  * Created by octavian on 8/18/16.
  */
 public class EmbeddedFriendlySpringNamingStrategy extends SpringNamingStrategy {
 
     /**
-     * Prints the difference between SpringNamingStrategy and EmbeddedFriendlySpringNamingStrategy only for the fields
-     * where a difference exists. Useful to understand the impact on existing schema if you were using
-     * SpringNamingStrategy and plan to migrate to EmbeddedFriendlySpringNamingStrategy.
+     * Prints the difference between SpringNamingStrategy and
+     * EmbeddedFriendlySpringNamingStrategy only for the fields where a
+     * difference exists. Useful to understand the impact on existing schema if
+     * you were using SpringNamingStrategy and plan to migrate to
+     * EmbeddedFriendlySpringNamingStrategy.
      */
     private static final boolean PRINT_CHANGES = false;
 
@@ -59,7 +71,10 @@ public class EmbeddedFriendlySpringNamingStrategy extends SpringNamingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedFriendlySpringNamingStrategy.class);
 
     /**
-     * <p>This method has the same logic as its super except that this one does not call StringHelper.unqualify()</p>
+     * <p>
+     * This method has the same logic as its super except that this one does not
+     * call StringHelper.unqualify()
+     * </p>
      * {@inheritDoc}
      */
     @Override
@@ -75,7 +90,10 @@ public class EmbeddedFriendlySpringNamingStrategy extends SpringNamingStrategy {
     }
 
     /**
-     * <p>This method has the same logic as its super except that this one does not call StringHelper.unqualify()</p>
+     * <p>
+     * This method has the same logic as its super except that this one does not
+     * call StringHelper.unqualify()
+     * </p>
      * {@inheritDoc}
      */
     @Override
@@ -91,18 +109,20 @@ public class EmbeddedFriendlySpringNamingStrategy extends SpringNamingStrategy {
     }
 
     /**
-     * <p>This method has the same logic as its super except that this one does not call StringHelper.unqualify()</p>
+     * <p>
+     * This method has the same logic as its super except that this one does not
+     * call StringHelper.unqualify()
+     * </p>
      * {@inheritDoc}
      */
     @Override
     public String foreignKeyColumnName(final String propertyName, final String propertyEntityName,
-                                       final String propertyTableName, final String referencedColumnName) {
+            final String propertyTableName, final String referencedColumnName) {
         String name = propertyTableName;
         if (propertyName != null) {
             name = propertyName;
         }
-        Assert.state(org.springframework.util.StringUtils.hasLength(name),
-                "Unable to generate foreignKeyColumnName");
+        Assert.state(org.springframework.util.StringUtils.hasLength(name), "Unable to generate foreignKeyColumnName");
         String fkColumnName = columnName(name) + "_" + referencedColumnName;
         if (PRINT_CHANGES) {
             String oldFkColumnName = super.foreignKeyColumnName(propertyName, propertyEntityName, propertyTableName,
@@ -115,10 +135,13 @@ public class EmbeddedFriendlySpringNamingStrategy extends SpringNamingStrategy {
     }
 
     /**
-     * Compares if two strings are equal. Also returns null in case both strings are null.
+     * Compares if two strings are equal. Also returns null in case both strings
+     * are null.
      *
-     * @param cs1 the first string, may be null
-     * @param cs2 the second string, may be null
+     * @param cs1
+     *            the first string, may be null
+     * @param cs2
+     *            the second string, may be null
      * @return true if strings are equal
      */
     private static boolean equals(final String cs1, final String cs2) {

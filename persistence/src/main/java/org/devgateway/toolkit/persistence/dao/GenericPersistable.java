@@ -22,6 +22,6 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  */
 public class GenericPersistable extends AbstractPersistable<Long> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 }

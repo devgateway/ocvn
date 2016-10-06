@@ -68,13 +68,11 @@ public class TopTenController extends GenericOCDSController {
      * @return
      */
 
-	@ApiOperation(value = "Returns the top ten largest active awards."
-			+ " The amount is taken from the award.value field. The returned data will contain"
-			+ "the following fields: "
-			+ "planning.bidNo, awards.date, awards.suppliers.name, "
+    @ApiOperation(value = "Returns the top ten largest active awards."
+            + " The amount is taken from the award.value field. The returned data will contain"
+            + "the following fields: " + "planning.bidNo, awards.date, awards.suppliers.name, "
             + "awards.value.amount, awards.suppliers.name, planning.budget (if any)")
-	@RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST,
-			RequestMethod.GET },
+    @RequestMapping(value = "/api/topTenLargestAwards", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> topTenLargestAwards(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
@@ -89,7 +87,7 @@ public class TopTenController extends GenericOCDSController {
         Aggregation agg = newAggregation(
                 match(where("awards.value.amount").exists(true).and("awards.status").is("active")
                         .andOperator(getDefaultFilterCriteria(filter))),
-                unwind("$awards"), match(getYearFilterCriteria("awards.date", filter)),
+                unwind("$awards"), match(getYearFilterCriteria(filter, "awards.date")),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "awards.value.amount"), limit(10));
 
@@ -107,10 +105,10 @@ public class TopTenController extends GenericOCDSController {
      *
      * @return
      */
-	@ApiOperation(value = "Returns the top ten largest active tenders."
-			+ " The amount is taken from the tender.value.amount field." + " The returned data will contain"
-			+ "the following fields: " + "planning.bidNo, tender.date, tender.value.amount, tender.tenderPeriod, "
-					+ "tender.procuringEntity.name")
+    @ApiOperation(value = "Returns the top ten largest active tenders."
+            + " The amount is taken from the tender.value.amount field." + " The returned data will contain"
+            + "the following fields: " + "planning.bidNo, tender.date, tender.value.amount, tender.tenderPeriod, "
+            + "tender.procuringEntity.name")
     @RequestMapping(value = "/api/topTenLargestTenders", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> topTenLargestTenders(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
@@ -123,8 +121,8 @@ public class TopTenController extends GenericOCDSController {
         project.put("tender.procuringEntity.name", 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.value.amount").exists(true).andOperator(getDefaultFilterCriteria(filter))),
-                match(getYearFilterCriteria("tender.tenderPeriod.startDate", filter)),
+                match(where("tender.value.amount").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "tender.value.amount"), limit(10));
 

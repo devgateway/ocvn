@@ -33,44 +33,44 @@ import org.hibernate.envers.Audited;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Group extends Category {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8451785172092014455L;
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	@OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-	private Set<Person> persons = new HashSet<>();
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8451785172092014455L;
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private Set<Person> persons = new HashSet<>();
 
-	public Group() {
-		super();
-	}
+    public Group() {
+        super();
+    }
 
-	public Group(final String label) {
-		super();
-		this.label = label;
-	}
+    public Group(final String label) {
+        super();
+        this.label = label;
+    }
 
-	@Override
-	public String toString() {
-		return getLabel();
-	}
+    @Override
+    public String toString() {
+        return getLabel();
+    }
 
-	@Override
-	public String getLabel() {
-		return label;
-	}
+    @Override
+    public String getLabel() {
+        return label;
+    }
 
-	@Override
-	public void setLabel(final String label) {
-		this.label = label;
-	}
+    @Override
+    public void setLabel(final String label) {
+        this.label = label;
+    }
 
-	public Set<Person> getPersons() {
-		return persons;
-	}
+    public Set<Person> getPersons() {
+        return persons;
+    }
 
-	public void setPersons(final Set<Person> persons) {
-		this.persons = persons;
-	}
+    public void setPersons(final Set<Person> persons) {
+        this.persons = persons;
+    }
 
 }

@@ -7,7 +7,8 @@
     "start": "node server.js",
     "test": "jest",
     "build": "gulp",
-    "extract-translatables": "extract-gettext -o languages/en_US.json components/"
+    "extract-translatables": "extract-gettext -o languages/en_US.json components/",
+    "lint": "eslint index.jsx"
   },
   "jest": {
     "scriptPreprocessor": "./node_modules/babel-jest",
@@ -46,6 +47,10 @@
     "css-loader": "^0.17.0",
     "d3": "^3.5.13",
     "exports-loader": "^0.6.2",
+    "eslint": "^3.7.0",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-import-resolver-webpack": "^0.6.0",
+    "eslint-plugin-import": "^1.16.0",
     "gulp": "^3.9.0",
     "gulp-npm-files": "^0.1.2",
     "gulp-util": "^3.0.7",
@@ -64,7 +69,6 @@
     "react-immutable-proptypes": "^1.2.0",
     "react-input-range": "^0.9.2",
     "react-leaflet": "^0.12.0",
-    "react-input-range": "^0.9.2",
     "style-loader": "^0.12.3",
     "urijs": "^1.17.1",
     "webpack": "^1.12.0",

@@ -35,278 +35,275 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
  */
 public class TenderRowImporter extends ReleaseRowImporter {
 
-	private OrganizationRepository organizationRepository;
-	private ClassificationRepository classificationRepository;
-	private ContrMethodRepository contrMethodRepository;
-	private VNLocationRepository locationRepository;
+    private OrganizationRepository organizationRepository;
+    private ClassificationRepository classificationRepository;
+    private ContrMethodRepository contrMethodRepository;
+    private VNLocationRepository locationRepository;
 
-	public TenderRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-			final OrganizationRepository organizationRepository,
-			final ClassificationRepository classificationRepository, final ContrMethodRepository contrMethodRepository,
-			final VNLocationRepository locationRepository,
-			final int skipRows) {
-		super(releaseRepository, importService, skipRows);
-		this.organizationRepository = organizationRepository;
-		this.classificationRepository = classificationRepository;
-		this.contrMethodRepository = contrMethodRepository;
-		this.locationRepository = locationRepository;
-	}	
+    public TenderRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
+            final OrganizationRepository organizationRepository,
+            final ClassificationRepository classificationRepository, final ContrMethodRepository contrMethodRepository,
+            final VNLocationRepository locationRepository, final int skipRows) {
+        super(releaseRepository, importService, skipRows);
+        this.organizationRepository = organizationRepository;
+        this.classificationRepository = classificationRepository;
+        this.contrMethodRepository = contrMethodRepository;
+        this.locationRepository = locationRepository;
+    }
 
-	
-	public void readProcurementMethodFromReleaseRow(final String[] row, VNTender tender) throws ParseException {
-		Tender.ProcurementMethod procurementMethod = null;
-		String procurementMethodDetails = null;
-		switch (getInteger(getRowCell(row, 5))) {
-		case 1:
-			procurementMethod = Tender.ProcurementMethod.open;
-			procurementMethodDetails = "Đấu thầu rộng rãi";
-			break;
-		case 2:
-			procurementMethod = Tender.ProcurementMethod.selective;
-			procurementMethodDetails = "Đấu thầu hạn chế";
-			break;
-		case 3:
-			procurementMethod = Tender.ProcurementMethod.limited;
-			procurementMethodDetails = "Chỉ định thầu";
-			break;
-		case 4:
-			procurementMethod = Tender.ProcurementMethod.limited;
-			procurementMethodDetails = "Mua sắm trực tiếp";
-			break;
-		case 5:
-			procurementMethod = Tender.ProcurementMethod.open;
-			procurementMethodDetails = "Chào hàng cạnh tranh";
-			break;
-		case 6:
-			procurementMethod = Tender.ProcurementMethod.limited;
-			procurementMethodDetails = "Tự thực hiện";
-			break;
-		case 7:
-			procurementMethod = Tender.ProcurementMethod.selective;
-			procurementMethodDetails = "Trong trường hợp đặc biệt";
-			break;
-		default:
-			procurementMethod = null;
-			procurementMethodDetails = null;
-			break;
-		}
-		tender.setProcurementMethodDetails(procurementMethodDetails);
-		tender.setProcurementMethod(procurementMethod);
+    public void readProcurementMethodFromReleaseRow(final String[] row, VNTender tender) throws ParseException {
+        Tender.ProcurementMethod procurementMethod = null;
+        String procurementMethodDetails = null;
+        switch (getInteger(getRowCell(row, 5))) {
+        case 1:
+            procurementMethod = Tender.ProcurementMethod.open;
+            procurementMethodDetails = "Đấu thầu rộng rãi";
+            break;
+        case 2:
+            procurementMethod = Tender.ProcurementMethod.selective;
+            procurementMethodDetails = "Đấu thầu hạn chế";
+            break;
+        case 3:
+            procurementMethod = Tender.ProcurementMethod.limited;
+            procurementMethodDetails = "Chỉ định thầu";
+            break;
+        case 4:
+            procurementMethod = Tender.ProcurementMethod.limited;
+            procurementMethodDetails = "Mua sắm trực tiếp";
+            break;
+        case 5:
+            procurementMethod = Tender.ProcurementMethod.open;
+            procurementMethodDetails = "Chào hàng cạnh tranh";
+            break;
+        case 6:
+            procurementMethod = Tender.ProcurementMethod.limited;
+            procurementMethodDetails = "Tự thực hiện";
+            break;
+        case 7:
+            procurementMethod = Tender.ProcurementMethod.selective;
+            procurementMethodDetails = "Trong trường hợp đặc biệt";
+            break;
+        default:
+            procurementMethod = null;
+            procurementMethodDetails = null;
+            break;
+        }
+        tender.setProcurementMethodDetails(procurementMethodDetails);
+        tender.setProcurementMethod(procurementMethod);
 
-	}
-	
-	
-	public void readStatusFromReleaseRow(final String[] row, Tender tender) throws ParseException {
+    }
 
-		Tender.Status status = null;
-		if (getRowCell(row, 1).equals("Y") && (getRowCell(row, 2) == null || getRowCell(row, 2).equals("N"))
-				&& (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
-			status = Tender.Status.active;
-		}
+    public void readStatusFromReleaseRow(final String[] row, Tender tender) throws ParseException {
 
-		if (getRowCell(row, 1) == null && getRowCell(row, 2) == null && getRowCell(row, 3) == null) {
-			status = Tender.Status.planned;
-		}
+        Tender.Status status = null;
+        if (getRowCell(row, 1).equals("Y") && (getRowCell(row, 2) == null || getRowCell(row, 2).equals("N"))
+                && (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
+            status = Tender.Status.active;
+        }
 
-		if (getRowCell(row, 1) == null && (getRowCell(row, 2).equals("N"))
-				&& (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
-			status = Tender.Status.planned;
-		}
+        if (getRowCell(row, 1) == null && getRowCell(row, 2) == null && getRowCell(row, 3) == null) {
+            status = Tender.Status.planned;
+        }
 
-		if (getRowCell(row, 1).equals("Y") && (getRowCell(row, 2).equals("Y"))
-				&& (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
-			status = Tender.Status.cancelled;
-		}
+        if (getRowCell(row, 1) == null && (getRowCell(row, 2).equals("N"))
+                && (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
+            status = Tender.Status.planned;
+        }
 
-		if (getRowCell(row, 1) == null && (getRowCell(row, 2).equals("Y"))
-				&& (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
-			status = Tender.Status.cancelled;
-		}
-		tender.setStatus(status);
+        if (getRowCell(row, 1).equals("Y") && (getRowCell(row, 2).equals("Y"))
+                && (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
+            status = Tender.Status.cancelled;
+        }
 
-	}
-	
-	public void readLocationAndClassificationFromReleaseRow(final String[] row, Tender tender) {
+        if (getRowCell(row, 1) == null && (getRowCell(row, 2).equals("Y"))
+                && (getRowCell(row, 3) == null || getRowCell(row, 3).equals("N"))) {
+            status = Tender.Status.cancelled;
+        }
+        tender.setStatus(status);
 
-		// location attached to tender/items
+    }
 
-		String locationName = getRowCell(row, 16);
-		VNLocation location = null;
-		if (locationName != null) {
-			location = locationRepository.findByDescription(locationName);
-			if (location == null) {
-				location = new VNLocation();
-				location.setDescription(locationName);
-				location = locationRepository.insert(location);
-			}
-		}
+    public void readLocationAndClassificationFromReleaseRow(final String[] row, Tender tender) {
 
-		if (tender.getItems().isEmpty()) {
-			VNItem item = new VNItem();
-			item.setId(Integer.toString(tender.getItems().size()));
-			if (location != null) {
-				item.setDeliveryLocation(location);
-			}
-			tender.getItems().add(item);
-		}
+        // location attached to tender/items
 
-		// we set classification for all items within this tender. If none
-		// are found, we create a fake item and add only this classification
-		for (Item item : tender.getItems()) {
-			String classificationId = getRowCell(row, 13);
-			Classification classification = classificationRepository.findOne(classificationId);
-			if (classification == null) {
-				classification = new Classification();
-				classification.setId(classificationId);
+        String locationName = getRowCell(row, 16);
+        VNLocation location = null;
+        if (locationName != null) {
+            location = locationRepository.findByDescription(locationName);
+            if (location == null) {
+                location = new VNLocation();
+                location.setDescription(locationName);
+                location = locationRepository.insert(location);
+            }
+        }
 
-				switch (classificationId) {
-				case "1":
-					classification.setDescription("Hàng hóa");
-					break;
-				case "3":
-					classification.setDescription("Xây lắp");
-					break;
-				case "5":
-					classification.setDescription("Tư vấn");
-					break;
-				case "10":
-					classification.setDescription("Combined");
-					break;
-				case "15":
-					classification.setDescription("Non-Consulting Services");
-					break;
-				default:
-					classification.setDescription("Unspecified");
-					break;
-				}
-				classification = classificationRepository.insert(classification);
+        if (tender.getItems().isEmpty()) {
+            VNItem item = new VNItem();
+            item.setId(Integer.toString(tender.getItems().size()));
+            if (location != null) {
+                item.setDeliveryLocation(location);
+            }
+            tender.getItems().add(item);
+        }
 
-			}
-			item.setClassification(classification);
-			if (location != null) {
-				((VNItem) item).setDeliveryLocation(location);
-			}
+        // we set classification for all items within this tender. If none
+        // are found, we create a fake item and add only this classification
+        for (Item item : tender.getItems()) {
+            String classificationId = getRowCell(row, 13);
+            Classification classification = classificationRepository.findOne(classificationId);
+            if (classification == null) {
+                classification = new Classification();
+                classification.setId(classificationId);
 
-		}
-	}
+                switch (classificationId) {
+                case "1":
+                    classification.setDescription("Hàng hóa");
+                    break;
+                case "3":
+                    classification.setDescription("Xây lắp");
+                    break;
+                case "5":
+                    classification.setDescription("Tư vấn");
+                    break;
+                case "10":
+                    classification.setDescription("Combined");
+                    break;
+                case "15":
+                    classification.setDescription("Non-Consulting Services");
+                    break;
+                default:
+                    classification.setDescription("Unspecified");
+                    break;
+                }
+                classification = classificationRepository.insert(classification);
 
-	@Override
-	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
+            }
+            item.setClassification(classification);
+            if (location != null) {
+                ((VNItem) item).setDeliveryLocation(location);
+            }
 
-		Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
+        }
+    }
 
-		if (release == null) {
-			release = new Release();
-			release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + getRowCell(row, 0));
-			release.getTag().add(Tag.tender);
-			VNPlanning planning = new VNPlanning();
-			release.setPlanning(planning);
-			planning.setBidNo(getRowCell(row, 0));
-		}
+    @Override
+    public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
-		VNTender tender = (VNTender) release.getTender();
-		if (tender == null) {
-			tender = new VNTender();
-			tender.setId(release.getOcid());
-			release.setTender(tender);
-		}
-		
-		readStatusFromReleaseRow(row, tender);
+        Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
 
-		tender.setApproveState(getRowCell(row, 1));
-		tender.setCancelYN(getRowCell(row, 2));
-		tender.setModYn(getRowCell(row, 3));
-		tender.setBidMethod(getInteger(getRowCell(row, 4)));
+        if (release == null) {
+            release = new Release();
+            release.setOcid(MongoConstants.OCDS_PREFIX + "bidno-" + getRowCell(row, 0));
+            release.getTag().add(Tag.tender);
+            VNPlanning planning = new VNPlanning();
+            release.setPlanning(planning);
+            planning.setBidNo(getRowCell(row, 0));
+        }
 
-		readProcurementMethodFromReleaseRow(row, tender);
+        VNTender tender = (VNTender) release.getTender();
+        if (tender == null) {
+            tender = new VNTender();
+            tender.setId(release.getOcid());
+            release.setTender(tender);
+        }
 
-		String contrMethodDetail = getRowCell(row, 6);
-		if (contrMethodDetail != null) {
-			ContrMethod contrMethod = contrMethodRepository.findByDetails(contrMethodDetail);
-			if (contrMethod == null) {
-				contrMethod = new ContrMethod();
-				contrMethod.setDetails(contrMethodDetail);
-//				switch (contrMethodId) {
-//				case 1:
-//					contrMethod.setDetails("Trọn gói");
-//					break;
-//				case 2:
-//					contrMethod.setDetails("Theo đơn giá");
-//					break;
-//				case 3:
-//					contrMethod.setDetails("Theo thời gian");
-//					break;
-//				case 4:
-//					contrMethod.setDetails("Theo tỷ lệ phần trăm");
-//					break;
-//				case 5:
-//					contrMethod.setDetails("Hỗn hợp");
-//					break;
-//				default:
-//					contrMethod.setDetails("Undefined");
-//					break;
-//				}
-				contrMethod = contrMethodRepository.insert(contrMethod);
-			}
-			tender.setContrMethod(contrMethod);
-		}
+        readStatusFromReleaseRow(row, tender);
 
-		Period period = new Period();
+        tender.setApproveState(getRowCell(row, 1));
+        tender.setCancelYN(getRowCell(row, 2));
+        tender.setModYn(getRowCell(row, 3));
+        tender.setBidMethod(getInteger(getRowCell(row, 4)));
 
-		period.setStartDate(getExcelDate(getRowCell(row, 7)));
-		period.setEndDate(getExcelDate(getRowCell(row, 8)));
-		tender.setTenderPeriod(period);
-		tender.setBidOpenDt(getExcelDate(getRowCell(row, 9)));
+        readProcurementMethodFromReleaseRow(row, tender);
 
-		Organization procuringEntity = organizationRepository.findByIdOrName(getRowCellUpper(row, 10));
+        String contrMethodDetail = getRowCell(row, 6);
+        if (contrMethodDetail != null) {
+            ContrMethod contrMethod = contrMethodRepository.findByDetails(contrMethodDetail);
+            if (contrMethod == null) {
+                contrMethod = new ContrMethod();
+                contrMethod.setDetails(contrMethodDetail);
+                // switch (contrMethodId) {
+                // case 1:
+                // contrMethod.setDetails("Trọn gói");
+                // break;
+                // case 2:
+                // contrMethod.setDetails("Theo đơn giá");
+                // break;
+                // case 3:
+                // contrMethod.setDetails("Theo thời gian");
+                // break;
+                // case 4:
+                // contrMethod.setDetails("Theo tỷ lệ phần trăm");
+                // break;
+                // case 5:
+                // contrMethod.setDetails("Hỗn hợp");
+                // break;
+                // default:
+                // contrMethod.setDetails("Undefined");
+                // break;
+                // }
+                contrMethod = contrMethodRepository.insert(contrMethod);
+            }
+            tender.setContrMethod(contrMethod);
+        }
 
-		if (procuringEntity == null) {
-			procuringEntity = new Organization();
-			procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
-			procuringEntity.setName(getRowCellUpper(row, 10));
-			Identifier procuringEntityIdentifier = new Identifier();
-			procuringEntityIdentifier.setId(getRowCellUpper(row, 10));
-			procuringEntity.setIdentifier(procuringEntityIdentifier);
-			procuringEntity = organizationRepository.insert(procuringEntity);
-		} else {
-			if (!procuringEntity.getTypes().contains(Organization.OrganizationType.procuringEntity)) {
-				procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
-				procuringEntity = organizationRepository.save(procuringEntity);
-			}
-		}
-		tender.setProcuringEntity(procuringEntity);
+        Period period = new Period();
 
-		Organization orderInstituCd = organizationRepository.findByIdOrName(getRowCellUpper(row, 11));
+        period.setStartDate(getExcelDate(getRowCell(row, 7)));
+        period.setEndDate(getExcelDate(getRowCell(row, 8)));
+        tender.setTenderPeriod(period);
+        tender.setBidOpenDt(getExcelDate(getRowCell(row, 9)));
 
-		if (orderInstituCd == null) {
-			orderInstituCd = new Organization();
-			Identifier orderInstituCdIdentifier = new Identifier();
-			orderInstituCdIdentifier.setId(getRowCellUpper(row, 11));
-			orderInstituCd.setName(getRowCellUpper(row, 11));			
-			orderInstituCd.setIdentifier(orderInstituCdIdentifier);
-			orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
-			orderInstituCd = organizationRepository.insert(orderInstituCd);
-		} else {
-			if (!orderInstituCd.getTypes().contains(Organization.OrganizationType.buyer)) {
-				orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
-				orderInstituCd = organizationRepository.save(orderInstituCd);
-			}
-		}
-		release.setBuyer(orderInstituCd);
+        Organization procuringEntity = organizationRepository.findByIdOrName(getRowCellUpper(row, 10));
 
-		if (getRowCell(row, 12) != null) {
-			Amount value = new Amount();
-			value.setCurrency("VND");
-			value.setAmount(getDecimal(getRowCell(row, 12)));
-			tender.setValue(value);
-		}
+        if (procuringEntity == null) {
+            procuringEntity = new Organization();
+            procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
+            procuringEntity.setName(getRowCellUpper(row, 10));
+            Identifier procuringEntityIdentifier = new Identifier();
+            procuringEntityIdentifier.setId(getRowCellUpper(row, 10));
+            procuringEntity.setIdentifier(procuringEntityIdentifier);
+            procuringEntity = organizationRepository.insert(procuringEntity);
+        } else {
+            if (!procuringEntity.getTypes().contains(Organization.OrganizationType.procuringEntity)) {
+                procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
+                procuringEntity = organizationRepository.save(procuringEntity);
+            }
+        }
+        tender.setProcuringEntity(procuringEntity);
 
-		tender.setPublicationMethod(getRowCell(row, 14));
+        Organization orderInstituCd = organizationRepository.findByIdOrName(getRowCellUpper(row, 11));
 
-		tender.setCancellationRationale(getRowCell(row, 15));
-		
-		readLocationAndClassificationFromReleaseRow(row, tender);
-		
-		return release;
-	}
+        if (orderInstituCd == null) {
+            orderInstituCd = new Organization();
+            Identifier orderInstituCdIdentifier = new Identifier();
+            orderInstituCdIdentifier.setId(getRowCellUpper(row, 11));
+            orderInstituCd.setName(getRowCellUpper(row, 11));
+            orderInstituCd.setIdentifier(orderInstituCdIdentifier);
+            orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
+            orderInstituCd = organizationRepository.insert(orderInstituCd);
+        } else {
+            if (!orderInstituCd.getTypes().contains(Organization.OrganizationType.buyer)) {
+                orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
+                orderInstituCd = organizationRepository.save(orderInstituCd);
+            }
+        }
+        release.setBuyer(orderInstituCd);
+
+        if (getRowCell(row, 12) != null) {
+            Amount value = new Amount();
+            value.setCurrency("VND");
+            value.setAmount(getDecimal(getRowCell(row, 12)));
+            tender.setValue(value);
+        }
+
+        tender.setPublicationMethod(getRowCell(row, 14));
+
+        tender.setCancellationRationale(getRowCell(row, 15));
+
+        readLocationAndClassificationFromReleaseRow(row, tender);
+
+        return release;
+    }
 }

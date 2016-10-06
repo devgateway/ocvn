@@ -1,13 +1,15 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
+import java.util.List;
+
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
-import java.util.List;
+import com.mongodb.DBObject;
 
 /**
  * @author idobre
@@ -22,7 +24,7 @@ public class AverageTenderAndAwardPeriodsControllerTest extends AbstractEndPoint
     @Test
     public void averageTenderPeriod() throws Exception {
         final List<DBObject> averageTenderPeriod = averageTenderAndAwardPeriodsController
-                .averageTenderPeriod(new DefaultFilterPagingRequest());
+                .averageTenderPeriod(new YearFilterPagingRequest());
 
         final DBObject first = averageTenderPeriod.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
@@ -57,7 +59,7 @@ public class AverageTenderAndAwardPeriodsControllerTest extends AbstractEndPoint
     @Test
     public void averageAwardPeriod() throws Exception {
         final List<DBObject> averageAwardPeriod = averageTenderAndAwardPeriodsController
-                .averageAwardPeriod(new DefaultFilterPagingRequest());
+                .averageAwardPeriod(new YearFilterPagingRequest());
 
         final DBObject first = averageAwardPeriod.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);

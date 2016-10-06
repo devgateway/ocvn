@@ -10,5 +10,5 @@ import org.devgateway.toolkit.web.spring.AsyncControllerLookupService;
  * @param <BEANPARAM>
  */
 public abstract class AsyncBeanParamControllerMethodCallable<RET, BEANPARAM> {
-	public abstract RET invokeControllerMethod(final BEANPARAM filter);
+    public abstract RET invokeControllerMethod(BEANPARAM filter);
 }

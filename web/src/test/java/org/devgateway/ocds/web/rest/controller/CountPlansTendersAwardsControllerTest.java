@@ -1,13 +1,14 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import java.util.List;
+
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
-import java.util.List;
+import com.mongodb.DBObject;
 
 /**
  * @author idobre
@@ -22,7 +23,7 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
     @Test
     public void countTendersByYear() throws Exception {
         final List<DBObject> countTendersByYear = countPlansTendersAwardsController
-                .countTendersByYear(new DefaultFilterPagingRequest());
+                .countTendersByYear(new YearFilterPagingRequest());
 
         final DBObject first = countTendersByYear.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
@@ -40,7 +41,7 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
     @Test
     public void countAwardsByYear() throws Exception {
         final List<DBObject> countAwardsByYear = countPlansTendersAwardsController
-                .countAwardsByYear(new DefaultFilterPagingRequest());
+                .countAwardsByYear(new YearFilterPagingRequest());
 
         final DBObject first = countAwardsByYear.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);
@@ -58,7 +59,7 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
     @Test
     public void countBidPlansByYear() throws Exception {
         final List<DBObject> countBidPlansByYear = countPlansTendersAwardsController
-                .countBidPlansByYear(new DefaultFilterPagingRequest());
+                .countBidPlansByYear(new YearFilterPagingRequest());
 
         final DBObject first = countBidPlansByYear.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);

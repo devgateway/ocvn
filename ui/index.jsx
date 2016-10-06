@@ -56,7 +56,7 @@ class OCVN extends OCApp{
             <h3><strong>{this.__("Toolkit description")}</strong></h3>
             <p>
               <small>
-                {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
+                  {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP). These data are published on a pilot basis and do not represent official government statistics.")}
               </small>
             </p>
           </section>

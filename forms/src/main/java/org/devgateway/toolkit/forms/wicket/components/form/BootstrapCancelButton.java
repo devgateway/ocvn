@@ -29,29 +29,32 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxBut
  */
 public abstract class BootstrapCancelButton extends LaddaAjaxButton {
 
-	private static final long serialVersionUID = -5748825183253028913L;
+    private static final long serialVersionUID = -5748825183253028913L;
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public BootstrapCancelButton(final String id, final IModel<String> model) {
-		super(id, model, Buttons.Type.Default);
-		setDefaultFormProcessing(false);
-		setIconType(FontAwesomeIconType.ban);
-	}
+    /**
+     * @param id
+     * @param model
+     */
+    public BootstrapCancelButton(final String id, final IModel<String> model) {
+        super(id, model, Buttons.Type.Default);
+        setDefaultFormProcessing(false);
+        setIconType(FontAwesomeIconType.ban);
+    }
 
-	@Override
-	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
-	
-	/* (non-Javadoc)
-	 * @see de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxButton#onInitialize()
-	 */
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    @Override
+    protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.
+     * LaddaAjaxButton#onInitialize()
+     */
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         if (ComponentUtil.isViewMode()) {
             setVisibilityAllowed(false);
         }
-	}
+    }
 }

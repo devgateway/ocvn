@@ -16,9 +16,9 @@ import java.util.TreeSet;
 })
 public class Gazetteer implements Serializable {
 
-	private static final long serialVersionUID = -7480459687909560318L;
+    private static final long serialVersionUID = -7480459687909560318L;
 
-	/**
+    /**
      * The entry of the selected gazetteer in the gazetteers codelist. The codelist provides details of services,
      * where available, that can resolve a gazetteer entry to provide location names.
      *

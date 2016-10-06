@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo.spring;
 
@@ -21,15 +21,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ReflectionsConfiguration {
 
-	protected static final Logger logger = LoggerFactory.getLogger(ReflectionsConfiguration.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ReflectionsConfiguration.class);
 
-	@Bean
-	public Reflections reflections() {
-		logger.debug("Starting reflections scanners...");
-		Reflections reflections = new Reflections(new ConfigurationBuilder()
-				.setUrls(ClasspathHelper.forPackage("org.devgateway.ocds.persistence.mongo"))
-				.setScanners(new SubTypesScanner(), new FieldAnnotationsScanner(), new MethodParameterScanner()));
-		logger.debug("Configured reflections bean.");
-		return reflections;
-	}
+    @Bean
+    public Reflections reflections() {
+        logger.debug("Starting reflections scanners...");
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage("org.devgateway.ocds.persistence.mongo"))
+                .setScanners(new SubTypesScanner(), new FieldAnnotationsScanner(), new MethodParameterScanner()));
+        logger.debug("Configured reflections bean.");
+        return reflections;
+    }
 }

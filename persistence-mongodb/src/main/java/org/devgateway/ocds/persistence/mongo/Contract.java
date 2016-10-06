@@ -13,6 +13,7 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSeparet
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -522,13 +523,13 @@ public class Contract implements Identifiable {
     }
 
     public enum Status {
-    	pending("pending"),
+        pending("pending"),
 
-    	active("active"),
+        active("active"),
 
-    	cancelled("cancelled"),
+        cancelled("cancelled"),
 
-    	terminated("terminated");
+        terminated("terminated");
 
         private final String value;
 
@@ -561,4 +562,8 @@ public class Contract implements Identifiable {
         }
     }
 
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

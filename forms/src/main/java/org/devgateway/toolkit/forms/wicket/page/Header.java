@@ -21,15 +21,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  */
 
 public class Header extends Panel {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected static Logger logger = Logger.getLogger(Header.class);
+    protected static Logger logger = Logger.getLogger(Header.class);
 
-	public Header(final String markupId) {
-		this(markupId, null);
-	}
+    public Header(final String markupId) {
+        this(markupId, null);
+    }
 
-	public Header(final String markupId, final PageParameters parameters) {
-		super(markupId);
-	}
+    public Header(final String markupId, final PageParameters parameters) {
+        super(markupId);
+    }
 }

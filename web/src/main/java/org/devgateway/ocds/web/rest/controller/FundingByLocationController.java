@@ -25,6 +25,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -75,7 +76,7 @@ public class FundingByLocationController extends GenericOCDSController {
     @RequestMapping(value = "/api/fundingByTenderDeliveryLocation", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> fundingByTenderDeliveryLocation(
-            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put("tender.items.deliveryLocation", 1);
@@ -84,7 +85,7 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).and("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"), match(
                         where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
@@ -106,7 +107,7 @@ public class FundingByLocationController extends GenericOCDSController {
     @RequestMapping(value = "/api/qualityFundingByTenderDeliveryLocation", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> qualityFundingByTenderDeliveryLocation(
-            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.putAll(filterProjectMap);
@@ -129,7 +130,7 @@ public class FundingByLocationController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 unwind("$tender.items"), new CustomProjectionOperation(project),
                 group(Fields.UNDERSCORE_ID_REF).max("tenderItemsDeliveryLocation").as("hasTenderItemsDeliverLocation"),
                 group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
@@ -150,7 +151,7 @@ public class FundingByLocationController extends GenericOCDSController {
             + "Responds only to the procuring entity id filter: tender.procuringEntity._id")
     @RequestMapping(value = "/api/plannedFundingByLocation",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject vars = new BasicDBObject();
         vars.put("numberOfLocations", new BasicDBObject("$size", "$planning.budget.projectLocation"));
@@ -170,9 +171,11 @@ public class FundingByLocationController extends GenericOCDSController {
         project.put("dividedTotal", dividedTotal);
         project.put(Keys.YEAR, new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
 
-        Aggregation agg = newAggregation(
-                match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
-                        .andOperator(getProcuringEntityIdCriteria(filter))),
+        Aggregation agg =
+                newAggregation(
+                        match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
+                                .andOperator(getProcuringEntityIdCriteria(filter),
+                                        getYearFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
                 new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
                 group("year", "planning.budget.projectLocation").sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
@@ -206,15 +209,15 @@ public class FundingByLocationController extends GenericOCDSController {
         DBObject group = new BasicDBObject();
         group.put(Fields.UNDERSCORE_ID, null);
         group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, new BasicDBObject("$sum", 1));
-		group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
-				new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays.asList(
-						new BasicDBObject("$gt",
-								Arrays.asList(
-										new BasicDBObject("$size",
-												new BasicDBObject("$ifNull", Arrays.asList(
-														"$planning.budget.projectLocation", ArrayUtils.toArray()))),
-										0)),
-						1, 0))));
+        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
+                new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays.asList(
+                        new BasicDBObject("$gt",
+                                Arrays.asList(
+                                        new BasicDBObject("$size",
+                                                new BasicDBObject("$ifNull", Arrays.asList(
+                                                        "$planning.budget.projectLocation", ArrayUtils.toArray()))),
+                                        0)),
+                        1, 0))));
 
         DBObject project2 = new BasicDBObject();
         project2.put(Fields.UNDERSCORE_ID, 0);

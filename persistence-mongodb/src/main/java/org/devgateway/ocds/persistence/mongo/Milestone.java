@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -294,11 +295,11 @@ public class Milestone implements Identifiable {
     }
 
     public enum Status {
-    	met("met"),
+        met("met"),
 
-    	notMet("notMet"),
+        notMet("notMet"),
 
-    	partiallyMet("partiallyMet");
+        partiallyMet("partiallyMet");
 
         private final String value;
 
@@ -332,4 +333,8 @@ public class Milestone implements Identifiable {
 
     }
 
+    @Override
+    public Serializable getIdProperty() {
+        return id;
+    }
 }

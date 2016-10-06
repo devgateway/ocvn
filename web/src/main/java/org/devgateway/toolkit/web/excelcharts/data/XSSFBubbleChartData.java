@@ -17,7 +17,7 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTPlotArea;
  * @author idobre
  * @since 8/12/16
  *
- * Holds data for a XSSF Bubble Chart.
+ *        Holds data for a XSSF Bubble Chart.
  */
 public class XSSFBubbleChartData extends AbstractXSSFChartData {
     public XSSFBubbleChartData(final String title) {
@@ -26,7 +26,7 @@ public class XSSFBubbleChartData extends AbstractXSSFChartData {
 
     @Override
     protected CustomChartSeries createNewSerie(final int id, final int order, final ChartDataSource<?> categories,
-                                               final ChartDataSource<? extends Number> values) {
+            final ChartDataSource<? extends Number> values) {
         return new AbstractSeries(id, order, categories, values) {
             @Override
             public void addToChart(final XmlObject ctChart) {
@@ -70,4 +70,3 @@ public class XSSFBubbleChartData extends AbstractXSSFChartData {
         xssfChart.setTitle(this.title);
     }
 }
-

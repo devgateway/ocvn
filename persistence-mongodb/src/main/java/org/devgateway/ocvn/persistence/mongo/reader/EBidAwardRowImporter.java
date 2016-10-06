@@ -24,91 +24,90 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
  */
 public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
+    public EBidAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
+            OrganizationRepository organizationRepository, int skipRows) {
+        super(releaseRepository, importService, organizationRepository, skipRows);
+    }
 
-	public EBidAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-			OrganizationRepository organizationRepository, int skipRows) {
-		super(releaseRepository, importService, organizationRepository, skipRows);
-	}
+    @Override
+    public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
 
-	@Override
-	public Release createReleaseFromReleaseRow(final String[] row) throws ParseException {
+        Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
 
-		Release release = repository.findByPlanningBidNo(getRowCell(row, 0));
+        if (release == null) {
+            release = newReleaseFromAwardFactory(getRowCell(row, 0));
+        }
 
-		if (release == null) {
-			release = newReleaseFromAwardFactory(getRowCell(row, 0));
-		}
-		
-		if (release.getTender() == null) {
-			VNTender tender = new VNTender();
-			tender.setId(release.getOcid());
-			release.setTender(tender);
-		}
+        if (release.getTender() == null) {
+            VNTender tender = new VNTender();
+            tender.setId(release.getOcid());
+            release.setTender(tender);
+        }
 
-		release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission.toString());
+        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission.toString());
 
-		VNAward award = new VNAward();
-		award.setId(release.getOcid() + "-award-" + release.getAwards().size());
-		release.getAwards().add(award);
+        VNAward award = new VNAward();
+        award.setId(release.getOcid() + "-award-" + release.getAwards().size());
+        release.getAwards().add(award);
 
-		Amount value = new Amount();
-		value.setCurrency("VND");
-		value.setAmount(getDecimal(getRowCell(row, 1)));
-		award.setValue(value);
+        Amount value = new Amount();
+        value.setCurrency("VND");
+        value.setAmount(getDecimal(getRowCell(row, 1)));
+        award.setValue(value);
 
-		Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
+        Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
 
-		if (supplier == null) {
-			supplier = new Organization();
-			supplier.setName(getRowCellUpper(row, 2));
-			supplier.setId(getRowCellUpper(row, 2));
-			supplier.getTypes().add(Organization.OrganizationType.supplier);
-			supplier = organizationRepository.insert(supplier);
-		} else {
-			if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
-				supplier.getTypes().add(Organization.OrganizationType.supplier);
-				supplier = organizationRepository.save(supplier);
-			}
-		}
+        if (supplier == null) {
+            supplier = new Organization();
+            supplier.setName(getRowCellUpper(row, 2));
+            supplier.setId(getRowCellUpper(row, 2));
+            supplier.getTypes().add(Organization.OrganizationType.supplier);
+            supplier = organizationRepository.insert(supplier);
+        } else {
+            if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
+                supplier.getTypes().add(Organization.OrganizationType.supplier);
+                supplier = organizationRepository.save(supplier);
+            }
+        }
 
-		award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
+        award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
 
-		// active=successful awards have suppliers
-		if (Award.Status.active.equals(award.getStatus())) {
-			award.getSuppliers().add(supplier);
-		}
+        // active=successful awards have suppliers
+        if (Award.Status.active.equals(award.getStatus())) {
+            award.getSuppliers().add(supplier);
+        }
 
-		award.setContractTime(getRowCell(row, 3));
+        award.setContractTime(getRowCell(row, 3));
 
-		award.setBidOpenRank(getInteger(getRowCell(row, 4)));
+        award.setBidOpenRank(getInteger(getRowCell(row, 4)));
 
-		award.setInelibigleYN(getRowCell(row, 6));
+        award.setInelibigleYN(getRowCell(row, 6));
 
-		award.setIneligibleRson(getRowCell(row, 7));
+        award.setIneligibleRson(getRowCell(row, 7));
 
-		if (getRowCell(row, 8) != null) {
-			award.setAlternateDate(getExcelDate(getRowCell(row, 8)));
-		}
+        if (getRowCell(row, 8) != null) {
+            award.setAlternateDate(getExcelDate(getRowCell(row, 8)));
+        }
 
-		if (getRowCell(row, 10) != null) {
-			award.setDate(getExcelDate(getRowCell(row, 10)));
-		}
+        if (getRowCell(row, 10) != null) {
+            award.setDate(getExcelDate(getRowCell(row, 10)));
+        }
 
-		if (getRowCell(row, 9) != null) {
-			award.setPublishedDate(getExcelDate(getRowCell(row, 9)));
-		}
+        if (getRowCell(row, 9) != null) {
+            award.setPublishedDate(getExcelDate(getRowCell(row, 9)));
+        }
 
-		// regardless if the award is active or not, we add the supplier to
-		// tenderers
-		release.getTender().getTenderers().add(supplier);
+        // regardless if the award is active or not, we add the supplier to
+        // tenderers
+        release.getTender().getTenderers().add(supplier);
 
-		release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
+        release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 
-		// copy items from tender
-		award.getItems().addAll(release.getTender().getItems());
+        // copy items from tender
+        award.getItems().addAll(release.getTender().getItems());
 
-		checkForAwardOutliers(release, award);
-		
-		return release;
-	}
+        checkForAwardOutliers(release, award);
+
+        return release;
+    }
 }

@@ -19,8 +19,8 @@ package org.devgateway.toolkit.persistence.dao;
  */
 public interface Labelable {
 
-	void setLabel(String label);
+    void setLabel(String label);
 
-	String getLabel();
+    String getLabel();
 
 }

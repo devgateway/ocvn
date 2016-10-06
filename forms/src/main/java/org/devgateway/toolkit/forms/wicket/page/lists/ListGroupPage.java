@@ -27,20 +27,20 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath(value = "/listgroups")
 public class ListGroupPage extends AbstractListPage<Group> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -324298525712620234L;
-	@SpringBean
-	protected GroupRepository groupRepository;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -324298525712620234L;
+    @SpringBean
+    protected GroupRepository groupRepository;
 
-	public ListGroupPage(final PageParameters pageParameters) {
-		super(pageParameters);
-		this.jpaRepository = groupRepository;
-		this.editPageClass = EditGroupPage.class;
-		columns.add(new PropertyColumn<Group, String>(
-				new Model<String>((new StringResourceModel("name", ListGroupPage.this, null)).getString()), "label",
-				"label"));
-	}
+    public ListGroupPage(final PageParameters pageParameters) {
+        super(pageParameters);
+        this.jpaRepository = groupRepository;
+        this.editPageClass = EditGroupPage.class;
+        columns.add(new PropertyColumn<Group, String>(
+                new Model<String>((new StringResourceModel("name", ListGroupPage.this, null)).getString()), "label",
+                "label"));
+    }
 
 }

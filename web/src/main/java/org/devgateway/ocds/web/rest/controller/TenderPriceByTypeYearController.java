@@ -63,8 +63,8 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
     @ApiOperation(value = "Returns the tender price by OCDS type (procurementMethod), by year. "
             + "The OCDS type is read from tender.procurementMethod. The tender price is read from "
             + "tender.value.amount")
-    @RequestMapping(value = "/api/tenderPriceByProcurementMethod", method = { RequestMethod.POST,
-            RequestMethod.GET }, produces = "application/json")
+    @RequestMapping(value = "/api/tenderPriceByProcurementMethod", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
     public List<DBObject> tenderPriceByProcurementMethod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
@@ -73,12 +73,11 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-                        .andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
-                getMatchDefaultFilterOperation(filter),
-                new CustomProjectionOperation(project), group("tender." + Keys.PROCUREMENT_METHOD)
-                        .sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
-				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
-						.andExclude(Fields.UNDERSCORE_ID),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomProjectionOperation(project),
+                group("tender." + Keys.PROCUREMENT_METHOD).sum("$tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),
+                project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD).andInclude(Keys.TOTAL_TENDER_AMOUNT)
+                        .andExclude(Fields.UNDERSCORE_ID),
                 sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
@@ -90,23 +89,23 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
     @ApiOperation(value = "Returns the tender price by Vietnam type (procurementMethodDetails), by year. "
             + "The OCDS type is read from tender.procurementMethodDetails. The tender price is read from "
             + "tender.value.amount")
-    @RequestMapping(value = "/api/tenderPriceByBidSelectionMethod", method = { RequestMethod.POST,
-            RequestMethod.GET }, produces = "application/json")
+    @RequestMapping(value = "/api/tenderPriceByBidSelectionMethod", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
     public List<DBObject> tenderPriceByBidSelectionMethod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put("tender." + Keys.PROCUREMENT_METHOD_DETAILS, 1);
         project.put("tender.value", 1);
 
-		Aggregation agg = newAggregation(
-				match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
-						.andOperator(getYearFilterCriteria("tender.tenderPeriod.startDate", filter))),
-				getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
-				group("tender." + Keys.PROCUREMENT_METHOD_DETAILS).sum("$tender.value.amount")
-						.as(Keys.TOTAL_TENDER_AMOUNT),
-				project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD_DETAILS)
-						.andInclude(Keys.TOTAL_TENDER_AMOUNT).andExclude(Fields.UNDERSCORE_ID),
-				sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
+        Aggregation agg = newAggregation(
+                match(where("awards").elemMatch(where("status").is("active")).and("tender.value").exists(true)
+                        .andOperator(getYearFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                getMatchDefaultFilterOperation(filter), new CustomProjectionOperation(project),
+                group("tender." + Keys.PROCUREMENT_METHOD_DETAILS).sum("$tender.value.amount")
+                        .as(Keys.TOTAL_TENDER_AMOUNT),
+                project().and(Fields.UNDERSCORE_ID).as(Keys.PROCUREMENT_METHOD_DETAILS)
+                        .andInclude(Keys.TOTAL_TENDER_AMOUNT).andExclude(Fields.UNDERSCORE_ID),
+                sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -116,38 +115,38 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
 
     @ApiOperation(value = "Same as /api/tenderPriceByBidSelectionMethod, but it always returns "
             + "all bidSelectionMethods (it adds the missing bid selection methods with zero totals")
-    @RequestMapping(value = "/api/tenderPriceByAllBidSelectionMethods", method = { RequestMethod.POST,
-            RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> tenderPriceByAllBidSelectionMethods(
-            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    @RequestMapping(value = "/api/tenderPriceByAllBidSelectionMethods",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject>
+            tenderPriceByAllBidSelectionMethods(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         List<DBObject> tenderPriceByBidSelectionMethod = tenderPriceByBidSelectionMethod(filter);
 
-        //create a treeset ordered by procurment method details key
+        // create a treeset ordered by procurment method details key
         Collection<DBObject> ret = new TreeSet<>((DBObject o1, DBObject o2) -> o1.get(Keys.PROCUREMENT_METHOD_DETAILS)
                 .toString().compareTo(o2.get(Keys.PROCUREMENT_METHOD_DETAILS).toString()));
 
         // add them all to sorted set
         for (DBObject o : tenderPriceByBidSelectionMethod) {
-			if (o.containsField(Keys.PROCUREMENT_METHOD_DETAILS) && o.get(Keys.PROCUREMENT_METHOD_DETAILS) != null) {
-				ret.add(o);
+            if (o.containsField(Keys.PROCUREMENT_METHOD_DETAILS) && o.get(Keys.PROCUREMENT_METHOD_DETAILS) != null) {
+                ret.add(o);
             } else {
                 o.put(Keys.PROCUREMENT_METHOD_DETAILS, UNSPECIFIED);
                 ret.add(o);
             }
         }
 
-        //get all the non null bid selection methods
+        // get all the non null bid selection methods
         Set<Object> bidSelectionMethods = bidSelectionMethodSearchController.bidSelectionMethods().stream()
                 .filter(e -> e.get(Fields.UNDERSCORE_ID) != null).map(e -> e.get(Fields.UNDERSCORE_ID))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         bidSelectionMethods.add(UNSPECIFIED);
 
-        //remove elements that already are in the result
-        bidSelectionMethods.removeAll(ret.stream()
-                .map(e -> e.get(Keys.PROCUREMENT_METHOD_DETAILS)).collect(Collectors.toSet()));
+        // remove elements that already are in the result
+        bidSelectionMethods
+                .removeAll(ret.stream().map(e -> e.get(Keys.PROCUREMENT_METHOD_DETAILS)).collect(Collectors.toSet()));
 
-        //add the missing procurementmethoddetails with zero amounts
+        // add the missing procurementmethoddetails with zero amounts
         bidSelectionMethods.forEach(e -> {
             DBObject obj = new BasicDBObject(Keys.PROCUREMENT_METHOD_DETAILS, e.toString());
             obj.put(Keys.TOTAL_TENDER_AMOUNT, BigDecimal.ZERO);

@@ -7,8 +7,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface GenericOrganizationRepository<T extends Organization> extends MongoRepository<T, String> {
 
-	T findOne(String id);
+    T findOne(String id);
 
-	T findByIdOrNameAllIgnoreCase(String id, String name);
-	
+    T findByIdOrNameAllIgnoreCase(String id, String name);
+
 }

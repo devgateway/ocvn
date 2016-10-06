@@ -10,22 +10,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JMXConfiguration {
 
-	@Bean
-	public WebSpringServerConnectionProvider jMiniXConnectionProvider() {
-		return new WebSpringServerConnectionProvider();
-	}
+    @Bean
+    public WebSpringServerConnectionProvider jMiniXConnectionProvider() {
+        return new WebSpringServerConnectionProvider();
+    }
 
-	@Bean
-	public MiniConsoleApplication miniConsoleApplication() {
-		MiniConsoleApplication mca = new MiniConsoleApplication();
-		mca.setServerConnectionProvider(jMiniXConnectionProvider());
-		return mca;
-	}
+    @Bean
+    public MiniConsoleApplication miniConsoleApplication() {
+        MiniConsoleApplication mca = new MiniConsoleApplication();
+        mca.setServerConnectionProvider(jMiniXConnectionProvider());
+        return mca;
+    }
 
-	@Bean
-	public ServletRegistrationBean jminiXServletRegistration(final MiniConsoleApplication miniConsoleApplication) {
-		ServletRegistrationBean registration = new ServletRegistrationBean(new SpringMiniConsoleServlet());
-		registration.addUrlMappings("/jminix/*");
-		return registration;
-	}
+    @Bean
+    public ServletRegistrationBean jminiXServletRegistration(final MiniConsoleApplication miniConsoleApplication) {
+        ServletRegistrationBean registration = new ServletRegistrationBean(new SpringMiniConsoleServlet());
+        registration.addUrlMappings("/jminix/*");
+        return registration;
+    }
 }

@@ -47,7 +47,8 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
     public ExcelChartSheetDefault(final Workbook workbook, final String excelSheetName) {
         this.excelSheet = workbook.createSheet(excelSheetName);
 
-        // get the styles from workbook without creating them again (by default the workbook has already 1 style)
+        // get the styles from workbook without creating them again (by default
+        // the workbook has already 1 style)
         if (workbook.getNumCellStyles() > 1) {
             this.dataStyleCell = workbook.getCellStyleAt((short) 1);
             this.headerStyleCell = workbook.getCellStyleAt((short) 2);
@@ -84,9 +85,11 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
     @Override
     public void writeCell(final Object value, final Row row, final int column) {
         // try to determine the cell type based on the object value
-        // if nothing matches then use 'CELL_TYPE_STRING' as type and call the object toString() function.
-        //      * don't create any cell if the value is null (Cell.CELL_TYPE_BLANK)
-        //      * do nothing if we have an empty List/Set instead of display empty brackets like []
+        // if nothing matches then use 'CELL_TYPE_STRING' as type and call the
+        // object toString() function.
+        // * don't create any cell if the value is null (Cell.CELL_TYPE_BLANK)
+        // * do nothing if we have an empty List/Set instead of display empty
+        // brackets like []
         if (value != null && !((value instanceof List || value instanceof Set) && ((Collection) value).isEmpty())) {
             final Cell cell;
             if (value instanceof String) {
@@ -131,9 +134,11 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
     }
 
     /**
-     * Create a new row and set the default height (different heights for headers and data rows)
+     * Create a new row and set the default height (different heights for
+     * headers and data rows)
      *
-     * @param rowNumber - creates a new row at line rowNumber
+     * @param rowNumber
+     *            - creates a new row at line rowNumber
      * @return Row
      */
     @Override
@@ -141,17 +146,17 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
         final Row row = excelSheet.createRow(rowNumber);
 
         if (rowNumber < 1) {
-            row.setHeight((short) ROWHEADERHEIGHT);             // 40px (800 / 10 / 2)
+            row.setHeight((short) ROWHEADERHEIGHT); // 40px (800 / 10 / 2)
         } else {
-            row.setHeight((short) ROWHEIGHT);                   // 30px (600 / 10 / 2)
+            row.setHeight((short) ROWHEIGHT); // 30px (600 / 10 / 2)
         }
 
         return row;
     }
 
     /**
-     * Create a new row and return it. Since the rows in the sheet are 0-based we can use
-     * {@link Sheet#getPhysicalNumberOfRows} to get the new free row
+     * Create a new row and return it. Since the rows in the sheet are 0-based
+     * we can use {@link Sheet#getPhysicalNumberOfRows} to get the new free row
      */
     @Override
     public Row createRow() {
@@ -179,18 +184,21 @@ public final class ExcelChartSheetDefault implements ExcelChartSheet {
     }
 
     /**
-     * Returns a ChartDataSource with the categories. Categories should be on the first row of the excel sheet
+     * Returns a ChartDataSource with the categories. Categories should be on
+     * the first row of the excel sheet
      */
     @Override
     public ChartDataSource<?> getCategoryChartDataSource() {
         if (excelSheet.getRow(0) == null) {
             throw new IllegalStateException("It seems that we don't have any category in the excel file");
         }
-        return getChartDataSource(0);      // categories should always be on the first row
+        return getChartDataSource(0); // categories should always be on the
+                                      // first row
     }
 
     /**
-     * Returns a List of ChartDataSource with the values. Values should always be present after the first row (category)
+     * Returns a List of ChartDataSource with the values. Values should always
+     * be present after the first row (category)
      */
     @Override
     public List<ChartDataSource<Number>> getValuesChartDataSource() {

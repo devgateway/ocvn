@@ -42,53 +42,53 @@ import org.wicketstuff.annotation.mount.MountPath;
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)
 public class RevisionsPage extends BasePage {
 
-	@SpringBean
-	private EntityManager entityManager;
+    @SpringBean
+    private EntityManager entityManager;
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param parameters
-	 */
-	public RevisionsPage(final PageParameters parameters) {
-		super(parameters);
+    /**
+     * @param parameters
+     */
+    public RevisionsPage(final PageParameters parameters) {
+        super(parameters);
 
-		final long entityId = parameters.get(WebConstants.PARAM_ID).toLong();
-		String entityClass = parameters.get(WebConstants.PARAM_ENTITY_CLASS).toString();
+        final long entityId = parameters.get(WebConstants.PARAM_ID).toLong();
+        String entityClass = parameters.get(WebConstants.PARAM_ENTITY_CLASS).toString();
 
-		Class<?> clazz = null;
-		try {
-			clazz = Class.forName(entityClass);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(entityClass);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-		AuditReader reader = AuditReaderFactory.get(entityManager);
+        AuditReader reader = AuditReaderFactory.get(entityManager);
 
-		AuditQuery query = reader.createQuery().forRevisionsOfEntity(clazz, false, true);
-		query.add(AuditEntity.property("id").eq(entityId));
+        AuditQuery query = reader.createQuery().forRevisionsOfEntity(clazz, false, true);
+        query.add(AuditEntity.property("id").eq(entityId));
 
-		List<?> resultList = query.getResultList();
-		List<DefaultRevisionEntity> items = new ArrayList<>();
-		for (Object item : resultList) {
-			Object[] obj = (Object[]) item;
-			items.add((DefaultRevisionEntity) obj[1]);
-		}
+        List<?> resultList = query.getResultList();
+        List<DefaultRevisionEntity> items = new ArrayList<>();
+        for (Object item : resultList) {
+            Object[] obj = (Object[]) item;
+            items.add((DefaultRevisionEntity) obj[1]);
+        }
 
-		add(new ListView<DefaultRevisionEntity>("revisions", items) {
+        add(new ListView<DefaultRevisionEntity>("revisions", items) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void populateItem(final ListItem<DefaultRevisionEntity> item) {
-				final PageParameters pp = new PageParameters();
-				pp.set(WebConstants.PARAM_REVISION_ID, item.getModelObject().getId());
-				pp.set(WebConstants.PARAM_ID, entityId);
+            @Override
+            protected void populateItem(final ListItem<DefaultRevisionEntity> item) {
+                final PageParameters pp = new PageParameters();
+                pp.set(WebConstants.PARAM_REVISION_ID, item.getModelObject().getId());
+                pp.set(WebConstants.PARAM_ID, entityId);
 
-				item.add(new Label("revisionNumber", new PropertyModel<Integer>(item.getModel(), "id")));
-				item.add(DateLabel.forDatePattern("revisionDate",
-						new PropertyModel<Date>(item.getModel(), "revisionDate"), "yyyy/MM/dd @HH:mm:ss z"));
-			}
-		});
-	}
+                item.add(new Label("revisionNumber", new PropertyModel<Integer>(item.getModel(), "id")));
+                item.add(DateLabel.forDatePattern("revisionDate",
+                        new PropertyModel<Date>(item.getModel(), "revisionDate"), "yyyy/MM/dd @HH:mm:ss z"));
+            }
+        });
+    }
 }

@@ -111,8 +111,7 @@
     </module>
     <module name="Translation"/>
     <module name="FileTabCharacter">
-        <property name="severity" value="ignore"/>
-        <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+        <property name="fileExtensions" value="java,xml,html,md"/>
     </module>
     <module name="RegexpSingleline">
         <property name="severity" value="ignore"/>

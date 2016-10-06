@@ -26,39 +26,39 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
  */
 
 public class AjaxBootstrapNavigationToolbar extends AbstractToolbar {
-	private static final long serialVersionUID = 230663553625059960L;
+    private static final long serialVersionUID = 230663553625059960L;
 
-	public AjaxBootstrapNavigationToolbar(final DataTable<?, ?> table) {
-		super(table);
+    public AjaxBootstrapNavigationToolbar(final DataTable<?, ?> table) {
+        super(table);
 
-		WebMarkupContainer span = new WebMarkupContainer("span");
-		this.add(span);
-		span.add(AttributeModifier.replace("colspan", new AbstractReadOnlyModel<String>() {
-			private static final long serialVersionUID = 1L;
+        WebMarkupContainer span = new WebMarkupContainer("span");
+        this.add(span);
+        span.add(AttributeModifier.replace("colspan", new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getObject() {
-				return String.valueOf(table.getColumns().size());
-			}
-		}));
+            @Override
+            public String getObject() {
+                return String.valueOf(table.getColumns().size());
+            }
+        }));
 
-		span.add(new Component[] { this.newPagingNavigator("navigator", table) });
-	}
+        span.add(new Component[] { this.newPagingNavigator("navigator", table) });
+    }
 
-	protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
-		return new AjaxBootstrapNavigator(navigatorId, table) {
-			private static final long serialVersionUID = 1L;
+    protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
+        return new AjaxBootstrapNavigator(navigatorId, table) {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onAjaxEvent(final AjaxRequestTarget target) {
-				target.add(table);
-			}
-		};
-	}
+            @Override
+            protected void onAjaxEvent(final AjaxRequestTarget target) {
+                target.add(table);
+            }
+        };
+    }
 
-	@Override
-	protected void onConfigure() {
-		super.onConfigure();
-		this.setVisible(this.getTable().getPageCount() > 1L);
-	}
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        this.setVisible(this.getTable().getPageCount() > 1L);
+    }
 }

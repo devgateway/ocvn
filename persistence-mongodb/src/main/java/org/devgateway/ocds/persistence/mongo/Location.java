@@ -2,6 +2,9 @@ package org.devgateway.ocds.persistence.mongo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -37,7 +40,7 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
     private String description;
 
     @JsonProperty("gazetteer")
-	private Gazetteer gazetteer = new Gazetteer();
+    private Gazetteer gazetteer = new Gazetteer();
 
     /**
      * A URI to a further description of the activity location. This may be a human readable document with information
@@ -47,7 +50,6 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
     @JsonProperty("uri")
     private String uri;
 
-    @Override
     public String getId() {
         return id;
     }
@@ -182,5 +184,10 @@ public abstract class Location<T extends GeoJson<?>> implements Identifiable {
                 append(gazetteer, rhs.gazetteer).
                 append(uri, rhs.uri).
                 isEquals();
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
     }
 }

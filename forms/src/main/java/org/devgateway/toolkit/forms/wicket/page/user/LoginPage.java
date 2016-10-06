@@ -76,41 +76,42 @@ public class LoginPage extends BasePage {
             username.required();
             add(username);
 
-            final PasswordFieldBootstrapFormComponent password = new PasswordFieldBootstrapFormComponent("password",
-                    new PropertyModel<>(this, "password"));
+            final PasswordFieldBootstrapFormComponent password =
+                    new PasswordFieldBootstrapFormComponent("password", new PropertyModel<>(this, "password"));
             password.getField().setResetPassword(false);
             add(password);
 
-            final IndicatingAjaxButton submit = new IndicatingAjaxButton("submit",
-                    new StringResourceModel("submit.label", LoginPage.this, null)) {
-                private static final long serialVersionUID = 1L;
+            final IndicatingAjaxButton submit =
+                    new IndicatingAjaxButton("submit", new StringResourceModel("submit.label", LoginPage.this, null)) {
+                        private static final long serialVersionUID = 1L;
 
-                @Override
-                protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                    SSAuthenticatedWebSession session = SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
-                    if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
-                        Person user = SecurityUtil.getCurrentAuthenticatedPerson();
-                        if (user.getChangePassword()) {
-                            PageParameters pageParam = new PageParameters();
-                            pageParam.add(WebConstants.PARAM_ID, user.getId());
-                            setResponsePage(ChangePasswordPage.class, pageParam);
-                        } else {
-                            setResponsePage(getApplication().getHomePage());
+                        @Override
+                        protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                            SSAuthenticatedWebSession session =
+                                    SSAuthenticatedWebSession.getSSAuthenticatedWebSession();
+                            if (session.signIn(LoginForm.this.username, LoginForm.this.password)) {
+                                Person user = SecurityUtil.getCurrentAuthenticatedPerson();
+                                if (user.getChangePassword()) {
+                                    PageParameters pageParam = new PageParameters();
+                                    pageParam.add(WebConstants.PARAM_ID, user.getId());
+                                    setResponsePage(ChangePasswordPage.class, pageParam);
+                                } else {
+                                    setResponsePage(getApplication().getHomePage());
+                                }
+                            } else if (session.getAe().getMessage().equalsIgnoreCase("User is disabled")) {
+                                notificationPanel.error(session.getAe().getMessage());
+                                target.add(notificationPanel);
+                            } else {
+                                notificationPanel.error(getString("bad_credentials"));
+                                target.add(notificationPanel);
+                            }
                         }
-                    } else if (session.getAe().getMessage().equalsIgnoreCase("User is disabled")) {
-                        notificationPanel.error(session.getAe().getMessage());
-                        target.add(notificationPanel);
-                    } else {
-                        notificationPanel.error(getString("bad_credentials"));
-                        target.add(notificationPanel);
-                    }
-                }
 
-                @Override
-                protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-                    target.add(notificationPanel);
-                }
-            };
+                        @Override
+                        protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                            target.add(notificationPanel);
+                        }
+                    };
             add(submit);
 
             final IndicatingAjaxButton forgotPassword = new IndicatingAjaxButton("forgotPassword",
@@ -133,12 +134,14 @@ public class LoginPage extends BasePage {
     }
 
     /**
-     * @param parameters  The page parameters.
+     * @param parameters
+     *            The page parameters.
      */
     public LoginPage(final PageParameters parameters) {
         super(parameters);
 
-        // redirect to homepage if user reaches the /login page while authenticated
+        // redirect to homepage if user reaches the /login page while
+        // authenticated
         if (AbstractAuthenticatedWebSession.get().isSignedIn()) {
             setResponsePage(Homepage.class);
         }

@@ -19,7 +19,7 @@ package org.devgateway.toolkit.persistence.dao;
  *
  */
 public interface Indexable {
-	int getIndex();
+    int getIndex();
 
-	void setIndex(int index);
+    void setIndex(int index);
 }

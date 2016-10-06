@@ -9,6 +9,7 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -291,6 +292,11 @@ public class Transaction implements Identifiable {
                 append(receiverOrganization, rhs.receiverOrganization).
                 append(uri, rhs.uri).
                 isEquals();
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return id;
     }
 
 }

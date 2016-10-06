@@ -148,7 +148,7 @@ public class VNImportService implements ExcelImportService {
     }
 
     private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer,
-                             final int importRowBatch) {
+            final int importRowBatch) {
         logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
 
         XExcelFileReader reader = null;
@@ -170,13 +170,14 @@ public class VNImportService implements ExcelImportService {
             }
 
         } catch (Exception e) {
-            logMessage(e.getMessage());
+            logMessage("<font style='color:red'>" + e + "</font>");
             e.printStackTrace();
         } finally {
-            reader.close();
+            if (reader != null) {
+                reader.close();
+            }
         }
     }
-
 
     /**
      * Simple method that gets all cache names and invokes {@link Cache#clear()}
@@ -199,34 +200,39 @@ public class VNImportService implements ExcelImportService {
      * @throws IOException
      */
     private String saveSourceFilesToTempDir(final byte[] prototypeDatabase, final byte[] locations,
-                                            final byte[] publicInstitutionsSuppliers)
-            throws FileNotFoundException, IOException {
+            final byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
         File tempDir = Files.createTempDir();
-        FileOutputStream prototypeDatabaseOutputStream = new FileOutputStream(new File(tempDir, DATABASE_FILE_NAME));
-        prototypeDatabaseOutputStream.write(prototypeDatabase);
-        prototypeDatabaseOutputStream.close();
+        if (prototypeDatabase != null) {
+            FileOutputStream prototypeDatabaseOutputStream =
+                    new FileOutputStream(new File(tempDir, DATABASE_FILE_NAME));
+            prototypeDatabaseOutputStream.write(prototypeDatabase);
+            prototypeDatabaseOutputStream.close();
+        }
 
-        FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
-        locationsOutputStream.write(locations);
-        locationsOutputStream.close();
+        if (locations != null) {
+            FileOutputStream locationsOutputStream = new FileOutputStream(new File(tempDir, LOCATIONS_FILE_NAME));
+            locationsOutputStream.write(locations);
+            locationsOutputStream.close();
+        }
 
-        FileOutputStream publicInstitutionsSuppliersOutputStream = new FileOutputStream(
-                new File(tempDir, ORGS_FILE_NAME));
-        publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
-        publicInstitutionsSuppliersOutputStream.close();
+        if (publicInstitutionsSuppliers != null) {
+            FileOutputStream publicInstitutionsSuppliersOutputStream =
+                    new FileOutputStream(new File(tempDir, ORGS_FILE_NAME));
+            publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
+            publicInstitutionsSuppliersOutputStream.close();
+        }
 
         return tempDir.toURI().toURL().toString();
     }
 
     @Async
     public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-                                final byte[] publicInstitutionsSuppliers,
-                                final Boolean purgeDatabase, final Boolean validateData)
+            final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase, final Boolean validateData)
             throws InterruptedException {
 
         String tempDirPath = null;
 
-		clearAllCaches(); //clears caches before import starts
+        clearAllCaches(); // clears caches before import starts
 
         try {
             newMsgBuffer();
@@ -236,45 +242,47 @@ public class VNImportService implements ExcelImportService {
 
             tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers);
 
-            if (fileTypes.contains(ImportFileTypes.LOCATIONS)) {
+            if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
                         new LocationRowImporter(locationRepository, this, 1), 1);
             }
 
-            if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS)) {
+            if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
                         new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
             }
 
-            if (fileTypes.contains(ImportFileTypes.SUPPLIERS)) {
+            if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
                         new SupplierRowImporter(organizationRepository, this, 2), 1);
             }
 
-            if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
-                        new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 1));
-            }
+            if (prototypeDatabase != null) {
+                if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
+                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
+                            new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 1));
+                }
 
-            if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
-                        new BidPlansRowImporter(releaseRepository, this, 1));
-            }
+                if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
+                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
+                            new BidPlansRowImporter(releaseRepository, this, 1));
+                }
 
-            if (fileTypes.contains(ImportFileTypes.TENDERS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
-                        new TenderRowImporter(releaseRepository, this, organizationRepository, classificationRepository,
-                                contrMethodRepository, locationRepository, 1));
-            }
+                if (fileTypes.contains(ImportFileTypes.TENDERS)) {
+                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
+                            new TenderRowImporter(releaseRepository, this, organizationRepository,
+                                    classificationRepository, contrMethodRepository, locationRepository, 1));
+                }
 
-            if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
-                        new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 1));
-            }
+                if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
+                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
+                            new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+                }
 
-            if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
-                importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
-                        new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+                if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
+                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
+                            new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+                }
             }
 
             if (purgeDatabase) {
@@ -291,7 +299,7 @@ public class VNImportService implements ExcelImportService {
             logger.error(e.getMessage());
             e.printStackTrace();
         } finally {
-			clearAllCaches(); //always clears caches post import
+            clearAllCaches(); // always clears caches post import
             if (tempDirPath != null) {
                 try {
                     FileUtils.deleteDirectory(Paths.get(new URL(tempDirPath).toURI()).toFile());
@@ -318,7 +326,7 @@ public class VNImportService implements ExcelImportService {
             page = releaseRepository.findAll(new PageRequest(pageNumber++, VALIDATION_BATCH));
             page.getContent().parallelStream().map(rel -> validationService.validate(rel))
                     .filter(r -> !r.getReport().isSuccess()).forEach(r -> logMessage(
-                    "<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
+                            "<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
             processedCount += page.getNumberOfElements();
             logMessage("Validated " + processedCount + " releases");
         } while (!page.isLast());

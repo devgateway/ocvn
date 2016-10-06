@@ -9,9 +9,9 @@ import java.io.Serializable;
  */
 public class JpaFilterState<T> implements Serializable {
 
-	private static final long serialVersionUID = 2241550275925712593L;
+    private static final long serialVersionUID = 2241550275925712593L;
 
-	public Specification<T> getSpecification() {
+    public Specification<T> getSpecification() {
         return (root, query, cb) -> cb.and();
     }
 }

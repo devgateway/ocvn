@@ -2,7 +2,10 @@ package org.devgateway.ocds.persistence.mongo;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface Identifiable {
 
-    Serializable getId();
+    @JsonIgnore
+    Serializable getIdProperty();
 }

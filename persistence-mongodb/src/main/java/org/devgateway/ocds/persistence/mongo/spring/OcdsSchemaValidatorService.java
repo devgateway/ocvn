@@ -36,7 +36,7 @@ public class OcdsSchemaValidatorService {
 
     private ObjectMapper jacksonObjectMapper;
     private String[] patchResourceNames;
-	private JsonNode ocdsSchemaNode;
+    private JsonNode ocdsSchemaNode;
 
     public class ProcessingReportWithNode {
         private ProcessingReport report;
@@ -133,9 +133,9 @@ public class OcdsSchemaValidatorService {
     public <S> List<ProcessingReportWithNode> validateAll(final Collection<S> values) {
         return values.stream().map(this::validate).collect(Collectors.toList());
     }
-    
+
     public JsonNode findValueInOcdsSchema(final String fieldName) {
-    	return ocdsSchemaNode.findValue(fieldName);
+        return ocdsSchemaNode.findValue(fieldName);
     }
-    
+
 }

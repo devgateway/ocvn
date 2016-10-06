@@ -18,14 +18,14 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class EmailServiceConfiguration {
 
-	private static final int SMTP_PORT = 25;
+    private static final int SMTP_PORT = 25;
 
-	@Bean
-	public JavaMailSenderImpl javaMailSenderImpl() {
-		JavaMailSenderImpl jmsi = new JavaMailSenderImpl();
-		jmsi.setHost("localhost");
-		jmsi.setPort(SMTP_PORT);
-		return jmsi;
-	}
+    @Bean
+    public JavaMailSenderImpl javaMailSenderImpl() {
+        JavaMailSenderImpl jmsi = new JavaMailSenderImpl();
+        jmsi.setHost("localhost");
+        jmsi.setPort(SMTP_PORT);
+        return jmsi;
+    }
 
 }

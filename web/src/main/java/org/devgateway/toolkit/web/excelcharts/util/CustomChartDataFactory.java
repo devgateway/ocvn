@@ -7,7 +7,7 @@ import org.devgateway.toolkit.web.excelcharts.CustomChartData;
  * @author idobre
  * @since 8/11/16
  *
- * A factory for different charts data types (like bar chart, area chart)
+ *        A factory for different charts data types (like bar chart, area chart)
  */
 public interface CustomChartDataFactory {
     /**

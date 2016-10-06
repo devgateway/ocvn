@@ -1,16 +1,16 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.mongodb.DBObject;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.mongodb.DBObject;
 
 /**
  * @author idobre
@@ -25,7 +25,7 @@ public class CostEffectivenessVisualsControllerTest extends AbstractEndPointCont
     @Test
     public void costEffectivenessAwardAmount() throws Exception {
         final List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
-                .costEffectivenessAwardAmount(new DefaultFilterPagingRequest());
+                .costEffectivenessAwardAmount(new YearFilterPagingRequest());
 
         final DBObject first = costEffectivenessAwardAmount.get(0);
         int year = (int) first.get(Fields.UNDERSCORE_ID);

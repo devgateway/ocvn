@@ -20,13 +20,13 @@ import org.wicketstuff.annotation.mount.MountPath;
 @MountPath(value = "/user")
 public class EditUserPageElevated extends EditUserPage {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5372177614898411737L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5372177614898411737L;
 
-	public EditUserPageElevated(final PageParameters parameters) {
-		super(parameters);
-	}
+    public EditUserPageElevated(final PageParameters parameters) {
+        super(parameters);
+    }
 
 }

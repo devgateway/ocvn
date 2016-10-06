@@ -31,6 +31,7 @@ class NrEbid extends FrontendYearFilterableChart{
 }
 
 NrEbid.endpoint = 'percentTendersUsingEBid';
+NrEbid.excelEP = 'numberTendersUsingEBidExcelChart';
 NrEbid.getName = __ => __('Number of eBid Awards');
 NrEbid.getMaxField = pluckImm('totalTendersUsingEbid');
 

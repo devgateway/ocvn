@@ -27,141 +27,140 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
 
-	private final Logger logger = LoggerFactory.getLogger(RowImporter.class);
+    private final Logger logger = LoggerFactory.getLogger(RowImporter.class);
 
-	protected R repository;
+    protected R repository;
 
-	protected ImportService importService;
+    protected ImportService importService;
 
-	protected int skipRows;
-	protected int cursorRowNo = 0;
-	protected int importedRows = 0;
-	
-	
-	public RowImporter(final R repository, final ImportService importService, final int skipRows) {
-		this.repository = repository;
-		this.importService = importService;
-		this.skipRows = skipRows;
-	}
+    protected int skipRows;
+    protected int cursorRowNo = 0;
+    protected int importedRows = 0;
 
-	public String getRowCell(String[] row, int index) {
-		if (row.length > index && !row[index].isEmpty()) {
-			return row[index].trim();
-		}
-		return null;
-	}
-	
-	public String getRowCellUpper(String[] row, int index) {
-		String rowCell = getRowCell(row, index);
-		return rowCell != null ? rowCell.toUpperCase() : null;
-	}
-	
-	/**
-	 * Returns a double number, checking the {@link NumberFormatException} and
-	 * wrapping the error into a {@link RuntimeException} that can be thrown
-	 * later
-	 *
-	 * @param string
-	 * @return
-	 */
-	public Double getDouble(final String string) {
-		if (string == null) {
-			return null;
-		}
-		try {
-			return Double.parseDouble(string);
-		} catch (NumberFormatException e) {
-			throw new RuntimeException("Cell value " + string + " is not a valid number.");
-		}
-	}
+    public RowImporter(final R repository, final ImportService importService, final int skipRows) {
+        this.repository = repository;
+        this.importService = importService;
+        this.skipRows = skipRows;
+    }
 
-	public BigDecimal getDecimal(final String string) {
-		if (string == null) {
-			return null;
-		}
-		try {
-			return new BigDecimal(string);
-		} catch (NumberFormatException e) {
-			throw new RuntimeException("Cell value " + string + " is not a valid decimal.");
-		}
-	}
+    public String getRowCell(String[] row, int index) {
+        if (row.length > index && !row[index].isEmpty()) {
+            return row[index].trim();
+        }
+        return null;
+    }
 
-	public Integer getInteger(final String string) {
-		if (string == null) {
-			return null;
-		}
-		try {
-			return Integer.parseInt(string);
-		} catch (NumberFormatException e) {
-			throw new RuntimeException("Cell value " + string + " is not a valid integer.");
-		}
-	}
+    public String getRowCellUpper(String[] row, int index) {
+        String rowCell = getRowCell(row, index);
+        return rowCell != null ? rowCell.toUpperCase() : null;
+    }
 
-	@Deprecated
-	public Date getDateFromString(final SimpleDateFormat sdf, final String string) {
-		if (string == null) {
-			return null;
-		}
-		try {
-			return sdf.parse(string);
-		} catch (ParseException e) {
-			throw new RuntimeException(
-					"Cell value " + string + " is not a valid date. Use format " + sdf.getNumberFormat().toString());
-		}
-	}
+    /**
+     * Returns a double number, checking the {@link NumberFormatException} and
+     * wrapping the error into a {@link RuntimeException} that can be thrown
+     * later
+     *
+     * @param string
+     * @return
+     */
+    public Double getDouble(final String string) {
+        if (string == null) {
+            return null;
+        }
+        try {
+            return Double.parseDouble(string);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Cell value " + string + " is not a valid number.");
+        }
+    }
 
-	public Date getExcelDate(final String string) {
-		if (string == null) {
-			return null;
-		}
-		Calendar calendar;
-		try {
-			calendar = DateUtil.getJavaCalendar(Double.parseDouble(string), false,
-					TimeZone.getTimeZone(MongoConstants.DEFAULT_IMPORT_TIMEZONE));
-			if (calendar.get(Calendar.YEAR) < MongoConstants.MINIMUM_MONGO_YEAR) {
-				throw new RuntimeException("Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
-						+ " (" + calendar.get(Calendar.YEAR) + ").");		
-			}
-			if (calendar.get(Calendar.YEAR) > MongoConstants.MAXIMUM_MONGO_YEAR) {
-				throw new RuntimeException("Years above " + MongoConstants.MAXIMUM_MONGO_YEAR + " are not allowed"
-						+ " (" + calendar.get(Calendar.YEAR) + ").");
-			}
-		} catch (NumberFormatException e) {
-			throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
-		}
-		return calendar.getTime();
-	}
+    public BigDecimal getDecimal(final String string) {
+        if (string == null) {
+            return null;
+        }
+        try {
+            return new BigDecimal(string);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Cell value " + string + " is not a valid decimal.");
+        }
+    }
 
-	private boolean isRowEmpty(final String[] row) {
-		for (int i = 0; i < row.length; i++) {
-			if (!row[i].trim().isEmpty()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    public Integer getInteger(final String string) {
+        if (string == null) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(string);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Cell value " + string + " is not a valid integer.");
+        }
+    }
 
-	public boolean importRows(final List<String[]> rows) throws ParseException {
+    @Deprecated
+    public Date getDateFromString(final SimpleDateFormat sdf, final String string) {
+        if (string == null) {
+            return null;
+        }
+        try {
+            return sdf.parse(string);
+        } catch (ParseException e) {
+            throw new RuntimeException(
+                    "Cell value " + string + " is not a valid date. Use format " + sdf.getNumberFormat().toString());
+        }
+    }
 
-		for (String[] row : rows) {
-			if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
-				continue;
-			}
+    public Date getExcelDate(final String string) {
+        if (string == null) {
+            return null;
+        }
+        Calendar calendar;
+        try {
+            calendar = DateUtil.getJavaCalendar(Double.parseDouble(string), false,
+                    TimeZone.getTimeZone(MongoConstants.DEFAULT_IMPORT_TIMEZONE));
+            if (calendar.get(Calendar.YEAR) < MongoConstants.MINIMUM_MONGO_YEAR) {
+                throw new RuntimeException("Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
+                        + " (" + calendar.get(Calendar.YEAR) + ").");
+            }
+            if (calendar.get(Calendar.YEAR) > MongoConstants.MAXIMUM_MONGO_YEAR) {
+                throw new RuntimeException("Years above " + MongoConstants.MAXIMUM_MONGO_YEAR + " are not allowed"
+                        + " (" + calendar.get(Calendar.YEAR) + ").");
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Cell value " + string + " is not a valid Excel date.");
+        }
+        return calendar.getTime();
+    }
 
-			try {
-				importRow(row);
-				importedRows++;
-			} catch (Exception e) {
-				importService.logMessage(
-						"	<font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
-				// throw e; we do not stop
-			}
-		}
+    private boolean isRowEmpty(final String[] row) {
+        for (int i = 0; i < row.length; i++) {
+            if (!row[i].trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-		logger.debug("Finished importing " + importedRows + " rows.");
-		return true;
-	}
+    public boolean importRows(final List<String[]> rows) throws ParseException {
 
-	public abstract void importRow(String[] row) throws ParseException;
+        for (String[] row : rows) {
+            if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
+                continue;
+            }
+
+            try {
+                importRow(row);
+                importedRows++;
+            } catch (Exception e) {
+                importService.logMessage(
+                        "    <font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
+                // throw e; we do not stop
+            }
+        }
+
+        logger.debug("Finished importing " + importedRows + " rows.");
+        return true;
+    }
+
+    public abstract void importRow(String[] row) throws ParseException;
 
 }

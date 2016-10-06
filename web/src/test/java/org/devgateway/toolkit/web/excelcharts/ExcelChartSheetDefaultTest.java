@@ -18,18 +18,10 @@ import java.util.List;
  * @since 9/8/16
  */
 public class ExcelChartSheetDefaultTest {
-    private static final List<?> CATEGORIES = Arrays.asList(
-            "cat 1",
-            "cat 2",
-            "cat 3",
-            "cat 4",
-            "cat 5"
-    );
+    private static final List<?> CATEGORIES = Arrays.asList("cat 1", "cat 2", "cat 3", "cat 4", "cat 5");
 
-    private static final List<List<? extends Number>> VALUES = Arrays.asList(
-            Arrays.asList(5, 7, 10, 12, 6),
-            Arrays.asList(20, 12, 10, 5, 14)
-    );
+    private static final List<List<? extends Number>> VALUES =
+            Arrays.asList(Arrays.asList(5, 7, 10, 12, 6), Arrays.asList(20, 12, 10, 5, 14));
 
     private Workbook workbook;
 

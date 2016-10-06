@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integration")
-@SpringBootTest(classes = {PersistenceApplication.class})
+@SpringBootTest(classes = { PersistenceApplication.class })
 @TestPropertySource("classpath:test.properties")
 public abstract class AbstractPersistenceTest {
 

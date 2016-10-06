@@ -59,12 +59,12 @@ public class VNBudget extends Budget {
         this.bidPlanProjectType = bidPlanProjectType;
     }
 
-	public Amount getProjectAmount() {
-		return projectAmount;
-	}
+    public Amount getProjectAmount() {
+        return projectAmount;
+    }
 
-	public void setProjectAmount(Amount projectAmount) {
-		this.projectAmount = projectAmount;
-	}
+    public void setProjectAmount(Amount projectAmount) {
+        this.projectAmount = projectAmount;
+    }
 
 }

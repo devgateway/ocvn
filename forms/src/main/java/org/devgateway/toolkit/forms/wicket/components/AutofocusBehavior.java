@@ -20,9 +20,9 @@ import org.apache.wicket.markup.ComponentTag;
  */
 public class AutofocusBehavior extends Behavior {
 
-	private static final long serialVersionUID = 4562919169661259730L;
+    private static final long serialVersionUID = 4562919169661259730L;
 
-	@Override
+    @Override
     public void onComponentTag(final Component component, final ComponentTag tag) {
         super.onComponentTag(component, tag);
         tag.put("autofocus", "autofocus");

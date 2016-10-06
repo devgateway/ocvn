@@ -32,40 +32,40 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.image.IconBehavior;
  * @since 11/14/14
  */
 public class CustomDownloadLink extends Link<FileMetadata> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private static final TooltipConfig TOOLTIP_CONFIG = new TooltipConfig()
-			.withPlacement(TooltipConfig.Placement.bottom);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private static final TooltipConfig TOOLTIP_CONFIG =
+            new TooltipConfig().withPlacement(TooltipConfig.Placement.bottom);
 
-	public CustomDownloadLink(final String id, final IModel<FileMetadata> model) {
-		super(id, model);
-		add(new IconBehavior(GlyphIconType.download));
-		add(new TooltipBehavior(new StringResourceModel("downloadUploadedFileTooltip", this, null), TOOLTIP_CONFIG));
-	}
+    public CustomDownloadLink(final String id, final IModel<FileMetadata> model) {
+        super(id, model);
+        add(new IconBehavior(GlyphIconType.download));
+        add(new TooltipBehavior(new StringResourceModel("downloadUploadedFileTooltip", this, null), TOOLTIP_CONFIG));
+    }
 
-	@Override
-	public void onClick() {
-		AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+    @Override
+    public void onClick() {
+        AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void write(final OutputStream output) throws IOException {
-				output.write(getModelObject().getContent().getBytes());
-			}
+            @Override
+            public void write(final OutputStream output) throws IOException {
+                output.write(getModelObject().getContent().getBytes());
+            }
 
-			@Override
-			public String getContentType() {
-				return getModelObject().getContentType();
-			}
-		};
+            @Override
+            public String getContentType() {
+                return getModelObject().getContentType();
+            }
+        };
 
-		ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, getModelObject().getName());
-		handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-		getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-	}
+        ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, getModelObject().getName());
+        handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+    }
 }

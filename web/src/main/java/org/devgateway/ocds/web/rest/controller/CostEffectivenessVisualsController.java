@@ -33,8 +33,8 @@ import javax.validation.Valid;
 
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.devgateway.toolkit.web.spring.AsyncControllerLookupService;
@@ -65,9 +65,9 @@ import io.swagger.annotations.ApiOperation;
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
-	
-	@Autowired
-	private AsyncControllerLookupService controllerLookupService;
+
+    @Autowired
+    private AsyncControllerLookupService controllerLookupService;
 
     public static final class Keys {
         public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
@@ -87,7 +87,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
     @RequestMapping(value = "/api/costEffectivenessAwardAmount",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> costEffectivenessAwardAmount(
-            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
         project.put("year", new BasicDBObject("$year", "$awards.date"));
@@ -111,7 +111,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 match(where("awards").elemMatch(where("status").is(Award.Status.active.toString())).and("awards.date")
                         .exists(true)),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"),
-                match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true)),
+                match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true).
+                        andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
                 new CustomProjectionOperation(project),
                 group("$year").sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
                         .sum("totalAwardsWithTender").as(Keys.TOTAL_AWARDS_WITH_TENDER),
@@ -163,7 +164,7 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
-                        .exists(true)),
+                    .exists(true).andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group1),
                 getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as(Keys.TOTAL_TENDER_AMOUNT)
@@ -189,46 +190,47 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
     public List<DBObject> costEffectivenessTenderAwardAmount(
             @ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
-		Future<List<DBObject>> costEffectivenessAwardAmountFuture = controllerLookupService
-				.asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<DBObject>, DefaultFilterPagingRequest>() {
-					@Override
-					public List<DBObject> invokeControllerMethod(DefaultFilterPagingRequest filter) {
-						return costEffectivenessAwardAmount(filter);
-					}
-				}, filter);
-		
-		
-		Future<List<DBObject>> costEffectivenessTenderAmountFuture = controllerLookupService
-				.asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<DBObject>, GroupingFilterPagingRequest>() {
-					@Override
-					public List<DBObject> invokeControllerMethod(GroupingFilterPagingRequest filter) {
-						return costEffectivenessTenderAmount(filter);
-					}
-				}, filter);
-    	
+        Future<List<DBObject>> costEffectivenessAwardAmountFuture = controllerLookupService
+                .asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<DBObject>, GroupingFilterPagingRequest>() {
+                    @Override
+                    public List<DBObject> invokeControllerMethod(GroupingFilterPagingRequest filter) {
+                        return costEffectivenessAwardAmount(filter);
+                    }
+                }, filter);
 
-		controllerLookupService.waitTillDone(costEffectivenessAwardAmountFuture, costEffectivenessTenderAmountFuture);
-		
-		
+
+        Future<List<DBObject>> costEffectivenessTenderAmountFuture = controllerLookupService
+                .asyncInvoke(new AsyncBeanParamControllerMethodCallable<List<DBObject>, GroupingFilterPagingRequest>() {
+                    @Override
+                    public List<DBObject> invokeControllerMethod(GroupingFilterPagingRequest filter) {
+                        return costEffectivenessTenderAmount(filter);
+                    }
+                }, filter);
+
+
+        //this is completely unnecessary since the #get methods are blocking
+        //controllerLookupService.waitTillDone(costEffectivenessAwardAmountFuture, costEffectivenessTenderAmountFuture);
+
+
         LinkedHashMap<Integer, DBObject> response = new LinkedHashMap<>();
 
-		try {
+        try {
 
-			costEffectivenessAwardAmountFuture.get()
-					.forEach(dbobj -> response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj));
-			costEffectivenessTenderAmountFuture.get().forEach(dbobj -> {
-				if (response.containsKey(dbobj.get(Fields.UNDERSCORE_ID))) {
-					Map<?, ?> map = dbobj.toMap();
-					map.remove(Fields.UNDERSCORE_ID);
-					response.get(dbobj.get(Fields.UNDERSCORE_ID)).putAll(map);
-				} else {
-					response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj);
-				}
-			});
+            costEffectivenessAwardAmountFuture.get()
+                    .forEach(dbobj -> response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj));
+            costEffectivenessTenderAmountFuture.get().forEach(dbobj -> {
+                if (response.containsKey(dbobj.get(Fields.UNDERSCORE_ID))) {
+                    Map<?, ?> map = dbobj.toMap();
+                    map.remove(Fields.UNDERSCORE_ID);
+                    response.get(dbobj.get(Fields.UNDERSCORE_ID)).putAll(map);
+                } else {
+                    response.put((Integer) dbobj.get(Fields.UNDERSCORE_ID), dbobj);
+                }
+            });
 
-		} catch (InterruptedException | ExecutionException e) {
-			throw new RuntimeException(e);
-		}
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
 
         Collection<DBObject> respCollection = response.values();
         respCollection.forEach(dbobj -> {

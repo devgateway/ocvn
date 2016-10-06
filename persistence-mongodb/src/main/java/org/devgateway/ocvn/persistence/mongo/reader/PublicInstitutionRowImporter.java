@@ -20,51 +20,51 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
  */
 public class PublicInstitutionRowImporter extends RowImporter<Organization, OrganizationRepository> {
 
-	public PublicInstitutionRowImporter(final OrganizationRepository repository, final ImportService importService,
-			final int skipRows) {
-		super(repository, importService, skipRows);
-	}
+    public PublicInstitutionRowImporter(final OrganizationRepository repository, final ImportService importService,
+            final int skipRows) {
+        super(repository, importService, skipRows);
+    }
 
-	@Override
-	public void importRow(final String[] row) throws ParseException {
-		if (getRowCell(row, 0) == null) {
-			throw new RuntimeException("Main identifier empty!");
-		}
-		Organization organization = repository.findOne(getRowCellUpper(row, 0));
-		if (organization != null) {
-			throw new RuntimeException("Duplicate identifer for organization " + organization);
-		}
-		organization = new Organization();
-		Identifier identifier = new Identifier();
+    @Override
+    public void importRow(final String[] row) throws ParseException {
+        if (getRowCell(row, 0) == null) {
+            throw new RuntimeException("Main identifier empty!");
+        }
+        Organization organization = repository.findOne(getRowCellUpper(row, 0));
+        if (organization != null) {
+            throw new RuntimeException("Duplicate identifer for organization " + organization);
+        }
+        organization = new Organization();
+        Identifier identifier = new Identifier();
 
-		identifier.setId(getRowCellUpper(row, 0));
-		organization.setId(getRowCellUpper(row, 0));
-		organization.setIdentifier(identifier);
-		organization.setName(getRowCellUpper(row, 1));
+        identifier.setId(getRowCellUpper(row, 0));
+        organization.setId(getRowCellUpper(row, 0));
+        organization.setIdentifier(identifier);
+        organization.setName(getRowCellUpper(row, 1));
 
-		if (getRowCell(row, 44) != null) {
-			Identifier additionalIdentifier = new Identifier();
-			additionalIdentifier.setId(getRowCellUpper(row, 44));
-			organization.getAdditionalIdentifiers().add(additionalIdentifier);
-		}
+        if (getRowCell(row, 44) != null) {
+            Identifier additionalIdentifier = new Identifier();
+            additionalIdentifier.setId(getRowCellUpper(row, 44));
+            organization.getAdditionalIdentifiers().add(additionalIdentifier);
+        }
 
-		Address address = new Address();
-		address.setStreetAddress(getRowCell(row, 14));
-		address.setPostalCode(getRowCell(row, 13));
+        Address address = new Address();
+        address.setStreetAddress(getRowCell(row, 14));
+        address.setPostalCode(getRowCell(row, 13));
 
-		organization.setAddress(address);
+        organization.setAddress(address);
 
-		ContactPoint cp = new ContactPoint();
-		cp.setName(getRowCell(row, 5));
-		cp.setTelephone(getRowCell(row, 7));
-		cp.setFaxNumber(getRowCell(row, 8));
-		cp.setEmail(getRowCell(row, 9));
-		cp.setUrl(getRowCell(row, 18));
+        ContactPoint cp = new ContactPoint();
+        cp.setName(getRowCell(row, 5));
+        cp.setTelephone(getRowCell(row, 7));
+        cp.setFaxNumber(getRowCell(row, 8));
+        cp.setEmail(getRowCell(row, 9));
+        cp.setUrl(getRowCell(row, 18));
 
-		organization.setContactPoint(cp);
+        organization.setContactPoint(cp);
 
-		repository.insert(organization);
+        repository.insert(organization);
 
-	}
+    }
 
 }

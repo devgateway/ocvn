@@ -21,15 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ContrMethodSearchController extends GenericOCDSController {
 
-	@Autowired
-	private ContrMethodRepository contrMethodRepository;
+    @Autowired
+    private ContrMethodRepository contrMethodRepository;
 
-	@RequestMapping(value = "/api/ocds/contrMethod/all", 
-			method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-	public List<ContrMethod> contrMethods() {
+    @RequestMapping(value = "/api/ocds/contrMethod/all", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    public List<ContrMethod> contrMethods() {
 
-		return contrMethodRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));
+        return contrMethodRepository.findAll(new Sort(Direction.ASC, Fields.UNDERSCORE_ID));
 
-	}
+    }
 
 }

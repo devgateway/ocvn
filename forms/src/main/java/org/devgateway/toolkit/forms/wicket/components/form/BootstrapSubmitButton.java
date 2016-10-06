@@ -29,31 +29,31 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.ladda.LaddaAjaxBut
  */
 public abstract class BootstrapSubmitButton extends LaddaAjaxButton {
 
-	private static final long serialVersionUID = 8306451874943978003L;
+    private static final long serialVersionUID = 8306451874943978003L;
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public BootstrapSubmitButton(final String id, final IModel<String> model) {
-		super(id, model, Buttons.Type.Primary);
-		setIconType(FontAwesomeIconType.save);
-	}
-	
-	public BootstrapSubmitButton(final String id, final Form<?> form, final IModel<String> model) {
-		super(id, model, form, Buttons.Type.Primary);
-		setIconType(FontAwesomeIconType.save);
-	}
-	
-	@Override
-	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
-	
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
+    /**
+     * @param id
+     * @param model
+     */
+    public BootstrapSubmitButton(final String id, final IModel<String> model) {
+        super(id, model, Buttons.Type.Primary);
+        setIconType(FontAwesomeIconType.save);
+    }
+
+    public BootstrapSubmitButton(final String id, final Form<?> form, final IModel<String> model) {
+        super(id, model, form, Buttons.Type.Primary);
+        setIconType(FontAwesomeIconType.save);
+    }
+
+    @Override
+    protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
         if (ComponentUtil.isViewMode()) {
             setVisibilityAllowed(false);
         }
-	}
+    }
 }

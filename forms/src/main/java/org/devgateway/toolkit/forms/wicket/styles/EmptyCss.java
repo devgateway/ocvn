@@ -21,14 +21,14 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *        when we load bootstrap.css file
  */
 public class EmptyCss extends CssResourceReference {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final EmptyCss INSTANCE = new EmptyCss();
+    public static final EmptyCss INSTANCE = new EmptyCss();
 
-	/**
-	 * Construct.
-	 */
-	public EmptyCss() {
-		super(EmptyCss.class, "empty.css");
-	}
+    /**
+     * Construct.
+     */
+    public EmptyCss() {
+        super(EmptyCss.class, "empty.css");
+    }
 }

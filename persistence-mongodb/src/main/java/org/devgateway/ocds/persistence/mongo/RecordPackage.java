@@ -11,6 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -265,10 +266,6 @@ public class RecordPackage implements Identifiable {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    public String getId() {
-        return uri;
-    }
-
     @Override
     public int hashCode() {
         return new HashCodeBuilder().
@@ -298,6 +295,11 @@ public class RecordPackage implements Identifiable {
                 append(publishedDate, rhs.publishedDate).
                 append(packages, rhs.packages).
                 append(records, rhs.records).isEquals();
+    }
+
+    @Override
+    public Serializable getIdProperty() {
+        return uri;
     }
 
 }
