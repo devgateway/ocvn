@@ -18,7 +18,6 @@ module.exports = {
         loaders: [
           'react-hot',
           'babel-loader?babelrc=false,presets[]=react,presets[]=es2015,cacheDirectory',
-          'eslint-loader'
         ],
         exclude: /node_modules/
       },
