@@ -72,6 +72,7 @@ class Comparison extends translatable(PureRenderCompoent){
             width={width / 2}
             translations={translations}
             styling={styling}
+            legend="h"
             {...rangeProp}
         />
         <div className="chart-toolbar">
