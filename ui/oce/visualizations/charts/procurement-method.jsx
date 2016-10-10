@@ -56,7 +56,7 @@ ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
 class ProcurementMethodComparison extends Comparison{
   render(){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations,
-        styling} = this.props;
+        styling, width} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -115,12 +115,14 @@ class ProcurementMethodComparison extends Comparison{
       return <div className="col-md-6 comparison" key={index}>
         <Component
             filters={comparisonFilters}
+            margin={{b: 200}}
             requestNewData={(_, data) => requestNewComparisonData([index], data)}
             data={uniformData.get(index)}
             years={years}
             title={this.getTitle(index)}
             translations={translations}
             styling={styling}
+            width={width / 2}
             {...rangeProp}
         />
         <div className="chart-toolbar">
