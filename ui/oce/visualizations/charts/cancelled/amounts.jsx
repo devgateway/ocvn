@@ -43,11 +43,11 @@ class CancelledFunding extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:cancelledAmounts:xAxisName'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Amount (in VND)")
+        title: this.t('charts:cancelledAmounts:yAxisName')
       }
     }
   }

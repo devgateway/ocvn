@@ -35,7 +35,7 @@ class LocationWrapper extends translatable(Component){
                         className={cn("col-sm-3 text-center", {active: index == currentTab})}
                         onClick={e => this.setState({currentTab: index})}
                     >
-                      <a href="javascript:void(0);">{Tab.getName(this.__.bind(this))}</a>
+                      <a href="javascript:void(0);">{Tab.getName(this.t.bind(this))}</a>
                     </div>
                 )}
               </section>
@@ -56,19 +56,17 @@ class LocationWrapper extends translatable(Component){
 class Tab extends translatable(Component){}
 
 export class OverviewTab extends Tab{
-  static getName(__){
-    return __('Overview');
-  }
+  static getName(t){return t('maps:tenderLocations:tabs:overview:title')}
 
   render(){
     let {data} = this.props;
     let {count, amount} = data;
     return <div>
       <p>
-        <strong>{this.__('Number of Tenders:')}</strong> {count}
+        <strong>{this.t('maps:tenderLocations:tabs:overview:nrOfTenders')}</strong> {count}
       </p>
       <p>
-        <strong>{this.__('Total Funding for the location:')}</strong> {amount.toLocaleString()}
+        <strong>{this.t('maps:tenderLocations:tabs:overview:totalFundingByLocation')}</strong> {amount.toLocaleString()}
       </p>
     </div>
   }
@@ -104,7 +102,7 @@ export class ChartTab extends Tab{
       ep: this.constructor.Chart.excelEP,
       filters: decoratedFilters,
       years,
-      __: this.__.bind(this)
+      t: this.t.bind(this)
     });
     return <div className={cn("map-chart", this.getChartClass())}>
       <this.constructor.Chart
@@ -137,29 +135,21 @@ export class ChartTab extends Tab{
 }
 
 export class OverviewChartTab extends ChartTab{
-  static getName(__){
-    return __('Overview chart');
-  }
+  static getName(t){return t('charts:overview:title')}
 
-  getChartClass(){
-    return "overview";
-  }  
+  getChartClass(){return "overview";}
 }
 
 OverviewChartTab.Chart = OverviewChart;
 
 export class CostEffectivenessTab extends ChartTab{
-  static getName(__){
-    return __('Cost effectiveness');
-  }
+  static getName(t){return t('charts:costEffectiveness:title')}
 }
 
 CostEffectivenessTab.Chart = CostEffectiveness;
 
 export class ProcurementMethodTab extends ChartTab{
-  static getName(__){
-    return __('Procurement method');
-  }
+  static getName(t){return t('charts:procurementMethod:title')}
 
   getMargins(){
     let margins = super.getMargins();

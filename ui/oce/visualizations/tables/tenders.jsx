@@ -21,11 +21,11 @@ class Tenders extends Table{
       <table className="table table-striped table-hover tenders-table">
         <thead>
         <tr>
-          <th>{this.__("Number")}</th>
-          <th>{this.__("Start date")}</th>
-          <th>{this.__("End date")}</th>
-          <th>{this.__("Procuring entity")}</th>
-          <th>{this.__("Estimated value")}</th>
+          <th>{this.t('tables:top10tenders:number')}</th>
+          <th>{this.t('tables:top10tenders:startDate')}</th>
+          <th>{this.t('tables:top10tenders:endDate')}</th>
+          <th>{this.t('tables:top10tenders:procuringEntity')}</th>
+          <th>{this.t('tables:top10tenders:estimatedValue')}</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@ class Tenders extends Table{
   }
 }
 
-Tenders.getName = __ => __('Top 10 largest tenders');
+Tenders.getName = t => t('tables:top10tenders:title');
 Tenders.endpoint = 'topTenLargestTenders';
 
 export default Tenders;

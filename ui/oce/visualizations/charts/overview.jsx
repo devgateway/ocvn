@@ -18,9 +18,9 @@ class OverviewChart extends FrontendYearFilterableChart{
     var data = super.getData();
     if(!data) return [];
     let LINES = {
-      award: this.__("Award"),
-      bidplan: this.__("Bidplan"),
-      tender: this.__("Tender")
+      award: this.t('charts:overview:traces:award'),
+      bidplan: this.t('charts:overview:traces:bidplan'),
+      tender: this.t('charts:overview:traces:tender')
     };
     let years = data.map(pluckImm('year')).toArray();
     return Object.keys(LINES).map((key, index) => ({
@@ -38,11 +38,11 @@ class OverviewChart extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:overview:xAxisName'),
         type: "category"
       },
       yaxis: {
-        title: this.__("Count"),
+        title: this.t('charts:overview:yAxisName'),
         exponentformat: 'none'
       }
     }
@@ -52,6 +52,6 @@ class OverviewChart extends FrontendYearFilterableChart{
 OverviewChart.endpoints = ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'];
 OverviewChart.excelEP = 'procurementActivityExcelChart';
 
-OverviewChart.getName = __ => __("Procurement activity by year");
+OverviewChart.getName = t => t('charts:overview:title');
 
 export default OverviewChart;

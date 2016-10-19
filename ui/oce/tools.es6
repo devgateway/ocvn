@@ -44,7 +44,7 @@ export var cacheFn = fn => {
 
 export let max = (a, b) => a > b ? a : b;
 
-export let download = ({ep, filters, years, __}) => {
+export let download = ({ep, filters, years, t}) => {
   let url = new URI(`/api/ocds/${ep}`).addSearch(filters.toJS()).addSearch('year', years.toArray());
   return fetch(url.clone().query(""), {
     method: 'POST',
@@ -69,6 +69,6 @@ export let download = ({ep, filters, years, __}) => {
     });
     return response;
   }).catch(() => {
-    alert(__("An error occurred during export!"));
+    alert(t('export:error'));
   });
 }
