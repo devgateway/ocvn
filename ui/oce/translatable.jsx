@@ -6,7 +6,7 @@ var translatable = Class => class Translatable extends Class{
   }
 
   __n(sg, pl, n){
-    console.warn('__n is deprecated, use t');
+    console.warn('__n is deprecated, use t_n');
     return n + " " + this.__(1 == n ? sg : pl);
   }
 
@@ -15,6 +15,10 @@ var translatable = Class => class Translatable extends Class{
     if(!translations) console.error('Missing translations', this.constructor.name);
     if(!translations[key]) console.error('Missing translation for key', key);
     return translations[key];
+  }
+
+  t_n(sg, pl, n){
+    return n + " " + this.t(1 == n ? sg : pl);
   }
 };
 
