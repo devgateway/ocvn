@@ -230,7 +230,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>${poi.version}</version>
+            <version>${pentaho.poi.version}</version>
         </dependency>
     </dependencies>
 
