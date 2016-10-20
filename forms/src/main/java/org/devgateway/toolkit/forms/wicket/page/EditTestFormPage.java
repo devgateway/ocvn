@@ -31,8 +31,8 @@ import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstra
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
+import org.devgateway.toolkit.forms.wicket.providers.GenericChoiceProvider;
 import org.devgateway.toolkit.forms.wicket.providers.GenericPersistableJpaRepositoryTextChoiceProvider;
-import org.devgateway.toolkit.forms.wicket.providers.ListChoiceProvider;
 import org.devgateway.toolkit.persistence.dao.TestForm;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
@@ -130,7 +130,7 @@ public class EditTestFormPage extends AbstractEditPage<TestForm> {
         editForm.add(fileInput);
 
         Select2ChoiceBootstrapFormComponent<Group> preloadedEntitySelect = new Select2ChoiceBootstrapFormComponent<>(
-                "preloadedEntitySelect", new ListChoiceProvider<>(groupRepository.findAll()));
+                "preloadedEntitySelect", new GenericChoiceProvider<>(groupRepository.findAll()));
         preloadedEntitySelect.required();
         editForm.add(preloadedEntitySelect);
     }

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
+//@RepositoryRestResource // uncomment this to enable rest api access over group entities
 public interface GroupRepository extends CategoryRepository<Group> {
 
     Group findByLabel(String label);
