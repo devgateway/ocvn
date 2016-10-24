@@ -26,6 +26,6 @@ class ProcurementTypes extends Tab{
   }
 }
 
-ProcurementTypes.getName = __ => __('Procurement types');
+ProcurementTypes.getName = t => t('filters:tabs:procurementTypes:title');
 
 export default ProcurementTypes;

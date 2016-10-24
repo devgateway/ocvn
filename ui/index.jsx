@@ -34,8 +34,8 @@ class OCVN extends OCApp{
       <header className="branding row">
         <div className="col-sm-offset-1 col-sm-4">
           <h1>
-            {this.__('e-Procurement')}
-            <small>{this.__('Toolkit')}</small>
+            {this.t('general:title')}
+            <small>{this.t('general:subtitle')}</small>
           </h1>
         </div>
         <div className="col-sm-6 menu">
@@ -53,10 +53,10 @@ class OCVN extends OCApp{
             {this.navigation()}
           </div>
           <section className="col-sm-12 description">
-            <h3><strong>{this.__("Toolkit description")}</strong></h3>
+            <h3><strong>{this.t('general:description:title')}</strong></h3>
             <p>
               <small>
-                  {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP). These data are published on a pilot basis and do not represent official government statistics.")}
+                  {this.t('general:description:content')}
               </small>
             </p>
           </section>
@@ -78,8 +78,8 @@ class OCVN extends OCApp{
 OCVN.Filters = OCVNFilters;
 
 OCVN.TRANSLATIONS = {
-  us: {},
-  vn: require('./languages/vn_VN.json')
+  us: require('./languages/en_US.json'),
+  vn: require('./languages/vn_VN.json'),
 };
 
 const BILLION = 1000000000;

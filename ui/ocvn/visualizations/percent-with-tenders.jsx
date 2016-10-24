@@ -1,10 +1,8 @@
 import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
 import {pluckImm} from "../../oce/tools";
 
-class PercentEProcurement extends FrontendYearFilterableChart{
-  static getName(__){
-    return __('Percentage of plans with tender');
-  }
+class PercentWithTenders extends FrontendYearFilterableChart{
+  static getName(t){return t('charts:percentWithTenders:title')}
 
   getData(){
     let data = super.getData();
@@ -23,11 +21,11 @@ class PercentEProcurement extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:percentWithTenders:xAxisTitle'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Percent"),
+        title: this.t('charts:percentWithTenders:yAxisTitle'),
         hoverformat: '.2f'
       }
     }
@@ -35,8 +33,8 @@ class PercentEProcurement extends FrontendYearFilterableChart{
 }
 
 
-PercentEProcurement.endpoint = 'percentTendersWithLinkedProcurementPlan';
-PercentEProcurement.excelEP = 'tendersWithLinkedProcurementPlanExcelChart';
-PercentEProcurement.getMaxField = imm => imm.get('percentTenders', 0);
+PercentWithTenders.endpoint = 'percentTendersWithLinkedProcurementPlan';
+PercentWithTenders.excelEP = 'tendersWithLinkedProcurementPlanExcelChart';
+PercentWithTenders.getMaxField = imm => imm.get('percentTenders', 0);
 
-export default PercentEProcurement;
+export default PercentWithTenders;

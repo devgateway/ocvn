@@ -1,9 +1,7 @@
 import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
 
 class CancelledFunding extends FrontendYearFilterableChart{
-  static getName(__){
-    return __(' Cancelled funding by reason');
-  }
+  static getName(t){return t('charts:cancelledFunding:title')}
 
   getData(){
     let data = super.getData();
@@ -38,11 +36,11 @@ class CancelledFunding extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:cancelledFunding:xAxisTitle'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Amount (in VND)")
+        title: this.t('charts:cancelledFunding:yAxisTitle')
       }
     }
   }
