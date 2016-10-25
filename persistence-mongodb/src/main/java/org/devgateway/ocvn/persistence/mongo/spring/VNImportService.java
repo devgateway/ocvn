@@ -102,7 +102,7 @@ public class VNImportService implements ExcelImportService {
     // getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
     // URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
-    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer)
+    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer)
             throws Exception {
         importSheet(fileUrl, sheetName, importer, MongoConstants.IMPORT_ROW_BATCH);
     }
@@ -147,7 +147,7 @@ public class VNImportService implements ExcelImportService {
         msgBuffer.append(message).append("\r\n");
     }
 
-    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer,
+    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer,
             final int importRowBatch) {
         logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
 

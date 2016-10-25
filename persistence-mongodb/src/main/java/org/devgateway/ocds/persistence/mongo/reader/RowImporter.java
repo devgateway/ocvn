@@ -1,5 +1,6 @@
 package org.devgateway.ocds.persistence.mongo.reader;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

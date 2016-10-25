@@ -18,7 +18,7 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
  *         custom Excel format provided by Vietnam
  * @see VNOrganization
  */
-public class PublicInstitutionRowImporter extends RowImporter<Organization, OrganizationRepository> {
+public class PublicInstitutionRowImporter extends RowImporter<Organization, String, OrganizationRepository> {
 
     public PublicInstitutionRowImporter(final OrganizationRepository repository, final ImportService importService,
             final int skipRows) {
