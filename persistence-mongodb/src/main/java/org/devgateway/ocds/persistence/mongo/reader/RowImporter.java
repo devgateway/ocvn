@@ -22,10 +22,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @param <T>
  *            - the type of OCDS/dervied entity to be imported
+ * @param <ID> the id type
  * @param <R>
  *            - the main repository that is able to save <T>
  */
-public abstract class RowImporter<T, R extends MongoRepository<T, String>> {
+public abstract class RowImporter<T, ID extends Serializable, R extends MongoRepository<T, ID>> {
 
     private final Logger logger = LoggerFactory.getLogger(RowImporter.class);
 
