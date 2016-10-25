@@ -31,7 +31,15 @@ public final class ImportFileTypes {
 
     public static final String OFFLINE_AWARDS = "Offline Awards";
 
+    public static final String CITIES = "Cities";
+    
+    public static final String ORG_DEPARTMENTS = "Organization Departments";
+    
+    public static final String ORG_GROUPS = "Organization Groups";
+    
     public static final List<String> ALL_FILE_TYPES = Collections.unmodifiableList(Arrays.asList(LOCATIONS,
-            PUBLIC_INSTITUTIONS, SUPPLIERS, PROCUREMENT_PLANS, BID_PLANS, TENDERS, EBID_AWARDS, OFFLINE_AWARDS));
+            PUBLIC_INSTITUTIONS, SUPPLIERS, PROCUREMENT_PLANS, BID_PLANS, TENDERS, EBID_AWARDS, OFFLINE_AWARDS,
+            CITIES, ORG_DEPARTMENTS, ORG_GROUPS
+            ));
 
 }
