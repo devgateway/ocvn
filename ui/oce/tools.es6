@@ -44,8 +44,12 @@ export var cacheFn = fn => {
 
 export let max = (a, b) => a > b ? a : b;
 
-export let download = ({ep, filters, years, __}) => {
-  let url = new URI(`/api/ocds/${ep}`).addSearch(filters.toJS()).addSearch('year', years.toArray());
+export let download = ({ep, filters, years, t}) => {
+  let url = new URI(`/api/ocds/${ep}`)
+      .addSearch(filters.toJS())
+      .addSearch('year', years.toArray())
+      //this sin shall be atoned for in the future
+      .addSearch('language', localStorage.oceLocale);
   return fetch(url.clone().query(""), {
     method: 'POST',
     headers: {
@@ -69,6 +73,6 @@ export let download = ({ep, filters, years, __}) => {
     });
     return response;
   }).catch(() => {
-    alert(__("An error occurred during export!"));
+    alert(t('export:error'));
   });
 }

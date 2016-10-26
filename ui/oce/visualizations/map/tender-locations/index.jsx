@@ -22,9 +22,7 @@ class TenderLocations extends Map{
         .toArray()
   }
 
-  static getLayerName(__){
-    return __('Tender locations');
-  }
+  static getLayerName(t){return t('maps:tenderLocations:title')}
 }
 
 TenderLocations.endpoint = 'fundingByTenderDeliveryLocation';

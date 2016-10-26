@@ -25,7 +25,7 @@ class BidPeriod extends FrontendYearFilterableChart {
     return [{
       x: data.map(pluckImm('tender')).map(ensureNonNegative).toArray(),
       y: years,
-      name: this.__("Tender"),
+      name: this.t('charts:bidPeriod:traces:tender'),
       type: "bar",
       orientation: 'h',
       marker: {
@@ -34,7 +34,7 @@ class BidPeriod extends FrontendYearFilterableChart {
     }, {
       x: data.map(pluckImm('award')).map(ensureNonNegative).toArray(),
       y: years,
-      name: this.__("Award"),
+      name: this.t('charts:bidPeriod:traces:award'),
       type: "bar",
       orientation: 'h',
       marker: {
@@ -54,7 +54,7 @@ class BidPeriod extends FrontendYearFilterableChart {
           x: sum,
           xanchor: 'left',
           yanchor: 'middle',
-          text: this.__('Total:') + ' ' + sum,
+          text: this.t('charts:bidPeriod:traces:total') + ' ' + sum,
           showarrow: false
         }
       }).toArray();
@@ -64,11 +64,11 @@ class BidPeriod extends FrontendYearFilterableChart {
       annotations,
       barmode: "stack",
       xaxis: {
-        title: this.__("Number of days"),
+        title: this.t('charts:bidPeriod:xAxisTitle'),
         hoverformat: '.2f'
       },
       yaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:bidPeriod:yAxisTitle'),
         type: "category"
       }
     }
@@ -77,7 +77,7 @@ class BidPeriod extends FrontendYearFilterableChart {
 
 BidPeriod.endpoints = ['averageTenderPeriod', 'averageAwardPeriod'];
 BidPeriod.excelEP = 'bidTimelineExcelChart';
-BidPeriod.getName = __ => __('Bid Timeline');
+BidPeriod.getName = t => t('charts:bidPeriod:title');
 BidPeriod.horizontal = true;
 BidPeriod.getFillerDatum = year => Map({
   year,

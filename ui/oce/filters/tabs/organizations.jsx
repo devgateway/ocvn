@@ -14,6 +14,6 @@ class Organizations extends Tab{
   }
 }
 
-Organizations.getName = __ => __('Organizations');
+Organizations.getName = t => t('filters:tabs:organizations:title');
 
 export default Organizations;

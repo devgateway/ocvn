@@ -24,7 +24,7 @@ class Filters extends translatable(Component){
             onClick={_ => this.setState({currentTab: index})}
         >
           <a href="javascript:void(0);">
-            {Tab.getName(this.__.bind(this))}
+            {Tab.getName(this.t.bind(this))}
           </a>
         </li>
     );
@@ -50,7 +50,7 @@ class Filters extends translatable(Component){
   render(){
     let {onClick, onUpdate, open} = this.props;
     return <div className={cn('filters', {open})}  onClick={onClick}>
-      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.t('filters:title')} <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box row" onClick={e => e.stopPropagation()}>
         <ul className="nav nav-pills nav-stacked col-xs-4">
           {this.listTabs()}
@@ -60,11 +60,11 @@ class Filters extends translatable(Component){
         </div>
         <section className="buttons col-xs-offset-4 col-xs-8">
           <button className="btn btn-danger" onClick={e => onUpdate(this.state.state)}>
-            {this.__('Apply')}
+            {this.t('filters:apply')}
           </button>
           &nbsp;
           <button className="btn btn-default" onClick={e => this.reset()}>
-            {this.__('Reset')}
+            {this.t('filters:reset')}
           </button>
         </section>
       </div>

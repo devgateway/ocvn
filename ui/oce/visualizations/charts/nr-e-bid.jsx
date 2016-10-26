@@ -19,11 +19,11 @@ class NrEbid extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:nrEBid:xAxisTitle'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Count"),
+        title: this.t('charts:nrEBid:yAxisTitle'),
         hoverformat: '.2f'
       }
     }
@@ -32,7 +32,7 @@ class NrEbid extends FrontendYearFilterableChart{
 
 NrEbid.endpoint = 'percentTendersUsingEBid';
 NrEbid.excelEP = 'numberTendersUsingEBidExcelChart';
-NrEbid.getName = __ => __('Number of eBid Awards');
+NrEbid.getName = t => t('charts:nrEBid:title');
 NrEbid.getMaxField = pluckImm('totalTendersUsingEbid');
 
 export default NrEbid;

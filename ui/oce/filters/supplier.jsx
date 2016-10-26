@@ -1,8 +1,8 @@
 import TypeAhead from "./inputs/type-ahead.jsx";
 
 class Supplier extends TypeAhead{
-    static getName(__){
-        return __("Supplier");
+    static getName(t){
+        return t('filters:supplier:title');
     }
 }
 

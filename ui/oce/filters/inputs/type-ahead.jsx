@@ -51,7 +51,7 @@ class TypeAhead extends translatable(Component){
     let haveQuery = query.length >= this.constructor.MIN_QUERY_LENGTH;
     return (
         <section className="field type-ahead">
-          <header>{this.constructor.getName(this.__.bind(this))} ({selected.count()})</header>
+          <header>{this.constructor.getName(this.t.bind(this))} ({selected.count()})</header>
           <section className="options">
             {selected.map(id => this.renderOption({
               id,
@@ -63,12 +63,12 @@ class TypeAhead extends translatable(Component){
             <input
                 type="text"
                 className="input-sm form-control search"
-                placeholder={this.__("type search query")}
+                placeholder={this.t('filters:typeAhead:inputPlaceholder')}
                 value={query}
                 onChange={e => this.updateQuery(e.target.value)}
             />
 
-            {haveQuery && <div className="result-count">{this.__n("result", "results", options.count())}</div>}
+            {haveQuery && <div className="result-count">{this.t_n('filters:typeAhead:result:sg', 'filters:typeAhead:result:pl', options.count())}</div>}
 
             {options.filter(option => !selected.has(option.get('id'))).map(option => this.renderOption({
               id: option.get('id'),

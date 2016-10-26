@@ -17,7 +17,7 @@ class OCVNBidPeriod extends BidPeriod{
         return [{
             x: data.map(pluckImm('avg')).toArray(),
             y: data.map(pluckImm('year')).toArray(),
-            name: this.__('Average time from plan to tender phase'),
+            name: this.t('charts:bidPeriod:traces:avgTime'),
             type: "bar",
             orientation: 'h',
             marker: {

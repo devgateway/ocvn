@@ -24,7 +24,7 @@ class ProcurementMethod extends backendYearFilterable(Chart){
     }
 
     for(let datum of data){
-      let cat = datum.get(this.constructor.PROCUREMENT_METHOD_FIELD) || this.__('Unspecified');
+      let cat = datum.get(this.constructor.PROCUREMENT_METHOD_FIELD) || this.t('charts:procurementMethod:unspecified');
       let totalTenderAmount = datum.get('totalTenderAmount');
       trace.x.push(cat);
       trace.y.push(totalTenderAmount);
@@ -37,11 +37,11 @@ class ProcurementMethod extends backendYearFilterable(Chart){
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Method"),
+        title: this.t('charts:procurementMethod:xAxisName'),
         type: "category"
       },
       yaxis: {
-        title: this.__("Amount (in VND)")
+        title: this.t('charts:procurementMethod:yAxisName')
       }
     }
   }
@@ -49,7 +49,7 @@ class ProcurementMethod extends backendYearFilterable(Chart){
 
 ProcurementMethod.endpoint = 'tenderPriceByProcurementMethod';
 ProcurementMethod.excelEP = 'procurementMethodExcelChart';
-ProcurementMethod.getName = __ => __('Procurement method');
+ProcurementMethod.getName = t => t('charts:procurementMethod:title');
 ProcurementMethod.UPDATABLE_FIELDS = ['data'];
 ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
 
@@ -110,7 +110,7 @@ class ProcurementMethodComparison extends Comparison{
         ep: Component.excelEP,
         filters: comparisonFilters,
         years,
-        __: this.__.bind(this)
+        t: this.t.bind(this)
       });
       return <div className="col-md-6 comparison" key={index}>
         <Component

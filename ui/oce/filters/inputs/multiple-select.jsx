@@ -50,11 +50,11 @@ class MultipleSelect extends translatable(Component){
             {this.getTitle()} <span className="count">({this.getSelectedCount()}/{totalOptions})</span>
             <div className="pull-right">
               <a href="javascript:void(0)" onClick={e => this.selectAll()}>
-                {this.__('Select all')}
+                {this.t('filters:multipleSelect:selectAll')}
               </a>
               &nbsp;|&nbsp;
               <a href="javascript:void(0)" onClick={e => this.selectNone()}>
-                {this.__('Select none')}
+                {this.t('filters:multipleSelect:selectNone')}
               </a>
             </div>
           </header>

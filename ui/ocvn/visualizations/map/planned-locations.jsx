@@ -21,9 +21,7 @@ class PlannedLocations extends Map{
         .toArray()
   }
 
-  static getLayerName(__){
-    return __('Planning');
-  }
+  static getLayerName(t){return t('map:plannedLocations:title')}
 }
 
 PlannedLocations.endpoint = 'plannedFundingByLocation';
