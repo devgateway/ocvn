@@ -242,15 +242,19 @@ public class VietnamImportPage extends BasePage {
 
                     vnExcelImportService.importAllSheets(importForm.getModelObject().getFileTypes(),
                             importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().isEmpty() ? null
-                                    : importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator()
-                                            .next().getContent().getBytes(),
+                            : importForm.getModelObject().getSourceFiles().getPrototypeDatabaseFile().iterator()
+                                    .next().getContent().getBytes(),
                             importForm.getModelObject().getSourceFiles().getLocationsFile().isEmpty() ? null
-                                    : importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next()
-                                            .getContent().getBytes(),
+                            : importForm.getModelObject().getSourceFiles().getLocationsFile().iterator().next()
+                                    .getContent().getBytes(),
                             importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile().isEmpty()
-                                    ? null
-                                    : importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile()
-                                            .iterator().next().getContent().getBytes(),
+                            ? null
+                            : importForm.getModelObject().getSourceFiles().getPublicInstitutionsSuppliersFile()
+                                    .iterator().next().getContent().getBytes(),
+                            importForm.getModelObject().getSourceFiles().getCityDepartmentGroupFile().isEmpty()
+                            ? null
+                            : importForm.getModelObject().getSourceFiles().getCityDepartmentGroupFile()
+                                    .iterator().next().getContent().getBytes(),
                             importForm.getModelObject().getDropData(), importForm.getModelObject().getValidateData());
                 } catch (Exception e) {
                     logger.error(e);

@@ -70,7 +70,9 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
                 loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
-                loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
+                loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), 
+                loadResourceStreamAsByteArray("/testImport/test_city_department_group.xlsx"),
+                true, false);
     }
 
     @After

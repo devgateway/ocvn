@@ -14,18 +14,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "city")
 public class City {
     @Id
-    private String id;
+    private Integer id;
 
     @ExcelExport
     private String name;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
+
 
     public String getName() {
         return name;

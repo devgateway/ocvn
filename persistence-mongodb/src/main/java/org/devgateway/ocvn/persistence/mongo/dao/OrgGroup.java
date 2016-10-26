@@ -14,16 +14,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "orgGroup")
 public class OrgGroup {
     @Id
-    private String id;
+    private Integer id;
 
     @ExcelExport
     private String name;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
