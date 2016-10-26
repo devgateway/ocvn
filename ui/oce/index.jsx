@@ -17,7 +17,7 @@ class OCApp extends React.Component{
     this.tabs = [];
     this.state = {
       exporting: false,
-      locale: localStorage.locale || "us",
+      locale: localStorage.oceLocale || "en_US",
       width: 0,
       currentTab: 0,
       menuBox: "",
@@ -37,7 +37,7 @@ class OCApp extends React.Component{
   }
 
   t(text){
-    const locale = this.state.locale || 'us';
+    const {locale} = this.state;
     return this.constructor.TRANSLATIONS[locale][text];
   }
 
@@ -172,7 +172,7 @@ class OCApp extends React.Component{
     />;
   }
 
-    yearsBar(){
+  yearsBar(){
     let {years, selectedYears} = this.state;
     return this.state.years.sort().map(year =>
         <a
@@ -192,7 +192,7 @@ class OCApp extends React.Component{
 
   setLocale(locale){
     this.setState({locale});
-    localStorage.locale = locale;
+    localStorage.oceLocale = locale;
   }
 
   languageSwitcher(){
