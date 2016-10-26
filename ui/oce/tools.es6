@@ -45,7 +45,11 @@ export var cacheFn = fn => {
 export let max = (a, b) => a > b ? a : b;
 
 export let download = ({ep, filters, years, t}) => {
-  let url = new URI(`/api/ocds/${ep}`).addSearch(filters.toJS()).addSearch('year', years.toArray());
+  let url = new URI(`/api/ocds/${ep}`)
+      .addSearch(filters.toJS())
+      .addSearch('year', years.toArray())
+      //this sin shall be atoned for in the future
+      .addSearch('language', localStorage.oceLocale);
   return fetch(url.clone().query(""), {
     method: 'POST',
     headers: {
