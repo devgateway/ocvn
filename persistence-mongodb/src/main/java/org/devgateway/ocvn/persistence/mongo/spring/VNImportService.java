@@ -45,6 +45,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
+import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocvn.persistence.mongo.reader.CityRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.OrgDepartmentRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.OrgGroupRowImporter;
@@ -71,6 +72,9 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired
     private OrganizationRepository organizationRepository;
+    
+    @Autowired
+    private VNOrganizationRepository vnOrganizationRepository;
 
     @Autowired
     private ClassificationRepository classificationRepository;
@@ -83,7 +87,7 @@ public class VNImportService implements ExcelImportService {
     
     @Autowired
     private CityRepository cityRepository;
-
+    
     @Autowired
     private OrgDepartmentRepository departmentRepository;
     
@@ -270,17 +274,8 @@ public class VNImportService implements ExcelImportService {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
                         new LocationRowImporter(locationRepository, this, 1), 1);
             }
-
-            if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
-                importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
-                        new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
-            }
-
-            if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
-                importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, this, 2), 1);
-            }
             
+                        
             if (cdg != null && fileTypes.contains(ImportFileTypes.CITIES)) {
                 importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "City",
                         new CityRowImporter(cityRepository, this, 1));
@@ -298,6 +293,17 @@ public class VNImportService implements ExcelImportService {
                         new OrgGroupRowImporter(orgGroupRepository, this, 1));
             }
 
+            if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
+                importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
+                        new PublicInstitutionRowImporter(vnOrganizationRepository, cityRepository,
+                                orgGroupRepository, departmentRepository,
+                                this, 2), 1);
+            }
+
+            if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
+                importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
+                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2), 1);
+            }
 
             if (prototypeDatabase != null) {
                 if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
