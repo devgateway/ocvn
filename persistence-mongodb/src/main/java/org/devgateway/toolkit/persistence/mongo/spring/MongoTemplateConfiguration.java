@@ -48,6 +48,16 @@ public class MongoTemplateConfiguration {
         createMandatoryImportIndexes();
         createPostImportStructures();
     }
+    
+    private void createProcuringEntityIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id", 
+                Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.procuringEntity.department._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.procuringEntity.address.postalCode", Direction.ASC));
+    }
 
     public void createPostImportStructures() {
 
@@ -94,6 +104,8 @@ public class MongoTemplateConfiguration {
         //vietnam specific indexes:
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
+        
+        createProcuringEntityIndexes();
 
         logger.info("Added extra Mongo indexes");
 

@@ -191,6 +191,20 @@ public abstract class GenericOCDSController {
     protected Criteria getProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.procuringEntity._id", filter.getProcuringEntityId(), filter);
     }
+    
+    protected Criteria getProcuringEntityGroupIdCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procuringEntity.group._id", filter.getProcuringEntityGroupId(), filter);
+    }
+    
+    protected Criteria getProcuringEntityDepartmentIdCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procuringEntity.department._id", 
+                filter.getProcuringEntityDepartmentId(), filter);
+    }
+    
+    protected Criteria getProcuringEntityCityIdCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procuringEntity.address.postalCode", 
+                filter.getProcuringEntityCityId(), filter);
+    }
 
     
     /**
@@ -208,6 +222,9 @@ public abstract class GenericOCDSController {
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
         tmpMap.put("tender.procuringEntity._id", 1);
+        tmpMap.put("tender.procuringEntity.group._id", 1);
+        tmpMap.put("tender.procuringEntity.department._id", 1);
+        tmpMap.put("tender.procuringEntity.address.postalCode", 1);
         tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
@@ -249,6 +266,9 @@ public abstract class GenericOCDSController {
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+                getProcuringEntityCityIdCriteria(filter),
+                getProcuringEntityGroupIdCriteria(filter),
+                getProcuringEntityDepartmentIdCriteria(filter),
                 getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
@@ -257,6 +277,9 @@ public abstract class GenericOCDSController {
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+                getProcuringEntityCityIdCriteria(filter),
+                getProcuringEntityGroupIdCriteria(filter),
+                getProcuringEntityDepartmentIdCriteria(filter),
                 getSupplierIdCriteria(filter), getByTenderDeliveryLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter), getByAwardAmountIntervalCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
