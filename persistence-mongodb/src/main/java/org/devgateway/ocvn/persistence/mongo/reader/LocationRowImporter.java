@@ -17,7 +17,7 @@ import java.text.ParseException;
  * @author mihai
  * @see Location
  */
-public class LocationRowImporter extends RowImporter<VNLocation, VNLocationRepository> {
+public class LocationRowImporter extends RowImporter<VNLocation, String, VNLocationRepository> {
 
     public LocationRowImporter(final VNLocationRepository locationRepository, final ImportService importService,
                                final int skipRows) {

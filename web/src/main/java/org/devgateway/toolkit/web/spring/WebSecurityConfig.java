@@ -22,6 +22,7 @@ import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -43,6 +44,7 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 @Order(2) // this loads the security config after the forms security (if you use
 // them overlayed, it must pick that one first)
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @PropertySource("classpath:allowedApiEndpoints.properties")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -74,11 +76,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/configuration/**", "/swagger-resources/**", "/dashboard").antMatchers(allowedApiEndpoints);
     }
 
+   
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .expressionHandler(webExpressionHandler()) // inject role hierarchy
-                .anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
+                .anyRequest().authenticated().and().formLogin().
+                loginPage("/login").
+                permitAll().and().requestCache().and()
                 .logout().permitAll().and().sessionManagement().and().csrf().disable();
         http.addFilter(securityContextPersistenceFilter());
     }

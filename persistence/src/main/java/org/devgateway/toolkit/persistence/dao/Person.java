@@ -13,14 +13,18 @@ package org.devgateway.toolkit.persistence.dao;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
 import org.hibernate.annotations.Cache;
@@ -34,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Audited
-public class Person extends AbstractAuditableEntity implements Serializable, UserDetails {
+public class Person extends AbstractAuditableEntity implements Serializable, UserDetails, Labelable {
     private static final long serialVersionUID = 109780377848343674L;
 
     private String username;
@@ -62,6 +66,15 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToOne(fetch = FetchType.EAGER)
     private Group group;
+    
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserDashboard defaultDashboard;
+    
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  mappedBy = "users")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<UserDashboard> dashboards = new HashSet<>();
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
@@ -82,6 +95,17 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
+
+
+    
+   
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
     @Override
     public String getUsername() {
@@ -263,11 +287,38 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
 
     @Override
     public String toString() {
-        return "[" + username + "," + firstName + "," + lastName + "," + email + "]";
+        return username;
     }
 
     @Override
     public AbstractAuditableEntity getParent() {
         return null;
+    }
+
+    public UserDashboard getDefaultDashboard() {
+        return defaultDashboard;
+    }
+
+    public void setDefaultDashboard(UserDashboard defaultDashboard) {
+        this.defaultDashboard = defaultDashboard;
+    }
+
+    @Override
+    public void setLabel(String label) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String getLabel() {
+      return username;
+    }
+
+    public Set<UserDashboard> getDashboards() {
+        return dashboards;
+    }
+
+    public void setDashboards(Set<UserDashboard> dashboards) {
+        this.dashboards = dashboards;
     }
 }

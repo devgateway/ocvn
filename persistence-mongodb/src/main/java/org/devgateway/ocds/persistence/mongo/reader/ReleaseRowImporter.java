@@ -9,7 +9,7 @@ import java.text.ParseException;
 /**
  * @author mihai
  */
-public abstract class ReleaseRowImporter extends RowImporter<Release, ReleaseRepository> {
+public abstract class ReleaseRowImporter extends RowImporter<Release, String, ReleaseRepository> {
 
     public ReleaseRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
                               final int skipRows) {
