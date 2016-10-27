@@ -9,6 +9,8 @@ import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
+import org.devgateway.ocvn.persistence.mongo.dao.City;
+import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 
 /**
  * @author mihai Specific {@link RowImporter} for Suppliers, in the custom Excel
@@ -17,9 +19,13 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
  */
 public class SupplierRowImporter extends RowImporter<Organization, String, OrganizationRepository> {
 
-    public SupplierRowImporter(final OrganizationRepository repository, final ImportService importService,
+    private final CityRepository cityRepository;
+
+    public SupplierRowImporter(final OrganizationRepository repository, final CityRepository cityRepository,
+            final ImportService importService,
             final int skipRows) {
         super(repository, importService, skipRows);
+        this.cityRepository = cityRepository;
     }
 
     @Override
@@ -43,8 +49,17 @@ public class SupplierRowImporter extends RowImporter<Organization, String, Organ
 
         Address address = new Address();
         address.setStreetAddress(getRowCell(row, 18));
-        address.setPostalCode(getRowCell(row, 17));
-
+        
+        if (getRowCell(row, 17) != null) {
+            City city = cityRepository.findOne(getInteger(getRowCell(row, 17)));
+            if (city == null) {
+                city = new City();
+                city.setId(getInteger(getRowCell(row, 17)));
+                city = cityRepository.save(city);
+            }
+            address.setPostalCode(city.getId().toString());
+        }
+        
         organization.setAddress(address);
 
         ContactPoint cp = new ContactPoint();
