@@ -15,7 +15,7 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
  *         format provided by Vietnam
  * @see VNOrganization
  */
-public class SupplierRowImporter extends RowImporter<Organization, OrganizationRepository> {
+public class SupplierRowImporter extends RowImporter<Organization, String, OrganizationRepository> {
 
     public SupplierRowImporter(final OrganizationRepository repository, final ImportService importService,
             final int skipRows) {

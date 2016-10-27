@@ -12,3 +12,11 @@ npm-debug.log
 .idea
 rebel.xml
 /logs/
+/forms/nbactions.xml
+/nb-configuration.xml
+/forms/nb-configuration.xml
+/persistence-mongodb/nb-configuration.xml
+/forms/.rebel.xml.bak
+/persistence/nb-configuration.xml
+/web/nb-configuration.xml
+/ui/nb-configuration.xml
