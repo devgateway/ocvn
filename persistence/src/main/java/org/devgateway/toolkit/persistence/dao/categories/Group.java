@@ -23,6 +23,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 
  * @author mpostelnicu
@@ -37,6 +39,8 @@ public class Group extends Category {
      * 
      */
     private static final long serialVersionUID = 8451785172092014455L;
+    
+    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<Person> persons = new HashSet<>();

@@ -43,13 +43,34 @@ public class UserDashboardRestController {
     @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
             value = "/userDashboards/search/getDefaultDashboardForCurrentUser")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
-    @ResponseBody 
+    @ResponseBody
     public ResponseEntity<?>
             getDefaultDashboardForCurrentUser(PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
         UserDashboard dashboard = repository.getDefaultDashboardForPersonId(getCurrentAuthenticatedPerson().getId());
+        if (dashboard == null) {
+            return ResponseEntity.ok().build();
+        }
         Resource<Object> resource = persistentEntityResourceAssembler.toResource(dashboard);
         return ResponseEntity.ok(resource);
     }
+    
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
+            value = "/userDashboards/getCurrentAuthenticatedUserDetails")
+    @ResponseBody
+    public ResponseEntity<?>
+            getCurrentAuthenticatedUserDetails(PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
+
+        Person currentAuthenticatedPersonToken = getCurrentAuthenticatedPerson();
+        Person currentAuthenticatedPerson;
+        if (currentAuthenticatedPersonToken != null) {
+            currentAuthenticatedPerson = personRepository.getOne(currentAuthenticatedPersonToken.getId());
+        } else {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.ok(currentAuthenticatedPerson);
+    }
+
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @RequestMapping(method = { RequestMethod.POST, RequestMethod.GET },
