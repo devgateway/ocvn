@@ -3,19 +3,10 @@
  */
 package org.devgateway.ocds.web.rest.controller;
 
-import org.bson.types.ObjectId;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,9 +17,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import javax.annotation.PostConstruct;
+
+import org.bson.types.ObjectId;
+import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 
 /**
  * @author mpostelnicu
@@ -88,6 +94,28 @@ public abstract class GenericOCDSController {
     }
 
 
+    /**
+     * Creates a mongodb query for searching based on text index, sorts the results by score
+     * 
+     * @param request
+     * @return
+     */
+    protected Query textSearchQuery(final TextSearchRequest request) {
+        PageRequest pageRequest = new PageRequest(request.getPageNumber(), request.getPageSize());
+
+        Query query = null;
+
+        if (request.getText() == null) {
+            query = new Query();
+        } else {
+            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
+        }
+
+        query.with(pageRequest);
+
+        return query;
+    }
+    
     /**
      * Appends the tender.items.deliveryLocation._id
      *
