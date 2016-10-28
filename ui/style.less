@@ -53,12 +53,26 @@ header.branding{
     }
   }
 
-  .language-switcher{
+  .header-icons.user-tools{
+    font-size: 1em;
+    .glyphicon {
+      color: #f0f0f0;
+    }
+    a{
+      color: white;
+      text-transform: uppercase;
+      &, :hover{
+        text-decoration: none;
+      }
+    }
+  }
+
+  .header-icons{
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    .flag {
+    .icon {
       box-shadow: 0px 1px 10px 1px #B53636;
       -webkit-box-shadow: 0px 1px 10px 1px #B53636;
       -moz-box-shadow: 0px 1px 10px 1px #B53636;

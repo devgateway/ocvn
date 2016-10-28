@@ -28,7 +28,10 @@ class OCApp extends React.Component{
       data: fromJS({}),
       comparisonData: fromJS({}),
       bidTypes: fromJS({}),
-      years: fromJS([])
+      years: fromJS([]),
+      user: {
+        loggedIn: false
+      }
     }
   }
 
@@ -69,9 +72,26 @@ class OCApp extends React.Component{
     }))
   }
 
+  fetchUserInfo(){
+    fetchJson('/rest/userDashboards/search/getDashboardsForCurrentUser').then(
+        () => this.setState({
+          user: {
+            loggedIn: true
+          }
+        })
+    ).catch(
+        () => this.setState({
+          user: {
+            loggedIn: false
+          }
+        })
+    )
+  }
+
   componentDidMount(){
     this.fetchBidTypes();
     this.fetchYears();
+    this.fetchUserInfo();
 
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth - 30
@@ -195,9 +215,20 @@ class OCApp extends React.Component{
     localStorage.oceLocale = locale;
   }
 
+  loginBox(){
+    if(this.state.user.loggedIn){
+      return <a href="/preLogout">
+        <i className="glyphicon glyphicon-user"/> {this.t("general:logout")}
+      </a>
+    }
+    return <a href="/login">
+      <i className="glyphicon glyphicon-user"/> {this.t("general:login")}
+    </a>
+  }
+
   languageSwitcher(){
     return Object.keys(this.constructor.TRANSLATIONS).map(locale =>
-        <img className="flag"
+        <img className="icon"
              src={`assets/flags/${locale}.png`}
              alt={`${locale} flag`}
              onClick={e => this.setLocale(locale)}
