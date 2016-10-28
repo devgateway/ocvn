@@ -68,11 +68,11 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     private Group group;
     
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserDashboard defaultDashboard;
     
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy = "users")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UserDashboard> dashboards = new HashSet<>();
 
@@ -94,6 +94,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
     private List<Role> roles;
 
 
