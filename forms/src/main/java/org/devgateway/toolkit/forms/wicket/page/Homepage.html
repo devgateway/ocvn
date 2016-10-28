@@ -9,27 +9,12 @@
 
 
     <div class="jumbotron jumbotron-icon text-center">
-        <div class="row">
-            <div class="jumbo-icon-link col-md-4">
-                <a href="/dashboard" target="_blank">
-                    <i class="fa fa-tachometer fa-5x"></i>
-                    <span class="fa-2x jumbo-icon-txt">Dashboard</span>
-                </a>
-            </div>
-
-            <div wicket:id="manageUsers" class="jumbo-icon-link col-md-4">
-                <a href="listusers">
-                    <i class="fa fa-users fa-5x"></i>
-                    <span class="fa-2x jumbo-icon-txt">Manage Users</span>
-                </a>
-            </div>
-
-            <div class="jumbo-icon-link col-md-4">
-                <a href="swagger-ui.html" target="_blank">
-                    <i class="fa fa-gears fa-5x"></i>
-                    <span class="fa-2x jumbo-icon-txt">API</span>
-                </a>
-            </div>
+    <div class="row">
+        <div class="col-md-offset-1 jumbo-icon-link col-md-2">
+            <a href="/dashboard" target="_blank">
+                <i class="fa fa-tachometer fa-5x"></i>
+                <span class="fa-2x jumbo-icon-txt">Dashboard</span>
+            </a>
         </div>
 
         <div class="jumbo-icon-link col-md-2">
@@ -47,7 +32,7 @@
         </div>
 
       
-        <div class="jumbo-icon-link col-md-2">
+        <div wicket:id="manageUsers" class="jumbo-icon-link col-md-2">
             <a href="listusers">
                 <i class="fa fa-users fa-5x"></i>
                 <span class="fa-2x jumbo-icon-txt">Manage Users</span>
