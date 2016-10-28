@@ -43,7 +43,10 @@ class OCVN extends OCApp{
           {this.comparison()}
           {this.exportBtn()}
         </div>
-        <div className="col-sm-2 language-switcher">
+        <div className="col-sm-2 header-icons user-tools">
+          {this.loginBox()}
+        </div>
+        <div className="col-sm-1 header-icons language-switcher">
           {this.languageSwitcher()}
         </div>
       </header>
