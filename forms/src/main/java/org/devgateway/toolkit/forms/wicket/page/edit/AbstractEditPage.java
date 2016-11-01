@@ -125,6 +125,7 @@ public abstract class AbstractEditPage<T extends GenericPersistable> extends Bas
         if (markupCacheService != null) {
             markupCacheService.flushMarkupCache();
             markupCacheService.clearReportsCache();
+            markupCacheService.clearReportsApiCache();
         }
     }
 

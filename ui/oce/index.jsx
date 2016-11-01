@@ -30,7 +30,8 @@ class OCApp extends React.Component{
       bidTypes: fromJS({}),
       years: fromJS([]),
       user: {
-        loggedIn: false
+        loggedIn: false,
+        isAdmin: false
       }
     }
   }
@@ -73,10 +74,11 @@ class OCApp extends React.Component{
   }
 
   fetchUserInfo(){
-    fetchJson('/rest/userDashboards/search/getDashboardsForCurrentUser').then(
-        () => this.setState({
+    fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
+        ({username}) => this.setState({
           user: {
-            loggedIn: true
+            loggedIn: true,
+            isAdmin: 'admin' == username
           }
         })
     ).catch(
