@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -48,14 +47,12 @@ public class UserDashboard extends AbstractAuditableEntity implements Serializab
         this.formUrlEncodedBody = formUrlEncodedBody;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "defaultDashboard")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "defaultDashboard")
     @RestResource(exported = false)
     @JsonIgnore
     private Set<Person> defaultDashboardUsers = new HashSet<>();
 
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
-            fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @RestResource(exported = false)
     @JsonIgnore
     private Set<Person> users = new HashSet<>();
