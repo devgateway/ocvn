@@ -25,7 +25,7 @@
         <spring.boot.version>1.4.1.RELEASE</spring.boot.version>
         <derby.version>10.12.1.1</derby.version>
         <poi.version>3.14</poi.version>
-        <pentaho.poi.version>3.12</pentaho.poi.version>
+        <pentaho.poi.version>3.14</pentaho.poi.version>
     </properties>
 
     <modules>

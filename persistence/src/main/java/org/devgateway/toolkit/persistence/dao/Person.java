@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -67,13 +66,11 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @ManyToOne(fetch = FetchType.EAGER)
     private Group group;
     
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToOne(fetch = FetchType.EAGER)
     private UserDashboard defaultDashboard;
     
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy = "users")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.EAGER,  mappedBy = "users")
     private Set<UserDashboard> dashboards = new HashSet<>();
 
     @Transient
