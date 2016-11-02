@@ -5,13 +5,17 @@ import Organizations from "./tabs/organizations";
 import TenderRules from "./tabs/tender-rules";
 import Amounts from "./tabs/amounts";
 import {Map} from "immutable";
+import {send} from "../tools";
+import URI from "urijs";
 
 class Filters extends translatable(Component){
   constructor(props){
     super(props);
     this.state = {
       currentTab: 0,
-      state: Map()
+      state: Map(),
+      savingDashboard: false,
+      dashboardName: ""
     }
   }
 
@@ -47,8 +51,26 @@ class Filters extends translatable(Component){
     this.props.onUpdate(Map())
   }
 
+  onSaveClicked(){
+    const {savingDashboard, dashboardName, state} = this.state;
+    if(!savingDashboard){
+      this.setState({savingDashboard: true});
+    } else {
+      const encoded = ""+JSON.stringify(state);
+      send(new URI('/rest/userDashboards/saveDashboardForCurrentUser')
+          .addSearch('name', dashboardName)
+          .addSearch('formUrlEncodedBody', encoded)
+      );
+      this.setState({
+        savingDashboard: false,
+        dashboardName: ""
+      })
+    }
+  }
+
   render(){
-    let {onClick, onUpdate, open} = this.props;
+    let {onClick, onUpdate, open, user} = this.props;
+    const {savingDashboard, dashboardName} = this.state;
     return <div className={cn('filters', {open})}  onClick={onClick}>
       <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.t('filters:title')} <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box row" onClick={e => e.stopPropagation()}>
@@ -66,6 +88,21 @@ class Filters extends translatable(Component){
           <button className="btn btn-default" onClick={e => this.reset()}>
             {this.t('filters:reset')}
           </button>
+          &nbsp;
+          {savingDashboard && user.isAdmin &&
+            <input
+                type="text"
+                className="input-sm form-control dashboard-name"
+                value={dashboardName}
+                onChange={e => this.setState({dashboardName: e.target.value})}
+            />
+          }
+          &nbsp;
+          {user.loggedIn &&
+            <button className="btn btn-default" onClick={e => this.onSaveClicked()}>
+              {this.t('filters:dashboard:save')}
+            </button>
+          }
         </section>
       </div>
     </div>

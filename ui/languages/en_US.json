@@ -20,6 +20,7 @@
   "filters:title": "Filter the data",
   "filters:apply": "Apply",
   "filters:reset": "Reset",
+  "filters:dashboard:save": "Save",
   "filters:procuringEntity:title": "Procuring entity",
   "filters:supplier:title": "Supplier",
   "filters:tenderPrice:title": "Tender price",
