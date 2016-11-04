@@ -7,6 +7,7 @@ import Amounts from "./tabs/amounts";
 import {Map} from "immutable";
 import {send} from "../tools";
 import URI from "urijs";
+import {DropdownButton, MenuItem} from "react-bootstrap";
 
 class Filters extends translatable(Component){
   constructor(props){
@@ -16,7 +17,23 @@ class Filters extends translatable(Component){
       state: Map(),
       savingDashboard: false,
       dashboardName: ""
-    }
+    };
+
+    const save = ep => () => {
+      const {state, dashboardName} = this.state;
+      const encoded = ""+JSON.stringify(state);
+      send(new URI(`/rest/userDashboards/${ep}`)
+          .addSearch('name', dashboardName)
+          .addSearch('formUrlEncodedBody', encoded)
+      );
+      this.setState({
+        savingDashboard: false,
+        dashboardName: ""
+      })
+    };
+
+    this.saveForCurrentUser = save('saveDashboardForCurrentUser')
+    this.saveUnassigned = save('saveDashboard');
   }
 
   listTabs(){
@@ -51,23 +68,6 @@ class Filters extends translatable(Component){
     this.props.onUpdate(Map())
   }
 
-  onSaveClicked(){
-    const {savingDashboard, dashboardName, state} = this.state;
-    if(!savingDashboard){
-      this.setState({savingDashboard: true});
-    } else {
-      const encoded = ""+JSON.stringify(state);
-      send(new URI('/rest/userDashboards/saveDashboardForCurrentUser')
-          .addSearch('name', dashboardName)
-          .addSearch('formUrlEncodedBody', encoded)
-      );
-      this.setState({
-        savingDashboard: false,
-        dashboardName: ""
-      })
-    }
-  }
-
   render(){
     let {onClick, onUpdate, open, user} = this.props;
     const {savingDashboard, dashboardName} = this.state;
@@ -89,7 +89,12 @@ class Filters extends translatable(Component){
             {this.t('filters:reset')}
           </button>
           &nbsp;
-          {savingDashboard && user.isAdmin &&
+          {user.loggedIn && !savingDashboard &&
+            <button className="btn btn-default" onClick={e => this.setState({savingDashboard: true})}>
+              {this.t('filters:dashboard:save')}
+            </button>
+          }
+          {savingDashboard &&
             <input
                 type="text"
                 className="input-sm form-control dashboard-name"
@@ -98,10 +103,32 @@ class Filters extends translatable(Component){
             />
           }
           &nbsp;
+          {savingDashboard && !user.isAdmin &&
+              <button className="btn btn-default" onClick={e => this.saveForCurrentUser()}>
+                {this.t('filters:dashboard:save')}
+              </button>
+          }
+          {savingDashboard && user.isAdmin &&
+              <DropdownButton id="admin-dashboard-save" title={this.t('filters:dashboard:save')}>
+                <MenuItem onClick={e => this.saveForCurrentUser()}>{this.t('filters:dashboard:saveForAdmin')}</MenuItem>
+                <MenuItem onClick={e => this.saveUnassigned()}>{this.t('filters:dashboard:saveUnassigned')}</MenuItem>
+              </DropdownButton>
+          }
           {user.loggedIn &&
-            <button className="btn btn-default" onClick={e => this.onSaveClicked()}>
-              {this.t('filters:dashboard:save')}
-            </button>
+              <DropdownButton id="dashboard-load-dropdown" title={this.t('filters:dashboard:load')}>
+
+              </DropdownButton>
+          }
+          {savingDashboard && user.isAdmin &&
+              <DropdownButton id="admin-dashboard-save" title={this.t('filters:dashboard:save')}>
+                <MenuItem onClick={e => this.saveForCurrentUser()}>{this.t('filters:dashboard:saveForAdmin')}</MenuItem>
+                <MenuItem onClick={e => this.saveUnassigned()}>{this.t('filters:dashboard:saveUnassigned')}</MenuItem>
+              </DropdownButton>
+          }
+          {user.loggedIn &&
+              <DropdownButton id="dashboard-load-dropdown" title={this.t('filters:dashboard:load')}>
+
+              </DropdownButton>
           }
         </section>
       </div>
