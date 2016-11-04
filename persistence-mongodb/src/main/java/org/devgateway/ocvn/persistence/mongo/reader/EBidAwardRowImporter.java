@@ -81,7 +81,7 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
         award.setBidOpenRank(getInteger(getRowCell(row, 4)));
 
-        award.setInelibigleYN(getRowCell(row, 6));
+        award.setIneligibleYN(getRowCell(row, 6));
 
         award.setIneligibleRson(getRowCell(row, 7));
 
