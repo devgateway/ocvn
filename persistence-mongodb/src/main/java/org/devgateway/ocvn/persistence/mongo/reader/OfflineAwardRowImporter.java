@@ -88,7 +88,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
         award.setContractTime(getRowCell(row, 4));
 
-        award.setInelibigleYN(getRowCell(row, 6));
+        award.setIneligibleYN(getRowCell(row, 6));
 
         award.setIneligibleRson(getRowCell(row, 7));
 
