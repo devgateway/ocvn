@@ -75,10 +75,11 @@ class OCApp extends React.Component{
 
   fetchUserInfo(){
     fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
-        ({username}) => this.setState({
+        ({username, id}) => this.setState({
           user: {
             loggedIn: true,
-            isAdmin: 'admin' == username
+            isAdmin: 'admin' == username,
+            id
           }
         })
     ).catch(
