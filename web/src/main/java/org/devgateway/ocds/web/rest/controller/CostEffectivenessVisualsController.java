@@ -164,13 +164,15 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
-                    .exists(true).andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group1),
                 getTopXFilterOperation(filter, "$year").sum("tenderWithAwardsValue").as(Keys.TOTAL_TENDER_AMOUNT)
-                        .count()
-                        .as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(Keys.TOTAL_TENDER_WITH_AWARDS),
-                new CustomProjectionOperation(project2), sort(Direction.ASC, Fields.UNDERSCORE_ID),
+                        .count().as(Keys.TOTAL_TENDERS).sum("tenderWithAwards").as(Keys.TOTAL_TENDER_WITH_AWARDS),
+                new CustomProjectionOperation(project2),
+                filter.getGroupByCategory() != null ? sort(Direction.DESC, Keys.TOTAL_TENDER_AMOUNT)
+                        : sort(Direction.ASC, Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
