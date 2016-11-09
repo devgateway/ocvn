@@ -1,29 +1,30 @@
 import ReactDOM from "react-dom";
 import OCApp from "./oce";
 import OverviewTab from './oce/tabs/overview';
-import LocationTab from './oce/tabs/location';
-import CompetitivenessTab from './oce/tabs/competitiveness';
-import EfficiencyTab from './oce/tabs/efficiency';
-import EProcurementTab from './oce/tabs/e-procurement';
+import OCVNLocation from "./ocvn/tabs/location";
+import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
+import OCVNEfficiency from './ocvn/tabs/efficiency';
+import OCVNEProcurement from './ocvn/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
+import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
-class OCEChild extends OCApp{
+class OCVN extends OCApp{
   constructor(props) {
     super(props);
     this.registerTab(OverviewTab);
-    this.registerTab(LocationTab);
-    this.registerTab(CompetitivenessTab);
-    this.registerTab(EfficiencyTab);
-    this.registerTab(EProcurementTab);
+    this.registerTab(OCVNLocation);
+    this.registerTab(OCVNCompetitiveness);
+    this.registerTab(OCVNEfficiency);
+    this.registerTab(OCVNEProcurement);
   }
 
   fetchBidTypes(){
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-              map.set(datum.id, datum.get('description')), Map())
+            map.set(datum.id, datum.description), Map())
         })
     );
   }
@@ -33,8 +34,8 @@ class OCEChild extends OCApp{
       <header className="branding row">
         <div className="col-sm-offset-1 col-sm-4">
           <h1>
-            {this.__('e-Procurement')}
-            <small>{this.__('Toolkit')}</small>
+            {this.t('general:title')}
+            <small>{this.t('general:subtitle')}</small>
           </h1>
         </div>
         <div className="col-sm-6 menu">
@@ -42,7 +43,10 @@ class OCEChild extends OCApp{
           {this.comparison()}
           {this.exportBtn()}
         </div>
-        <div className="col-sm-2 language-switcher">
+        <div className="col-sm-2 header-icons user-tools">
+          {this.loginBox()}
+        </div>
+        <div className="col-sm-1 header-icons language-switcher">
           {this.languageSwitcher()}
         </div>
       </header>
@@ -52,10 +56,10 @@ class OCEChild extends OCApp{
             {this.navigation()}
           </div>
           <section className="col-sm-12 description">
-            <h3><strong>{this.__("Toolkit description")}</strong></h3>
+            <h3><strong>{this.t('general:description:title')}</strong></h3>
             <p>
               <small>
-                {this.__("The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP).")}
+                  {this.t('general:description:content')}
               </small>
             </p>
           </section>
@@ -74,7 +78,33 @@ class OCEChild extends OCApp{
   }
 }
 
-ReactDOM.render(<OCEChild/>, document.getElementById('dg-container'));
+OCVN.Filters = OCVNFilters;
+
+OCVN.TRANSLATIONS = {
+  en_US: require('./languages/en_US.json'),
+  vn_VN: require('./languages/vn_VN.json'),
+};
+
+const BILLION = 1000000000;
+const MILLION = 1000000;
+const THOUSAND = 1000;
+
+OCVN.STYLING = {
+  charts: {
+    axisLabelColor: "#cc3c3b",
+    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
+    hoverFormatter: number => {
+      if(typeof number == "undefined") return number;
+      let abs = Math.abs(number);
+      if(abs >= BILLION) return (number/BILLION).toFixed(2) + "B";
+      if(abs >= MILLION) return (number/MILLION).toFixed(2) + "M";
+      if(abs >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
+      return number.toFixed(2);
+    }
+  }
+};
+
+ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

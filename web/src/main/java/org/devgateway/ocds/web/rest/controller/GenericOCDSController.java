@@ -16,10 +16,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -236,6 +238,21 @@ public abstract class GenericOCDSController {
         return criteria;
     }
 
+
+    /**
+     * Appends the contrMethod filter, based on tender.contrMethod
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
+        return filter.getContrMethod() == null ? new Criteria()
+                : createFilterCriteria("tender.contrMethod._id",
+                filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
+                filter);
+    }
+
+
     private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
         if (filterValues == null) {
@@ -275,6 +292,8 @@ public abstract class GenericOCDSController {
         tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
+        tmpMap.put("tender.procurementMethodDetails", 1);
+        tmpMap.put("tender.contrMethod", 1);
         tmpMap.put("tender.value.amount", 1);
         tmpMap.put("awards.value.amount", 1);
 
@@ -299,9 +318,20 @@ public abstract class GenericOCDSController {
         return filter.getInvert() ? criteria.norOperator(yearCriteria) : criteria.orOperator(yearCriteria);
     }
 
+    /**
+     * Appends the bid selection method to the filter, this will filter based on
+     * tender.procurementMethodDetails. It accepts multiple elements
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getBidSelectionMethod(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
+    }
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
+                getBidSelectionMethod(filter), getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter));
@@ -309,9 +339,9 @@ public abstract class GenericOCDSController {
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
         return new Criteria().andOperator(getBidTypeIdFilterCriteria(filter), getProcuringEntityIdCriteria(filter),
-                getSupplierIdCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter), getByTenderAmountIntervalCriteria(filter),
-                getByAwardAmountIntervalCriteria(filter), getYearFilterCriteria(filter, dateProperty));
+                getSupplierIdCriteria(filter), getByTenderDeliveryLocationIdentifier(filter),
+                getByTenderAmountIntervalCriteria(filter), getByAwardAmountIntervalCriteria(filter),
+                getYearFilterCriteria(filter, dateProperty));
     }
 
     protected MatchOperation getMatchDefaultFilterOperation(final DefaultFilterPagingRequest filter) {
@@ -341,7 +371,9 @@ public abstract class GenericOCDSController {
     }
 
     private String getGroupByCategory(final GroupingFilterPagingRequest filter) {
-        if ("bidTypeId".equals(filter.getGroupByCategory())) {
+        if ("bidSelectionMethod".equals(filter.getGroupByCategory())) {
+            return "tender.procurementMethodDetails".replace(".", "");
+        } else if ("bidTypeId".equals(filter.getGroupByCategory())) {
             return "tender.items.classification._id".replace(".", "");
         } else if ("procuringEntityId".equals(filter.getGroupByCategory())) {
             return "tender.procuringEntity._id".replace(".", "");

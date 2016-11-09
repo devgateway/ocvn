@@ -19,7 +19,7 @@ class Chart extends Visualization{
     var layout = this.getLayout();
     layout.width = width;
     layout.height = height;
-    layout.margin = margin;
+    layout.margin = margin || {pad: 20};
     if(title) layout.title = title;
     if(xAxisRange) layout.xaxis.range = xAxisRange;
     if(yAxisRange) layout.yaxis.range = yAxisRange;

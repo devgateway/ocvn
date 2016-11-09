@@ -22,9 +22,11 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
@@ -70,11 +72,18 @@ public class LoginPage extends BasePage {
         }
         
         protected void retrieveReferrerFromSavedRequestIfPresent() {
-            HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
-            SavedRequest savedRequest =
-                    (SavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-            if (savedRequest != null) {
-                referrer = savedRequest.getRedirectUrl();
+            StringValue referrerParam = RequestCycle.get().getRequest().getRequestParameters()
+                    .getParameterValue("referrer");
+            if (!referrerParam.isEmpty()) {
+                referrer = referrerParam.toString();
+            } else {
+
+                HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
+                SavedRequest savedRequest = (SavedRequest) request.getSession()
+                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+                if (savedRequest != null) {
+                    referrer = savedRequest.getRedirectUrl();
+                }
             }
         }
 
@@ -97,7 +106,7 @@ public class LoginPage extends BasePage {
             final PasswordFieldBootstrapFormComponent password =
                     new PasswordFieldBootstrapFormComponent("password", new PropertyModel<>(this, "password"));
             password.getField().setResetPassword(false);
-            add(password);
+            add(password);                   
 
             final IndicatingAjaxButton submit =
                     new IndicatingAjaxButton("submit", new StringResourceModel("submit.label", LoginPage.this, null)) {

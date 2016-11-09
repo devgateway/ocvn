@@ -33,9 +33,6 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
         this.monthly = monthly;
     }
     
-    /**
-     *
-     */
     public YearFilterPagingRequest() {
         super();
     }

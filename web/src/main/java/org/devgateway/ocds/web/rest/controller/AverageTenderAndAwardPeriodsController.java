@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
@@ -53,7 +54,7 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
 
-    private static final int DAY_MS = 86400000;
+
 
     public static final class Keys {
         public static final String AVERAGE_TENDER_DAYS = "averageTenderDays";
@@ -79,7 +80,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 Arrays.asList(
                         new BasicDBObject("$subtract",
                                 Arrays.asList("$tender.tenderPeriod.endDate", "$tender.tenderPeriod.startDate")),
-                        DAY_MS));
+                        MongoConstants.DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -118,6 +119,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
+        project1.put(Fields.UNDERSCORE_ID, 0);
         project1.put(Keys.TOTAL_TENDER_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_TENDERS, 1);
         project1.put(Keys.PERCENTAGE_TENDER_WITH_START_END_DATES,
@@ -131,6 +133,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         as(Keys.TOTAL_TENDERS),
                 new CustomProjectionOperation(project1));
 
+
+
+
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
         return list;
@@ -143,8 +148,10 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
             produces = "application/json")
     public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
-                new BasicDBObject("$subtract", Arrays.asList("$awards.date", "$tender.tenderPeriod.endDate")), DAY_MS));
+        DBObject awardLengthDays = new BasicDBObject("$divide",
+                Arrays.asList(
+                        new BasicDBObject("$subtract", Arrays.asList("$awards.date", "$tender.tenderPeriod.endDate")),
+                        MongoConstants.DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -192,6 +199,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
+        project1.put(Fields.UNDERSCORE_ID, 0);
         project1.put(Keys.TOTAL_AWARD_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_AWARDS, 1);
         project1.put(Keys.PERCENTAGE_AWARD_WITH_START_END_DATES,

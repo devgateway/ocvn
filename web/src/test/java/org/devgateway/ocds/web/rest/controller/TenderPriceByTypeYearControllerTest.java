@@ -35,5 +35,43 @@ public class TenderPriceByTypeYearControllerTest extends AbstractEndPointControl
         Assert.assertEquals("open", procurementMethod);
         Assert.assertEquals(9000.0, totalTenderAmount.doubleValue(), 0);
     }
+
+    @Test
+    public void tenderPriceByBidSelectionMethod() throws Exception {
+        final List<DBObject> tenderPriceByBidSelectionMethod = tenderPriceByTypeYearController
+                .tenderPriceByBidSelectionMethod(new YearFilterPagingRequest());
+
+        final DBObject first = tenderPriceByBidSelectionMethod.get(0);
+        Number totalTenderAmount = (Number) first.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        String procurementMethodDetails = (String) first
+                .get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
+        Assert.assertNull(procurementMethodDetails);
+        Assert.assertEquals(600000.0, totalTenderAmount.doubleValue(), 0);
+
+        final DBObject second = tenderPriceByBidSelectionMethod.get(1);
+        totalTenderAmount = (Number) second.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        procurementMethodDetails = (String) second.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
+        Assert.assertEquals("Competitive offers", procurementMethodDetails);
+        Assert.assertEquals(9000.0, totalTenderAmount.doubleValue(), 0);
+    }
+
+    @Test
+    public void tenderPriceByAllBidSelectionMethods() throws Exception {
+        final List<DBObject> tenderPriceByAllBidSelectionMethods = tenderPriceByTypeYearController
+                .tenderPriceByAllBidSelectionMethods(new YearFilterPagingRequest());
+
+        final DBObject first = tenderPriceByAllBidSelectionMethods.get(0);
+        Number totalTenderAmount = (Number) first.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        String procurementMethodDetails = (String) first
+                .get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
+        Assert.assertEquals("Competitive offers", procurementMethodDetails);
+        Assert.assertEquals(9000.0, totalTenderAmount.doubleValue(), 0);
+
+        final DBObject second = tenderPriceByAllBidSelectionMethods.get(1);
+        totalTenderAmount = (Number) second.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
+        procurementMethodDetails = (String) second.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
+        Assert.assertEquals("Unspecified", procurementMethodDetails);
+        Assert.assertEquals(600000.0, totalTenderAmount.doubleValue(), 0);
+    }
 }
 

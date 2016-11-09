@@ -4,10 +4,10 @@
 package org.devgateway.ocds.web.rest.controller.request;
 
 import java.math.BigDecimal;
-import java.util.List;
-
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * @author mihai Filtering bean applied to all endpoints
@@ -23,10 +23,18 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Corresponds to the OCDS Organization.identifier")
     private List<String> procuringEntityId;
 
-    //@EachPattern(regexp = "^[\\p{L}0-9]*$")
+    // @EachPattern(regexp = "^[\\p{L}0-9]*$")
     @ApiModelProperty(value = "This is the id of the organization/supplier entity. "
             + "Corresponds to the OCDS Organization.identifier")
     private List<String> supplierId;
+
+    @ApiModelProperty(value = "This will filter after tender.procurementMethodDetails."
+            + "Valid examples are Đấu thầu rộng rãi, Đấu thầu hạn chế, etc...")
+    private List<String> bidSelectionMethod;
+
+    @ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+    private List<String> contrMethod;
 
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
     private List<String> tenderLoc;
@@ -81,7 +89,13 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.procuringEntityId = procuringEntityId;
     }
 
+    public List<String> getBidSelectionMethod() {
+        return bidSelectionMethod;
+    }
 
+    public void setBidSelectionMethod(final List<String> bidSelectionMethod) {
+        this.bidSelectionMethod = bidSelectionMethod;
+    }
 
     public Boolean getInvert() {
         return invert;
@@ -89,6 +103,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setInvert(final Boolean invert) {
         this.invert = invert;
+    }
+
+    public List<String> getContrMethod() {
+        return contrMethod;
+    }
+
+    public void setContrMethod(List<String> contrMethod) {
+        this.contrMethod = contrMethod;
     }
 
     public List<String> getTenderLoc() {
@@ -138,7 +160,5 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setSupplierId(final List<String> supplierId) {
         this.supplierId = supplierId;
     }
-
-
 
 }
