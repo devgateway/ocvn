@@ -221,11 +221,11 @@ class OCApp extends React.Component{
 
   loginBox(){
     if(this.state.user.loggedIn){
-      return <a href="/preLogout">
+      return <a href="/preLogout?referrer=/ui/index.html">
         <i className="glyphicon glyphicon-user"/> {this.t("general:logout")}
       </a>
     }
-    return <a href="/login">
+    return <a href="/login?referrer=/ui/index.html">
       <i className="glyphicon glyphicon-user"/> {this.t("general:login")}
     </a>
   }
