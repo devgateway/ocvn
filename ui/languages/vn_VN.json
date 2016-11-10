@@ -108,6 +108,7 @@
   "filters:contractMethod:title": "Loại hợp đồng",
   "filters:tabs:locations:title": "Địa điểm (tỉnh thành)",
   "filters:tabs:procurementTypes:title": "Hình thức đấu thầu",
+  "filters:bidSelectionMethod:title": "Hình thức lựa chọn nhà thầu",
   "charts:bidPeriod:traces:avgTime": "Average time from plan to tender phase",
   "charts:bidSelectionMethod:title": "Hình thức lựa chọn nhà thầu",
   "charts:cancelledFunding:title": "Cancelled funding by reason",
