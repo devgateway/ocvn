@@ -54,7 +54,21 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     @ApiModelProperty(value = "This will filter after awards.value.amount and will specify a maximum."
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
+    
+    @ApiModelProperty(value = "This will search after the City Id of the procuring entity."
+            + "The field is organization.address.postalCode")
+    private List<Integer> procuringEntityCityId;
 
+    
+    @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+            + "The field is organization.department._id")
+    private List<Integer> procuringEntityDepartmentId;
+    
+        @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+            + "The field is organization.group._id")
+    private List<Integer> procuringEntityGroupId;
+
+    
     /**
      * This parameter will invert (negate) all existing filtering parameters. So
      * A IN B turns into A NOT IN B. A IN B AND AN IN C turns into A NOT IN B
@@ -159,6 +173,30 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setSupplierId(final List<String> supplierId) {
         this.supplierId = supplierId;
+    }
+
+    public List<Integer> getProcuringEntityCityId() {
+        return procuringEntityCityId;
+    }
+
+    public void setProcuringEntityCityId(List<Integer> procuringEntityCityId) {
+        this.procuringEntityCityId = procuringEntityCityId;
+    }
+
+    public List<Integer> getProcuringEntityDepartmentId() {
+        return procuringEntityDepartmentId;
+    }
+
+    public void setProcuringEntityDepartmentId(List<Integer> procuringEntityDepartmentId) {
+        this.procuringEntityDepartmentId = procuringEntityDepartmentId;
+    }
+
+    public List<Integer> getProcuringEntityGroupId() {
+        return procuringEntityGroupId;
+    }
+
+    public void setProcuringEntityGroupId(List<Integer> procuringEntityGroupId) {
+        this.procuringEntityGroupId = procuringEntityGroupId;
     }
 
 }

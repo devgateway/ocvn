@@ -1,8 +1,16 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
+import java.io.IOException;
+import java.net.URL;
+
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocvn.persistence.mongo.dao.City;
+import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
+import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +23,6 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
-
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.net.URL;
 
 @Configuration
 public class MongoTemplateConfiguration {
@@ -47,6 +51,25 @@ public class MongoTemplateConfiguration {
     public void mongoPostInit() {
         createMandatoryImportIndexes();
         createPostImportStructures();
+    }
+    
+    private void createProcuringEntityIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id", 
+                Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.procuringEntity.department._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.procuringEntity.address.postalCode", Direction.ASC));
+     
+        mongoTemplate.indexOps(City.class)
+        .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+
+        mongoTemplate.indexOps(OrgDepartment.class)
+        .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+
+        mongoTemplate.indexOps(OrgGroup.class)
+        .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
     }
 
     public void createPostImportStructures() {
@@ -94,6 +117,8 @@ public class MongoTemplateConfiguration {
         //vietnam specific indexes:
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
+        
+        createProcuringEntityIndexes();
 
         logger.info("Added extra Mongo indexes");
 

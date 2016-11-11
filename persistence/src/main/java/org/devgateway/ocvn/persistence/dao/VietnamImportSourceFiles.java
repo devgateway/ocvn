@@ -48,7 +48,11 @@ public class VietnamImportSourceFiles extends AbstractAuditableEntity implements
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<FileMetadata> locationsFile;
-
+    
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<FileMetadata> cityDepartmentGroupFile;
+       
     /*
      * (non-Javadoc)
      *
@@ -115,6 +119,14 @@ public class VietnamImportSourceFiles extends AbstractAuditableEntity implements
     @Override
     public String toString() {
         return name;
+    }
+
+    public Set<FileMetadata> getCityDepartmentGroupFile() {
+        return cityDepartmentGroupFile;
+    }
+
+    public void setCityDepartmentGroupFile(Set<FileMetadata> cityDepartmentGroupFile) {
+        this.cityDepartmentGroupFile = cityDepartmentGroupFile;
     }
 
 }

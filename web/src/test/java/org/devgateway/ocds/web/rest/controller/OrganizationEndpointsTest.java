@@ -5,7 +5,7 @@ import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.devgateway.ocds.web.rest.controller.selector.BuyerSearchController;
 import org.devgateway.ocds.web.rest.controller.selector.OrganizationSearchController;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
@@ -80,7 +80,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testOrganizationSearchText() {
-        final OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        final TextSearchRequest osr = new TextSearchRequest();
         osr.setText("Development");
         final List<Organization> organizations = organizationSearchController.searchText(osr);
         Assert.assertEquals(1, organizations.size(), 0);
@@ -94,7 +94,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testProcuringEntitySearchText() {
-        final OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        final TextSearchRequest osr = new TextSearchRequest();
         osr.setText("Development");
         final List<Organization> organizations = procuringEntitySearchController.searchText(osr);
         Assert.assertEquals(1, organizations.size(), 0);
@@ -108,7 +108,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testBuyerSearchText() {
-        final OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        final TextSearchRequest osr = new TextSearchRequest();
         osr.setText("Development");
         final List<Organization> organizations = buyerSearchController.searchText(osr);
         Assert.assertEquals(1, organizations.size(), 0);
@@ -122,7 +122,7 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
 
     @Test
     public void testSupplierSaerchText() {
-        final OrganizationSearchRequest osr = new OrganizationSearchRequest();
+        final TextSearchRequest osr = new TextSearchRequest();
         osr.setText("Development");
         final List<Organization> organizations = supplierSearchController.searchText(osr);
         Assert.assertEquals(0, organizations.size(), 0);
