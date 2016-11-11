@@ -17,7 +17,7 @@ class OCApp extends React.Component{
     this.tabs = [];
     this.state = {
       exporting: false,
-      locale: localStorage.locale || "us",
+      locale: localStorage.oceLocale || "en_US",
       width: 0,
       currentTab: 0,
       menuBox: "",
@@ -28,7 +28,11 @@ class OCApp extends React.Component{
       data: fromJS({}),
       comparisonData: fromJS({}),
       bidTypes: fromJS({}),
-      years: fromJS([])
+      years: fromJS([]),
+      user: {
+        loggedIn: false,
+        isAdmin: false
+      }
     }
   }
 
@@ -36,8 +40,9 @@ class OCApp extends React.Component{
     this.tabs.push(tab);
   }
 
-  __(text){
-    return this.constructor.TRANSLATIONS[this.state.locale][text] || text;
+  t(text){
+    const {locale} = this.state;
+    return this.constructor.TRANSLATIONS[locale][text];
   }
 
   updateComparisonCriteria(criteria){
@@ -68,9 +73,28 @@ class OCApp extends React.Component{
     }))
   }
 
+  fetchUserInfo(){
+    fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
+        ({username, id}) => this.setState({
+          user: {
+            loggedIn: true,
+            isAdmin: 'admin' == username,
+            id
+          }
+        })
+    ).catch(
+        () => this.setState({
+          user: {
+            loggedIn: false
+          }
+        })
+    )
+  }
+
   componentDidMount(){
     this.fetchBidTypes();
     this.fetchYears();
+    this.fetchUserInfo();
 
     this.setState({
       width: document.querySelector('.years-bar').offsetWidth - 30
@@ -90,12 +114,13 @@ class OCApp extends React.Component{
   }
 
   filters(){
-    let {menuBox, bidTypes, locale} = this.state;
+    let {menuBox, bidTypes, locale, user} = this.state;
     return <this.constructor.Filters
         onClick={e => this.setMenuBox(e, MENU_BOX_FILTERS)}
         onUpdate={filters => this.setState({filters, menuBox: ""})}
         open={menuBox == MENU_BOX_FILTERS}
         bidTypes={bidTypes}
+        user={user}
         translations={this.constructor.TRANSLATIONS[locale]}
     />
   }
@@ -106,10 +131,10 @@ class OCApp extends React.Component{
         onClick={e => this.setMenuBox(e, MENU_BOX_COMPARISON)}
         className={cn("filters compare", {open: menuBox == MENU_BOX_COMPARISON})}
     >
-      <img className="top-nav-icon" src="assets/icons/compare.svg"/> {this.__('Compare')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/compare.svg"/> {this.t('header:comparison:title')} <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box" onClick={e => e.stopPropagation()}>
         <div className="col-sm-6">
-          <label>{this.__('Comparison criteria')}</label>
+          <label>{this.t('header:comparison:criteria')}</label>
         </div>
         <div className="col-sm-6">
           <select
@@ -117,10 +142,10 @@ class OCApp extends React.Component{
               value={compareBy}
               onChange={e => this.updateComparisonCriteria(e.target.value)}
           >
-            <option value="">{this.__('None')}</option>
-            <option value="bidTypeId">{this.__('Bid Type')}</option>
-            <option value="bidSelectionMethod">{this.__('Bid Selection Method')}</option>
-            <option value="procuringEntityId">{this.__('Procuring Entity')}</option>
+            <option value="">{this.t('header:comparison:criteria:none')}</option>
+            <option value="bidTypeId">{this.t('header:comparison:criteria:bidType')}</option>
+            <option value="bidSelectionMethod">{this.t('header:comparison:criteria:bidSelectionMethod')}</option>
+            <option value="procuringEntityId">{this.t('header:comparison:criteria:procuringEntity')}</option>
           </select>
         </div>
       </div>
@@ -136,7 +161,7 @@ class OCApp extends React.Component{
             <i className={`glyphicon glyphicon-${icon}`}/>
           </span>
       &nbsp;
-      {getName(this.__.bind(this))}
+      {getName(this.t.bind(this))}
     </a>
   }
 
@@ -171,7 +196,7 @@ class OCApp extends React.Component{
     />;
   }
 
-    yearsBar(){
+  yearsBar(){
     let {years, selectedYears} = this.state;
     return this.state.years.sort().map(year =>
         <a
@@ -191,12 +216,23 @@ class OCApp extends React.Component{
 
   setLocale(locale){
     this.setState({locale});
-    localStorage.locale = locale;
+    localStorage.oceLocale = locale;
+  }
+
+  loginBox(){
+    if(this.state.user.loggedIn){
+      return <a href="/preLogout?referrer=/ui/index.html">
+        <i className="glyphicon glyphicon-user"/> {this.t("general:logout")}
+      </a>
+    }
+    return <a href="/login?referrer=/ui/index.html">
+      <i className="glyphicon glyphicon-user"/> {this.t("general:login")}
+    </a>
   }
 
   languageSwitcher(){
     return Object.keys(this.constructor.TRANSLATIONS).map(locale =>
-        <img className="flag"
+        <img className="icon"
              src={`assets/flags/${locale}.png`}
              alt={`${locale} flag`}
              onClick={e => this.setLocale(locale)}
@@ -213,7 +249,7 @@ class OCApp extends React.Component{
       ep: 'excelExport',
       filters,
       years,
-      __: this.__.bind(this)
+      t: this.t.bind(this)
     }).then(onDone).catch(onDone);
 
   }
@@ -224,14 +260,14 @@ class OCApp extends React.Component{
           <div className="filters">
             <div className="progress">
               <div className="progress-bar progress-bar-danger" role="progressbar" style={{width: "100%"}}>
-                {this.__('Exporting...')}
+                {this.t('export:exporting')}
               </div>
             </div>
           </div>
       )
     }
     return <div className="filters" onClick={e => this.downloadExcel()}>
-      <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.__('Export')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.t('export:export')} <i className="glyphicon glyphicon-menu-down"></i>
     </div>
   }
 }

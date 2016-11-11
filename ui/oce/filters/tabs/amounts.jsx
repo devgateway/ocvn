@@ -24,6 +24,6 @@ class Amount extends Tab{
   }
 }
 
-Amount.getName = __ => __('Amounts');
+Amount.getName = t => t('filters:tabs:amounts:title');
 
 export default Amount;

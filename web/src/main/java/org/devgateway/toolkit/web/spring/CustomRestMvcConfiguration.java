@@ -1,5 +1,6 @@
 package org.devgateway.toolkit.web.spring;
 
+import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -24,6 +25,7 @@ public class CustomRestMvcConfiguration {
             @Override
             public void configureRepositoryRestConfiguration(final RepositoryRestConfiguration config) {
                 config.setRepositoryDetectionStrategy(RepositoryDetectionStrategies.ANNOTATED);
+                config.exposeIdsFor(UserDashboard.class);
             }
         };
     }

@@ -10,6 +10,6 @@ class LocationsTab extends Tab{
   }
 }
 
-LocationsTab.getName = __ => __('Locations');
+LocationsTab.getName = t => t('filters:tabs:locations:title');
 
 export default LocationsTab;

@@ -5,14 +5,40 @@ import Organizations from "./tabs/organizations";
 import TenderRules from "./tabs/tender-rules";
 import Amounts from "./tabs/amounts";
 import {Map} from "immutable";
+import {send, fetchJson, callFunc} from "../tools";
+import URI from "urijs";
+import {DropdownButton, MenuItem} from "react-bootstrap";
+import {fromJSON, toJSON} from "transit-immutable-js";
 
 class Filters extends translatable(Component){
   constructor(props){
     super(props);
     this.state = {
       currentTab: 0,
-      state: Map()
-    }
+      state: Map(),
+      savingDashboard: false,
+      dashboardName: "",
+      dashboards: []
+    };
+
+    const save = ep => () => {
+      const {state, dashboardName} = this.state;
+      const encoded = toJSON(state);
+      send(new URI(`/rest/userDashboards/${ep}`)
+          .addSearch('name', dashboardName)
+          .addSearch('formUrlEncodedBody', encoded)
+      ).then(callFunc('text')).then(response => response.length ?
+          alert(this.t('filters:dashboard:saveError')) : //response text means error
+          this.fetchDashboards()//no response text means success, on success, no response is expected
+      );
+      this.setState({
+        savingDashboard: false,
+        dashboardName: ""
+      })
+    };
+
+    this.saveForCurrentUser = save('saveDashboardForCurrentUser')
+    this.saveUnassigned = save('saveDashboard');
   }
 
   listTabs(){
@@ -24,7 +50,7 @@ class Filters extends translatable(Component){
             onClick={_ => this.setState({currentTab: index})}
         >
           <a href="javascript:void(0);">
-            {Tab.getName(this.__.bind(this))}
+            {Tab.getName(this.t.bind(this))}
           </a>
         </li>
     );
@@ -47,10 +73,29 @@ class Filters extends translatable(Component){
     this.props.onUpdate(Map())
   }
 
+  fetchDashboards(){
+    fetchJson('/rest/userDashboards/search/getDashboardsForCurrentUser').then(data => this.setState({
+      dashboards: data._embedded ? data._embedded.userDashboards : []
+    })).catch(() => null);
+  }
+
+  componentDidMount(){
+    this.fetchDashboards();
+    fetchJson('/rest/userDashboards/search/getDefaultDashboardForCurrentUser')
+        .then(({formUrlEncodedBody}) => this.updateFilters(fromJSON(formUrlEncodedBody)))
+        .catch(() => null)
+  }
+
+  updateFilters(newFilters){
+    this.setState({state: newFilters});
+    this.props.onUpdate(newFilters);
+  }
+
   render(){
-    let {onClick, onUpdate, open} = this.props;
+    let {onClick, onUpdate, open, user} = this.props;
+    const {savingDashboard, dashboardName, dashboards} = this.state;
     return <div className={cn('filters', {open})}  onClick={onClick}>
-      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.__('Filter the data')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.t('filters:title')} <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box row" onClick={e => e.stopPropagation()}>
         <ul className="nav nav-pills nav-stacked col-xs-4">
           {this.listTabs()}
@@ -60,12 +105,59 @@ class Filters extends translatable(Component){
         </div>
         <section className="buttons col-xs-offset-4 col-xs-8">
           <button className="btn btn-danger" onClick={e => onUpdate(this.state.state)}>
-            {this.__('Apply')}
+            {this.t('filters:apply')}
           </button>
           &nbsp;
           <button className="btn btn-default" onClick={e => this.reset()}>
-            {this.__('Reset')}
+            {this.t('filters:reset')}
           </button>
+          &nbsp;
+          {user.loggedIn && !savingDashboard &&
+            <button className="btn btn-default" onClick={e => this.setState({savingDashboard: true})}>
+              {this.t('filters:dashboard:save')}
+            </button>
+          }
+          {savingDashboard &&
+            <input
+                type="text"
+                className="input-sm form-control dashboard-name"
+                value={dashboardName}
+                onChange={e => this.setState({dashboardName: e.target.value})}
+            />
+          }
+          &nbsp;
+          {savingDashboard && !user.isAdmin &&
+              <button className="btn btn-default" onClick={e => this.saveForCurrentUser()}>
+                {this.t('filters:dashboard:save')}
+              </button>
+          }
+          {savingDashboard && user.isAdmin &&
+              <DropdownButton dropup id="admin-dashboard-save" title={this.t('filters:dashboard:save')}>
+                <MenuItem onClick={e => this.saveForCurrentUser()}>{this.t('filters:dashboard:saveForAdmin')}</MenuItem>
+                <MenuItem onClick={e => this.saveUnassigned()}>{this.t('filters:dashboard:saveUnassigned')}</MenuItem>
+              </DropdownButton>
+          }
+          {user.loggedIn && !!dashboards.length &&
+              <DropdownButton dropup id="dashboard-load-dropdown" title={this.t('filters:dashboard:load')}>
+                {dashboards.map(({name, formUrlEncodedBody}, index) =>
+                    <MenuItem key={index} onClick={e => this.updateFilters(fromJSON(formUrlEncodedBody))}>
+                      {name}
+                    </MenuItem>
+                )}
+              </DropdownButton>
+          }
+
+          {user.loggedIn && !user.isAdmin && <p className="dashboard-hint">
+            {this.t('filters:dashboard:defaultHint')}
+            &nbsp;
+            <a href={`/account?id=${user.id}`}>{this.t('filters:dashboard:profileSettings')}</a>
+          </p>}
+
+          {user.loggedIn && user.isAdmin && <p className="dashboard-hint">
+            <a href="/listAllDashboards">{this.t('filters:dashboard:manageDashboards')}</a>
+            &nbsp;|&nbsp;
+            <a href="/listusers">{this.t('filters:dashboard:manageUsers')}</a>
+          </p>}
         </section>
       </div>
     </div>

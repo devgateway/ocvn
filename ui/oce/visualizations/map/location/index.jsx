@@ -12,7 +12,7 @@ export default class LocationWrapper extends translatable(Component){
             <div>
               <h3>{name}</h3>
               <p>
-                <strong>{this.__("Amount (in VND)")}</strong> {amount.toLocaleString()}
+                <strong>{this.t('general:amountInVND')}</strong> {amount.toLocaleString()}
               </p>
             </div>
           </Popup>

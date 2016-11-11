@@ -77,6 +77,15 @@
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
 
     <!-- Defines a cache used by libloader. This cache holds the parsed object loaded via libloader. -->
-    <cache name="report-dataset-cache" eternal="true" overflowToDisk="false" diskPersistent="false"
-        diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
+    <cache name="report-dataset-cache" eternal="true" overflowToDisk="false"
+           diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true"
+           maxEntriesLocalHeap="100000" />
+
+    <cache name="reportsCache"
+           eternal="true"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU"
+           maxEntriesLocalHeap="100000"
+           statistics="true">
+    </cache>
 </ehcache>

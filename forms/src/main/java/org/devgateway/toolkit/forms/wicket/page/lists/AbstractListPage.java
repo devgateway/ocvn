@@ -123,6 +123,10 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
         return new ActionPanel(id, model);
     }
 
+    public SortableJpaRepositoryDataProvider<T> getProvider() {
+        return new SortableJpaRepositoryDataProvider<>(jpaRepository);
+    }
+ 
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -134,9 +138,9 @@ public abstract class AbstractListPage<T extends GenericPersistable> extends Bas
             throw new NullEditPageClassException();
         }
 
-        SortableJpaRepositoryDataProvider<T> dataProvider = new SortableJpaRepositoryDataProvider<>(jpaRepository);
+        SortableJpaRepositoryDataProvider<T> dataProvider = getProvider();
         dataProvider.setFilterState(newFilterState());
-
+        
         // add the 'Edit' button
         columns.add(new AbstractColumn<T, String>(new StringResourceModel("actionsColumn", this, null)) {
             private static final long serialVersionUID = -7447601118569862123L;

@@ -16,7 +16,7 @@ class Comparison extends translatable(PureRenderCompoent){
 
   wrap(children){
     return <div>
-      <h3 className="page-header">{this.getComponent().getName(this.__.bind(this))}</h3>
+      <h3 className="page-header">{this.getComponent().getName(this.t.bind(this))}</h3>
       <div className="row">
         {children}
       </div>
@@ -26,9 +26,9 @@ class Comparison extends translatable(PureRenderCompoent){
   getTitle(index){
     let {compareBy, bidTypes, comparisonCriteriaValues} = this.props;
     if("bidTypeId" == compareBy){
-      return bidTypes.get(comparisonCriteriaValues[index], this.__('Other'))
+      return bidTypes.get(comparisonCriteriaValues[index], this.t('general:comparison:other'))
     }
-    return comparisonCriteriaValues[index] || this.__('Other');
+    return comparisonCriteriaValues[index] || this.t('general:comparison:other');
   }
 
   render(){
@@ -60,7 +60,7 @@ class Comparison extends translatable(PureRenderCompoent){
         ep: Component.excelEP,
         filters: comparisonFilters,
         years,
-        __: this.__.bind(this)
+        t: this.t.bind(this)
       });
       return <div className="col-md-6 comparison" key={index} ref={ref}>
         <Component

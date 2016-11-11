@@ -68,4 +68,14 @@
         <sqlFile path="Renamed_roles.sql" />
     </changeSet>
 
+    <changeSet id="OCE-125" author="mpostelnicu">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="ROLE" />
+        </preConditions>
+        <comment>Enable admin to create users with "Procuring Entity" Role.</comment>
+        <insert tableName="ROLE">
+            <column name="AUTHORITY" value="ROLE_PROCURING_ENTITY" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

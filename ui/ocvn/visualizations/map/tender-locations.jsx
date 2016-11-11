@@ -5,9 +5,7 @@ import BidSelectionMethod from "../../visualizations/bid-selection-method";
 import {injectOceans} from "./index.jsx";
 
 class BidSelectionMethodTab extends ProcurementMethodTab{
-  static getName(__){
-    return __('Bid selection method');
-  }
+  static getName(t){return t('charts:bidSelectionMethod:title')}
 }
 
 BidSelectionMethodTab.Chart = BidSelectionMethod;
@@ -17,9 +15,7 @@ class OCVNTenderLocation extends TenderLocation{}
 OCVNTenderLocation.TABS = [OverviewTab, OverviewChartTab, CostEffectivenessTab, BidSelectionMethodTab];
 
 class OCVNTenderLocations extends injectOceans(TenderLocations){
-    static getLayerName(__){
-        return __('Invitation to Bid Locations');
-    }
+    static getLayerName(t){return t('maps:invitationToBidLocations:title')}
 }
 
 OCVNTenderLocations.Location = OCVNTenderLocation;

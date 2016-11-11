@@ -63,6 +63,8 @@ import org.devgateway.toolkit.persistence.dao.Person;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
+import org.devgateway.ocds.forms.wicket.page.list.ListMyDashboardsPage;
 
 /**
  * Base wicket-bootstrap {@link org.apache.wicket.Page}
@@ -249,6 +251,17 @@ public abstract class BasePage extends GenericWebPage<Void> {
         return homeMenu;
     }
 
+    
+    protected NavbarButton<ListMyDashboardsPage> newMyDashboardsMenu() {
+        // home
+        NavbarButton<ListMyDashboardsPage> menu = new NavbarButton<>(ListMyDashboardsPage.class,
+                this.getPageParameters(), new ResourceModel("mydashboards"));
+        menu.setIconType(GlyphIconType.filter);
+        MetaDataRoleAuthorizationStrategy.authorize(menu, Component.RENDER,
+                SecurityConstants.Roles.ROLE_PROCURING_ENTITY);
+        return menu;
+    }
+    
     protected NavbarDropDownButton newAdminMenu() {
 
         // admin menu
@@ -315,7 +328,11 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
                 list.add(new MenuBookmarkablePageLink<Void>(EditAdminSettingsPage.class,
                         new StringResourceModel("navbar.adminSettings", BasePage.this, null))
-                                .setIconType(FontAwesomeIconType.briefcase));
+                        .setIconType(FontAwesomeIconType.briefcase));
+                
+                list.add(new MenuBookmarkablePageLink<Void>(ListAllDashboardsPage.class,
+                        new StringResourceModel("navbar.allDashboard", BasePage.this, null))
+                        .setIconType(FontAwesomeIconType.filter));
 
                 list.add(uiBrowserLink);
 
@@ -348,7 +365,9 @@ public abstract class BasePage extends GenericWebPage<Void> {
         navbar.setPosition(Navbar.Position.TOP);
         navbar.setInverted(true);
 
-        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(), newAdminMenu(),
+        navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.RIGHT, newHomeMenu(), 
+                newMyDashboardsMenu(),
+                newAdminMenu(),
                 newAccountMenu(), newLogoutMenu()));
 
         navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT, newLanguageMenu()));

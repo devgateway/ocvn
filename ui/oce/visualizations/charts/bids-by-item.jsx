@@ -4,9 +4,7 @@ import Comparison from "../../comparison";
 import backendYearFilterable from "../../backend-year-filterable";
 
 class BidsByItem extends backendYearFilterable(Chart){
-  static getName(__){
-    return __('Number of bids by item');
-  }
+  static getName(t){return t('charts:bidsByItem:title')}
 
   getData(){
     let data = super.getData();
@@ -40,11 +38,11 @@ class BidsByItem extends backendYearFilterable(Chart){
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Item"),
+        title: this.t('charts:bidsByItem:xAxisTitle'),
         type: "category"
       },
       yaxis: {
-        title: this.__("Count")
+        title: this.t('charts:bidsByItem:xAxisTitle')
       }
     }
   }

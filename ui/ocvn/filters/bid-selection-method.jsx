@@ -2,7 +2,7 @@ import MultipleSelect from "../../oce/filters/inputs/multiple-select";
 
 class BidSelectionMethod extends MultipleSelect{
   getTitle(){
-    return this.__('Locations');
+    return this.t('filters:bidSelectionMethod:title');
   }
 
   getId(option){

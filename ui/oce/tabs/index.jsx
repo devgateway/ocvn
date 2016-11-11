@@ -13,7 +13,7 @@ class Tab extends Visualization{
     let exportable = Component.prototype instanceof Chart;
     return dontWrap ? rendered : <section key={index} ref={ref}>
       <h4 className="page-header">
-        {getName(this.__.bind(this))}
+        {getName(this.t.bind(this))}
         {exportable && Component.excelEP && <img
             src="assets/icons/export-black.svg"
             width="16"
@@ -23,7 +23,7 @@ class Tab extends Visualization{
               ep: Component.excelEP,
               filters,
               years,
-              __: this.__.bind(this)
+              t: this.t.bind(this)
             })}
         />}
         {exportable && <img

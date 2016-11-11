@@ -62,14 +62,14 @@ public class MarkupCacheService {
 
     /**
      * Add the content of a report (PDF, Excel, RTF) to cache
-     * 
+     *
      * @param outputType
      * @param reportName
      * @param parameters
      * @param buffer
      */
     public void addReportToCache(final String outputType, final String reportName, final String parameters,
-            final byte[] buffer) {
+                                 final byte[] buffer) {
         CacheManager cm = CacheManager.getInstance();
 
         // get the reports cache "reportsCache", declared in ehcache.xml
@@ -80,7 +80,7 @@ public class MarkupCacheService {
 
     /**
      * Fetch the content of a report from cache
-     * 
+     *
      * @param outputType
      * @param reportName
      * @param parameters
@@ -139,7 +139,20 @@ public class MarkupCacheService {
         if (cache != null) {
             cache.removeAll();
         }
+    }
 
+    /**
+     * Remove from cache all reports api content
+     */
+    public void clearReportsApiCache() {
+        CacheManager cm = CacheManager.getInstance();
+
+        // get the reports cache "reportsApiCache", declared in ehcache.xml
+        Cache cache = cm.getCache("reportsApiCache");
+
+        if (cache != null) {
+            cache.removeAll();
+        }
     }
 
     private String createCacheKey(final String outputType, final String reportName, final String parameters) {

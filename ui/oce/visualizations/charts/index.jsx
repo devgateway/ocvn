@@ -67,7 +67,7 @@ class Chart extends Visualization{
   render(){
     let hasNoData = this.hasNoData();
     return <div className={cn("chart-container", {"no-data": hasNoData})}>
-      {hasNoData && <div className="no-data-msg">{this.__('No data')}</div>}
+      {hasNoData && <div className="no-data-msg">{this.t('charts:general:noData')}</div>}
       <ReactIgnore>
         <div ref="chartContainer"/>
       </ReactIgnore>

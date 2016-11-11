@@ -44,15 +44,23 @@ export var cacheFn = fn => {
 
 export let max = (a, b) => a > b ? a : b;
 
-export let download = ({ep, filters, years, __}) => {
-  let url = new URI(`/api/ocds/${ep}`).addSearch(filters.toJS()).addSearch('year', years.toArray());
-  return fetch(url.clone().query(""), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: url.query()
-  }).then(response => {
+//takes and URI object and makes a POST request to it's base url and query as payload
+export const send = url => fetch(url.clone().query(""), {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  credentials: 'same-origin',
+  body: url.query()
+});
+
+export let download = ({ep, filters, years, t}) =>
+  send(new URI(`/api/ocds/${ep}`)
+    .addSearch(filters.toJS())
+    .addSearch('year', years.toArray())
+    //this sin shall be atoned for in the future
+    .addSearch('language', localStorage.oceLocale)
+  ).then(response => {
     let {userAgent} = navigator;
     let isSafari =  -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
     if(isSafari){
@@ -69,6 +77,5 @@ export let download = ({ep, filters, years, __}) => {
     });
     return response;
   }).catch(() => {
-    alert(__("An error occurred during export!"));
+    alert(t('export:error'));
   });
-}
