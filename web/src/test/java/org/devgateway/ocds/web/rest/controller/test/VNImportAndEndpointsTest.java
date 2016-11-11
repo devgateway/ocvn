@@ -12,7 +12,7 @@ import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsContr
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.selector.ProcuringEntitySearchController;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
@@ -70,7 +70,9 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
                 loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
-                loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), true, false);
+                loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), 
+                loadResourceStreamAsByteArray("/testImport/test_city_department_group.xlsx"),
+                true, false);
     }
 
     @After
@@ -197,7 +199,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     @Test
     public void testProcuringEntitySearchController() {
         List<Organization> procuringEntities = procuringEntitySearchController.searchText(
-                new OrganizationSearchRequest());
+                new TextSearchRequest());
         Assert.assertEquals(procuringEntities.size(), 1, 0);
     }
 

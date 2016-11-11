@@ -45,6 +45,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
+import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.ocvn.persistence.mongo.reader.CityRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.OrgDepartmentRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.OrgGroupRowImporter;
+import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
 
 /**
  * @author mihai Service that imports Excel sheets from given import file in
@@ -65,6 +72,9 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired
     private OrganizationRepository organizationRepository;
+    
+    @Autowired
+    private VNOrganizationRepository vnOrganizationRepository;
 
     @Autowired
     private ClassificationRepository classificationRepository;
@@ -74,7 +84,16 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired
     private VNLocationRepository locationRepository;
-
+    
+    @Autowired
+    private CityRepository cityRepository;
+    
+    @Autowired
+    private OrgDepartmentRepository departmentRepository;
+    
+    @Autowired
+    private OrgGroupRepository orgGroupRepository;
+    
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -93,6 +112,7 @@ public class VNImportService implements ExcelImportService {
 
     public static final String LOCATIONS_FILE_NAME = "locations";
     public static final String ORGS_FILE_NAME = "orgs";
+    public static final String CITY_DEPT_GRP_NAME = "cdg";
     public static final String DATABASE_FILE_NAME = "database";
 
     // TODO: remove these
@@ -200,7 +220,7 @@ public class VNImportService implements ExcelImportService {
      * @throws IOException
      */
     private String saveSourceFilesToTempDir(final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
+            final byte[] publicInstitutionsSuppliers,  final byte[] cdg) throws FileNotFoundException, IOException {
         File tempDir = Files.createTempDir();
         if (prototypeDatabase != null) {
             FileOutputStream prototypeDatabaseOutputStream =
@@ -221,13 +241,21 @@ public class VNImportService implements ExcelImportService {
             publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
             publicInstitutionsSuppliersOutputStream.close();
         }
+                       
+        if (cdg != null) {
+            FileOutputStream cdgOutputStream =
+                    new FileOutputStream(new File(tempDir, CITY_DEPT_GRP_NAME));
+            cdgOutputStream.write(cdg);
+            cdgOutputStream.close();
+        }
 
         return tempDir.toURI().toURL().toString();
     }
 
     @Async
     public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase, final Boolean validateData)
+            final byte[] publicInstitutionsSuppliers, final byte[] cdg, 
+            final Boolean purgeDatabase, final Boolean validateData)
             throws InterruptedException {
 
         String tempDirPath = null;
@@ -240,21 +268,41 @@ public class VNImportService implements ExcelImportService {
                 purgeDatabase();
             }
 
-            tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers);
+            tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers, cdg);
 
             if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
                         new LocationRowImporter(locationRepository, this, 1), 1);
             }
+            
+                        
+            if (cdg != null && fileTypes.contains(ImportFileTypes.CITIES)) {
+                importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "City",
+                        new CityRowImporter(cityRepository, this, 1));
+            }
+            
+            
+            if (cdg != null && fileTypes.contains(ImportFileTypes.ORG_DEPARTMENTS)) {
+                importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "Department",
+                        new OrgDepartmentRowImporter(departmentRepository, this, 1));
+            }
+            
+            
+            if (cdg != null && fileTypes.contains(ImportFileTypes.ORG_GROUPS)) {
+                importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "Group",
+                        new OrgGroupRowImporter(orgGroupRepository, this, 1));
+            }
 
             if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
-                        new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
+                        new PublicInstitutionRowImporter(vnOrganizationRepository, cityRepository,
+                                orgGroupRepository, departmentRepository,
+                                this, 2), 1);
             }
 
             if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, this, 2), 1);
+                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2), 1);
             }
 
             if (prototypeDatabase != null) {
