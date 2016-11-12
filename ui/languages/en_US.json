@@ -112,6 +112,7 @@
   "filters:bidSelectionMethod:title": "Bid Selection Method",
   "filters:peGroup:title": "PE group",
   "filters:peDepartment:title": "PE department",
+  "filters:peCity:title": "PE city",
   "charts:bidPeriod:traces:avgTime": "Average time from plan to tender phase",
   "charts:bidSelectionMethod:title": "Bid selection method",
   "charts:cancelledFunding:title": "Cancelled funding by reason",
