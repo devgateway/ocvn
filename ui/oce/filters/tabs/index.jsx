@@ -6,6 +6,7 @@ class Tab extends translatable(React.Component){
     let {onUpdate, translations, state} = this.props;
     let selected = state.get(slug, Set());
     return <Component
+        key={slug}
         selected={selected}
         onToggle={id => onUpdate(slug, selected.has(id) ?
             selected.delete(id) :
