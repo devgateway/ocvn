@@ -4,7 +4,6 @@ import java.text.ParseException;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Classification;
-import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Item;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Period;
@@ -23,6 +22,7 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
+import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 
@@ -258,36 +258,22 @@ public class TenderRowImporter extends ReleaseRowImporter {
         Organization procuringEntity = organizationRepository.findByIdOrName(getRowCellUpper(row, 10));
 
         if (procuringEntity == null) {
-            procuringEntity = new Organization();
-            procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
-            procuringEntity.setName(getRowCellUpper(row, 10));
-            Identifier procuringEntityIdentifier = new Identifier();
-            procuringEntityIdentifier.setId(getRowCellUpper(row, 10));
-            procuringEntity.setIdentifier(procuringEntityIdentifier);
-            procuringEntity = organizationRepository.insert(procuringEntity);
+            procuringEntity = OrganizationRepositoryUtil.newAndInsertOrganization(
+                    Organization.OrganizationType.procuringEntity, getRowCellUpper(row, 10), organizationRepository);
         } else {
-            if (!procuringEntity.getTypes().contains(Organization.OrganizationType.procuringEntity)) {
-                procuringEntity.getTypes().add(Organization.OrganizationType.procuringEntity);
-                procuringEntity = organizationRepository.save(procuringEntity);
-            }
+            procuringEntity = OrganizationRepositoryUtil.ensureOrgIsOfTypeAndSave(procuringEntity,
+                    Organization.OrganizationType.procuringEntity, organizationRepository);
         }
         tender.setProcuringEntity(procuringEntity);
 
         Organization orderInstituCd = organizationRepository.findByIdOrName(getRowCellUpper(row, 11));
 
-        if (orderInstituCd == null) {
-            orderInstituCd = new Organization();
-            Identifier orderInstituCdIdentifier = new Identifier();
-            orderInstituCdIdentifier.setId(getRowCellUpper(row, 11));
-            orderInstituCd.setName(getRowCellUpper(row, 11));
-            orderInstituCd.setIdentifier(orderInstituCdIdentifier);
-            orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
-            orderInstituCd = organizationRepository.insert(orderInstituCd);
-        } else {
-            if (!orderInstituCd.getTypes().contains(Organization.OrganizationType.buyer)) {
-                orderInstituCd.getTypes().add(Organization.OrganizationType.buyer);
-                orderInstituCd = organizationRepository.save(orderInstituCd);
-            }
+        if (orderInstituCd == null) {        
+            orderInstituCd = OrganizationRepositoryUtil.newAndInsertOrganization(
+                    Organization.OrganizationType.buyer, getRowCellUpper(row, 11), organizationRepository);            
+        } else {           
+            orderInstituCd = OrganizationRepositoryUtil.ensureOrgIsOfTypeAndSave(orderInstituCd,
+                    Organization.OrganizationType.procuringEntity, organizationRepository);                   
         }
         release.setBuyer(orderInstituCd);
 
