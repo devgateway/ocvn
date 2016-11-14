@@ -10,6 +10,8 @@ import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
+import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
+import org.devgateway.ocvn.persistence.mongo.reader.util.CityRepositoryUtil;
 import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 
 /**
@@ -51,13 +53,10 @@ public class SupplierRowImporter extends RowImporter<Organization, String, Organ
         address.setStreetAddress(getRowCell(row, 18));
         
         if (getRowCell(row, 17) != null) {
-            City city = cityRepository.findOne(getInteger(getRowCell(row, 17)));
-            if (city == null) {
-                city = new City();
-                city.setId(getInteger(getRowCell(row, 17)));
-                city = cityRepository.save(city);
-            }
-            address.setPostalCode(city.getId().toString());
+            City city = CityRepositoryUtil.ensureExistsCityById(getInteger(getRowCell(row, 17)), cityRepository);
+            if (city != null) {
+                address.setPostalCode(city.getId().toString());
+            }            
         }
         
         organization.setAddress(address);
