@@ -200,7 +200,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
     public void testProcuringEntitySearchController() {
         List<Organization> procuringEntities = procuringEntitySearchController.searchText(
                 new TextSearchRequest());
-        Assert.assertEquals(procuringEntities.size(), 1, 0);
+        Assert.assertEquals(3, procuringEntities.size(), 0);
     }
 
 }
