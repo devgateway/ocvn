@@ -13,6 +13,7 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
+import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
 
 /**
  * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom
@@ -58,16 +59,11 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
         Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
 
         if (supplier == null) {
-            supplier = new Organization();
-            supplier.setName(getRowCellUpper(row, 2));
-            supplier.setId(getRowCellUpper(row, 2));
-            supplier.getTypes().add(Organization.OrganizationType.supplier);
-            supplier = organizationRepository.insert(supplier);
+            supplier = OrganizationRepositoryUtil.newAndInsertOrganization(Organization.OrganizationType.supplier,
+                    getRowCellUpper(row, 2), organizationRepository);
         } else {
-            if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
-                supplier.getTypes().add(Organization.OrganizationType.supplier);
-                supplier = organizationRepository.save(supplier);
-            }
+            supplier = OrganizationRepositoryUtil.ensureOrgIsOfTypeAndSave(supplier,
+                    Organization.OrganizationType.supplier, organizationRepository);
         }
 
         award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);

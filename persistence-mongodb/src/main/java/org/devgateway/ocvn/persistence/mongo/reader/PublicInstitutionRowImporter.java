@@ -15,6 +15,7 @@ import org.devgateway.ocvn.persistence.mongo.dao.City;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
+import org.devgateway.ocvn.persistence.mongo.reader.util.CityRepositoryUtil;
 import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
@@ -67,13 +68,10 @@ public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, St
         address.setStreetAddress(getRowCell(row, 14));
         
         if (getRowCell(row, 13) != null) {
-            City city = cityRepository.findOne(getInteger(getRowCell(row, 13)));
-            if (city == null) {
-                city = new City();
-                city.setId(getInteger(getRowCell(row, 13)));
-                city = cityRepository.save(city);
+            City city = CityRepositoryUtil.ensureExistsCityById(getInteger(getRowCell(row, 13)), cityRepository);
+            if (city != null) {
+                address.setPostalCode(city.getId().toString());
             }
-            address.setPostalCode(city.getId().toString());
         }
 
         organization.setAddress(address);

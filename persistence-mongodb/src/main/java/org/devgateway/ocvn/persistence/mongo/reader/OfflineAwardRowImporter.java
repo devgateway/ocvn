@@ -14,6 +14,7 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
+import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
 
 /**
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
@@ -66,16 +67,11 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
             supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 3));
 
             if (supplier == null) {
-                supplier = new Organization();
-                supplier.setName(getRowCellUpper(row, 3));
-                supplier.setId(getRowCellUpper(row, 3));
-                supplier.getTypes().add(Organization.OrganizationType.supplier);
-                supplier = organizationRepository.insert(supplier);
+                supplier = OrganizationRepositoryUtil.newAndInsertOrganization(Organization.OrganizationType.supplier,
+                        getRowCellUpper(row, 3), organizationRepository);
             } else {
-                if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
-                    supplier.getTypes().add(Organization.OrganizationType.supplier);
-                    supplier = organizationRepository.save(supplier);
-                }
+                supplier = OrganizationRepositoryUtil.ensureOrgIsOfTypeAndSave(supplier,
+                        Organization.OrganizationType.supplier, organizationRepository);
             }
         }
 
