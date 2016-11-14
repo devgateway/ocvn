@@ -57,7 +57,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     
     @ApiModelProperty(value = "This will search after the City Id of the procuring entity."
             + "The field is organization.address.postalCode")
-    private List<Integer> procuringEntityCityId;
+    private List<String> procuringEntityCityId;
 
     
     @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
@@ -175,11 +175,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.supplierId = supplierId;
     }
 
-    public List<Integer> getProcuringEntityCityId() {
+    public List<String> getProcuringEntityCityId() {
         return procuringEntityCityId;
     }
 
-    public void setProcuringEntityCityId(List<Integer> procuringEntityCityId) {
+    public void setProcuringEntityCityId(List<String> procuringEntityCityId) {
         this.procuringEntityCityId = procuringEntityCityId;
     }
 
