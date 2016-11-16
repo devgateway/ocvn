@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
 public interface UserDashboardRepository extends TextSearchableRepository<UserDashboard, Long> {
 
-    @Query("select d from Person p JOIN p.dashboards d where p.id = ?1")
+    @Query("select d from UserDashboard d JOIN d.users p where ?1 in p")
     Page<UserDashboard> findDashboardsForPersonId(long userId, Pageable pageable);
 
     @Query("select p.defaultDashboard from Person p where p.id = ?1")
