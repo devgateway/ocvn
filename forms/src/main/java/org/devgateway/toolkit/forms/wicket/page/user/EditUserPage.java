@@ -52,6 +52,7 @@ import org.devgateway.toolkit.persistence.repository.GroupRepository;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
@@ -310,6 +311,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
         return false;
     }
 
+    @Transactional
     private void ensureDefaultDashboardIsAlsoAssignedDashboard(Person person) {
         if (person.getDefaultDashboard() != null && !person.getDashboards().contains(person.getDefaultDashboard())) {
             person.getDefaultDashboard().getUsers().add(person);
