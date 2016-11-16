@@ -37,29 +37,28 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
     protected PropertyColumn<UserDashboard, String> columnName;
     protected PropertyColumn<UserDashboard, String> columnDefaultDashboardUsers;
     protected PropertyColumn<UserDashboard, String> columnUsers;
-    
 
     public ListAllDashboardsPage(final PageParameters pageParameters) {
         super(pageParameters);
         this.jpaRepository = userDashboardRepository;
         this.editPageClass = EditUserDashboardPage.class;
-        
-        columnName= new PropertyColumn<UserDashboard, String>(
+
+        columnName = new PropertyColumn<UserDashboard, String>(
                 new Model<String>((new StringResourceModel("name", ListAllDashboardsPage.this, null)).getString()),
                 "name", "name");
-        
+
         columns.add(columnName);
-        
-        columnDefaultDashboardUsers=new PropertyColumn<UserDashboard, String>(new Model<String>(
+
+        columnDefaultDashboardUsers = new PropertyColumn<UserDashboard, String>(new Model<String>(
                 (new StringResourceModel("defaultDashboardUsers", ListAllDashboardsPage.this, null)).getString()),
                 "defaultDashboardUsers");
-        
+
         columns.add(columnDefaultDashboardUsers);
 
-        columnUsers=new PropertyColumn<UserDashboard, String>(new Model<String>(
-                (new StringResourceModel("users", ListAllDashboardsPage.this, null)).getString()),
+        columnUsers = new PropertyColumn<UserDashboard, String>(
+                new Model<String>((new StringResourceModel("users", ListAllDashboardsPage.this, null)).getString()),
                 "users");
-        
+
         columns.add(columnUsers);
 
     }
@@ -67,7 +66,7 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-     
+
         editPageLink.setVisibilityAllowed(false);
     }
 
