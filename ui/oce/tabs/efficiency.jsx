@@ -9,6 +9,6 @@ class Efficiency extends Tab{
 }
 
 Efficiency.icon = "efficiency";
-Efficiency.visualizations = [BidPeriod, Cancelled, NrCancelled, BidsByItem];
+Efficiency.visualizations = [BidPeriod, BidsByItem, Cancelled, NrCancelled];
 
 export default Efficiency;
