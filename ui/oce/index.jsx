@@ -10,6 +10,7 @@ const MIN_YEAR = 2010;
 const MAX_YEAR = 2020;
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
+const ROLE_ADMIN = 'ROLE_ADMIN';
 
 class OCApp extends React.Component{
   constructor(props){
@@ -75,10 +76,10 @@ class OCApp extends React.Component{
 
   fetchUserInfo(){
     fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
-        ({username, id}) => this.setState({
+        ({username, id, roles}) => this.setState({
           user: {
             loggedIn: true,
-            isAdmin: 'admin' == username,
+            isAdmin: roles.some(({authority}) => authority == ROLE_ADMIN),
             id
           }
         })
@@ -286,3 +287,4 @@ OCApp.STYLING = {
 };
 
 export default OCApp;
+
