@@ -91,7 +91,6 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
 
     @ManyToMany(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnore
     private List<Role> roles;
 
 
