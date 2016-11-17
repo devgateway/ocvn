@@ -34,11 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
 @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
 public interface UserDashboardRepository extends TextSearchableRepository<UserDashboard, Long> {
 
-    @Query("select d from UserDashboard d JOIN d.users p where ?1 in p")
-    Page<UserDashboard> findDashboardsForPersonId(long userId, Pageable pageable);
+    @Query("select d from UserDashboard d JOIN d.users p where p.id=:userId")
+    Page<UserDashboard> findDashboardsForPersonId(@Param("userId") long  userId, Pageable pageable);
+    
+    @Query("select d from UserDashboard d JOIN d.users p where p.id=:userId")
+    List<UserDashboard> findDashboardsForPersonId(@Param("userId") long  userId);
 
-    @Query("select p.defaultDashboard from Person p where p.id = ?1")
-    UserDashboard getDefaultDashboardForPersonId(long userId);
+    @Query("select p.defaultDashboard from Person p where p.id = :userId")
+    UserDashboard getDefaultDashboardForPersonId(@Param("userId") long userId);
 
     @Override
     @Query("select e from  #{#entityName} e where lower(e.name) like %:code%")
