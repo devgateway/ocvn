@@ -1,5 +1,6 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
@@ -26,8 +27,8 @@ import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryU
 public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
     public EBidAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-            OrganizationRepository organizationRepository, int skipRows) {
-        super(releaseRepository, importService, organizationRepository, skipRows);
+            OrganizationRepository organizationRepository, int skipRows, BigDecimal maxTenderValue) {
+        super(releaseRepository, importService, organizationRepository, skipRows, maxTenderValue);
     }
 
     @Override
