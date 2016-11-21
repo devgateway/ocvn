@@ -42,7 +42,7 @@ class BidsByItem extends backendYearFilterable(Chart){
         type: "category"
       },
       yaxis: {
-        title: this.t('charts:bidsByItem:xAxisTitle')
+        title: this.t('charts:bidsByItem:yAxisTitle')
       }
     }
   }
@@ -106,18 +106,18 @@ class BidsByItemComparison extends Comparison{
     return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
       let ref = `visualization${index}`;
       return <div className="col-md-6 comparison" key={index}>
-          <Component
-              filters={comparisonFilters}
-              margin={{b: 200}}
-              requestNewData={(_, data) => requestNewComparisonData([index], data)}
-              data={uniformData.get(index)}
-              years={years}
-              title={this.getTitle(index)}
-              translations={translations}
-              styling={styling}
-              width={width/2}
-              {...rangeProp}
-          />
+        <Component
+            filters={comparisonFilters}
+            margin={{b: 200}}
+            requestNewData={(_, data) => requestNewComparisonData([index], data)}
+            data={uniformData.get(index)}
+            years={years}
+            title={this.getTitle(index)}
+            translations={translations}
+            styling={styling}
+            width={width/2}
+            {...rangeProp}
+        />
         <div className="chart-toolbar"
              onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
         >
@@ -125,7 +125,7 @@ class BidsByItemComparison extends Comparison{
             <img src="assets/icons/camera.svg"/>
           </div>
         </div>
-        </div>
+      </div>
     }));
   }
 }
@@ -133,4 +133,4 @@ class BidsByItemComparison extends Comparison{
 
 BidsByItem.compareWith = BidsByItemComparison;
 
-export default BidsByItem;
+export default BidsByItem;;
