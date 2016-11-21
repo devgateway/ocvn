@@ -14,8 +14,6 @@
  */
 package org.devgateway.toolkit.forms.wicket.page.user;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -37,7 +35,6 @@ import org.devgateway.toolkit.forms.wicket.page.BasePage;
 import org.devgateway.toolkit.forms.wicket.page.Homepage;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -76,15 +73,7 @@ public class LoginPage extends BasePage {
                     .getParameterValue("referrer");
             if (!referrerParam.isEmpty()) {
                 referrer = referrerParam.toString();
-            } else {
-
-                HttpServletRequest request = ((HttpServletRequest) getRequest().getContainerRequest());
-                SavedRequest savedRequest = (SavedRequest) request.getSession()
-                        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-                if (savedRequest != null) {
-                    referrer = savedRequest.getRedirectUrl();
-                }
-            }
+            } 
         }
 
         @Override
