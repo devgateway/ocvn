@@ -85,7 +85,7 @@ public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, St
 
         organization.setContactPoint(cp);
         
-        if (getRowCell(row, 47) != null) {
+        if (getRowCell(row, 47) != null && getInteger(getRowCell(row, 47)) != 0) {
             OrgDepartment orgDepartment = orgDepartmentRepository.findOne(getInteger(getRowCell(row, 47)));
             if (orgDepartment == null) {
                 orgDepartment = new OrgDepartment();
