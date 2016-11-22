@@ -8,7 +8,7 @@ import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class VNTendererOrganization extends Organization {

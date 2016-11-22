@@ -9,7 +9,7 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import java.util.Date;
 
 /**
- * @author mihai Eerxtension of {@link Tender} to allow extra Vietnam-specific
+ * @author mpostelnicu Eerxtension of {@link Tender} to allow extra Vietnam-specific
  *         fields
  */
 public class VNTender extends Tender {

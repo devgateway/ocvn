@@ -10,7 +10,7 @@ import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  * Extension of {@link Award} to allow extra Vietnam-specific fields
  */
 public class VNAward extends Award {

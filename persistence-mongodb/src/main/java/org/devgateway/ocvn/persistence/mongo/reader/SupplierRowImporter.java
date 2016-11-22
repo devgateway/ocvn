@@ -15,7 +15,7 @@ import org.devgateway.ocvn.persistence.mongo.reader.util.CityRepositoryUtil;
 import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 
 /**
- * @author mihai Specific {@link RowImporter} for Suppliers, in the custom Excel
+ * @author mpostelnicu Specific {@link RowImporter} for Suppliers, in the custom Excel
  *         format provided by Vietnam
  * @see VNOrganization
  */

@@ -21,7 +21,7 @@ import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryU
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
  * provided by Vietnam
  *
- * @author mihai
+ * @author mpostelnicu
  * @see VNAward
  */
 public class OfflineAwardRowImporter extends AwardReleaseRowImporter {

@@ -9,7 +9,7 @@ import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import java.util.Date;
 
 /**
- * @author mihai Extension of {@link Planning} to allow extra Vietnam-specific
+ * @author mpostelnicu Extension of {@link Planning} to allow extra Vietnam-specific
  *         fields
  */
 public class VNPlanning extends Planning {

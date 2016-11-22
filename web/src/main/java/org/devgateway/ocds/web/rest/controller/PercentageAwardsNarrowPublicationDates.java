@@ -36,7 +36,7 @@ import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 

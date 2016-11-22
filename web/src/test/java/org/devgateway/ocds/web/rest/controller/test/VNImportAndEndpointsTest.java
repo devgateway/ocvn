@@ -28,7 +28,7 @@ import org.springframework.data.mongodb.core.aggregation.Fields;
 import com.mongodb.DBObject;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class VNImportAndEndpointsTest extends AbstractWebTest {

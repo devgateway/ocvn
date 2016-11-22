@@ -21,7 +21,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
 
 /**
- * @author mihai Specific {@link RowImporter} for Public Institutions, in the
+ * @author mpostelnicu Specific {@link RowImporter} for Public Institutions, in the
  *         custom Excel format provided by Vietnam
  * @see VNOrganization
  */
