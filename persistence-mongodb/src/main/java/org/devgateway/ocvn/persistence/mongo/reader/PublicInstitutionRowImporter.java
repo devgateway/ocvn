@@ -5,108 +5,103 @@ package org.devgateway.ocvn.persistence.mongo.reader;
 
 import java.text.ParseException;
 
-import org.devgateway.ocds.persistence.mongo.Address;
-import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
+import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
-import org.devgateway.ocvn.persistence.mongo.dao.City;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.reader.util.CityRepositoryUtil;
 import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
 
 /**
- * @author mpostelnicu Specific {@link RowImporter} for Public Institutions, in the
- *         custom Excel format provided by Vietnam
+ * @author mpostelnicu Specific {@link RowImporter} for Public Institutions, in
+ *         the custom Excel format provided by Vietnam
  * @see VNOrganization
  */
-public class PublicInstitutionRowImporter extends RowImporter<VNOrganization, String, VNOrganizationRepository> {
+public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrganization> {
 
-    private final CityRepository cityRepository;
     private final OrgGroupRepository orgGroupRepository;
     private final OrgDepartmentRepository orgDepartmentRepository;
 
     public PublicInstitutionRowImporter(final VNOrganizationRepository repository, final CityRepository cityRepository,
             final OrgGroupRepository orgGroupRepository, final OrgDepartmentRepository orgDepartmentRepository,
-            final ImportService importService,
-            final int skipRows) {
-        super(repository, importService, skipRows);
-        this.cityRepository = cityRepository;
+            final ImportService importService, final int skipRows) {
+        super(repository, cityRepository, importService, skipRows);
         this.orgGroupRepository = orgGroupRepository;
         this.orgDepartmentRepository = orgDepartmentRepository;
     }
-   
+
     @Override
     public void importRow(final String[] row) throws ParseException {
         if (getRowCell(row, 0) == null) {
             throw new RuntimeException("Main identifier empty!");
         }
-        VNOrganization organization = repository.findOne(getRowCellUpper(row, 0));
-        if (organization != null) {
-            throw new RuntimeException("Duplicate identifer for organization " + organization);
-        }
-        organization = new VNOrganization();
+
+        String newIdentifier = getRowCellUpper(row, 0);
+
+        String name = getRowCellUpper(row, 1);
+
+        VNOrganization organization = repository.findByName(name);
         Identifier identifier = new Identifier();
+        identifier.setId(newIdentifier);
 
-        identifier.setId(getRowCellUpper(row, 0));
-        organization.setId(getRowCellUpper(row, 0));
-        organization.setIdentifier(identifier);
-        organization.setName(getRowCellUpper(row, 1));
-
-        if (getRowCell(row, 44) != null) {
-            Identifier additionalIdentifier = new Identifier();
-            additionalIdentifier.setId(getRowCellUpper(row, 44));
-            organization.getAdditionalIdentifiers().add(additionalIdentifier);
-        }
-
-        Address address = new Address();
-        address.setStreetAddress(getRowCell(row, 14));
-        
-        if (getRowCell(row, 13) != null) {
-            City city = CityRepositoryUtil.ensureExistsCityById(getInteger(getRowCell(row, 13)), cityRepository);
-            if (city != null) {
-                address.setPostalCode(city.getId().toString());
+        if (organization == null) {
+            organization = (VNOrganization) newOrganization(new VNOrganization(), identifier, name);
+            newAddress(organization, getRowCell(row, 14));
+            
+            if (getRowCell(row, 44) != null) {
+                Identifier additionalIdentifier = new Identifier();
+                additionalIdentifier.setId(getRowCellUpper(row, 44));
+                addAditionalIdentifierOrFail(organization, identifier);
             }
-        }
 
-        organization.setAddress(address);
+            newContactPoint(organization, getRowCell(row, 5), getRowCell(row, 7), getRowCell(row, 8),
+                    getRowCell(row, 9), getRowCell(row, 18));
 
-        ContactPoint cp = new ContactPoint();
-        cp.setName(getRowCell(row, 5));
-        cp.setTelephone(getRowCell(row, 7));
-        cp.setFaxNumber(getRowCell(row, 8));
-        cp.setEmail(getRowCell(row, 9));
-        cp.setUrl(getRowCell(row, 18));
-
-        organization.setContactPoint(cp);
-        
-        if (getRowCell(row, 47) != null && getInteger(getRowCell(row, 47)) != 0) {
-            OrgDepartment orgDepartment = orgDepartmentRepository.findOne(getInteger(getRowCell(row, 47)));
-            if (orgDepartment == null) {
-                orgDepartment = new OrgDepartment();
-                orgDepartment.setId(getInteger(getRowCell(row, 47)));
-                orgDepartment = orgDepartmentRepository.save(orgDepartment);
+            if (getRowCell(row, 13) != null) {
+                newCity(organization, getInteger(getRowCell(row, 13)));
             }
-            organization.setDepartment(orgDepartment);
-        }
-        
-        if (getRowCell(row, 48) != null) {
-            OrgGroup orgGroup = orgGroupRepository.findOne(getInteger(getRowCell(row, 48)));
-            if (orgGroup == null) {
-                orgGroup = new OrgGroup();
-                orgGroup.setId(getInteger(getRowCell(row, 48)));
-                orgGroup = orgGroupRepository.save(orgGroup);
+            
+            if (getRowCell(row, 47) != null && getInteger(getRowCell(row, 47)) != 0) {
+                newDepartment(organization, getInteger(getRowCell(row, 47)));
             }
-            organization.setGroup(orgGroup);
+            
+            if (getRowCell(row, 48) != null) { 
+                newOrgGroup(organization, getInteger(getRowCell(row, 48)));
+            }
+
+        } else {
+            addAditionalIdentifierOrFail(organization, identifier);
         }
 
-        repository.insert(organization);
+        organization.getTypes().add(Organization.OrganizationType.supplier);
 
+        repository.save(organization);
+
+    }
+    
+    protected void newDepartment(VNOrganization organization, Integer departmentId) {
+        OrgDepartment orgDepartment = orgDepartmentRepository.findOne(departmentId);
+        if (orgDepartment == null) {
+            orgDepartment = new OrgDepartment();
+            orgDepartment.setId(departmentId);
+            orgDepartment = orgDepartmentRepository.save(orgDepartment);
+        }
+        organization.setDepartment(orgDepartment);
+    }
+    
+    protected void newOrgGroup(VNOrganization organization, Integer orgGroupId) {
+        OrgGroup orgGroup = orgGroupRepository.findOne(orgGroupId);
+        if (orgGroup == null) {
+            orgGroup = new OrgGroup();
+            orgGroup.setId(orgGroupId);
+            orgGroup = orgGroupRepository.save(orgGroup);
+        }
+        organization.setGroup(orgGroup);
     }
 
 }

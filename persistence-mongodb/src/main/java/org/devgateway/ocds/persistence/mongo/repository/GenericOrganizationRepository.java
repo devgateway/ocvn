@@ -20,5 +20,6 @@ public interface GenericOrganizationRepository<T extends Organization> extends M
     T findByIdOrName(String idName);
 
     T findByIdAndTypes(String id, Organization.OrganizationType type);
-
+    
+    T findByName(String name);
 }
