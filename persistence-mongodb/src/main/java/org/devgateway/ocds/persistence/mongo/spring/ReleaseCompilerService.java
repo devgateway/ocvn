@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Sets;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 @Service

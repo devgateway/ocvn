@@ -24,7 +24,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * @author mpost This helps us test Spring Data Rest
+ * @author mpostelnicuThis helps us test Spring Data Rest
  *         repositories with our infrastructure.
  */
 @Transactional

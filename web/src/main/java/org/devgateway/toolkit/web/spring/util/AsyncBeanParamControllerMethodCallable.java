@@ -4,7 +4,7 @@ import org.devgateway.toolkit.web.spring.AsyncControllerLookupService;
 
 /**
  * @see AsyncControllerLookupService
- * @author mihai
+ * @author mpostelnicu
  *
  * @param <RET>
  * @param <BEANPARAM>

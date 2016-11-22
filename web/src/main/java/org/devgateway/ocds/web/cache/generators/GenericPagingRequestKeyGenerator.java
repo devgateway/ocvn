@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * @author mihai {@link KeyGenerator} for {@link RequestMapping}S that use
+ * @author mpostelnicu {@link KeyGenerator} for {@link RequestMapping}S that use
  *         {@link GenericPagingRequest} This will use the default
  *         Jackson's {@link ObjectMapper} to produce JSON from the input bean
  *         plus takes into account the target (
