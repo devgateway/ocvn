@@ -30,7 +30,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
  * Specific {@link RowImporter} for Tenders, in the custom Excel format provided
  * by Vietnam
  *
- * @author mihai
+ * @author mpostelnicu
  * @see VNTender
  */
 public class TenderRowImporter extends ReleaseRowImporter {

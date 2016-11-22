@@ -7,7 +7,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class CustomGroupingOperation extends CustomOperation {

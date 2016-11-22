@@ -16,7 +16,7 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {

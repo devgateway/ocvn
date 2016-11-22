@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author mihai Specific data types found in Vietnam data mapping files used
+ * @author mpostelnicu Specific data types found in Vietnam data mapping files used
  *         for data import into OCDS
  */
 public final class ImportFileTypes {

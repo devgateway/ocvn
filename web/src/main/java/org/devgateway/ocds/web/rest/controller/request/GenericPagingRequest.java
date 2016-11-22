@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class GenericPagingRequest {

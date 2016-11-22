@@ -8,7 +8,7 @@ import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
 
 /**
- * @author mihai Specific {@link RowImporter} Cities. Organization#address
+ * @author mpostelnicu Specific {@link RowImporter} Cities. Organization#address
  */
 public class OrgGroupRowImporter extends RowImporter<OrgGroup, Integer, OrgGroupRepository> {
     

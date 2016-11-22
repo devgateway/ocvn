@@ -11,7 +11,7 @@ package org.devgateway.ocds.persistence.mongo.merge;
  *
  * @see Merge
  *
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public enum MergeStrategy {

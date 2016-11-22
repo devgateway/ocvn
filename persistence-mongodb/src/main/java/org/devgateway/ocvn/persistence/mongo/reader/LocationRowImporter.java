@@ -14,7 +14,7 @@ import java.text.ParseException;
  * Specific {@link RowImporter} for {@link Location}, in the custom Excel format
  * provided by Vietnam
  *
- * @author mihai
+ * @author mpostelnicu
  * @see Location
  */
 public class LocationRowImporter extends RowImporter<VNLocation, String, VNLocationRepository> {

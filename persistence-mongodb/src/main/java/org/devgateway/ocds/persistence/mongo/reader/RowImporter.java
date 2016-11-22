@@ -19,7 +19,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * Generic superclass for importing rows from excel data sources
  *
- * @author mihai
+ * @author mpostelnicu
  *
  * @param <T>
  *            - the type of OCDS/dervied entity to be imported

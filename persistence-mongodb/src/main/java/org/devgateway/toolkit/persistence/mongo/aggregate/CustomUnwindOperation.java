@@ -6,7 +6,7 @@ package org.devgateway.toolkit.persistence.mongo.aggregate;
 import com.mongodb.BasicDBObject;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class CustomUnwindOperation extends CustomOperation {

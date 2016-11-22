@@ -65,7 +65,7 @@ import com.google.common.io.Files;
 import com.mongodb.DBObject;
 
 /**
- * @author mihai Service that imports Excel sheets from given import file in
+ * @author mpostelnicu Service that imports Excel sheets from given import file in
  *         Vietnam input data format
  */
 @Service

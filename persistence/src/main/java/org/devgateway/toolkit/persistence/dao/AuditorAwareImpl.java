@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * This is a bean that reads the auditor information which is used to audit the
  * JPA entities
  * 
- * @author mihai
+ * @author mpostelnicu
  *
  */
 @Component
