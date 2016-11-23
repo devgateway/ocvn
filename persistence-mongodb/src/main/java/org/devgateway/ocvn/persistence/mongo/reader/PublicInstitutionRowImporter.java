@@ -34,7 +34,7 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
         this.orgGroupRepository = orgGroupRepository;
         this.orgDepartmentRepository = orgDepartmentRepository;
     }
-
+    
     @Override
     public void importRow(final String[] row) throws ParseException {
         if (getRowCell(row, 0) == null) {
@@ -56,7 +56,7 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
             if (getRowCell(row, 44) != null) {
                 Identifier additionalIdentifier = new Identifier();
                 additionalIdentifier.setId(getRowCellUpper(row, 44));
-                addAditionalIdentifierOrFail(organization, identifier);
+                addAditionalIdentifierOrFail(organization, additionalIdentifier);
             }
 
             newContactPoint(organization, getRowCell(row, 5), getRowCell(row, 7), getRowCell(row, 8),
