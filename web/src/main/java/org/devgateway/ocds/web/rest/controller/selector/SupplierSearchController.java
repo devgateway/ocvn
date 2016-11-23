@@ -26,7 +26,7 @@ public class SupplierSearchController extends AbstractOrganizationSearchControll
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     @ApiOperation(value = "Finds supplier by the given id")
     public Organization byId(@PathVariable final String id) {
-        return organizationRepository.findByIdAndTypes(id, Organization.OrganizationType.supplier);
+        return organizationRepository.findByAllIdsAndType(id, Organization.OrganizationType.supplier);
     }
 
     /**
