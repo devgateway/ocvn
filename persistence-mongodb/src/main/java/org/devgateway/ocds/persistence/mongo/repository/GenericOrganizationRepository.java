@@ -20,5 +20,9 @@ public interface GenericOrganizationRepository<T extends Organization> extends M
     T findByIdOrName(String idName);
 
     T findByIdAndTypes(String id, Organization.OrganizationType type);
-
+    
+    T findByName(String name);
+    
+    @Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'additionalIdentifiers.identifier._id': ?0} ] }")
+    T findByAllIds(String id);
 }

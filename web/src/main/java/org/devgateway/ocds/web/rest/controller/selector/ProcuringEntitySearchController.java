@@ -27,7 +27,7 @@ public class ProcuringEntitySearchController extends AbstractOrganizationSearchC
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     @ApiOperation(value = "Finds procuringEntities by the given id")
     public Organization byId(@PathVariable final String id) {
-        return organizationRepository.findByIdAndTypes(id, Organization.OrganizationType.procuringEntity);
+        return organizationRepository.findByAllIdsAndType(id, Organization.OrganizationType.procuringEntity);
     }
 
     /**

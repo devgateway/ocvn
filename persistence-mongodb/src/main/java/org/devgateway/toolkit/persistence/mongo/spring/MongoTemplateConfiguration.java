@@ -19,10 +19,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
+import org.springframework.data.mongodb.core.index.CompoundIndexDefinition;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
+
+import com.mongodb.BasicDBObject;
 
 @Configuration
 public class MongoTemplateConfiguration {
@@ -37,9 +40,10 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class)
-                .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new CompoundIndexDefinition(
+                new BasicDBObject("identifier._id", 1).append("additionalIdentifiers._id", 1)).unique());
+        mongoTemplate.indexOps(Organization.class).ensureIndex(
+                new Index().on("types", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
         mongoTemplate.indexOps(VNLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
@@ -109,8 +113,10 @@ public class MongoTemplateConfiguration {
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class)
-                .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+                
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
+                .onField("id").onField("additionalIdentifiers._id").build());
+                
         mongoTemplate.indexOps(VNLocation.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
