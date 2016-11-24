@@ -57,7 +57,7 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
         value.setAmount(getDecimal(getRowCell(row, 1)));
         award.setValue(value);
 
-        Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
+        Organization supplier = organizationRepository.findByAllIds(getRowCellUpper(row, 2));
 
         if (supplier == null) {
             supplier = OrganizationRepositoryUtil.newAndInsertOrganization(Organization.OrganizationType.supplier,

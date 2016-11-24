@@ -4,6 +4,8 @@
 package org.devgateway.ocds.persistence.mongo.repository;
 
 import org.devgateway.ocds.persistence.mongo.Organization;
+import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
+import org.springframework.data.mongodb.repository.Query;
 
 /**
  * @author mpostelnicu

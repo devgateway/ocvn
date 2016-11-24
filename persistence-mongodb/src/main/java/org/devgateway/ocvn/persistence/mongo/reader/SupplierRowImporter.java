@@ -46,7 +46,7 @@ public class SupplierRowImporter extends OrganizationRowImporter<Organization> {
             }
 
         } else {
-            addAditionalIdentifierOrFail(organization, identifier);
+            addAditionalIdentifierOrFail(organization, identifier, Organization.OrganizationType.supplier);
         }
 
         organization.getTypes().add(Organization.OrganizationType.supplier);

@@ -6,7 +6,6 @@ package org.devgateway.ocvn.persistence.mongo.reader;
 import java.text.ParseException;
 
 import org.devgateway.ocds.persistence.mongo.Identifier;
-import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
@@ -56,7 +55,7 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
             if (getRowCell(row, 44) != null) {
                 Identifier additionalIdentifier = new Identifier();
                 additionalIdentifier.setId(getRowCellUpper(row, 44));
-                addAditionalIdentifierOrFail(organization, additionalIdentifier);
+                addAditionalIdentifierOrFail(organization, additionalIdentifier, null);
             }
 
             newContactPoint(organization, getRowCell(row, 5), getRowCell(row, 7), getRowCell(row, 8),
@@ -75,10 +74,8 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
             }
 
         } else {
-            addAditionalIdentifierOrFail(organization, identifier);
+            addAditionalIdentifierOrFail(organization, identifier, null);
         }
-
-        organization.getTypes().add(Organization.OrganizationType.supplier);
 
         repository.save(organization);
 

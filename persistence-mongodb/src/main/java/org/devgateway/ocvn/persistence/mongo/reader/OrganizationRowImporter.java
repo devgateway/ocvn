@@ -4,6 +4,7 @@ import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
+import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.GenericOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
@@ -25,9 +26,25 @@ public abstract class OrganizationRowImporter<O extends Organization>
         this.cityRepository = cityRepository;
     }
 
-    protected void addAditionalIdentifierOrFail(Organization organization, Identifier identifier) {
+    /**
+     * Adds an additional identifier to the current organization. If the
+     * identifier is already present, it throws an exception. If there is a type
+     * specified, it will accept a duplicate identifier if the types are
+     * different, and in such case it only makes the organization of new type
+     * 
+     * @param organization
+     * @param identifier
+     * @param type
+     */
+    protected void addAditionalIdentifierOrFail(Organization organization, Identifier identifier,
+            OrganizationType type) {
         if (containsIdentifier(organization, identifier)) {
-            throw new RuntimeException("Duplicate identifier for organization " + organization);
+            if (type == null || organization.getTypes().contains(type)) {
+                throw new RuntimeException(
+                        "Duplicate identifier " + identifier.getId() + " for organization " + organization);
+            } else {
+                organization.getTypes().add(type);
+            }
         } else {
             organization.getAdditionalIdentifiers().add(identifier);
         }

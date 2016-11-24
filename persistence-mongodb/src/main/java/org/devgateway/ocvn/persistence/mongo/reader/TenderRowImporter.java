@@ -255,7 +255,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
         tender.setTenderPeriod(period);
         tender.setBidOpenDt(getExcelDate(getRowCell(row, 9)));
 
-        Organization procuringEntity = organizationRepository.findByIdOrName(getRowCellUpper(row, 10));
+        Organization procuringEntity = organizationRepository.findByAllIds(getRowCellUpper(row, 10));
 
         if (procuringEntity == null) {
             procuringEntity = OrganizationRepositoryUtil.newAndInsertOrganization(
@@ -266,7 +266,7 @@ public class TenderRowImporter extends ReleaseRowImporter {
         }
         tender.setProcuringEntity(procuringEntity);
 
-        Organization orderInstituCd = organizationRepository.findByIdOrName(getRowCellUpper(row, 11));
+        Organization orderInstituCd = organizationRepository.findByAllIds(getRowCellUpper(row, 11));
 
         if (orderInstituCd == null) {        
             orderInstituCd = OrganizationRepositoryUtil.newAndInsertOrganization(
