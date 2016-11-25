@@ -63,6 +63,15 @@ class OCVN extends OCApp{
               </small>
             </p>
           </section>
+          <section className="col-sm-12 github">
+            <a href="https://github.com/devgateway/ocvn" target="_blank">
+              <button className="btn btn-default">
+                <img src="/ui/assets/icons/octocat.png" width={16} height={16}/>
+                &nbsp;
+                {this.t("general:viewOnGithub")}
+              </button>
+            </a>
+          </section>
         </div>
       </aside>
       <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">

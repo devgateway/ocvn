@@ -7,6 +7,7 @@
   "general:description:content": "Cổng thông tin Giám sát Đánh giá đấu thầu là nền tảng tương tác nhằm phân tích, giám sát và đánh giá thông tin về đấu thầu tại Việt Nam. Mọi dữ liệu trong bảng điều khiển của Cổng thông tin đều được thu thập từ hệ thống mạng đấu thầu quốc gia (eGP). Việc công khai các dữ liệu này mang tính thí điểm và không đại diện cho dữ liệu chính thức của Chính phủ.",
   "general:login": "Log in",
   "general:logout": "Log out",
+  "general:viewOnGithub": "View code on github",
   "header:comparison:title": "So sánh",
   "header:comparison:criteria": "Tiêu chí so sánh",
   "header:comparison:criteria:none": "Không có",
