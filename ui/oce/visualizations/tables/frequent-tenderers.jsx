@@ -1,6 +1,13 @@
 import Table from "./index";
 
 class FrequentTenderers extends Table{
+  constructor(...args){
+    super(...args);
+    this.state = {
+      showAll: false
+    }
+  }
+
   row(entry, index){
     return <tr key={index}>
       <td>{entry.getIn(['id', 'tendererId1'])}</td>
@@ -9,8 +16,13 @@ class FrequentTenderers extends Table{
     </tr>
   }
 
+  maybeSlice(flag, list){
+    return flag ? list.slice(0, 10) : list;
+  }
+
   render(){
     if(!this.props.data) return null;
+    const {showAll} = this.state;
     return <table className="table table-stripped trable-hover frequent-supplier-bidder-table">
       <thead>
       <tr>
@@ -20,7 +32,14 @@ class FrequentTenderers extends Table{
       </tr>
       </thead>
       <tbody>
-      {this.props.data.map(this.row)}
+      {this.maybeSlice(!showAll, this.props.data).map(this.row)}
+      {!showAll && <tr>
+        <td colSpan="3">
+          <button className="btn btn-info btn-danger btn-block" onClick={_ => this.setState({showAll: true})}>
+            {this.t('tables:showAll')}
+          </button>
+        </td>
+      </tr>}
       </tbody>
     </table>
   }

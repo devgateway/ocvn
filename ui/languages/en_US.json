@@ -108,6 +108,7 @@
   "tables:frequentTenderers:supplier": "Supplier",
   "tables:frequentTenderers:nrITB": "Number of ITBs in Common",
   "tables:frequentTenderers:title": "Frequent Supplier Bidding Combinations",
+  "tables:showAll": "Show all",
   "filters:locations:title": "Locations",
   "filters:bidArea:title": "Bid Area",
   "filters:contractMethod:title": "Contract method",
