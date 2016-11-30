@@ -25,7 +25,6 @@ public interface OrganizationRepository extends GenericOrganizationRepository<Or
     @Query(value = "{'additionalIdentifiers.identifier._id': { $in : ?0 }}")
     List<Organization> findByIdCollection(Collection<String> idCol);
 
-    @Query(value = "{$and: [  { $or: [ {'_id' : ?0 }, "
-            + "{'additionalIdentifiers.identifier._id': ?0} ] }, { 'types': ?1 } ] }")
+    @Query(value = "{$and: [{'additionalIdentifiers.identifier._id': ?0} , { 'types': ?1 } ] }")
     Organization findByAllIdsAndType(String id, OrganizationType type);
 }
