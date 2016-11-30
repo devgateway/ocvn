@@ -39,7 +39,6 @@ class FrequentTenderers extends Table{
           orgs.forEach(({id, name}) => orgNames[id] = name);
           this.setState({orgNames})
         })
-
   }
 
   componentDidMount(){
@@ -65,7 +64,7 @@ class FrequentTenderers extends Table{
       </thead>
       <tbody>
       {this.maybeSlice(!showAll, this.props.data).map(this.row.bind(this))}
-      {!showAll && <tr>
+      {!showAll && this.props.data.count() > 10 && <tr>
         <td colSpan="3">
           <button className="btn btn-info btn-danger btn-block" onClick={_ => this.setState({showAll: true})}>
             {this.t('tables:showAll')}
