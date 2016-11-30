@@ -61,6 +61,7 @@ public abstract class OrganizationRowImporter<O extends Organization>
         organization.setIdentifier(identifier);
         organization.setName(name);
         organization.setId(identifier.getId());
+        organization.getAdditionalIdentifiers().add(identifier);
         return organization;
     }
 
@@ -82,9 +83,6 @@ public abstract class OrganizationRowImporter<O extends Organization>
     }
 
     protected boolean containsIdentifier(Organization organization, Identifier identifier) {
-        if (organization.getIdentifier().equals(identifier)) {
-            return true;
-        }
         return organization.getAdditionalIdentifiers().contains(identifier);
     }
 

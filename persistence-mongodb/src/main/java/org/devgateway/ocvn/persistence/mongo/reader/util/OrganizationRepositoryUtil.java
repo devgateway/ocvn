@@ -46,6 +46,7 @@ public final class OrganizationRepositoryUtil {
         Identifier identifier = new Identifier();
         identifier.setId(id);
         org.setIdentifier(identifier);
+        org.getAdditionalIdentifiers().add(identifier);
         return repository.insert(org);
     }
 
