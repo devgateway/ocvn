@@ -167,13 +167,13 @@ public class TenderRowImporter extends ReleaseRowImporter {
                     classification.setDescription("Tư vấn");
                     break;
                 case "10":
-                    classification.setDescription("Combined");
+                    classification.setDescription("Hỗn hợp");
                     break;
                 case "15":
-                    classification.setDescription("Non-Consulting Services");
+                    classification.setDescription("Phi tư vấn");
                     break;
                 default:
-                    classification.setDescription("Unspecified");
+                    classification.setDescription("Chưa xác định");
                     break;
                 }
                 classification = classificationRepository.insert(classification);

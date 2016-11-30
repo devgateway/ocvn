@@ -70,7 +70,7 @@ public class TenderPriceByTypeYearControllerTest extends AbstractEndPointControl
         final DBObject second = tenderPriceByAllBidSelectionMethods.get(1);
         totalTenderAmount = (Number) second.get(TenderPriceByTypeYearController.Keys.TOTAL_TENDER_AMOUNT);
         procurementMethodDetails = (String) second.get(TenderPriceByTypeYearController.Keys.PROCUREMENT_METHOD_DETAILS);
-        Assert.assertEquals("Unspecified", procurementMethodDetails);
+        Assert.assertEquals("Chưa xác định", procurementMethodDetails);
         Assert.assertEquals(600000.0, totalTenderAmount.doubleValue(), 0);
     }
 }

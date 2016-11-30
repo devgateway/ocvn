@@ -51,7 +51,7 @@ public class TenderPriceByTypeYearController extends GenericOCDSController {
     @Autowired
     private BidSelectionMethodSearchController bidSelectionMethodSearchController;
 
-    private static final String UNSPECIFIED = "Unspecified";
+    private static final String UNSPECIFIED = "Chưa xác định";
 
     public static final class Keys {
         public static final String YEAR = "year";
