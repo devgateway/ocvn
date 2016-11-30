@@ -1,5 +1,5 @@
 import Table from "./index";
-import {pluckImm, send, callFunc} from "../../tools";
+import {pluckImm, send, callFunc, shallowCopy} from "../../tools";
 import URI from "urijs";
 
 class FrequentTenderers extends Table{
@@ -34,8 +34,7 @@ class FrequentTenderers extends Table{
     send(new URI('/api/ocds/organization/ids').addSearch('id', idsWithoutNames))
         .then(callFunc('json'))
         .then(orgs => {
-          let orgNames = {};
-          Object.keys(this.state.orgNames).forEach(key => orgNames[key] = this.state.orgNames[key]);
+          let orgNames = shallowCopy(this.state.orgNames);
           orgs.forEach(({id, name}) => orgNames[id] = name);
           this.setState({orgNames})
         })

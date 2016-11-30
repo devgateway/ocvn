@@ -2,7 +2,7 @@ import translatable from "../../translatable";
 import Component from "../../pure-render-component";
 import {fetchJson} from "../../tools";
 import URI from "urijs";
-import {fromJS} from "immutable";
+import {fromJS, shallowCopy} from "immutable";
 
 class TypeAhead extends translatable(Component){
   constructor(props){
@@ -28,8 +28,7 @@ class TypeAhead extends translatable(Component){
   select(option){
     let id = option.get('id');
     let name = option.get('name');
-    let orgNames = {};
-    Object.keys(this.state.orgNames).forEach(key => orgNames[key] = this.state.orgNames[key]);
+    let orgNames = shallowCopy(this.state.orgNames);
     orgNames[id] = name;
     this.setState({orgNames});
     this.props.onToggle(id);
