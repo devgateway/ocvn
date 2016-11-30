@@ -19,9 +19,19 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     private List<String> bidTypeId;
 
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+    @ApiModelProperty(
+            value = "This corresponds the negated bidTypeId filter, matches elements that are NOT in the list of Ids")
+    private List<String> notBidTypeId;
+
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     @ApiModelProperty(value = "This is the id of the organization/procuring entity. "
             + "Corresponds to the OCDS Organization.identifier")
     private List<String> procuringEntityId;
+
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+    @ApiModelProperty(value = "This corresponds the negated procuringEntityId filter,"
+            + " matches elements that are NOT in the list of Ids")
+    private List<String> notProcuringEntityId;
 
     // @EachPattern(regexp = "^[\\p{L}0-9]*$")
     @ApiModelProperty(value = "This is the id of the organization/supplier entity. "
@@ -69,20 +79,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     private List<Integer> procuringEntityGroupId;
 
     
-    /**
-     * This parameter will invert (negate) all existing filtering parameters. So
-     * A IN B turns into A NOT IN B. A IN B AND AN IN C turns into A NOT IN B
-     * AND A NOT IN C. So this is NOT exactly a logical *not*, the correct way
-     * would be !(A && B) = !A || !B. Which is not what we do here, but we
-     * actually dont use multiple parameters anywhere, so it should not matter
-     * now
-     */
-    @ApiModelProperty(value = "This parameter will invert (negate) all existing filtering parameters."
-            + "So A IN B turns into A NOT IN B. A IN B AND AN IN C turns into A NOT IN B"
-            + " AND A NOT IN C. So this is NOT exactly a logical *not*, the correct way "
-            + "  would be !(A && B) = !A || !B.")
-    private Boolean invert = false;
-
     public DefaultFilterPagingRequest() {
         super();
     }
@@ -173,6 +169,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setSupplierId(final List<String> supplierId) {
         this.supplierId = supplierId;
+    }
+    
+    public List<String> getNotBidTypeId() {
+        return notBidTypeId;
+    }
+
+    public void setNotBidTypeId(List<String> notBidTypeId) {
+        this.notBidTypeId = notBidTypeId;
+    }
+
+    public List<String> getNotProcuringEntityId() {
+        return notProcuringEntityId;
+    }
+
+    public void setNotProcuringEntityId(List<String> notProcuringEntityId) {
+        this.notProcuringEntityId = notProcuringEntityId;
     }
 
     public List<String> getProcuringEntityCityId() {
