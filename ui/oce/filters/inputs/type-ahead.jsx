@@ -1,8 +1,8 @@
 import translatable from "../../translatable";
 import Component from "../../pure-render-component";
-import {fetchJson} from "../../tools";
+import {fetchJson, send, callFunc, shallowCopy} from "../../tools";
 import URI from "urijs";
-import {fromJS, shallowCopy} from "immutable";
+import {fromJS} from "immutable";
 
 class TypeAhead extends translatable(Component){
   constructor(props){
@@ -44,6 +44,26 @@ class TypeAhead extends translatable(Component){
         /> {name}
       </label>
     </div>
+  }
+
+  maybeFetchOrgNames(){
+    const idsWithoutNames = this.props.selected.filter(id => !this.state.orgNames[id]).toJS();
+    if(!idsWithoutNames.length) return;
+    send(new URI('/api/ocds/organization/ids').addSearch('id', idsWithoutNames))
+        .then(callFunc('json'))
+        .then(orgs => {
+          let orgNames = shallowCopy(this.state.orgNames);
+          orgs.forEach(({id, name}) => orgNames[id] = name);
+          this.setState({orgNames})
+        })
+  }
+
+  componentDidMount(){
+    this.maybeFetchOrgNames();
+  }
+
+  componentDidUpdate(){
+    this.maybeFetchOrgNames();
   }
 
   render(){
