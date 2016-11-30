@@ -295,6 +295,11 @@ public abstract class GenericOCDSController {
     protected Criteria getBidSelectionMethod(final DefaultFilterPagingRequest filter) {
         return createFilterCriteria("tender.procurementMethodDetails", filter.getBidSelectionMethod(), filter);
     }
+    
+    protected Criteria getNotBidSelectionMethod(final DefaultFilterPagingRequest filter) {
+        return createNotFilterCriteria("tender.procurementMethodDetails", filter.getNotBidSelectionMethod(), filter);
+    }
+
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(
@@ -322,10 +327,12 @@ public abstract class GenericOCDSController {
                 getProcuringEntityCityIdCriteria(filter),
                 getProcuringEntityGroupIdCriteria(filter),
                 getProcuringEntityDepartmentIdCriteria(filter),
-                getSupplierIdCriteria(filter), 
-                getByTenderDeliveryLocationIdentifier(filter),
-                getByTenderAmountIntervalCriteria(filter), 
-                getByAwardAmountIntervalCriteria(filter),
+                getBidSelectionMethod(filter), 
+                getNotBidSelectionMethod(filter), 
+                getContrMethodFilterCriteria(filter),
+                getSupplierIdCriteria(filter),
+                getByTenderDeliveryLocationIdentifier(filter), 
+                getByTenderAmountIntervalCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
     }
 

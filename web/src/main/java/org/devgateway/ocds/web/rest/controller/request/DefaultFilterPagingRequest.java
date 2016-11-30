@@ -42,6 +42,10 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Valid examples are Đấu thầu rộng rãi, Đấu thầu hạn chế, etc...")
     private List<String> bidSelectionMethod;
 
+    @ApiModelProperty(value = "This corresponds the negated bidSelectionMethod filter,"
+            + " matches elements that are NOT in the list of Ids")
+    private List<String> notBidSelectionMethod;
+    
     @ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     private List<String> contrMethod;
@@ -106,15 +110,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setBidSelectionMethod(final List<String> bidSelectionMethod) {
         this.bidSelectionMethod = bidSelectionMethod;
     }
-
-    public Boolean getInvert() {
-        return invert;
-    }
-
-    public void setInvert(final Boolean invert) {
-        this.invert = invert;
-    }
-
+    
     public List<String> getContrMethod() {
         return contrMethod;
     }
@@ -209,6 +205,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setProcuringEntityGroupId(List<Integer> procuringEntityGroupId) {
         this.procuringEntityGroupId = procuringEntityGroupId;
+    }
+
+    public List<String> getNotBidSelectionMethod() {
+        return notBidSelectionMethod;
+    }
+
+    public void setNotBidSelectionMethod(List<String> notBidSelectionMethod) {
+        this.notBidSelectionMethod = notBidSelectionMethod;
     }
 
 }
