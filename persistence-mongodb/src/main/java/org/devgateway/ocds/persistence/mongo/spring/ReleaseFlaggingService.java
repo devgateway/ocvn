@@ -47,7 +47,7 @@ public class ReleaseFlaggingService {
         Page<FlaggedRelease> page;
         do {
             page = releaseRepository.findAll(new PageRequest(pageNumber++, FLAGGING_BATCH_SIZE));
-            page.getContent().parallelStream().forEach(r -> processAndSaveFlagsForRelease(r));
+            page.getContent().parallelStream().forEach(this::processAndSaveFlagsForRelease);
             processedCount += page.getNumberOfElements();
             logMessage.accept("Flagged " + processedCount + " releases");
         } while (!page.isLast());

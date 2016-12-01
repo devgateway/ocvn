@@ -47,12 +47,12 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
 
         if (failedPreconditionsPredicates.isEmpty()) {
             logger.debug("Flaggable " + flaggable.getIdProperty() + " does meet all preconditions. Calculating flag.");
-            flagValue = calculateFlag(flaggable, rationale.append("Calculated rationale: "));
+            flagValue = calculateFlag(flaggable, rationale);
         } else {
             logger.debug("Flaggable " + flaggable.getIdProperty()
                     + " does NOT meet all preconditions. Dumping failed predicates.");
             rationale.append("Preconditions that are not met: ");
-            failedPreconditionsPredicates.forEach(p -> rationale.append(p.toString()));
+            failedPreconditionsPredicates.forEach(p -> rationale.append(p.toString()).append(" "));
         }
 
         logger.debug("Setting flag with value " + flagValue + " to flaggable " + flaggable.getIdProperty());
