@@ -80,6 +80,8 @@ public class VietnamImportPage extends BasePage {
 
     private CheckBoxBootstrapFormComponent validateData;
 
+    private CheckBoxBootstrapFormComponent flagData;
+
     /**
      * @param parameters
      */
@@ -97,7 +99,9 @@ public class VietnamImportPage extends BasePage {
         private Boolean dropData = true;
 
         private Boolean validateData = true;
-
+        
+        private Boolean flagData = true;
+        
         public Boolean getValidateData() {
             return validateData;
         }
@@ -128,6 +132,14 @@ public class VietnamImportPage extends BasePage {
 
         public void setDropData(final Boolean dropData) {
             this.dropData = dropData;
+        }
+
+        public Boolean getFlagData() {
+            return flagData;
+        }
+
+        public void setFlagData(Boolean flagData) {
+            this.flagData = flagData;
         }
 
     }
@@ -190,10 +202,18 @@ public class VietnamImportPage extends BasePage {
         validateData = new CheckBoxBootstrapFormComponent("validateData");
         importForm.add(validateData);
     }
+    
+    protected void addFlagData() {
+        flagData = new CheckBoxBootstrapFormComponent("flagData");
+        importForm.add(flagData);
+    }
+
 
     protected void addFileTypesSelect() {
         fileTypes = new Select2MultiChoiceBootstrapFormComponent<String>("fileTypes",
                 new GenericChoiceProvider<String>(ImportFileTypes.ALL_FILE_TYPES) {
+
+                    private static final long serialVersionUID = -2273682733952308598L;
 
                     @Override
                     public String getDisplayValue(final String arg0) {
@@ -206,7 +226,7 @@ public class VietnamImportPage extends BasePage {
                     }
 
                 });
-        fileTypes.required();
+       //fileTypes.required();
         importForm.add(fileTypes);
     }
 
@@ -255,7 +275,8 @@ public class VietnamImportPage extends BasePage {
                             ? null
                             : importForm.getModelObject().getSourceFiles().getCityDepartmentGroupFile()
                                     .iterator().next().getContent().getBytes(),
-                            importForm.getModelObject().getDropData(), importForm.getModelObject().getValidateData());
+                            importForm.getModelObject().getDropData(), importForm.getModelObject().getValidateData(),
+                            importForm.getModelObject().getFlagData());
                 } catch (Exception e) {
                     logger.error(e);
                     e.printStackTrace();
@@ -297,6 +318,7 @@ public class VietnamImportPage extends BasePage {
         addDoneButton();
         addDropData();
         addValidateData();
+        addFlagData();
 
         switchFieldsBasedOnExecutorAvailability(null);
 
