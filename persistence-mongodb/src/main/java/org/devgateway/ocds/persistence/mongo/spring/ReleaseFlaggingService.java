@@ -39,7 +39,7 @@ public class ReleaseFlaggingService {
 
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {
 
-        logMessage.accept("<b>RUNNING SCHEMA VALIDATION.</b>");
+        logMessage.accept("<b>RUNNING CORRUPTION FLAGGING.</b>");
 
         int pageNumber = 0;
         int processedCount = 0;
@@ -49,9 +49,9 @@ public class ReleaseFlaggingService {
             page = releaseRepository.findAll(new PageRequest(pageNumber++, FLAGGING_BATCH_SIZE));
             page.getContent().parallelStream().forEach(r -> processAndSaveFlagsForRelease(r));
             processedCount += page.getNumberOfElements();
-            logMessage.accept("Validated " + processedCount + " releases");
+            logMessage.accept("Flagged " + processedCount + " releases");
         } while (!page.isLast());
 
-        logMessage.accept("<b>SCHEMA VALIDATION COMPLETE.</b>");
+        logMessage.accept("<b>CORRUPTION FLAGGING COMPLETE.</b>");
     }
 }
