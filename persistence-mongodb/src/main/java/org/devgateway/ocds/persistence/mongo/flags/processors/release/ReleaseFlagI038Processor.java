@@ -46,8 +46,8 @@ public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Collection<NamedPredicate<FlaggedRelease>> getPreconditionsPredicates() {
-        return Collections.unmodifiableList(Arrays.asList(FlaggedReleasePredicates.HAS_OPEN_PROCUREMENT_METHOD,
-                FlaggedReleasePredicates.HAS_TENDER_END_DATE, FlaggedReleasePredicates.HAS_TENDER_START_DATE));
+        return Collections.unmodifiableList(Arrays.asList(FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
+                FlaggedReleasePredicates.TENDER_END_DATE, FlaggedReleasePredicates.TENDER_START_DATE));
     }
 
 }
