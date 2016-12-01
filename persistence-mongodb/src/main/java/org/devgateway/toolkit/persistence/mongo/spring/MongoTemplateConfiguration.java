@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
@@ -49,7 +50,7 @@ public class MongoTemplateConfiguration {
     }
     
     public void createCorruptionFlagsIndexes() {
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.i038.value", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
     }
 
     @PostConstruct
