@@ -25,6 +25,7 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
+import org.devgateway.ocds.persistence.mongo.spring.ReleaseFlaggingService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.CityRowImporter;
@@ -116,6 +117,9 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired(required = false)
     private CacheManager cacheManager;
+    
+    @Autowired
+    private ReleaseFlaggingService releaseFlaggingService;
 
     private StringBuffer msgBuffer = new StringBuffer();
 
@@ -277,9 +281,8 @@ public class VNImportService implements ExcelImportService {
 
     @Async
     public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers, final byte[] cdg, 
-            final Boolean purgeDatabase, final Boolean validateData)
-            throws InterruptedException {
+            final byte[] publicInstitutionsSuppliers, final byte[] cdg, final Boolean purgeDatabase,
+            final Boolean validateData, final Boolean flagData) throws InterruptedException {
 
         String tempDirPath = null;
 
@@ -366,6 +369,10 @@ public class VNImportService implements ExcelImportService {
             if (validateData) {
                 validateData();
             }
+            
+            if (flagData) {
+                flagData();
+            }
 
             logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
 
@@ -386,6 +393,12 @@ public class VNImportService implements ExcelImportService {
                 }
             }
         }
+    }
+
+    private void flagData() {
+        
+        releaseFlaggingService.processAndSaveFlagsForAllReleases(this::logMessage);
+        
     }
 
     public void validateData() {
