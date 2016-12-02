@@ -46,7 +46,7 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
             release.setTender(tender);
         }
 
-        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission.toString());
+        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission);
 
         VNAward award = new VNAward();
         award.setId(release.getOcid() + "-award-" + release.getAwards().size());
