@@ -79,6 +79,9 @@ class OCVN extends OCApp{
           {this.content()}
         </div>
       </div>
+      {this.showMonths() && <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 months-bar" role="navigation">
+        {this.monthsBar()}
+      </div>}
       <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
         {this.yearsBar()}
       </div>
