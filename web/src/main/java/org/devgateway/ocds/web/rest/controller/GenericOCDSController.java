@@ -82,6 +82,11 @@ public abstract class GenericOCDSController {
         return end;
     }
 
+    protected String ref(String field) {
+        return "$" + field;
+    }
+
+
     /**
      * Appends the procuring bid type id for this filter, this will fitler based
      * on tender.items.classification._id
