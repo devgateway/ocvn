@@ -25,6 +25,7 @@ class OCApp extends React.Component{
       compareBy: "",
       comparisonCriteriaValues: [],
       selectedYears: Set(range(MIN_YEAR, MAX_YEAR)),
+      selectedMonths: Set(range(1, 12)),
       filters: fromJS({}),
       data: fromJS({}),
       comparisonData: fromJS({}),
@@ -198,8 +199,8 @@ class OCApp extends React.Component{
   }
 
   yearsBar(){
-    let {years, selectedYears} = this.state;
-    return this.state.years.sort().map(year =>
+    const {years, selectedYears} = this.state;
+    return years.sort().map(year =>
         <a
             key={year}
             href="javascript:void(0);"
@@ -213,6 +214,27 @@ class OCApp extends React.Component{
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
         </a>
     ).toArray();
+  }
+
+  showMonths(){
+    const {years, selectedYears} = this.state;
+    return selectedYears.intersect(years).count() == 1;
+  }
+
+  monthsBar(){
+    const {selectedMonths} = this.state;
+    return range(1, 12).map(month => <a
+        key={month}
+        href="javascript:void(0);"
+        className={cn({active: selectedMonths.has(+month)})}
+        onClick={_ => this.setState({
+          selectedMonths: selectedMonths.has(+month) ?
+              selectedMonths.delete(+month) :
+              selectedMonths.add(+month)
+        })}
+    >
+      <i className="glyphicon glyphicon-ok-circle"></i> {this.t(`general:months:${month}`)}
+    </a>)
   }
 
   setLocale(locale){
@@ -287,4 +309,3 @@ OCApp.STYLING = {
 };
 
 export default OCApp;
-
