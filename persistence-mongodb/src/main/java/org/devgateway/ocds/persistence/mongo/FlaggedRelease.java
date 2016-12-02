@@ -3,11 +3,11 @@
  */
 package org.devgateway.ocds.persistence.mongo;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.devgateway.ocds.persistence.mongo.flags.Flaggable;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
+import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author mpostelnicu
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Document(collection = "release")
 public class FlaggedRelease extends Release implements Flaggable {
 
-    @JsonIgnore
+    @JsonView(Views.Internal.class)
     private ReleaseFlags flags;
 
     @Override
