@@ -1,12 +1,8 @@
-/**
- * 
- */
 package org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Predicate;
 
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
@@ -20,7 +16,8 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 
 /**
  * @author mpostelnicu
- *
+ * 
+ * i003 Only winning bidder was eligible for a tender that had multiple bidders.
  */
 public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcessor {
 
@@ -31,12 +28,16 @@ public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcesso
         if (flaggable.getFlags() == null) {
             flaggable.setFlags(new ReleaseFlags());
         }
-        flaggable.getFlags().setI038(flag);
+        flaggable.getFlags().setI003(flag);
     }
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-        flaggable.getAwards()
+        long eligibleUnsuccessfulAwards = flaggable.getAwards().stream().map(a -> (VNAward) a)
+                .filter(a -> Award.Status.unsuccessful.equals(a.getStatus()) && !"Y".equals(a.getIneligibleYN()))
+                .count();
+        rationale.append("Number of eligible unsuccessful awards: ").append(eligibleUnsuccessfulAwards);
+        return eligibleUnsuccessfulAwards == 0;
     }
 
     @Override

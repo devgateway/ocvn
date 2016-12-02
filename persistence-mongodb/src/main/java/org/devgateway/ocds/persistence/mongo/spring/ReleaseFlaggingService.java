@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.ReleaseFlagI003Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,8 +30,8 @@ public class ReleaseFlaggingService {
 
     public static final int FLAGGING_BATCH_SIZE = 5000;
 
-    private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors =
-            Collections.unmodifiableList(Arrays.asList(ReleaseFlagI038Processor.INSTANCE));
+    private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors = Collections
+            .unmodifiableList(Arrays.asList(ReleaseFlagI038Processor.INSTANCE, ReleaseFlagI003Processor.INSTANCE));
 
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {
         releaseFlagProcessors.forEach(processor -> processor.process(release));
