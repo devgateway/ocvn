@@ -79,3 +79,9 @@ export let download = ({ep, filters, years, t}) =>
   }).catch(() => {
     alert(t('export:error'));
   });
+
+export const shallowCopy = original => {
+  let copy = {};
+  Object.keys(original).forEach(key => copy[key] = original[key]);
+  return copy;
+};

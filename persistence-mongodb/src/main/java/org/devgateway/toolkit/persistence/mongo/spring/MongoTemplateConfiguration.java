@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
@@ -19,13 +20,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
-import org.springframework.data.mongodb.core.index.CompoundIndexDefinition;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
-
-import com.mongodb.BasicDBObject;
 
 @Configuration
 public class MongoTemplateConfiguration {
@@ -40,8 +38,8 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.budget.projectID", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("planning.bidNo", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class).ensureIndex(new CompoundIndexDefinition(
-                new BasicDBObject("identifier._id", 1).append("additionalIdentifiers._id", 1)).unique());
+        mongoTemplate.indexOps(Organization.class)
+                .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(
                 new Index().on("types", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
@@ -49,6 +47,11 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
 
         logger.info("Added mandatory Mongo indexes");
+    }
+    
+    public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I003_VALUE, Direction.ASC));
     }
 
     @PostConstruct
@@ -77,6 +80,8 @@ public class MongoTemplateConfiguration {
     }
 
     public void createPostImportStructures() {
+        
+        createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));

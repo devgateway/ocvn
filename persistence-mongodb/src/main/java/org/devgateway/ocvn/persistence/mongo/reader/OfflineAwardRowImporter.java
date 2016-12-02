@@ -46,7 +46,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
             release.setTender(tender);
         }
 
-        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written.toString());
+        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written);
 
         VNAward award = new VNAward();
         award.setId(release.getOcid() + "-award-" + release.getAwards().size());

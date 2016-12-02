@@ -89,10 +89,18 @@ class Comparison extends translatable(PureRenderCompoent){
   }
 }
 
+function getInverseFilter(filter){
+  switch(filter){
+    case 'bidTypeId': return 'notBidTypeId';
+    case 'bidSelectionMethod': return 'notBidSelectionMethod';
+    case 'procuringEntityId': return 'notProcuringEntityId';
+  }
+}
+
 Comparison.decorateFilters = cacheFn((filters, compareBy, comparisonCriteriaValues) =>
     List(comparisonCriteriaValues)
         .map(criteriaValue => filters.set(compareBy, criteriaValue))
-        .push(filters.set(compareBy, comparisonCriteriaValues).set('invert', 'true')));
+        .push(filters.set(getInverseFilter(compareBy), comparisonCriteriaValues)));
 
 Comparison.computeUniformData = cacheFn((Component, comparisonData, years) =>
     comparisonData.map(uniformDatum =>
