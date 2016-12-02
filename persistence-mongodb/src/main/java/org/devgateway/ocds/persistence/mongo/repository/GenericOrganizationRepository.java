@@ -12,7 +12,7 @@ public interface GenericOrganizationRepository<T extends Organization> extends M
     T findOne(String id);
 
     T findByIdOrNameAllIgnoreCase(String id, String name);
-        
+
     @Query(value = "{'additionalIdentifiers._id': ?0}")
     T findByAllIds(String id);
     

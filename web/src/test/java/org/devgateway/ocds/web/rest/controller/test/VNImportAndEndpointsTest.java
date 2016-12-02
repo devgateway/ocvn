@@ -72,7 +72,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
                 loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
                 loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), 
                 loadResourceStreamAsByteArray("/testImport/test_city_department_group.xlsx"),
-                true, false);
+                true, false, false);
     }
 
     @After
