@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
@@ -14,6 +14,9 @@ public class ReleaseFlags implements FlagsWrappable {
     // i003: Only winning bidder was eligible for a tender that had multiple
     // bidders.
     private Flag i003;
+
+    //i007 This awarded competitive tender only featured a single bid`
+    private Flag i007;
 
     public Flag getI038() {
         return i038;
@@ -31,4 +34,11 @@ public class ReleaseFlags implements FlagsWrappable {
         this.i003 = i003;
     }
 
+    public Flag getI007() {
+        return i007;
+    }
+
+    public void setI007(Flag i007) {
+        this.i007 = i007;
+    }
 }
