@@ -38,8 +38,8 @@ public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcesso
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
         Days daysBetween = Days.daysBetween(new DateTime(flaggable.getTender().getTenderPeriod().getStartDate()),
                 new DateTime(flaggable.getTender().getTenderPeriod().getEndDate()));
-        rationale.append("Days between=").append(daysBetween.getDays()).append(". Minimum allowed days=")
-                .append(MIN_ALLOWED_DAYS_BIDDING_PERIOD);
+        rationale.append("Days between: ").append(daysBetween.getDays()).append("; Minimum allowed days: ")
+                .append(MIN_ALLOWED_DAYS_BIDDING_PERIOD).append(";");
         return daysBetween.getDays() < MIN_ALLOWED_DAYS_BIDDING_PERIOD;
 
     }
