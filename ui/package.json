@@ -8,6 +8,7 @@
     "test": "jest",
     "build": "gulp",
     "extract-translatables": "node ./scripts/untranslated.es6",
+    "translate": "node ./scripts/translate.es6",
     "lint": "eslint index.jsx"
   },
   "jest": {
