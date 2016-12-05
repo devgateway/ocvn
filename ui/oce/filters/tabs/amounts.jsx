@@ -4,14 +4,16 @@ import AwardValue from "../award-value";
 
 class Amount extends Tab{
     renderChild(slug, Component){
-        let {state, onUpdate, translations} = this.props;
+        const {state, onUpdate, translations} = this.props;
+        const minValue = state.get('min'+slug);
+        const maxValue = state.get('max'+slug);
         return <Component
           translations={translations}
-          minValue={state.get("min"+slug)}
-          maxValue={state.get("max"+slug)}
+          minValue={minValue}
+          maxValue={maxValue}
           onUpdate={({min, max}) => {
-              onUpdate("min"+slug, min);
-              onUpdate("max"+slug, max);
+              minValue != min && onUpdate("min"+slug, min);
+              maxValue != max && onUpdate("max"+slug, max);
           }}
         />
     }
