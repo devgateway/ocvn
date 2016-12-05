@@ -20,6 +20,8 @@
 	"general:months:10": "T10",
 	"general:months:11": "T11",
 	"general:months:12": "T12",
+	"general:range:min": "Min",
+	"general:range:max": "Max",
 	"header:comparison:title": "So sánh",
 	"header:comparison:criteria": "Tiêu chí so sánh",
 	"header:comparison:criteria:none": "Không có",
