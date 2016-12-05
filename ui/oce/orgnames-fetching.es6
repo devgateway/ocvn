@@ -1,5 +1,5 @@
-
 import URI from "urijs";
+import {send, callFunc, shallowCopy} from "./tools";
 
 const orgNamesFetching = Class => class extends Class{
   constructor(...args){
@@ -13,8 +13,7 @@ const orgNamesFetching = Class => class extends Class{
   }
 
   maybeFetchOrgNames(){
-    if(!this.props.data) return;
-    const idsWithoutNames = this.props.data.map(pluckImm('id')).flatten().filter(id => !this.state.orgNames[id]).toJS();
+    const idsWithoutNames = this.getOrgsWithoutNamesIds();
     if(!idsWithoutNames.length) return;
     send(new URI('/api/ocds/organization/ids').addSearch('id', idsWithoutNames))
         .then(callFunc('json'))
@@ -26,12 +25,12 @@ const orgNamesFetching = Class => class extends Class{
   }
 
   componentDidMount(){
-    super.componentDidMount();
+    super.componentDidMount && super.componentDidMount();
     this.maybeFetchOrgNames();
   }
 
   componentDidUpdate(...args){
-    super.componentDidUpdate(...args);
+    super.componentDidUpdate && super.componentDidUpdate(...args);
     this.maybeFetchOrgNames();
   }
 };

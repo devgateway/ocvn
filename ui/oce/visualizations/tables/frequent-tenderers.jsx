@@ -1,5 +1,6 @@
 import Table from "./index";
 import orgNamesFetching from "../../orgnames-fetching";
+import {pluckImm} from "../../tools";
 
 class FrequentTenderers extends orgNamesFetching(Table){
   constructor(...args){
@@ -18,6 +19,11 @@ class FrequentTenderers extends orgNamesFetching(Table){
 
   maybeSlice(flag, list){
     return flag ? list.slice(0, 10) : list;
+  }
+
+  getOrgsWithoutNamesIds(){
+    if(!this.props.data) return [];
+    return this.props.data.map(pluckImm('id')).flatten().filter(id => !this.state.orgNames[id]).toJS();
   }
 
   render(){
