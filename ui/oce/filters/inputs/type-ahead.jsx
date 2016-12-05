@@ -1,17 +1,15 @@
 import translatable from "../../translatable";
 import Component from "../../pure-render-component";
-import {fetchJson, send, callFunc, shallowCopy} from "../../tools";
+import {fetchJson, shallowCopy} from "../../tools";
 import URI from "urijs";
 import {fromJS} from "immutable";
+import orgNamesFetching from "../../orgnames-fetching";
 
-class TypeAhead extends translatable(Component){
+class TypeAhead extends orgNamesFetching(translatable(Component)){
   constructor(props){
     super(props);
-    this.state = {
-      query: "",
-      options: fromJS([]),
-      orgNames: {}
-    };
+    this.state.query = "";
+    this.state.options = fromJS([]);
   }
 
   updateQuery(query){
@@ -46,24 +44,8 @@ class TypeAhead extends translatable(Component){
     </div>
   }
 
-  maybeFetchOrgNames(){
-    const idsWithoutNames = this.props.selected.filter(id => !this.state.orgNames[id]).toJS();
-    if(!idsWithoutNames.length) return;
-    send(new URI('/api/ocds/organization/ids').addSearch('id', idsWithoutNames))
-        .then(callFunc('json'))
-        .then(orgs => {
-          let orgNames = shallowCopy(this.state.orgNames);
-          orgs.forEach(({id, name}) => orgNames[id] = name);
-          this.setState({orgNames})
-        })
-  }
-
-  componentDidMount(){
-    this.maybeFetchOrgNames();
-  }
-
-  componentDidUpdate(){
-    this.maybeFetchOrgNames();
+  getOrgsWithoutNamesIds(){
+    return this.props.selected.filter(id => !this.state.orgNames[id]).toJS()
   }
 
   render(){
