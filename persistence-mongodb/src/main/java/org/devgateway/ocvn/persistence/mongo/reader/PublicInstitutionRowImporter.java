@@ -3,8 +3,6 @@
  */
 package org.devgateway.ocvn.persistence.mongo.reader;
 
-import java.text.ParseException;
-
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
@@ -15,6 +13,8 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
 import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
+
+import java.text.ParseException;
 
 /**
  * @author mpostelnicu Specific {@link RowImporter} for Public Institutions, in
@@ -65,7 +65,7 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
                 newCity(organization, getInteger(getRowCell(row, 13)));
             }
             
-            if (getRowCell(row, 47) != null && getInteger(getRowCell(row, 47)) != 0) {
+            if (getRowCell(row, 47) != null) {
                 newDepartment(organization, getInteger(getRowCell(row, 47)));
             }
             
@@ -84,9 +84,7 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
     protected void newDepartment(VNOrganization organization, Integer departmentId) {
         OrgDepartment orgDepartment = orgDepartmentRepository.findOne(departmentId);
         if (orgDepartment == null) {
-            orgDepartment = new OrgDepartment();
-            orgDepartment.setId(departmentId);
-            orgDepartment = orgDepartmentRepository.save(orgDepartment);
+            organization.setDepartment(null);
         }
         organization.setDepartment(orgDepartment);
     }
@@ -94,9 +92,7 @@ public class PublicInstitutionRowImporter extends OrganizationRowImporter<VNOrga
     protected void newOrgGroup(VNOrganization organization, Integer orgGroupId) {
         OrgGroup orgGroup = orgGroupRepository.findOne(orgGroupId);
         if (orgGroup == null) {
-            orgGroup = new OrgGroup();
-            orgGroup.setId(orgGroupId);
-            orgGroup = orgGroupRepository.save(orgGroup);
+            organization.setGroup(null);
         }
         organization.setGroup(orgGroup);
     }
