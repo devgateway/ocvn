@@ -9,7 +9,6 @@ import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.GenericOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
-import org.devgateway.ocvn.persistence.mongo.reader.util.CityRepositoryUtil;
 import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 
 /**
@@ -51,7 +50,7 @@ public abstract class OrganizationRowImporter<O extends Organization>
     }
 
     protected void newCity(Organization organization, Integer cityId) {
-        City city = CityRepositoryUtil.ensureExistsCityById(cityId, cityRepository);
+        City city = cityRepository.findOne(cityId);
         if (city != null) {
             organization.getAddress().setPostalCode(city.getId().toString());
         }

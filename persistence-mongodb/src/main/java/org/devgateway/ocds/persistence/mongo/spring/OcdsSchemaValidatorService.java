@@ -57,7 +57,7 @@ public class OcdsSchemaValidatorService {
 
         @Override
         public String toString() {
-            return report.toString() + " FAILED OBJECT JSON: " + failedValidationObjString;
+            return report.toString() + " FAILED OBJECT OCID: " + failedValidationObjString;
         }
     }
 
@@ -112,7 +112,8 @@ public class OcdsSchemaValidatorService {
             ProcessingReportWithNode processingReportWithNode = null;
             try {
                 processingReportWithNode = new ProcessingReportWithNode(processingReport, processingReport.isSuccess()
-                        ? null : jacksonObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
+                        ? null : jacksonObjectMapper.writerWithDefaultPrettyPrinter().
+                        writeValueAsString(jsonNode.get("ocid")));
             } catch (JsonProcessingException e) {
                 logger.error(e.getMessage());
                 e.printStackTrace();
