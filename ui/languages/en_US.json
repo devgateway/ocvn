@@ -22,6 +22,7 @@
   "general:months:12": "Dec",
   "general:range:min": "Min",
   "general:range:max": "Max",
+  "general:loading": "Loading...",
   "header:comparison:title": "Compare",
   "header:comparison:criteria": "Comparison criteria",
   "header:comparison:criteria:none": "None",
