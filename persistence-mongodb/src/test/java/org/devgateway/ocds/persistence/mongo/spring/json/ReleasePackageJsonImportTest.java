@@ -1,5 +1,9 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.Set;
+
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Contract;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -82,7 +86,7 @@ public class ReleasePackageJsonImportTest extends AbstractMongoTest {
 
         Assert.assertEquals(1, releases.size());
         Assert.assertNotNull(importedRelease);
-        Assert.assertArrayEquals(new String[] {"electronicSubmission"},
+        Assert.assertArrayEquals(new Tender.SubmissionMethod[] {Tender.SubmissionMethod.electronicSubmission},
                 importedRelease.getTender().getSubmissionMethod().toArray());
     }
 
