@@ -2,16 +2,18 @@ import FrontendYearFilterableChart from "./frontend-filterable";
 import {response2obj, pluckImm} from "../../tools";
 
 class OverviewChart extends FrontendYearFilterableChart{
-  transform([bidplansResponse, tendersResponse, awardsResponse]){
-    let bidplans = response2obj('count', bidplansResponse);
+  transform([tendersResponse, awardsResponse]){
     let tenders = response2obj('count', tendersResponse);
     let awards = response2obj('count', awardsResponse);
     return Object.keys(tenders).map(year => ({
       year: year,
-      bidplan: bidplans[year],
       tender: tenders[year],
       award: awards[year]
     }));
+  }
+
+  getRawData(){
+    return super.getData();
   }
 
   getData(){
@@ -19,7 +21,6 @@ class OverviewChart extends FrontendYearFilterableChart{
     if(!data) return [];
     let LINES = {
       award: this.t('charts:overview:traces:award'),
-      bidplan: this.t('charts:overview:traces:bidplan'),
       tender: this.t('charts:overview:traces:tender')
     };
     let years = data.map(pluckImm('year')).toArray();
@@ -49,7 +50,7 @@ class OverviewChart extends FrontendYearFilterableChart{
   }
 }
 
-OverviewChart.endpoints = ['countBidPlansByYear', 'countTendersByYear', 'countAwardsByYear'];
+OverviewChart.endpoints = ['countTendersByYear', 'countAwardsByYear'];
 OverviewChart.excelEP = 'procurementActivityExcelChart';
 
 OverviewChart.getName = t => t('charts:overview:title');
