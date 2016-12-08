@@ -85,3 +85,7 @@ export const shallowCopy = original => {
   Object.keys(original).forEach(key => copy[key] = original[key]);
   return copy;
 };
+
+export const arrReplace = (a, b, [head, ...tail]) => "undefined" == typeof head ?
+    tail :
+    [a == head ? b : head].concat(arrReplace(a, b, tail));
