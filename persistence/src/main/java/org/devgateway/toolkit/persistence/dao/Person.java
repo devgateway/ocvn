@@ -11,18 +11,7 @@
  *******************************************************************************/
 package org.devgateway.toolkit.persistence.dao;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.toolkit.persistence.dao.categories.Group;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
@@ -32,7 +21,16 @@ import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
@@ -92,9 +90,6 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @ManyToMany(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
-
-
-    
    
     public Boolean getEnabled() {
         return enabled;

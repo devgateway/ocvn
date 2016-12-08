@@ -10,6 +10,8 @@ import URI from "urijs";
 import {DropdownButton, MenuItem} from "react-bootstrap";
 import {fromJSON, toJSON} from "transit-immutable-js";
 
+const dashboardId = new URI(location).search(true).dashboardId;
+
 class Filters extends translatable(Component){
   constructor(props){
     super(props);
@@ -74,14 +76,27 @@ class Filters extends translatable(Component){
   }
 
   fetchDashboards(){
-    fetchJson('/rest/userDashboards/search/getDashboardsForCurrentUser').then(data => this.setState({
-      dashboards: data._embedded ? data._embedded.userDashboards : []
-    })).catch(() => null);
+    fetchJson('/rest/userDashboards/search/getDashboardsForCurrentUser')
+        .then(data => {
+          const dashboards = data._embedded ? data._embedded.userDashboards : [];
+          this.setState({dashboards});
+          if(dashboardId){
+            for(let counter in dashboards){
+              const dashboard = dashboards[counter];
+              if(dashboard.id == dashboardId){
+                this.updateFilters(fromJSON(dashboard.formUrlEncodedBody));
+                break;
+              }
+            }
+          }
+          return data;
+        })
+        .catch(() => null);
   }
 
   componentDidMount(){
     this.fetchDashboards();
-    fetchJson('/rest/userDashboards/search/getDefaultDashboardForCurrentUser')
+    !dashboardId && fetchJson('/rest/userDashboards/search/getDefaultDashboardForCurrentUser')
         .then(({formUrlEncodedBody}) => this.updateFilters(fromJSON(formUrlEncodedBody)))
         .catch(() => null)
   }
