@@ -14,6 +14,12 @@ let fetchEP = url => fetch(url.clone().query(""), {
 }).then(callFunc('json'));
 
 class Visualization extends translatable(Component){
+  constructor(...args){
+    super(...args);
+    this.state = this.state || {};
+    this.state.loading = true;
+  }
+
   buildUrl(ep){
     let {filters} = this.props;
     return new URI(API_ROOT + '/' + ep).addSearch(filters.toJS());
@@ -26,7 +32,12 @@ class Visualization extends translatable(Component){
     if(endpoint) promise = fetchEP(this.buildUrl(endpoint));
     if(endpoints) promise = Promise.all(endpoints.map(this.buildUrl.bind(this)).map(fetchEP));
     if(!promise) return;
-    promise.then(this.transform).then(fromJS).then(data => requestNewData([], data));
+    this.setState({loading: true});
+    promise
+        .then(this.transform)
+        .then(fromJS)
+        .then(data => requestNewData([], data))
+        .then(() => this.setState({loading: false}));
   }
 
   transform(data){return data;}

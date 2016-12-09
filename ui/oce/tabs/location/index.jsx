@@ -5,9 +5,7 @@ import cn from "classnames";
 import style from "./style.less";
 
 class LocationTab extends Tab{
-  static getName(__){
-    return __("Location")
-  }
+  static getName(t){return t('tabs:location:title')}
 
   static computeYears(data){
     if(!data) return Set();
@@ -38,12 +36,12 @@ class LocationTab extends Tab{
       return <div className="layer-switcher" style={switcherPos}>
         <div className={cn("dropdown", {open: dropdownOpen})} onClick={e => this.setState({dropdownOpen: !dropdownOpen})}>
           <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1">
-            {LAYERS[currentLayer].getLayerName(this.__.bind(this))} <span className="caret"></span>
+            {LAYERS[currentLayer].getLayerName(this.t.bind(this))} <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">
             {LAYERS.map((layer, index) => <li key={index}>
                   <a href="javascript:void(0)" onClick={e => this.setState({currentLayer: index})}>
-                    {LAYERS[index].getLayerName(this.__.bind(this))}
+                    {LAYERS[index].getLayerName(this.t.bind(this))}
                   </a>
                 </li>
             )}

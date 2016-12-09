@@ -20,11 +20,11 @@ class AvgNrBids extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:avgNrBids:xAxisTitle'),
         type: "category"
       },
       yaxis: {
-        title: this.__("Number"),
+        title: this.t('charts:avgNrBids:yAxisTitle'),
         hoverformat: '.2f'
       }
     }
@@ -33,7 +33,7 @@ class AvgNrBids extends FrontendYearFilterableChart{
 
 AvgNrBids.endpoint = 'averageNumberOfTenderers';
 AvgNrBids.excelEP = 'averageNumberBidsExcelChart';
-AvgNrBids.getName = __ => __('Average number of bids');
+AvgNrBids.getName = t => t('charts:avgNrBids:title');
 AvgNrBids.getFillerDatum = year => Map({
   year,
   averageNoTenderers: 0

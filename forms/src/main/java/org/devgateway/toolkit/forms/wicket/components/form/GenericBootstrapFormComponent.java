@@ -159,6 +159,8 @@ public abstract class GenericBootstrapFormComponent<TYPE, FIELD extends FormComp
         field.add(sizeBehavior);
         border.add(field);
 
+        field.setLabel(labelModel);
+
         tooltipLabel = new TooltipLabel("tooltipLabel", id);
         border.add(tooltipLabel);
     }

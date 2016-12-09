@@ -1,5 +1,6 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
@@ -14,19 +15,20 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
+import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
 
 /**
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
  * provided by Vietnam
  *
- * @author mihai
+ * @author mpostelnicu
  * @see VNAward
  */
 public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
     public OfflineAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-            OrganizationRepository organizationRepository, int skipRows) {
-        super(releaseRepository, importService, organizationRepository, skipRows);
+            OrganizationRepository organizationRepository, int skipRows, BigDecimal maxTenderValue) {
+        super(releaseRepository, importService, organizationRepository, skipRows, maxTenderValue);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
             release.setTender(tender);
         }
 
-        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written.toString());
+        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.written);
 
         VNAward award = new VNAward();
         award.setId(release.getOcid() + "-award-" + release.getAwards().size());
@@ -63,19 +65,14 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
         Organization supplier = null;
         if (getRowCell(row, 3) != null) {
 
-            supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 3));
+            supplier = organizationRepository.findByName(getRowCellUpper(row, 3));
 
             if (supplier == null) {
-                supplier = new Organization();
-                supplier.setName(getRowCellUpper(row, 3));
-                supplier.setId(getRowCellUpper(row, 3));
-                supplier.getTypes().add(Organization.OrganizationType.supplier);
-                supplier = organizationRepository.insert(supplier);
+                supplier = OrganizationRepositoryUtil.newAndInsertOrganization(Organization.OrganizationType.supplier,
+                        getRowCellUpper(row, 3), organizationRepository);
             } else {
-                if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
-                    supplier.getTypes().add(Organization.OrganizationType.supplier);
-                    supplier = organizationRepository.save(supplier);
-                }
+                supplier = OrganizationRepositoryUtil.ensureOrgIsOfTypeAndSave(supplier,
+                        Organization.OrganizationType.supplier, organizationRepository);
             }
         }
 
@@ -88,7 +85,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
         award.setContractTime(getRowCell(row, 4));
 
-        award.setInelibigleYN(getRowCell(row, 6));
+        award.setIneligibleYN(getRowCell(row, 6));
 
         award.setIneligibleRson(getRowCell(row, 7));
 

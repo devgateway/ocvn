@@ -1,6 +1,20 @@
 package org.devgateway.ocvn.persistence.mongo.spring;
 
-import com.google.common.io.Files;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -8,18 +22,26 @@ import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
+import org.devgateway.ocds.persistence.mongo.spring.ReleaseFlaggingService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.CityRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.EBidAwardRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.LocationRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.OfflineAwardRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.OrgDepartmentRowImporter;
+import org.devgateway.ocvn.persistence.mongo.reader.OrgGroupRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.ProcurementPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.PublicInstitutionRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.TenderRowImporter;
+import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
@@ -32,22 +54,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ScriptOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
+import com.google.common.io.Files;
+import com.mongodb.DBObject;
 
 /**
- * @author mihai Service that imports Excel sheets from given import file in
+ * @author mpostelnicu Service that imports Excel sheets from given import file in
  *         Vietnam input data format
  */
 @Service
@@ -65,6 +84,9 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired
     private OrganizationRepository organizationRepository;
+    
+    @Autowired
+    private VNOrganizationRepository vnOrganizationRepository;
 
     @Autowired
     private ClassificationRepository classificationRepository;
@@ -74,7 +96,16 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired
     private VNLocationRepository locationRepository;
-
+    
+    @Autowired
+    private CityRepository cityRepository;
+    
+    @Autowired
+    private OrgDepartmentRepository departmentRepository;
+    
+    @Autowired
+    private OrgGroupRepository orgGroupRepository;
+    
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -86,6 +117,9 @@ public class VNImportService implements ExcelImportService {
 
     @Autowired(required = false)
     private CacheManager cacheManager;
+    
+    @Autowired
+    private ReleaseFlaggingService releaseFlaggingService;
 
     private StringBuffer msgBuffer = new StringBuffer();
 
@@ -93,6 +127,7 @@ public class VNImportService implements ExcelImportService {
 
     public static final String LOCATIONS_FILE_NAME = "locations";
     public static final String ORGS_FILE_NAME = "orgs";
+    public static final String CITY_DEPT_GRP_NAME = "cdg";
     public static final String DATABASE_FILE_NAME = "database";
 
     // TODO: remove these
@@ -102,9 +137,21 @@ public class VNImportService implements ExcelImportService {
     // getClass().getResource("/UM_PUBINSTITU_SUPPLIERS_DQA.xlsx");
     // URL locationFile = getClass().getResource("/Location_Table_SO.xlsx");
 
-    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer)
+    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer)
             throws Exception {
         importSheet(fileUrl, sheetName, importer, MongoConstants.IMPORT_ROW_BATCH);
+    }
+    
+    private BigDecimal getMaxTenderValue() {
+        Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true)),
+                project().and("tender.value.amount").as("tender.value.amount"),
+                group().max("tender.value.amount").as("maxTenderValue"),
+                project().andInclude("maxTenderValue").andExclude(Fields.UNDERSCORE_ID));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+
+        return results.getMappedResults().size() == 0 ? BigDecimal.ZERO
+                : BigDecimal.valueOf((double) results.getMappedResults().get(0).get("maxTenderValue"));
     }
 
     /**
@@ -147,7 +194,7 @@ public class VNImportService implements ExcelImportService {
         msgBuffer.append(message).append("\r\n");
     }
 
-    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?> importer,
+    private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer,
             final int importRowBatch) {
         logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
 
@@ -200,7 +247,7 @@ public class VNImportService implements ExcelImportService {
      * @throws IOException
      */
     private String saveSourceFilesToTempDir(final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers) throws FileNotFoundException, IOException {
+            final byte[] publicInstitutionsSuppliers,  final byte[] cdg) throws FileNotFoundException, IOException {
         File tempDir = Files.createTempDir();
         if (prototypeDatabase != null) {
             FileOutputStream prototypeDatabaseOutputStream =
@@ -221,14 +268,21 @@ public class VNImportService implements ExcelImportService {
             publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
             publicInstitutionsSuppliersOutputStream.close();
         }
+                       
+        if (cdg != null) {
+            FileOutputStream cdgOutputStream =
+                    new FileOutputStream(new File(tempDir, CITY_DEPT_GRP_NAME));
+            cdgOutputStream.write(cdg);
+            cdgOutputStream.close();
+        }
 
         return tempDir.toURI().toURL().toString();
     }
 
     @Async
     public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers, final Boolean purgeDatabase, final Boolean validateData)
-            throws InterruptedException {
+            final byte[] publicInstitutionsSuppliers, final byte[] cdg, final Boolean purgeDatabase,
+            final Boolean validateData, final Boolean flagData) throws InterruptedException {
 
         String tempDirPath = null;
 
@@ -240,21 +294,41 @@ public class VNImportService implements ExcelImportService {
                 purgeDatabase();
             }
 
-            tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers);
+            tempDirPath = saveSourceFilesToTempDir(prototypeDatabase, locations, publicInstitutionsSuppliers, cdg);
 
             if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
                         new LocationRowImporter(locationRepository, this, 1), 1);
             }
+            
+                        
+            if (cdg != null && fileTypes.contains(ImportFileTypes.CITIES)) {
+                importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "City",
+                        new CityRowImporter(cityRepository, this, 1));
+            }
+            
+            
+            if (cdg != null && fileTypes.contains(ImportFileTypes.ORG_DEPARTMENTS)) {
+                importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "Department",
+                        new OrgDepartmentRowImporter(departmentRepository, this, 1));
+            }
+            
+            
+            if (cdg != null && fileTypes.contains(ImportFileTypes.ORG_GROUPS)) {
+                importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "Group",
+                        new OrgGroupRowImporter(orgGroupRepository, this, 1));
+            }
 
             if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
-                        new PublicInstitutionRowImporter(organizationRepository, this, 2), 1);
+                        new PublicInstitutionRowImporter(vnOrganizationRepository, cityRepository,
+                                orgGroupRepository, departmentRepository,
+                                this, 2), 1);
             }
 
             if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, this, 2), 1);
+                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2), 1);
             }
 
             if (prototypeDatabase != null) {
@@ -274,14 +348,17 @@ public class VNImportService implements ExcelImportService {
                                     classificationRepository, contrMethodRepository, locationRepository, 1));
                 }
 
+                BigDecimal maxTenderValue = getMaxTenderValue();
+                
                 if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
-                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards",
-                            new EBidAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+                    importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards", new EBidAwardRowImporter(
+                            releaseRepository, this, organizationRepository, 1, maxTenderValue));
                 }
 
                 if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
                     importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
-                            new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1));
+                            new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1,
+                                    maxTenderValue));
                 }
             }
 
@@ -291,6 +368,10 @@ public class VNImportService implements ExcelImportService {
 
             if (validateData) {
                 validateData();
+            }
+            
+            if (flagData) {
+                flagData();
             }
 
             logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
@@ -312,6 +393,12 @@ public class VNImportService implements ExcelImportService {
                 }
             }
         }
+    }
+
+    private void flagData() {
+        
+        releaseFlaggingService.processAndSaveFlagsForAllReleases(this::logMessage);
+        
     }
 
     public void validateData() {

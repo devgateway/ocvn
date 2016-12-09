@@ -15,28 +15,49 @@ let labelFormatter =  number => {
     return number.toFixed(2);
 }
 
-class MultipleSelect extends translatable(Component){
+class Range extends translatable(Component){
   render(){
     if(!this.state) return null;
-    let {onUpdate, minValue, maxValue} = this.props;
-    let {min, max} = this.state;
+    const {min, max} = this.state;
+    const {onUpdate} = this.props;
+    const minValue = this.props.minValue || min;
+    const maxValue = this.props.maxValue || max;
     return (
         <section className="field">
           <header>
             {this.getTitle()}
           </header>
           <section className="options range">
-              <InputRange
-                  minValue={min}
-                  maxValue={max}
-                  value={{min: minValue || min, max: maxValue || max}}
-                  onChange={(_, newVal) => onUpdate(newVal)}
-                  formatLabel={labelFormatter}
-              />
+            <InputRange
+                minValue={min}
+                maxValue={max}
+                value={{min: minValue, max: maxValue}}
+                onChange={(_, newVal) => onUpdate(newVal)}
+                formatLabel={labelFormatter}
+            />
           </section>
+          <div className="range-inputs">
+            {this.t('general:range:min')}
+            &nbsp;
+            <input
+                type="number"
+                className="form-control input-sm"
+                value={minValue}
+                onChange={e => onUpdate({min: +e.target.value, max: maxValue})}
+            />
+            &nbsp;
+            {this.t('general:range:max')}
+            &nbsp;
+            <input
+                type="number"
+                className="form-control input-sm"
+                value={maxValue}
+                onChange={e => onUpdate({min: minValue, max: +e.target.value})}
+            />
+          </div>
         </section>
     )
   }
 }
 
-export default MultipleSelect;
+export default Range;

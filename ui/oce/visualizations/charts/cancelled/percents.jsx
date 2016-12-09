@@ -19,11 +19,11 @@ class CancelledPercents extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:cancelledPercents:xAxisName'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Percent"),
+        title: this.t('charts:cancelledPercents:yAxisName'),
         hoverformat: '.2f'
       }
     }

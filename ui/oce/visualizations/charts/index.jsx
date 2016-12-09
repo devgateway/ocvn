@@ -15,8 +15,8 @@ class Chart extends Visualization{
   }
 
   getDecoratedLayout(){
-    var {title, xAxisRange, yAxisRange, styling, width, height, margin, legend} = this.props;
-    var layout = this.getLayout();
+    const {title, xAxisRange, yAxisRange, styling, width, height, margin, legend} = this.props;
+    const layout = this.getLayout();
     layout.width = width;
     layout.height = height;
     layout.margin = margin || {pad: 20};
@@ -65,9 +65,14 @@ class Chart extends Visualization{
   }
 
   render(){
-    let hasNoData = this.hasNoData();
-    return <div className={cn("chart-container", {"no-data": hasNoData})}>
-      {hasNoData && <div className="no-data-msg">{this.__('No data')}</div>}
+    const {loading} = this.state;
+    let hasNoData = !loading && this.hasNoData();
+    return <div className="chart-container">
+      {hasNoData && <div className="message">{this.t('charts:general:noData')}</div>}
+      {loading && <div className="message">
+        {this.t('general:loading')}<br/>
+        <img src="assets/loading-bubbles.svg" alt=""/>
+      </div>}
       <ReactIgnore>
         <div ref="chartContainer"/>
       </ReactIgnore>

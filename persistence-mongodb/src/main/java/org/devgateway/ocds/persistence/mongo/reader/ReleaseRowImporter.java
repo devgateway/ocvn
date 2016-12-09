@@ -7,9 +7,9 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import java.text.ParseException;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  */
-public abstract class ReleaseRowImporter extends RowImporter<Release, ReleaseRepository> {
+public abstract class ReleaseRowImporter extends RowImporter<Release, String, ReleaseRepository> {
 
     public ReleaseRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
                               final int skipRows) {

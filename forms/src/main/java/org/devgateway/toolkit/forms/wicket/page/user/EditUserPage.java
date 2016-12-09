@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms.wicket.page.user;
 
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -27,6 +29,9 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
+import org.devgateway.ocds.forms.wicket.providers.LabelPersistableJpaRepositoryTextChoiceProvider;
+import org.devgateway.ocds.persistence.dao.UserDashboard;
+import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
@@ -49,8 +54,6 @@ import org.devgateway.toolkit.persistence.repository.RoleRepository;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.wicketstuff.annotation.mount.MountPath;
 
-import java.util.List;
-
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_USER)
 @MountPath(value = "/account")
 public class EditUserPage extends AbstractEditPage<Person> {
@@ -66,6 +69,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
     private RoleRepository roleRepository;
 
     @SpringBean
+    private UserDashboardRepository userDashboardRepository;
+
+    
+    @SpringBean
     private SendEmailService sendEmailService;
 
     protected TextFieldBootstrapFormComponent<String> userName = new TextFieldBootstrapFormComponent<>("username");
@@ -79,8 +86,12 @@ public class EditUserPage extends AbstractEditPage<Person> {
     protected TextFieldBootstrapFormComponent<String> title = new TextFieldBootstrapFormComponent<>("title");
 
     protected Select2ChoiceBootstrapFormComponent<Group> group = new Select2ChoiceBootstrapFormComponent<>("group",
-            new GenericPersistableJpaRepositoryTextChoiceProvider<>(groupRepository));
+            new LabelPersistableJpaRepositoryTextChoiceProvider<>(groupRepository));
 
+    protected Select2ChoiceBootstrapFormComponent<UserDashboard> defaultDashboard =
+            new Select2ChoiceBootstrapFormComponent<>("defaultDashboard",
+                    new GenericPersistableJpaRepositoryTextChoiceProvider<>(userDashboardRepository));
+    
     protected Select2MultiChoiceBootstrapFormComponent<Role> roles = new Select2MultiChoiceBootstrapFormComponent<>(
             "roles", new Model<>("Roles"), new GenericPersistableJpaRepositoryTextChoiceProvider<>(roleRepository));
 
@@ -112,6 +123,27 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
         this.jpaRepository = userRepository;
         this.listPageClass = ListUserPage.class;
+    }
+    
+    @Override
+    public AbstractEditPage<Person>.DeleteEditPageButton getDeleteEditPageButton() {
+        return new DeleteEditPageButton("delete", new StringResourceModel("deleteButton", this, null)) {
+            private static final long serialVersionUID = 1877838564684430669L;
+
+            protected void removeUserLinkFromDashboards(Person person) {
+                userDashboardRepository.findDashboardsForPersonId(person.getId()).forEach(dashboard -> {
+                    dashboard.getUsers().remove(person);
+                    userDashboardRepository.save(dashboard);
+                });
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                Person person = editForm.getModelObject();
+                removeUserLinkFromDashboards(person);
+                super.onSubmit(target, form);
+            }
+        };
     }
 
     protected class UniqueUsernameValidator implements IValidator<String> {
@@ -245,6 +277,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
         editForm.add(group);
         MetaDataRoleAuthorizationStrategy.authorize(group, Component.RENDER, SecurityConstants.Roles.ROLE_ADMIN);
 
+        editForm.add(defaultDashboard);
+        MetaDataRoleAuthorizationStrategy.authorize(defaultDashboard, Component.ENABLE,
+                SecurityConstants.Roles.ROLE_ADMIN);
+        
         roles.required();
         roles.getField().setOutputMarkupId(true);
         roles.setIsFloatedInput(true);
@@ -295,6 +331,14 @@ public class EditUserPage extends AbstractEditPage<Person> {
         return false;
     }
 
+    private void ensureDefaultDashboardIsAlsoAssignedDashboard(Person person) {
+        if (person.getDefaultDashboard() != null && !person.getDashboards().contains(person.getDefaultDashboard())) {
+            UserDashboard dashboard = userDashboardRepository.findOne(person.getDefaultDashboard().getId());
+            dashboard.getUsers().add(person);
+            userDashboardRepository.save(dashboard);
+        }
+    }
+    
     @Override
     public SaveEditPageButton getSaveEditPageButton() {
         return new SaveEditPageButton("save", new StringResourceModel("save", EditUserPage.this, null)) {
@@ -322,7 +366,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
                     saveable.setChangePassword(false);
                 }
 
-                jpaRepository.save(saveable);
+                saveable = jpaRepository.save(saveable);
+                
+                ensureDefaultDashboardIsAlsoAssignedDashboard(saveable);
+                
                 if (!SecurityUtil.isCurrentUserAdmin()) {
                     setResponsePage(Homepage.class);
                 } else {

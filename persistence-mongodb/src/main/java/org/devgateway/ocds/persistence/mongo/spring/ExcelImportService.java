@@ -6,7 +6,7 @@ import java.util.List;
  * @author idobre
  * @since 5/20/16
  *
- * Service that imports Excel sheets in OCDS format
+ *        Service that imports Excel sheets in OCDS format
  */
 public interface ExcelImportService extends ImportService {
     void newMsgBuffer();
@@ -14,6 +14,6 @@ public interface ExcelImportService extends ImportService {
     StringBuffer getMsgBuffer();
 
     void importAllSheets(List<String> fileTypes, byte[] prototypeDatabase, byte[] locations,
-                                byte[] publicInstitutionsSuppliers,
-                                Boolean purgeDatabase, Boolean validateData) throws InterruptedException;
+            byte[] publicInstitutionsSuppliers, byte[] cdg, Boolean purgeDatabase, Boolean validateData,
+            Boolean cleanData) throws InterruptedException;
 }

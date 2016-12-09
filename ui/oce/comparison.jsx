@@ -2,6 +2,7 @@ import PureRenderCompoent from "./pure-render-component";
 import translatable from "./translatable";
 import {max, cacheFn, download} from "./tools";
 import {List, Set, Map} from "immutable";
+import orgNamesFetching from "./orgnames-fetching";
 
 let computeUniformYears = cacheFn((Component, comparisonData, years) =>
     comparisonData.reduce((res, data) =>
@@ -9,26 +10,36 @@ let computeUniformYears = cacheFn((Component, comparisonData, years) =>
         , Set()).intersect(years).sort()
 );
 
-class Comparison extends translatable(PureRenderCompoent){
+class Comparison extends orgNamesFetching(translatable(PureRenderCompoent)){
   getComponent(){
     return this.props.Component;
   }
 
   wrap(children){
     return <div>
-      <h3 className="page-header">{this.getComponent().getName(this.__.bind(this))}</h3>
+      <h3 className="page-header">{this.getComponent().getName(this.t.bind(this))}</h3>
       <div className="row">
         {children}
       </div>
     </div>
   }
 
+  getOrgsWithoutNamesIds(){
+    const {comparisonCriteriaValues, compareBy} = this.props;
+    return "procuringEntityId" == compareBy ?
+        comparisonCriteriaValues.filter(id => !this.state.orgNames[id]) :
+        [];
+  }
+
   getTitle(index){
     let {compareBy, bidTypes, comparisonCriteriaValues} = this.props;
     if("bidTypeId" == compareBy){
-      return bidTypes.get(comparisonCriteriaValues[index], this.__('Other'))
+      return bidTypes.get(comparisonCriteriaValues[index], this.t('general:comparison:other'))
+    } else if("procuringEntityId" == compareBy){
+      const orgId = comparisonCriteriaValues[index];
+      return this.state.orgNames[orgId] || orgId;
     }
-    return comparisonCriteriaValues[index] || this.__('Other');
+    return comparisonCriteriaValues[index] || this.t('general:comparison:other');
   }
 
   render(){
@@ -60,7 +71,7 @@ class Comparison extends translatable(PureRenderCompoent){
         ep: Component.excelEP,
         filters: comparisonFilters,
         years,
-        __: this.__.bind(this)
+        t: this.t.bind(this)
       });
       return <div className="col-md-6 comparison" key={index} ref={ref}>
         <Component
@@ -72,6 +83,7 @@ class Comparison extends translatable(PureRenderCompoent){
             width={width / 2}
             translations={translations}
             styling={styling}
+            legend="h"
             {...rangeProp}
         />
         <div className="chart-toolbar">
@@ -88,10 +100,18 @@ class Comparison extends translatable(PureRenderCompoent){
   }
 }
 
+function getInverseFilter(filter){
+  switch(filter){
+    case 'bidTypeId': return 'notBidTypeId';
+    case 'bidSelectionMethod': return 'notBidSelectionMethod';
+    case 'procuringEntityId': return 'notProcuringEntityId';
+  }
+}
+
 Comparison.decorateFilters = cacheFn((filters, compareBy, comparisonCriteriaValues) =>
     List(comparisonCriteriaValues)
         .map(criteriaValue => filters.set(compareBy, criteriaValue))
-        .push(filters.set(compareBy, comparisonCriteriaValues).set('invert', 'true')));
+        .push(filters.set(getInverseFilter(compareBy), comparisonCriteriaValues)));
 
 Comparison.computeUniformData = cacheFn((Component, comparisonData, years) =>
     comparisonData.map(uniformDatum =>

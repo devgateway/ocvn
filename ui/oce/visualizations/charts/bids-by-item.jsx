@@ -4,9 +4,7 @@ import Comparison from "../../comparison";
 import backendYearFilterable from "../../backend-year-filterable";
 
 class BidsByItem extends backendYearFilterable(Chart){
-  static getName(__){
-    return __('Number of bids by item');
-  }
+  static getName(t){return t('charts:bidsByItem:title')}
 
   getData(){
     let data = super.getData();
@@ -40,11 +38,11 @@ class BidsByItem extends backendYearFilterable(Chart){
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Item"),
+        title: this.t('charts:bidsByItem:xAxisTitle'),
         type: "category"
       },
       yaxis: {
-        title: this.__("Count")
+        title: this.t('charts:bidsByItem:yAxisTitle')
       }
     }
   }
@@ -57,7 +55,7 @@ BidsByItem.UPDATABLE_FIELDS = ['data'];
 class BidsByItemComparison extends Comparison{
   render(){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations,
-        styling} = this.props;
+        styling, width} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -108,16 +106,18 @@ class BidsByItemComparison extends Comparison{
     return this.wrap(decoratedFilters.map((comparisonFilters, index) => {
       let ref = `visualization${index}`;
       return <div className="col-md-6 comparison" key={index}>
-          <Component
-              filters={comparisonFilters}
-              requestNewData={(_, data) => requestNewComparisonData([index], data)}
-              data={uniformData.get(index)}
-              years={years}
-              title={this.getTitle(index)}
-              translations={translations}
-              styling={styling}
-              {...rangeProp}
-          />
+        <Component
+            filters={comparisonFilters}
+            margin={{b: 200}}
+            requestNewData={(_, data) => requestNewComparisonData([index], data)}
+            data={uniformData.get(index)}
+            years={years}
+            title={this.getTitle(index)}
+            translations={translations}
+            styling={styling}
+            width={width/2}
+            {...rangeProp}
+        />
         <div className="chart-toolbar"
              onClick={e => this.refs[ref].querySelector(".modebar-btn:first-child").click()}
         >
@@ -125,7 +125,7 @@ class BidsByItemComparison extends Comparison{
             <img src="assets/icons/camera.svg"/>
           </div>
         </div>
-        </div>
+      </div>
     }));
   }
 }
@@ -133,4 +133,4 @@ class BidsByItemComparison extends Comparison{
 
 BidsByItem.compareWith = BidsByItemComparison;
 
-export default BidsByItem;
+export default BidsByItem;;

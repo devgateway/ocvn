@@ -7,7 +7,7 @@ import org.devgateway.ocds.persistence.mongo.Item;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
- * @author mihai Extension of {@link Item} to allow extra Vietnam-specific
+ * @author mpostelnicu Extension of {@link Item} to allow extra Vietnam-specific
  *         fields
  */
 public class VNItem extends Item {

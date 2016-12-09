@@ -10,11 +10,11 @@ import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  * Extension of {@link Award} to allow extra Vietnam-specific fields
  */
 public class VNAward extends Award {
-    private String inelibigleYN;
+    private String ineligibleYN;
 
     private String ineligibleRson;
 
@@ -34,12 +34,12 @@ public class VNAward extends Award {
 
     private String contractTime;
 
-    public String getInelibigleYN() {
-        return inelibigleYN;
+    public String getIneligibleYN() {
+        return ineligibleYN;
     }
 
-    public void setInelibigleYN(String inelibigleYN) {
-        this.inelibigleYN = inelibigleYN;
+    public void setIneligibleYN(String inelibigleYN) {
+        this.ineligibleYN = inelibigleYN;
     }
 
     public Integer getBidOpenRank() {

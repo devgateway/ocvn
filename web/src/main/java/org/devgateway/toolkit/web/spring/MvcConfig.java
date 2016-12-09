@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.spring;
 
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.io.FileCleaningTracker;
 import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.cache.generators.GenericExcelChartKeyGenerator;
@@ -27,9 +27,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
@@ -49,6 +48,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         builder.serializationInclusion(Include.NON_EMPTY).dateFormat(dateFormatGmt);
         builder.serializerByType(GeoJsonPoint.class, new GeoJsonPointSerializer());
         builder.serializerByType(ObjectId.class, new ToStringSerializer());
+        builder.defaultViewInclusion(true);
 
         return builder;
     }

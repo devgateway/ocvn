@@ -17,7 +17,7 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import java.text.ParseException;
 
 /**
- * @author mihai Specific {@link RowImporter} for Bid Plans in the custom Excel
+ * @author mpostelnicu Specific {@link RowImporter} for Bid Plans in the custom Excel
  *         format provided by Vietnam
  * @see VNPlanning
  */

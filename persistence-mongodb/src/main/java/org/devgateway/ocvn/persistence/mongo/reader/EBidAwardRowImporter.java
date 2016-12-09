@@ -1,5 +1,6 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
@@ -13,20 +14,21 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
+import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
 
 /**
  * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom
  * Excel format provided by Vietnam
  *
- * @author mihai
+ * @author mpostelnicu
  * @see VNAward
  *
  */
 public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
     public EBidAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-            OrganizationRepository organizationRepository, int skipRows) {
-        super(releaseRepository, importService, organizationRepository, skipRows);
+            OrganizationRepository organizationRepository, int skipRows, BigDecimal maxTenderValue) {
+        super(releaseRepository, importService, organizationRepository, skipRows, maxTenderValue);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
             release.setTender(tender);
         }
 
-        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission.toString());
+        release.getTender().getSubmissionMethod().add(Tender.SubmissionMethod.electronicSubmission);
 
         VNAward award = new VNAward();
         award.setId(release.getOcid() + "-award-" + release.getAwards().size());
@@ -55,19 +57,14 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
         value.setAmount(getDecimal(getRowCell(row, 1)));
         award.setValue(value);
 
-        Organization supplier = organizationRepository.findByIdOrName(getRowCellUpper(row, 2));
+        Organization supplier = organizationRepository.findByAllIds(getRowCellUpper(row, 2));
 
         if (supplier == null) {
-            supplier = new Organization();
-            supplier.setName(getRowCellUpper(row, 2));
-            supplier.setId(getRowCellUpper(row, 2));
-            supplier.getTypes().add(Organization.OrganizationType.supplier);
-            supplier = organizationRepository.insert(supplier);
+            supplier = OrganizationRepositoryUtil.newAndInsertOrganization(Organization.OrganizationType.supplier,
+                    getRowCellUpper(row, 2), organizationRepository);
         } else {
-            if (!supplier.getTypes().contains(Organization.OrganizationType.supplier)) {
-                supplier.getTypes().add(Organization.OrganizationType.supplier);
-                supplier = organizationRepository.save(supplier);
-            }
+            supplier = OrganizationRepositoryUtil.ensureOrgIsOfTypeAndSave(supplier,
+                    Organization.OrganizationType.supplier, organizationRepository);
         }
 
         award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
@@ -81,7 +78,7 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
         award.setBidOpenRank(getInteger(getRowCell(row, 4)));
 
-        award.setInelibigleYN(getRowCell(row, 6));
+        award.setIneligibleYN(getRowCell(row, 6));
 
         award.setIneligibleRson(getRowCell(row, 7));
 

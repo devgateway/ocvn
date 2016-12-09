@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  *         AOP Monitor that saves new {@link Release}S in {@link Record}S for
  *         archiving purposes.

@@ -16,17 +16,19 @@ import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {
 
     protected OrganizationRepository organizationRepository;
+    protected BigDecimal maxTenderValue;
 
     public AwardReleaseRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-            final OrganizationRepository organizationRepository, final int skipRows) {
+            final OrganizationRepository organizationRepository, final int skipRows, BigDecimal maxTenderValue) {
         super(releaseRepository, importService, skipRows);
         this.organizationRepository = organizationRepository;
+        this.maxTenderValue = maxTenderValue;
     }
 
     public Release newReleaseFromAwardFactory(String planningBidNo) {
@@ -56,6 +58,12 @@ public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {
                 && !release.getTender().getValue().getAmount().equals(BigDecimal.ZERO) && release.getTender().getValue()
                         .getAmount().multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
             throw new RuntimeException("Award value is more than 4x larger than the tender value!");
+        }
+
+        if ((release.getTender().getValue() == null
+                || release.getTender().getValue().getAmount().equals(BigDecimal.ZERO)) && award.getValue() != null
+                && maxTenderValue.multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
+            throw new RuntimeException("Award value is more than 4x larger than the largest tender value!");
         }
     }
 

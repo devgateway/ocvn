@@ -17,7 +17,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 
 /**
  *
- * @author mihai Specific {@link RowImporter} for Procurement Plans, in the
+ * @author mpostelnicu Specific {@link RowImporter} for Procurement Plans, in the
  *         custom Excel format provided by Vietnam
  * @see VNPlanning
  */

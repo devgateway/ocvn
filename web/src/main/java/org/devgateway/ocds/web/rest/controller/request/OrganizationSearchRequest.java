@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class OrganizationSearchRequest extends GenericPagingRequest {

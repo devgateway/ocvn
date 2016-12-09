@@ -22,10 +22,10 @@ class Awards extends Table{
       <table className="table table-striped table-hover awards-table">
         <thead>
         <tr>
-          <th>{this.__('Number')}</th>
-          <th>{this.__('Date')}</th>
-          <th>{this.__('Supplier')}</th>
-          <th>{this.__('Value')}</th>
+          <th>{this.t('tables:top10awards:number')}</th>
+          <th>{this.t('tables:top10awards:date')}</th>
+          <th>{this.t('tables:top10awards:supplier')}</th>
+          <th>{this.t('tables:top10awards:value')}</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@ class Awards extends Table{
   }
 }
 
-Awards.getName = __ => __('Top 10 largest awards');
+Awards.getName = t => t('tables:top10awards:title');
 Awards.endpoint = 'topTenLargestAwards';
 
 export default Awards;

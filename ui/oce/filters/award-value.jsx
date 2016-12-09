@@ -7,7 +7,7 @@ class AwardValue extends Range{
         
     }
     getTitle(){
-        return this.__('Award value');
+        return this.t('filters:awardValue:title');
     }
 }
 

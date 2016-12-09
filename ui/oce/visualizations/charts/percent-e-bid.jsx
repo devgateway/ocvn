@@ -19,11 +19,11 @@ class PercentEbid extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:percentEBid:xAxisName'),
         type: 'category'
       },
       yaxis: {
-        title: this.__("Percent"),
+        title: this.t('charts:percentEBid:yAxisName'),
         hoverformat: '.2f'
       }
     }
@@ -32,7 +32,7 @@ class PercentEbid extends FrontendYearFilterableChart{
 
 PercentEbid.endpoint = 'percentTendersUsingEBid';
 PercentEbid.excelEP = 'percentTendersUsingEBidExcelChart';
-PercentEbid.getName = __ => __('Percent of Tenders Using e-Bid');
+PercentEbid.getName = t => t('charts:percentEBid:title');
 PercentEbid.getMaxField = pluckImm('percentageTendersUsingEbid');
 
 export default PercentEbid;

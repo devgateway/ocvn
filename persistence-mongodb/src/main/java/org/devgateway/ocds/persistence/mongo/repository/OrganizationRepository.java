@@ -3,12 +3,15 @@
  */
 package org.devgateway.ocds.persistence.mongo.repository;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
 import org.springframework.data.mongodb.repository.Query;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public interface OrganizationRepository extends GenericOrganizationRepository<Organization> {
@@ -18,6 +21,10 @@ public interface OrganizationRepository extends GenericOrganizationRepository<Or
 
     @Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'name': ?0} ] }")
     Organization findByIdOrName(String idName);
+    
+    @Query(value = "{'additionalIdentifiers._id': { $in : ?0 }}")
+    List<Organization> findByIdCollection(Collection<String> idCol);
 
-    Organization findByIdAndTypes(String id, OrganizationType type);
+    @Query(value = "{$and: [{'additionalIdentifiers._id': ?0} , { 'types': ?1 } ] }")
+    Organization findByAllIdsAndType(String id, OrganizationType type);
 }

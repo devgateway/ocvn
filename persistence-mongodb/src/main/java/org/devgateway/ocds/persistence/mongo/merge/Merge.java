@@ -16,7 +16,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @see MergeStrategy
  *
- * @author mihai
+ * @author mpostelnicu
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

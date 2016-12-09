@@ -3,6 +3,10 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
+import org.devgateway.ocvn.persistence.mongo.dao.City;
+import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
+import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +39,19 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("identifier._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("types", Direction.ASC));
+        mongoTemplate.indexOps(Organization.class).ensureIndex(
+                new Index().on("types", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
         mongoTemplate.indexOps(VNLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
 
         logger.info("Added mandatory Mongo indexes");
+    }
+    
+    public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I003_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I007_VALUE, Direction.ASC));
     }
 
     @PostConstruct
@@ -48,8 +59,29 @@ public class MongoTemplateConfiguration {
         createMandatoryImportIndexes();
         createPostImportStructures();
     }
+    
+    private void createProcuringEntityIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id", 
+                Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.procuringEntity.department._id", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("tender.procuringEntity.address.postalCode", Direction.ASC));
+     
+        mongoTemplate.indexOps(City.class)
+        .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+
+        mongoTemplate.indexOps(OrgDepartment.class)
+        .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+
+        mongoTemplate.indexOps(OrgGroup.class)
+        .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+    }
 
     public void createPostImportStructures() {
+        
+        createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
@@ -86,14 +118,18 @@ public class MongoTemplateConfiguration {
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
-        mongoTemplate.indexOps(Organization.class)
-                .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
+                
+        mongoTemplate.indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
+                .onField("id").onField("additionalIdentifiers._id").build());
+                
         mongoTemplate.indexOps(VNLocation.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
         //vietnam specific indexes:
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
+        
+        createProcuringEntityIndexes();
 
         logger.info("Added extra Mongo indexes");
 

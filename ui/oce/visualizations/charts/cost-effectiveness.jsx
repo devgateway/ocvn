@@ -32,8 +32,8 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     let data = super.getData();
     if(!data) return [];
     let traces = [
-      this.mkTrace(this.__('Award Price'), 0),
-      this.mkTrace(this.__('Difference'), 1)
+      this.mkTrace(this.t('charts:costEffectiveness:traces:awardPrice'), 0),
+      this.mkTrace(this.t('charts:costEffectiveness:traces:difference'), 1)
     ];
 
     let {hoverFormatter} = this.props.styling.charts;
@@ -58,17 +58,17 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     return {
       barmode: "relative",
       xaxis: {
-        title: this.__("Year"),
+        title: this.t('charts:costEffectiveness:xAxisTitle'),
         type: "category"
       },
       yaxis: {
-        title: this.__("Amount (in VND)")
+        title: this.t('charts:costEffectiveness:yAxisTitle')
       }
     }
   }
 }
 
-CostEffectiveness.getName = __ => __('Cost effectiveness');
+CostEffectiveness.getName = t => t('charts:costEffectiveness:title');
 CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
 CostEffectiveness.excelEP = 'costEffectivenessExcelChart';
 CostEffectiveness.getFillerDatum = year => Map({

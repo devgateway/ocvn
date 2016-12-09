@@ -28,7 +28,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 

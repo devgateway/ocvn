@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public class AsyncControllerLookupServiceTest extends AbstractWebTest {

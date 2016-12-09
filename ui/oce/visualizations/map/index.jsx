@@ -14,8 +14,8 @@ class MapVisual extends frontendYearFilterable(Visualization){
   getTiles(){
       return (
         <TileLayer
-          url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url='//{s}.tile.osm.org/{z}/{x}/{y}.png'
+          attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors'
       />
     )
   }

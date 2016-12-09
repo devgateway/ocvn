@@ -83,6 +83,12 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
         publicInstitutionsSuppliersFile.maxFiles(1);
         publicInstitutionsSuppliersFile.required();
         editForm.add(publicInstitutionsSuppliersFile);
+        
+        FileInputBootstrapFormComponent cityDepartmentGroupFile =
+                new FileInputBootstrapFormComponent("cityDepartmentGroupFile");
+        cityDepartmentGroupFile.maxFiles(1);
+        cityDepartmentGroupFile.required();
+        editForm.add(cityDepartmentGroupFile);
 
         ResourceLink locationsTemplate = new ResourceLink("locationsTemplate",
                 new PackageResourceReference(RootXlsx.class, "Location_Table_SO.xlsx"));
@@ -95,6 +101,10 @@ public class EditVietnamImportSourceFiles extends AbstractEditPage<VietnamImport
         ResourceLink prototypeDatabase = new ResourceLink("prototypeDatabase",
                 new PackageResourceReference(RootXlsx.class, "Prototype_Database_OCDSCore.xlsx"));
         editForm.add(prototypeDatabase);
+        
+        ResourceLink cityDepartmentGroupFileTemplate = new ResourceLink("cityDepartmentGroupFileTemplate",
+                new PackageResourceReference(RootXlsx.class, "test_city_department_group.xlsx"));
+        editForm.add(cityDepartmentGroupFileTemplate);
 
         FileInputBootstrapFormComponent locationsFile = new FileInputBootstrapFormComponent("locationsFile");
         locationsFile.maxFiles(1);

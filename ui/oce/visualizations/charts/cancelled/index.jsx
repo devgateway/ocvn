@@ -20,7 +20,7 @@ class Cancelled extends translatable(React.Component){
     let Chart = percents ? Percents : Amounts;
     return <section>
       <h4 className="page-header">
-        {percents ? this.__('Cancelled funding (%)') : this.__('Cancelled funding')}
+        {percents ? this.t('charts:cancelledPercents:title') : this.t('charts:cancelledAmounts:title')}
         &nbsp;
         <button
             className="btn btn-default btn-sm"
@@ -36,7 +36,7 @@ class Cancelled extends translatable(React.Component){
               ep: Chart.excelEP,
               filters,
               years,
-              __: this.__.bind(this)
+              t: this.t.bind(this)
             })}
         />
 
@@ -74,7 +74,7 @@ Cancelled.compareWith = class CancelledComparison extends Comparison{
     let {percents} = this.state;
     return <div>
       <h3 className="page-header">
-        {percents ? this.__('Cancelled funding (%)') : this.__('Cancelled funding')}
+        {percents ? this.t('charts:cancelledPercents:title') : this.t('charts:cancelledAmounts:title')}{percents ? this.t('charts:cancelledPercents:title') : this.t('charts:cancelledAmounts:title')}
         &nbsp;
         <button
             className="btn btn-default btn-sm"

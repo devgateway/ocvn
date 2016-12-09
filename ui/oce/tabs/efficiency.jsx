@@ -5,10 +5,10 @@ import NrCancelled from "../visualizations/charts/nr-cancelled";
 import BidsByItem from "../visualizations/charts/bids-by-item";
 
 class Efficiency extends Tab{
-  static getName(__){return __('Efficiency')}
+  static getName(t){return t('tabs:efficiency:title')}
 }
 
 Efficiency.icon = "efficiency";
-Efficiency.visualizations = [BidPeriod, Cancelled, NrCancelled, BidsByItem];
+Efficiency.visualizations = [BidPeriod, BidsByItem, Cancelled, NrCancelled];
 
 export default Efficiency;

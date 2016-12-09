@@ -2,7 +2,7 @@ import MultipleSelect from "../../oce/filters/inputs/multiple-select";
 
 class ContractMethod extends MultipleSelect{
   getTitle(){
-    return this.__('Contract method');
+    return this.t('filters:contractMethod:title');
   }
 
   getId(option){

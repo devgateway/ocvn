@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * profile. This will enable a special embedded mongodb server that can be used
  * just during the test.
  *
- * @author mihai
+ * @author mpostelnicu
  *
  */
 public abstract class AbstractMongoTest {

@@ -21,6 +21,8 @@ import org.joda.time.DateTime;
 import org.springframework.data.domain.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 
  * @author mpostelnicu
@@ -37,16 +39,20 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
 
     @Audited
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonIgnore
     private DateTime lastUpdated;
 
     @Audited
+    @JsonIgnore
     private String lastModifiedBy;
 
     @Audited
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonIgnore
     private DateTime created;
 
     @Audited
+    @JsonIgnore
     private String createdBy;
 
     /**
@@ -108,6 +114,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
      * Gets create audit date.
      */
     @Override
+    @JsonIgnore
     public DateTime getCreatedDate() {
         return created;
     }
@@ -140,6 +147,7 @@ public abstract class AbstractAuditableEntity extends GenericPersistable impleme
      * Gets last modified audit date.
      */
     @Override
+    @JsonIgnore
     public DateTime getLastModifiedDate() {
         return lastUpdated;
     }
