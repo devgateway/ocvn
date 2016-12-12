@@ -1,8 +1,6 @@
 package org.devgateway.ocds.web.rest.controller.test;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.mongodb.DBObject;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
@@ -25,7 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 
-import com.mongodb.DBObject;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author mpostelnicu
@@ -87,10 +86,10 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
                 .costEffectivenessAwardAmount(new YearFilterPagingRequest());
         DBObject root = costEffectivenessAwardAmount.get(0);
         int year = (int) root.get(Fields.UNDERSCORE_ID);
-        Assert.assertEquals(2014, year);
+        Assert.assertEquals(2012, year);
 
         double totalAwardAmount = (double) root.get("totalAwardAmount");
-        Assert.assertEquals(2000, totalAwardAmount, 0);
+        Assert.assertEquals(1000, totalAwardAmount, 0);
 
     }
 
