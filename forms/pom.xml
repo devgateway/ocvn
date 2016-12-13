@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.devgateway.ocvn</groupId>
         <artifactId>ocvn</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -40,25 +40,25 @@
         <dependency>
             <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.devgateway.ocvn</groupId>
             <artifactId>persistence-mongodb</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.devgateway.ocvn</groupId>
             <artifactId>ui</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.devgateway.ocvn</groupId>
             <artifactId>web</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
 
         <!--
