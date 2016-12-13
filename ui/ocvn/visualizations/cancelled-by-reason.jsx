@@ -21,13 +21,13 @@ class CancelledFunding extends FrontendYearFilterableChart{
       trace.hoverinfo = "text";
     }
 
-    for(let datum of data){
+    data.forEach(datum => {
       let year = datum.get('year');
       let totalCancelledTendersAmount = datum.get('totalCancelledTendersAmount');
       trace.x.push(year);
       trace.y.push(totalCancelledTendersAmount);
       if(hoverFormatter) trace.text.push(hoverFormatter(totalCancelledTendersAmount));
-    }
+    });
 
     return [trace];
   }

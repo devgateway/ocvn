@@ -24,13 +24,13 @@ class BidsByItem extends backendYearFilterable(Chart){
       trace.hoverinfo = "text";
     }
 
-    for(let datum of data){
+    data.forEach(datum => {
       let name = datum.get('description');
       let totalTenders = datum.get('totalTenders');
       trace.x.push(name);
       trace.y.push(totalTenders);
       if(hoverFormatter) trace.text.push(hoverFormatter(totalTenders));
-    }
+    });
 
     return [trace];
   }
