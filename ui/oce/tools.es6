@@ -54,16 +54,18 @@ export const send = url => fetch(url.clone().query(""), {
   body: url.query()
 });
 
-export let download = ({ep, filters, years, t}) =>
-  send(new URI(`/api/ocds/${ep}`)
-    .addSearch(filters.toJS())
-    .addSearch('year', years.toArray())
-    //this sin shall be atoned for in the future
-    .addSearch('language', localStorage.oceLocale)
-  ).then(response => {
+export let download = ({ep, filters, years, t}) => {
+  const url = new URI(`/api/ocds/${ep}`)
+      .addSearch(filters.toJS())
+      .addSearch('year', years.toArray())
+      //this sin shall be atoned for in the future
+      .addSearch('language', localStorage.oceLocale);
+  return send(url).then(response => {
     let {userAgent} = navigator;
-    let isSafari =  -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
-    if(isSafari){
+    let isSafari = -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
+    const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
+        || navigator.userAgent.match(/rv 11/));
+    if (isSafari || isIE) {
       location.href = url;
       return response;
     }
@@ -79,6 +81,7 @@ export let download = ({ep, filters, years, t}) =>
   }).catch(() => {
     alert(t('export:error'));
   });
+};
 
 export const shallowCopy = original => {
   let copy = {};

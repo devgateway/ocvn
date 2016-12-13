@@ -38,7 +38,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
 
     let {hoverFormatter} = this.props.styling.charts;
 
-    for(let datum of data){
+    data.forEach(datum => {
       let year = datum.get('year');
       traces.forEach(trace => trace.x.push(year));
       let tender = datum.get('tender');
@@ -49,7 +49,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
         traces[0].text.push(hoverFormatter(tender));
         traces[1].text.push(hoverFormatter(diff));
       }
-    }
+    });
 
     return traces;
   }
