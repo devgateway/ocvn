@@ -23,13 +23,13 @@ class ProcurementMethod extends backendYearFilterable(Chart){
       trace.hoverinfo = "text";
     }
 
-    for(let datum of data){
+    data.forEach(datum => {
       let cat = datum.get(this.constructor.PROCUREMENT_METHOD_FIELD) || this.t('charts:procurementMethod:unspecified');
       let totalTenderAmount = datum.get('totalTenderAmount');
       trace.x.push(cat);
       trace.y.push(totalTenderAmount);
       if(hoverFormatter) trace.text.push(hoverFormatter(totalTenderAmount));
-    }
+    });
 
     return [trace];
   }
