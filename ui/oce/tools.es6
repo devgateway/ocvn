@@ -64,7 +64,7 @@ export let download = ({ep, filters, years, t}) => {
     let {userAgent} = navigator;
     let isSafari = -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
     const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
-        || navigator.userAgent.match(/rv 11/)) || $.browser.msie == 1;
+        || navigator.userAgent.match(/rv 11/));
     if (isSafari || isIE) {
       location.href = url;
       return response;
