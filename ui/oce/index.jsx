@@ -76,7 +76,8 @@ class OCApp extends React.Component{
   }
 
   fetchUserInfo(){
-    fetchJson('/rest/userDashboards/getCurrentAuthenticatedUserDetails').then(
+    const noCacheUrl = new URI('/rest/userDashboards/getCurrentAuthenticatedUserDetails').addSearch('time', new Date());
+    fetchJson(noCacheUrl).then(
         ({username, id, roles}) => this.setState({
           user: {
             loggedIn: true,
