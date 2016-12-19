@@ -55,4 +55,15 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
         Assert.assertEquals(2, count);
     }
 
+    @Test
+    public void countBidPlansByYear() throws Exception {
+        final List<DBObject> countBidPlansByYear = countPlansTendersAwardsController
+                .countBidPlansByYear(new YearFilterPagingRequest());
+
+        final DBObject first = countBidPlansByYear.get(0);
+        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
+        Assert.assertEquals(2016, year);
+        Assert.assertEquals(1, count);
+    }
 }
