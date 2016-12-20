@@ -3,11 +3,14 @@
  */
 package org.devgateway.ocds.persistence.mongo.spring;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Consumer;
+
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.ReleaseFlagI003Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.ReleaseFlagI007Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

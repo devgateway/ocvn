@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
