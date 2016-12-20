@@ -11,23 +11,17 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ArrayUtils;
+import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -43,6 +37,7 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -182,7 +177,7 @@ public class FundingByLocationController extends GenericOCDSController {
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
                 group("year", "planning.budget.projectLocation").sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
                         .sum("$cntprj").as("recordsCount"),
-                sort(Direction.ASC, Keys.YEAR)
+                sort(Sort.Direction.ASC, Keys.YEAR)
                 //, skip(filter.getSkip()), limit(filter.getPageSize())
                 );
 
