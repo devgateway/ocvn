@@ -16,7 +16,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.limi
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -32,7 +31,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -78,8 +76,6 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
             produces = "application/json")
     public List<DBObject> averageTenderPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        DBObject year = new BasicDBObject("$year", "$tender.tenderPeriod.startDate");
-
         DBObject tenderLengthDays = new BasicDBObject("$divide",
                 Arrays.asList(
                         new BasicDBObject("$subtract",
@@ -88,15 +84,16 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put(Keys.YEAR, year);
+        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
         project.put("tenderLengthDays", tenderLengthDays);
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true).and("tender.tenderPeriod.endDate")
                 .exists(true).andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project),
-                group("$year").avg("$tenderLengthDays").as(Keys.AVERAGE_TENDER_DAYS),
-                sort(Direction.ASC, Fields.UNDERSCORE_ID), skip(filter.getSkip()), limit(filter.getPageSize()));
+                getYearlyMonthlyGroupingOperation(filter).avg("$tenderLengthDays").as(Keys.AVERAGE_TENDER_DAYS),
+                transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_TENDER_DAYS),
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
@@ -150,7 +147,6 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
     @RequestMapping(value = "/api/averageAwardPeriod", method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
     public List<DBObject> averageAwardPeriod(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
-        DBObject year = new BasicDBObject("$year", "$awards.date");
 
         DBObject awardLengthDays = new BasicDBObject("$divide",
                 Arrays.asList(
@@ -159,18 +155,11 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put(Keys.YEAR, year);
+        addYearlyMonthlyProjection(filter, project, "$awards.date");
         project.put("awardLengthDays", awardLengthDays);
         project.put("awards.date", 1);
         project.put("awards.status", 1);
         project.put("tender.tenderPeriod.endDate", 1);
-
-        DBObject group = new BasicDBObject();
-        group.put(Fields.UNDERSCORE_ID, "$year");
-        group.put(Keys.AVERAGE_AWARD_DAYS, new BasicDBObject("$avg", "$awardLengthDays"));
-
-        DBObject sort = new BasicDBObject();
-        sort.put(Fields.UNDERSCORE_ID, 1);
 
         Aggregation agg = newAggregation(
                 // this is repeated so we gain speed by filtering items before
@@ -182,8 +171,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 match(where("awards.date").exists(true).and("awards.status").is("active")
                         .andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
-                new CustomOperation(new BasicDBObject("$group", group)),
-                new CustomOperation(new BasicDBObject("$sort", sort)), skip(filter.getSkip()),
+                group(getYearlyMonthlyGroupingFields(filter)).avg("$awardLengthDays").as(Keys.AVERAGE_AWARD_DAYS),
+                transformYearlyGrouping(filter).andInclude(Keys.AVERAGE_AWARD_DAYS),
+                getSortByYearMonth(filter), skip(filter.getSkip()),
                 limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

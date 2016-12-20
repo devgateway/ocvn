@@ -62,7 +62,7 @@ public class NumberOfTendersByItemClassification extends GenericOCDSController {
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
-        project.put("tender." + Keys.ITEMS_CLASSIFICATION, 1);
+        project.put("tender." + Keys.ITEMS_CLASSIFICATION, 1);        
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)

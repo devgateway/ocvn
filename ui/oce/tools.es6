@@ -25,6 +25,11 @@ export var toK = number => number >= 1000 ? Math.round(number / 1000) + "K" : nu
 export var identity = _ => _;
 
 export let response2obj = (field, arr) => arr.reduce((obj, elem) => {
+  obj[elem.year] = elem[field];
+  return obj;
+}, {});
+
+export const legacyResponse2obj = (field, arr) => arr.reduce((obj, elem) => {
   obj[elem._id] = elem[field];
   return obj;
 }, {});

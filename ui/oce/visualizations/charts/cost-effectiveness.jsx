@@ -4,7 +4,7 @@ import {Map} from "immutable";
 class CostEffectiveness extends FrontendYearFilterableChart{
   transform(data){
     return data.map(datum => ({
-      year: datum._id,
+      year: datum.year,
       tender: datum.totalTenderAmount,
       diff: datum.diffTenderAwardAmount
     }));

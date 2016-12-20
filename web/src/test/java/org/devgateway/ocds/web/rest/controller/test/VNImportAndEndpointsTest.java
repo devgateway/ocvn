@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import java.io.IOException;
 import java.util.List;
@@ -85,7 +84,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
         List<DBObject> costEffectivenessAwardAmount = costEffectivenessVisualsController
                 .costEffectivenessAwardAmount(new YearFilterPagingRequest());
         DBObject root = costEffectivenessAwardAmount.get(0);
-        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        int year = (int) root.get(CostEffectivenessVisualsController.Keys.YEAR);
         Assert.assertEquals(2012, year);
 
         double totalAwardAmount = (double) root.get("totalAwardAmount");
@@ -98,7 +97,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
         List<DBObject> costEffectivenessTenderAmount = costEffectivenessVisualsController
                 .costEffectivenessTenderAmount(new GroupingFilterPagingRequest());
         DBObject root = costEffectivenessTenderAmount.get(0);
-        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        int year = (int) root.get(CostEffectivenessVisualsController.Keys.YEAR);
         Assert.assertEquals(2012, year);
 
         double totalAwardAmount = (double) root.get("totalTenderAmount");
@@ -133,7 +132,7 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
                 .averageAwardPeriod(new YearFilterPagingRequest());
 
         DBObject root = averageAwardPeriod.get(0);
-        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        int year = (int) root.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         Assert.assertEquals(2014, year);
 
         double n = (double) root.get("averageAwardDays");
@@ -146,14 +145,14 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
                 .averageTenderPeriod(new YearFilterPagingRequest());
 
         DBObject root = averageTenderPeriod.get(0);
-        int year = (int) root.get(Fields.UNDERSCORE_ID);
+        int year = (int) root.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         Assert.assertEquals(2012, year);
 
         double n = (double) root.get("averageTenderDays");
         Assert.assertEquals(15, n, 0);
 
         root = averageTenderPeriod.get(1);
-        year = (int) root.get(Fields.UNDERSCORE_ID);
+        year = (int) root.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         Assert.assertEquals(2013, year);
 
         n = (double) root.get("averageTenderDays");

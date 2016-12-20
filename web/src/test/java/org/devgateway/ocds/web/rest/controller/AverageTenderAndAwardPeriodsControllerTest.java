@@ -7,7 +7,6 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 
 import com.mongodb.DBObject;
 
@@ -27,13 +26,13 @@ public class AverageTenderAndAwardPeriodsControllerTest extends AbstractEndPoint
                 .averageTenderPeriod(new YearFilterPagingRequest());
 
         final DBObject first = averageTenderPeriod.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         double averageTenderDays = (double) first.get(AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
         Assert.assertEquals(2014, year);
         Assert.assertEquals(15.0, averageTenderDays, 0);
 
         final DBObject second = averageTenderPeriod.get(1);
-        year = (int) second.get(Fields.UNDERSCORE_ID);
+        year = (int) second.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         averageTenderDays = (double) second.get(AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(46.0, averageTenderDays, 0);
@@ -62,13 +61,13 @@ public class AverageTenderAndAwardPeriodsControllerTest extends AbstractEndPoint
                 .averageAwardPeriod(new YearFilterPagingRequest());
 
         final DBObject first = averageAwardPeriod.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         double averageAwardDays = (double) first.get(AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
         Assert.assertEquals(2015, year);
         Assert.assertEquals(365.0, averageAwardDays, 0);
 
         final DBObject second = averageAwardPeriod.get(1);
-        year = (int) second.get(Fields.UNDERSCORE_ID);
+        year = (int) second.get(AverageTenderAndAwardPeriodsController.Keys.YEAR);
         averageAwardDays = (double) second.get(AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
         Assert.assertEquals(2016, year);
         Assert.assertEquals(405.0, averageAwardDays, 0);

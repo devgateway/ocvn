@@ -21,6 +21,21 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
     @EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
     protected List<Integer> year;
 
+    @ApiModelProperty(value = "When true, this parameter will add an extra layer of monthly grouping of all results."
+            + " The default is false")
+    private Boolean monthly = false;
+
+    public Boolean getMonthly() {
+        return monthly;
+    }
+
+    public void setMonthly(Boolean monthly) {
+        this.monthly = monthly;
+    }
+
+    /**
+     *
+     */
     public YearFilterPagingRequest() {
         super();
     }

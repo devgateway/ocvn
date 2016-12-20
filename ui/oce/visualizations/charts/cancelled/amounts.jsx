@@ -3,8 +3,8 @@ import {pluckImm} from "../../../tools";
 
 class CancelledFunding extends FrontendYearFilterableChart{
   transform(data){
-    return data.map(({_id, totalCancelledTendersAmount}) => ({
-      year: _id,
+    return data.map(({year, totalCancelledTendersAmount}) => ({
+      year,
       count: totalCancelledTendersAmount
     }));
   }

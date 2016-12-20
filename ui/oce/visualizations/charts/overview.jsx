@@ -1,5 +1,5 @@
 import FrontendYearFilterableChart from "./frontend-filterable";
-import {response2obj, pluckImm} from "../../tools";
+import {legacyResponse2obj, response2obj, pluckImm} from "../../tools";
 
 class OverviewChart extends FrontendYearFilterableChart{
   transform([tendersResponse, awardsResponse]){

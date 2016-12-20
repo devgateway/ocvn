@@ -8,9 +8,9 @@ class BidPeriod extends FrontendYearFilterableChart {
   transform([tenders, awards]) {
     let awardsHash = response2obj('averageAwardDays', awards);
     return tenders.map(tender => ({
-      year: tender._id,
+      year: tender.year,
       tender: +tender.averageTenderDays,
-      award: +(awardsHash[tender._id] || 0)
+      award: +(awardsHash[tender.year] || 0)
     }))
   };
 
