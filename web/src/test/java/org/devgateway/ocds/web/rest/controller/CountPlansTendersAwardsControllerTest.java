@@ -1,13 +1,13 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.List;
-
+import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 
-import com.mongodb.DBObject;
+import java.util.List;
 
 /**
  * @author idobre
