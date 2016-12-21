@@ -5,8 +5,9 @@ package org.devgateway.ocds.persistence.mongo.spring;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.ReleaseFlagI003Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,9 +31,10 @@ public class ReleaseFlaggingService {
 
     public static final int FLAGGING_BATCH_SIZE = 5000;
 
-    private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors =
-            Collections.unmodifiableList(Arrays.asList(
+    private final Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors = Collections
+            .unmodifiableList(Arrays.asList(
                     ReleaseFlagI038Processor.INSTANCE,
+                    ReleaseFlagI003Processor.INSTANCE,
                     ReleaseFlagI007Processor.INSTANCE
             ));
 
@@ -43,7 +45,7 @@ public class ReleaseFlaggingService {
 
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {
 
-        logMessage.accept("<b>RUNNING SCHEMA VALIDATION.</b>");
+        logMessage.accept("<b>RUNNING CORRUPTION FLAGGING.</b>");
 
         int pageNumber = 0;
         int processedCount = 0;
