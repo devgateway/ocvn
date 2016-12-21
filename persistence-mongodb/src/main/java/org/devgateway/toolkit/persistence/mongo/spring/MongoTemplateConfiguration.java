@@ -59,16 +59,16 @@ public class MongoTemplateConfiguration {
         createMandatoryImportIndexes();
         createPostImportStructures();
     }
-    
+
     private void createProcuringEntityIndexes() {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity._id", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id", 
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id",
                 Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.procuringEntity.department._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.procuringEntity.address.postalCode", Direction.ASC));
-     
+
         mongoTemplate.indexOps(City.class)
         .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
 
@@ -118,17 +118,17 @@ public class MongoTemplateConfiguration {
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
-                
+
         mongoTemplate.indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
                 .onField("id").onField("additionalIdentifiers._id").build());
-                
+
         mongoTemplate.indexOps(VNLocation.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
         //vietnam specific indexes:
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
-        
+
         createProcuringEntityIndexes();
 
         logger.info("Added extra Mongo indexes");

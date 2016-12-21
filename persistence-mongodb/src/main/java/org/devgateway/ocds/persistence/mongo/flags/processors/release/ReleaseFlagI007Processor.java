@@ -1,4 +1,4 @@
-package org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam;
+package org.devgateway.ocds.persistence.mongo.flags.processors.release;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
@@ -6,7 +6,6 @@ import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.NamedPredicate;
-import org.devgateway.ocds.persistence.mongo.flags.preconditions.VietnamFlaggedReleasePredicates;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,7 +40,7 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
     protected Collection<NamedPredicate<FlaggedRelease>> getPreconditionsPredicates() {
         return Collections.unmodifiableList(Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
                 FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                VietnamFlaggedReleasePredicates.ELECTRONIC_SUBMISSION));
+                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION));
     }
 
 }
