@@ -1,12 +1,12 @@
 package org.devgateway.ocds.persistence.mongo.flags;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.NamedPredicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class AbstractFlagProcessor<T extends Flaggable> {
 
@@ -16,7 +16,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
      * Calculates the given flag and returns the flag value. Does not set any
      * flag to the given {@link Flaggable}
      * 
-     * @param release
+     * @param flaggable
      *            a {@link Flaggable}
      * @return the value of the flag. This can be null (not applicable), false ,
      *         or true
@@ -24,19 +24,20 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
     protected abstract Boolean calculateFlag(T flaggable, StringBuffer rationale);
 
     /**
-     * Decides if the current {@link Flaggable} is eligible for this flag
-     * 
+     * Performs required initializations for flags, if needed
      * @param flaggable
+     */
+    protected abstract void initializeFlags(T flaggable);
+
+    /**
+     * Decides if the current {@link Flaggable} is eligible for this flag
+     *
      * @return true if is eligible, false otherwise
      */
     protected abstract Collection<NamedPredicate<T>> getPreconditionsPredicates();
 
     /**
-     * Processes the flag on the flaggable. only if the current
-     * {@link Flaggable} {@link #checkPreconditions(Flaggable)}. invokes
-     * {@link #calculateFlag(Flaggable)} then {@link #setFlag(Flag, Flaggable)}
-     * with the {@link #generateRationale(Boolean, Flaggable)}
-     * 
+     * Processes the flag on the flaggable only if the preconditions are met
      * @param flaggable
      */
     public final void process(T flaggable) {
@@ -56,6 +57,8 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
         }
 
         logger.debug("Setting flag with value " + flagValue + " to flaggable " + flaggable.getIdProperty());
+
+        initializeFlags(flaggable);
         setFlag(new Flag(flagValue, rationale.toString()), flaggable);
     }
 

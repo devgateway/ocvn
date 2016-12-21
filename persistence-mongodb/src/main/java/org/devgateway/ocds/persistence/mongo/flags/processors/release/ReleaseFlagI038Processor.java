@@ -3,18 +3,17 @@
  */
 package org.devgateway.ocds.persistence.mongo.flags.processors.release;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
-import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.NamedPredicate;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author mpostelnicu
@@ -28,9 +27,6 @@ public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
-        if (flaggable.getFlags() == null) {
-            flaggable.setFlags(new ReleaseFlags());
-        }
         flaggable.getFlags().setI038(flag);
     }
 
