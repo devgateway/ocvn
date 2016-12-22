@@ -8,6 +8,7 @@ import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagPro
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.ReleaseFlagI003Processor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,8 @@ public class ReleaseFlaggingService {
             .unmodifiableList(Arrays.asList(
                     ReleaseFlagI038Processor.INSTANCE,
                     ReleaseFlagI003Processor.INSTANCE,
-                    ReleaseFlagI007Processor.INSTANCE
+                    ReleaseFlagI007Processor.INSTANCE,
+                    VietnamReleaseFlagI004Processor.INSTANCE
             ));
 
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {

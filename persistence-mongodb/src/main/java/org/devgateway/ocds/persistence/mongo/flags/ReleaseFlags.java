@@ -18,6 +18,17 @@ public class ReleaseFlags implements FlagsWrappable {
     //i007 This awarded competitive tender only featured a single bid`
     private Flag i007;
 
+    //i004: Sole source award above the threshold
+    private Flag i004;
+
+    public Flag getI004() {
+        return i004;
+    }
+
+    public void setI004(Flag i004) {
+        this.i004 = i004;
+    }
+
     public Flag getI038() {
         return i038;
     }

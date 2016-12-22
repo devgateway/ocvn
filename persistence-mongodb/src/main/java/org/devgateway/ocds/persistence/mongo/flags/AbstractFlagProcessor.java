@@ -34,7 +34,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
      *
      * @return true if is eligible, false otherwise
      */
-    protected abstract Collection<NamedPredicate<T>> getPreconditionsPredicates();
+    protected Collection<NamedPredicate<T>> preconditionsPredicates;
 
     /**
      * Processes the flag on the flaggable only if the preconditions are met
@@ -43,7 +43,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
     public final void process(T flaggable) {
         Boolean flagValue = null;
         StringBuffer rationale = new StringBuffer();
-        Set<NamedPredicate<T>> failedPreconditionsPredicates = getPreconditionsPredicates().parallelStream()
+        Set<NamedPredicate<T>> failedPreconditionsPredicates = preconditionsPredicates.parallelStream()
                 .filter(predicate -> !predicate.test(flaggable)).collect(Collectors.toSet());
 
         if (failedPreconditionsPredicates.isEmpty()) {

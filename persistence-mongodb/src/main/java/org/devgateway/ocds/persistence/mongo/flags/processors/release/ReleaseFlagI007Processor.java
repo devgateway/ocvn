@@ -4,10 +4,8 @@ import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
-import org.devgateway.ocds.persistence.mongo.flags.preconditions.NamedPredicate;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -18,6 +16,14 @@ import java.util.Collections;
 public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcessor {
 
     public static final ReleaseFlagI007Processor INSTANCE = new ReleaseFlagI007Processor();
+
+    public ReleaseFlagI007Processor() {
+        preconditionsPredicates = Collections.synchronizedList(
+                Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
+                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
+                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
+                ));
+    }
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -30,13 +36,6 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
 
         rationale.append("Number of bids: ").append(countAwards);
         return countAwards == 1;
-    }
-
-    @Override
-    protected Collection<NamedPredicate<FlaggedRelease>> getPreconditionsPredicates() {
-        return Collections.unmodifiableList(Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION));
     }
 
 }

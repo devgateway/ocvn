@@ -5,11 +5,9 @@ import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
-import org.devgateway.ocds.persistence.mongo.flags.preconditions.NamedPredicate;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -20,6 +18,15 @@ import java.util.Collections;
 public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcessor {
 
     public static final ReleaseFlagI003Processor INSTANCE = new ReleaseFlagI003Processor();
+
+    public ReleaseFlagI003Processor() {
+        preconditionsPredicates = Collections.unmodifiableList(Arrays.asList(
+                FlaggedReleasePredicates.ACTIVE_AWARD,
+                FlaggedReleasePredicates.UNSUCCESSFUL_AWARD,
+                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
+                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
+        ));
+    }
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -33,13 +40,6 @@ public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcesso
                 .count();
         rationale.append("Number of eligible unsuccessful awards: ").append(eligibleUnsuccessfulAwards);
         return eligibleUnsuccessfulAwards == 0;
-    }
-
-    @Override
-    protected Collection<NamedPredicate<FlaggedRelease>> getPreconditionsPredicates() {
-        return Collections.unmodifiableList(Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.UNSUCCESSFUL_AWARD, FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION));
     }
 
 }
