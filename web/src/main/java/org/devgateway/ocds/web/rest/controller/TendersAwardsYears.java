@@ -49,19 +49,27 @@ public class TendersAwardsYears extends GenericOCDSController {
                         Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
                                 new BasicDBObject("$year", "$tender.tenderPeriod.startDate"), null)));
 
+        project1.put("bidPlanYear",
+                new BasicDBObject("$cond",
+                        Arrays.asList(new BasicDBObject("$gt",
+                                        Arrays.asList("$planning.bidPlanProjectDateApprove", null)),
+                                new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"), null)));
+
         project1.put("awardYear",
                 new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
                         new BasicDBObject("$year", "$awards.date"), null)));
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         BasicDBObject project2 = new BasicDBObject();
-        project2.put("year", Arrays.asList("$tenderYear", "$awardYear"));
+        project2.put("year", Arrays.asList("$tenderYear", "$awardYear", "$bidPlanYear"));
 
         Aggregation agg = Aggregation.newAggregation(
-                project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").and("awards.date")
-                        .as("awards.date"),
+                project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").
+                        and("awards.date")
+                        .as("awards.date").and("planning.bidPlanProjectDateApprove").
+                        as("planning.bidPlanProjectDateApprove"),
                 match(new Criteria().orOperator(where("tender.tenderPeriod.startDate").exists(true),
-                        where("awards.date").exists(true))),
+                        where("awards.date").exists(true), where("planning.bidPlanProjectDateApprove").exists(true))),
                 new CustomUnwindOperation("$awards"), new CustomProjectionOperation(project1),
                 new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
                 match(where("year").ne(null)),
