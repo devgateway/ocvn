@@ -65,7 +65,6 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
     @Autowired
     private AsyncControllerLookupService controllerLookupService;
 
-
     public static final class Keys {
         public static final String TOTAL_AWARD_AMOUNT = "totalAwardAmount";
         public static final String YEAR = "year";
