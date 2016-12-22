@@ -39,13 +39,13 @@ public abstract class ReleaseFlagI004Processor extends AbstractFlaggedReleaseFla
         String classificationId = flaggable.getTender().getItems().stream()
                 .findFirst().get().getClassification().getId();
 
-        BigDecimal limit=getSolesourceLimits().get(classificationId);
-        if(limit==null) {
+        BigDecimal limit = getSolesourceLimits().get(classificationId);
+        if (limit == null) {
             rationale.append("Classification is null");
             return false;
         }
-        boolean limitReached = flaggable.getAwards().stream().anyMatch(a -> a.getValue() != null &&
-                limit.compareTo(a.getValue().getAmount()) == -1);
+        boolean limitReached = flaggable.getAwards().stream().anyMatch(a -> a.getValue() != null
+                && limit.compareTo(a.getValue().getAmount()) == -1);
 
         rationale.append("Classification ").append(classificationId).append(" limit of ")
                 .append(limit).append(limitReached ? " reached." : " not reached");

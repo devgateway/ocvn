@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.devgateway.ocds.persistence.mongo.flags.processors.release;
 
@@ -15,7 +15,6 @@ import java.util.Collections;
 
 /**
  * @author mpostelnicu
- *
  */
 public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcessor {
 
@@ -24,7 +23,7 @@ public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcesso
     public static final ReleaseFlagI038Processor INSTANCE = new ReleaseFlagI038Processor();
 
     public ReleaseFlagI038Processor() {
-        preconditionsPredicates=Collections.synchronizedList(Arrays.asList(
+        preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
                 FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
                 FlaggedReleasePredicates.TENDER_END_DATE,
                 FlaggedReleasePredicates.TENDER_START_DATE
