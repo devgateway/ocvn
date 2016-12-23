@@ -37,8 +37,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(cacheNames = "tendersAwardsYears")
 public class TendersAwardsYears extends GenericOCDSController {
 
-    @ApiOperation(value = "Computes all available years from awards.date, tender.tenderPeriod.startDate")
-    @RequestMapping(value = "/api/tendersAwardsYears", method = { RequestMethod.POST,
+    @ApiOperation(value = "Computes all available years from awards.date, tender.tenderPeriod.startDate"
+            + "and planning.bidPlanProjectDateApprove")
+    @RequestMapping(value = "/api/tendersAwardsYears", method = {RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> tendersAwardsYears() {
 
