@@ -37,7 +37,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(cacheNames = "tendersAwardsYears")
 public class TendersAwardsYears extends GenericOCDSController {
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "Computes all available years from awards.date, tender.tenderPeriod.startDate")
     @RequestMapping(value = "/api/tendersAwardsYears", method = { RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> tendersAwardsYears() {
@@ -62,7 +62,7 @@ public class TendersAwardsYears extends GenericOCDSController {
                         .as("awards.date"),
                 match(new Criteria().orOperator(where("tender.tenderPeriod.startDate").exists(true),
                         where("awards.date").exists(true))),
-                new CustomUnwindOperation("$awards"), new CustomProjectionOperation(project1),
+                new CustomUnwindOperation("$awards", true), new CustomProjectionOperation(project1),
                 new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
                 match(where("year").ne(null)),
                 new CustomGroupingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, "$year")),
