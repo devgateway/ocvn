@@ -20,6 +20,7 @@ import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingReque
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomUnwindOperation;
 import org.devgateway.toolkit.web.spring.AsyncControllerLookupService;
 import org.devgateway.toolkit.web.spring.util.AsyncBeanParamControllerMethodCallable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +163,9 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
                         .exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                getMatchDefaultFilterOperation(filter), unwind("$awards"), new CustomProjectionOperation(project),
+                getMatchDefaultFilterOperation(filter),
+                new CustomUnwindOperation("$awards", true),
+                new CustomProjectionOperation(project),
                 new CustomGroupingOperation(group1),
                 getTopXFilterOperation(filter, getYearlyMonthlyGroupingFields(filter)).sum("tenderWithAwardsValue")
                         .as(Keys.TOTAL_TENDER_AMOUNT).count().as(Keys.TOTAL_TENDERS).sum("tenderWithAwards")
@@ -177,7 +180,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDER_AMOUNT, Keys.TOTAL_TENDERS,
                         Keys.TOTAL_TENDER_WITH_AWARDS, Keys.PERCENTAGE_TENDERS_WITH_AWARDS),
                 getSortByYearMonth(filter),
-                skip(filter.getSkip()), limit(filter.getPageSize()));
+                skip(filter.getSkip()), limit(filter.getPageSize()))
+                .withOptions(Aggregation.newAggregationOptions().allowDiskUse(true).build());
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
