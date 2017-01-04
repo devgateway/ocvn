@@ -59,6 +59,9 @@ export const send = url => fetch(url.clone().query(""), {
   body: url.query()
 });
 
+export const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
+    || navigator.userAgent.match(/rv 11/));
+
 export let download = ({ep, filters, years, t}) => {
   const url = new URI(`/api/ocds/${ep}`)
       .addSearch(filters.toJS())
@@ -68,8 +71,7 @@ export let download = ({ep, filters, years, t}) => {
   return send(url).then(response => {
     let {userAgent} = navigator;
     let isSafari = -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
-    const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
-        || navigator.userAgent.match(/rv 11/));
+
     if (isSafari || isIE) {
       location.href = url;
       return response;

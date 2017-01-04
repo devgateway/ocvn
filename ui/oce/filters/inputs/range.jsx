@@ -1,6 +1,7 @@
 import translatable from "../../translatable";
 import Component from "../../pure-render-component";
 import InputRange from "react-input-range";
+import {isIE} from "../../tools";
 import IRstyles from "react-input-range/dist/react-input-range.css";
 
 const BILLION = 1000000000;
@@ -16,6 +17,21 @@ let labelFormatter =  number => {
 }
 
 class Range extends translatable(Component){
+  maybeGetInputRange(min, max, minValue, maxValue, onUpdate){
+    if(!isIE){
+      return (
+          <InputRange
+              minValue={min}
+              maxValue={max}
+              value={{min: minValue, max: maxValue}}
+              onChange={(_, newVal) => onUpdate(newVal)}
+              formatLabel={labelFormatter}
+          />
+      )
+    }
+    return null;
+  }
+
   render(){
     if(!this.state) return null;
     const {min, max} = this.state;
@@ -28,13 +44,7 @@ class Range extends translatable(Component){
             {this.getTitle()}
           </header>
           <section className="options range">
-            <InputRange
-                minValue={min}
-                maxValue={max}
-                value={{min: minValue, max: maxValue}}
-                onChange={(_, newVal) => onUpdate(newVal)}
-                formatLabel={labelFormatter}
-            />
+            {this.maybeGetInputRange(min, max, minValue, maxValue, onUpdate)}
           </section>
           <div className="range-inputs">
             {this.t('general:range:min')}
