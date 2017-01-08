@@ -31,6 +31,11 @@ public final class FlaggedReleasePredicates {
                     p -> p.getTender() != null
                             && ProcurementMethod.limited.equals(p.getTender().getProcurementMethod()));
 
+    public static final NamedPredicate<FlaggedRelease> ACTIVE_AWARD_WITH_DATE =
+            new NamedPredicate<>("Needs to have at least one active award",
+                    p -> p.getAwards().stream().filter(a -> a.getDate() != null
+                            && Award.Status.active.equals(a.getStatus())).count() > 0);
+
     public static final NamedPredicate<FlaggedRelease> ACTIVE_AWARD =
             new NamedPredicate<>("Needs to have at least one active award",
                     p -> p.getAwards().stream().filter(a -> Award.Status.active.equals(a.getStatus())).count() > 0);
