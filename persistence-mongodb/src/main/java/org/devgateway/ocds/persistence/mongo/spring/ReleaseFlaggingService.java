@@ -8,7 +8,6 @@ import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagPro
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI019Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.ReleaseFlagI003Processor;
 import org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
