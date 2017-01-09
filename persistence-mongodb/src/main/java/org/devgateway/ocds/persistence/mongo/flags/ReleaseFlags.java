@@ -21,6 +21,17 @@ public class ReleaseFlags implements FlagsWrappable {
     //i004: Sole source award above the threshold
     private Flag i004;
 
+    //i019: Long delays in contract negotiations or award
+    private Flag i019;
+
+    public Flag getI019() {
+        return i019;
+    }
+
+    public void setI019(Flag i019) {
+        this.i019 = i019;
+    }
+
     public Flag getI004() {
         return i004;
     }
