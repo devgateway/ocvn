@@ -19,6 +19,7 @@ class NrCancelled extends FrontendYearFilterableChart{
   }
 
   getLayout(){
+    const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
         title: this.t('charts:nrCancelled:xAxisTitle'),
@@ -26,7 +27,7 @@ class NrCancelled extends FrontendYearFilterableChart{
       },
       yaxis: {
         title: this.t('charts:nrCancelled:yAxisTitle'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       }
     }
   }

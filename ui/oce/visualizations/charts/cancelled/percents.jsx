@@ -17,6 +17,7 @@ class CancelledPercents extends FrontendYearFilterableChart{
   }
 
   getLayout(){
+    const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
         title: this.t('charts:cancelledPercents:xAxisName'),
@@ -24,7 +25,7 @@ class CancelledPercents extends FrontendYearFilterableChart{
       },
       yaxis: {
         title: this.t('charts:cancelledPercents:yAxisName'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       }
     }
   }

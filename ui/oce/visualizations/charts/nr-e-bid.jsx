@@ -17,6 +17,7 @@ class NrEbid extends FrontendYearFilterableChart{
   }
 
   getLayout(){
+    const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
         title: this.t('charts:nrEBid:xAxisTitle'),
@@ -24,7 +25,7 @@ class NrEbid extends FrontendYearFilterableChart{
       },
       yaxis: {
         title: this.t('charts:nrEBid:yAxisTitle'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       }
     }
   }

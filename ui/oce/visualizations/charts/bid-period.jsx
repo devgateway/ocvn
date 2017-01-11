@@ -44,6 +44,7 @@ class BidPeriod extends FrontendYearFilterableChart {
   }
 
   getLayout() {
+    const {hoverFormat} = this.props.styling.charts;
     let annotations = [];
     let data = super.getData();
     if(data){
@@ -65,7 +66,7 @@ class BidPeriod extends FrontendYearFilterableChart {
       barmode: "stack",
       xaxis: {
         title: this.t('charts:bidPeriod:xAxisTitle'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       },
       yaxis: {
         title: this.t('charts:bidPeriod:yAxisTitle'),

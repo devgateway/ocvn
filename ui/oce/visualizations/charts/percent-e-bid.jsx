@@ -17,6 +17,7 @@ class PercentEbid extends FrontendYearFilterableChart{
   }
 
   getLayout(){
+    const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
         title: this.t('charts:percentEBid:xAxisName'),
@@ -24,7 +25,7 @@ class PercentEbid extends FrontendYearFilterableChart{
       },
       yaxis: {
         title: this.t('charts:percentEBid:yAxisName'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       }
     }
   }
