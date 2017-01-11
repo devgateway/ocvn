@@ -87,7 +87,7 @@ public class Person extends AbstractAuditableEntity implements Serializable, Use
     @JsonIgnore
     private boolean changePass;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Role> roles;
    

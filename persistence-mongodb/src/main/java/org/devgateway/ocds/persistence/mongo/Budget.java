@@ -62,7 +62,6 @@ public class Budget {
      * or the programme used to fund this project.
      *
      */
-    @ExcelExport
     @JsonProperty("description")
     @Merge(MergeStrategy.ocdsVersion)
     private String description;
@@ -93,6 +92,7 @@ public class Budget {
      * and the data should use the identifier from the relevant registry of projects.
      *
      */
+    @ExcelExport
     @JsonProperty("projectID")
     @Merge(MergeStrategy.ocdsVersion)
     private String projectID;

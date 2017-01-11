@@ -11,12 +11,12 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.devgateway.ocds</groupId>
-    <artifactId>oce</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <groupId>org.devgateway.ocvn</groupId>
+    <artifactId>ocvn</artifactId>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>OCExplorer</name>
-    <description>OCDS General Implementation</description>
+    <name>OCVN</name>
+    <description>OCVN Open Contracting Vietnam</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,28 +43,28 @@
     </organization>
     <issueManagement>
         <system>JIRA</system>
-        <url>https://jira.dgfoundation.org/browse/OCE/</url>
+        <url>https://jira.dgfoundation.org/browse/OCVN/</url>
     </issueManagement>
     <ciManagement>
         <system>Jenkins</system>
-        <url>http://ocexplorer.dgstg.org/ci/</url>
+        <url>http://ocvn.dgstg.org/ci/</url>
     </ciManagement>
 
     <scm>
-        <url>git@github.com:devgateway/oc-explorer.git</url>
+        <url>git@github.com:devgateway/ocvn.git</url>
         <developerConnection>
-            scm:git:git@github.com:devgateway/oc-explorer.git
+            scm:git:git@github.com:devgateway/ocvn.git
         </developerConnection>
-        <connection>git@github.com:devgateway/oc-explorer.git
+        <connection>git@github.com:devgateway/ocvn.git
         </connection>
         <tag>0.0.3-SNAPSHOT</tag>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>oc-explorer-releases</id>
-            <name>OC Explorer releases</name>
-            <url>http://artifactory.ampdev.net/artifactory/oc-explorer-releases/</url>
+            <id>ocvn-releases</id>
+            <name>OCVN releases</name>
+            <url>http://artifactory.ampdev.net/artifactory/ocvn-releases/</url>
         </repository>
     </distributionManagement>
 

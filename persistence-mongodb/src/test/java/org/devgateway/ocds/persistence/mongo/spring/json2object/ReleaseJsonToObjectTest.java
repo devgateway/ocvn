@@ -29,7 +29,7 @@ public class ReleaseJsonToObjectTest {
                 + "    }\n"
                 + "}";
 
-        final JsonToObject releaseJsonToObject = new ReleaseJsonToObject(jsonRelease);
+        final JsonToObject releaseJsonToObject = new ReleaseJsonToObject(jsonRelease, false);
 
         Assert.assertTrue("Object is a Release", releaseJsonToObject.toObject() instanceof Release);
 
@@ -50,7 +50,7 @@ public class ReleaseJsonToObjectTest {
                 + "    tag: [\"award\"],\n"
                 + "}";
 
-        final JsonToObject invalidJsonToObject = new ReleaseJsonToObject(invalidJsonRelease);
+        final JsonToObject invalidJsonToObject = new ReleaseJsonToObject(invalidJsonRelease, false);
 
         invalidJsonToObject.toObject();
     }
@@ -60,7 +60,7 @@ public class ReleaseJsonToObjectTest {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("json/release-json-to-object-test.json").getFile());
 
-        final JsonToObject releaseJsonToObject = new ReleaseJsonToObject(file);
+        final JsonToObject releaseJsonToObject = new ReleaseJsonToObject(file, false);
 
         Assert.assertTrue("Object is a Release", releaseJsonToObject.toObject() instanceof Release);
 
