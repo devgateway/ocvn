@@ -13,7 +13,9 @@ class FrequentTenderers extends orgNamesFetching(Table){
     return <tr key={index}>
       <td>{this.getOrgName(entry.getIn(['id', 'tendererId1']))}</td>
       <td>{this.getOrgName(entry.getIn(['id', 'tendererId2']))}</td>
-      <td>{entry.get('value')}</td>
+      <td>{entry.getIn(['value', 'pairCount'])}</td>
+      <td>{entry.getIn(['value', 'winner1Count'])}</td>
+      <td>{entry.getIn(['value', 'winner2Count'])}</td>
     </tr>
   }
 
@@ -35,12 +37,14 @@ class FrequentTenderers extends orgNamesFetching(Table){
         <th>{this.t('tables:frequentTenderers:supplier')} #1</th>
         <th>{this.t('tables:frequentTenderers:supplier')} #2</th>
         <th>{this.t('tables:frequentTenderers:nrITB')}</th>
+        <th>{this.t('tables:frequentTenderers:supplier1wins')}</th>
+        <th>{this.t('tables:frequentTenderers:supplier2wins')}</th>
       </tr>
       </thead>
       <tbody>
       {this.maybeSlice(!showAll, this.props.data).map(this.row.bind(this))}
       {!showAll && this.props.data.count() > 10 && <tr>
-        <td colSpan="3">
+        <td colSpan="5">
           <button className="btn btn-info btn-danger btn-block" onClick={_ => this.setState({showAll: true})}>
             {this.t('tables:showAll')}
           </button>
