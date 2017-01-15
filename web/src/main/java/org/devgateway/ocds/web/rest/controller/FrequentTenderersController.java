@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiOperation;
 @Cacheable
 public class FrequentTenderersController extends GenericOCDSController {
 
-    private class TendererPair {
+    public static class TendererPair {
         private String tendererId1;
         private String tendererId2;
 
@@ -62,9 +62,39 @@ public class FrequentTenderersController extends GenericOCDSController {
 
     }
 
-    private class ValueObject {
+    public static class  ValueTuple {
+        private Integer pairCount;
+        private Integer winner1Count;
+        private Integer winner2Count;
+
+        public Integer getPairCount() {
+            return pairCount;
+        }
+
+        public void setPairCount(Integer pairCount) {
+            this.pairCount = pairCount;
+        }
+
+        public Integer getWinner1Count() {
+            return winner1Count;
+        }
+
+        public void setWinner1Count(Integer winner1Count) {
+            this.winner1Count = winner1Count;
+        }
+
+        public Integer getWinner2Count() {
+            return winner2Count;
+        }
+
+        public void setWinner2Count(Integer winner2Count) {
+            this.winner2Count = winner2Count;
+        }
+    }
+
+    public static class ValueObject {
         private TendererPair id;
-        private Integer value;
+        private ValueTuple value;
 
         public TendererPair getId() {
             return id;
@@ -74,11 +104,11 @@ public class FrequentTenderersController extends GenericOCDSController {
             this.id = id;
         }
 
-        public Integer getValue() {
+        public ValueTuple getValue() {
             return value;
         }
 
-        public void setValue(Integer value) {
+        public void setValue(ValueTuple value) {
             this.value = value;
         }
     }
@@ -97,7 +127,8 @@ public class FrequentTenderersController extends GenericOCDSController {
                                 .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                         "release", "classpath:frequent-tenderers-map.js", "classpath:frequent-tenderers-reduce.js",
                         ValueObject.class).spliterator(), false)
-                .filter(vo -> vo.getValue() > 1).sorted((p1, p2) -> p2.getValue().compareTo(p1.getValue()))
+                .filter(vo -> vo.getValue().getPairCount() > 1).sorted((p1, p2) -> p2.getValue().
+                        getPairCount().compareTo(p1.getValue().getPairCount()))
                 .skip(filter.getPageNumber() * filter.getPageSize()).limit(filter.getPageSize())
                 .collect(Collectors.toList());
     }

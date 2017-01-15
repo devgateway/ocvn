@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -63,5 +64,24 @@ public class TopTenControllerTest extends AbstractEndPointControllerTest {
         value = (BasicDBObject) tender.get("value");
         amount = (double) value.get("amount");
         Assert.assertEquals(9000.0, amount, 0);
+    }
+
+
+    @Test
+    public void topTenLargestSuppliers() throws Exception {
+        final List<DBObject> topTenLargestSuppliers = topTenController
+                .topTenLargestSuppliers(new YearFilterPagingRequest());
+
+
+        final DBObject first = topTenLargestSuppliers.get(0);
+        Assert.assertEquals(6040000.0, first.get(TopTenController.Keys.TOTAL_AWARD_AMOUNT));
+        Assert.assertEquals(2, first.get(TopTenController.Keys.TOTAL_CONTRACTS));
+        Assert.assertEquals(null,
+                ((Collection) first.get(TopTenController.Keys.PROCURING_ENTITY_IDS)).iterator().next());
+        Assert.assertEquals(null, first.get(TopTenController.Keys.SUPPLIER_ID));
+        Assert.assertEquals(1, first.get(TopTenController.Keys.PROCURING_ENTITY_IDS_COUNT));
+
+        Assert.assertEquals(1, topTenLargestSuppliers.size());
+
     }
 }
