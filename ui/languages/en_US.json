@@ -145,7 +145,7 @@
   "charts:percentWithTenders:xAxisTitle": "Year",
   "charts:percentWithTenders:yAxisTitle": "Percent",
   "map:plannedLocations:title": "Planning",
-  "maps:invitationToBidLocations:title": "Invitation to Bid Locations"
+  "maps:invitationToBidLocations:title": "Invitation to Bid Locations",
   "tables:frequentTenderers:supplier1wins": "Supplier #1 wins",
   "tables:frequentTenderers:supplier2wins": "Supplier #2 wins"
 }
