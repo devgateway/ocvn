@@ -18,6 +18,7 @@ class AvgNrBids extends FrontendYearFilterableChart{
   }
 
   getLayout(){
+    const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
         title: this.t('charts:avgNrBids:xAxisTitle'),
@@ -25,7 +26,7 @@ class AvgNrBids extends FrontendYearFilterableChart{
       },
       yaxis: {
         title: this.t('charts:avgNrBids:yAxisTitle'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       }
     }
   }

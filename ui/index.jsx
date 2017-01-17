@@ -105,13 +105,15 @@ OCVN.STYLING = {
   charts: {
     axisLabelColor: "#cc3c3b",
     traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
+    hoverFormat: ',.2f',
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
+      const format = number => number.toLocaleString(undefined, {maximumFractionDigits: 2});
       let abs = Math.abs(number);
-      if(abs >= BILLION) return (number/BILLION).toFixed(2) + "B";
-      if(abs >= MILLION) return (number/MILLION).toFixed(2) + "M";
-      if(abs >= THOUSAND) return (number/THOUSAND).toFixed(2) + "K";
-      return number.toFixed(2);
+      if(abs >= BILLION) return format(number/BILLION) + "B";
+      if(abs >= MILLION) return format(number/MILLION) + "M";
+      if(abs >= THOUSAND) return format(number/THOUSAND) + "K";
+      return format(number);
     }
   }
 };
