@@ -145,5 +145,7 @@
 	"charts:percentWithTenders:xAxisTitle": "Năm",
 	"charts:percentWithTenders:yAxisTitle": "Phần trăm",
 	"map:plannedLocations:title": "Lập kế hoạch",
-	"maps:invitationToBidLocations:title": "địa điểm thông báo mời thầu/ đấu thầu"
+	"maps:invitationToBidLocations:title": "địa điểm thông báo mời thầu/ đấu thầu",
+	"tables:frequentTenderers:supplier1wins": "Nhà cung cấp số 1 trúng thầu",
+	"tables:frequentTenderers:supplier2wins": "Nhà cung cấp số 2 trúng thầu"
 }
