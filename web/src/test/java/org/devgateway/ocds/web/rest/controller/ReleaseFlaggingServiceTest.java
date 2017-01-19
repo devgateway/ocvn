@@ -79,4 +79,17 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         Assert.assertEquals(false, release2.getFlags().getI077().getValue());
     }
 
+    @Test
+    public void testI004() {
+        FlaggedRelease release1 = flaggedReleaseRepository.findByOcid("ocds-endpoint-001");
+        Assert.assertNotNull(release1);
+        Assert.assertEquals(null, release1.getFlags().getI004().getValue());
+
+        FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
+        Assert.assertNotNull(release2);
+        Assert.assertEquals(null, release2.getFlags().getI004().getValue());
+    }
+
+
+
 }

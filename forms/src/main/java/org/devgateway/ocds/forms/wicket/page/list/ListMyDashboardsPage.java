@@ -41,6 +41,9 @@ public class ListMyDashboardsPage extends ListAllDashboardsPage {
 
     public ListMyDashboardsPage(final PageParameters pageParameters) {
         super(pageParameters);
+        
+        columns.remove(columnUsers);
+        columns.remove(columnDefaultDashboardUsers);
     }
 
 }

@@ -10,6 +10,9 @@ import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI019Processor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
+import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
@@ -54,7 +57,7 @@ public class ReleaseFlaggingService {
 
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {
 
-        logMessage.accept("<b>RUNNING SCHEMA VALIDATION.</b>");
+        logMessage.accept("<b>RUNNING CORRUPTION FLAGGING.</b>");
 
         int pageNumber = 0;
         int processedCount = 0;
