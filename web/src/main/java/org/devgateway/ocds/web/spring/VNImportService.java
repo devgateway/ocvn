@@ -1,20 +1,7 @@
-package org.devgateway.ocvn.persistence.mongo.spring;
+package org.devgateway.ocds.web.spring;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
-
+import com.google.common.io.Files;
+import com.mongodb.DBObject;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -25,7 +12,6 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
-import org.devgateway.ocds.persistence.mongo.spring.ReleaseFlaggingService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.CityRowImporter;
@@ -62,8 +48,20 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.io.Files;
-import com.mongodb.DBObject;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  * @author mpostelnicu Service that imports Excel sheets from given import file in
@@ -237,12 +235,11 @@ public class VNImportService implements ExcelImportService {
     }
 
     /**
-     * Extracts the files from the given {@link VietnamImportSourceFiles}
+     * Extracts the files from the given {@link org.devgateway.ocvn.persistence.dao.VietnamImportSourceFiles}
      * object, creates a temp dir and drops them there.
      *
-     * @param files
      * @return the path of the temp dir created, that contains the files save
-     *         from {@link VietnamImportSourceFiles}
+     *         from {@link org.devgateway.ocvn.persistence.dao.VietnamImportSourceFiles}
      * @throws FileNotFoundException
      * @throws IOException
      */

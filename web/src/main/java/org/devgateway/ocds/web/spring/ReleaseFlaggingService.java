@@ -3,16 +3,10 @@
  */
 package org.devgateway.ocds.web.spring;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Consumer;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI019Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI038Processor;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI007Processor;
+import org.devgateway.ocds.web.flags.release.vietnam.ReleaseFlagI003Processor;
+import org.devgateway.ocds.web.flags.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
@@ -22,6 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 /**
  * @author mpostelnicu
@@ -44,6 +44,11 @@ public class ReleaseFlaggingService {
     @Autowired
     private ReleaseFlagI077Processor releaseFlagI077Processor;
 
+    @Autowired
+    private ReleaseFlagI003Processor releaseFlagI003Processor;
+
+    @Autowired
+    private VietnamReleaseFlagI004Processor vietnamReleaseFlagI004Processor;
 
     public static final int FLAGGING_BATCH_SIZE = 5000;
 
@@ -77,7 +82,9 @@ public class ReleaseFlaggingService {
     protected void setProcessors() {
         releaseFlagProcessors = Collections.unmodifiableList(Arrays.asList(
                 releaseFlagI038Processor,
+                releaseFlagI003Processor,
                 releaseFlagI007Processor,
+                vietnamReleaseFlagI004Processor,
                 releaseFlagI019Processor,
                 releaseFlagI077Processor
         ));

@@ -1,16 +1,17 @@
-package org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam;
+package org.devgateway.ocds.web.flags.release.vietnam;
 
 import com.google.common.collect.ImmutableMap;
-import org.devgateway.ocds.persistence.mongo.flags.processors.release.ReleaseFlagI004Processor;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI004Processor;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 
 /**
  * Created by mpost on 12/22/2016.
  */
+@Component
 public class VietnamReleaseFlagI004Processor extends ReleaseFlagI004Processor {
-
-    public static final VietnamReleaseFlagI004Processor INSTANCE = new VietnamReleaseFlagI004Processor();
 
     @Override
     public ImmutableMap<String, BigDecimal> getSolesourceLimits() {
@@ -21,5 +22,11 @@ public class VietnamReleaseFlagI004Processor extends ReleaseFlagI004Processor {
                 .put("10", BigDecimal.valueOf(5000000000d))
                 .build();
         return map;
+    }
+
+    @Override
+    @PostConstruct
+    protected void setPredicates() {
+
     }
 }
