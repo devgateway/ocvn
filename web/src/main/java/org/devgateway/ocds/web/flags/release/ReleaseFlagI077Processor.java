@@ -1,11 +1,6 @@
 package org.devgateway.ocds.web.flags.release;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
@@ -13,6 +8,12 @@ import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleaseP
 import org.devgateway.ocds.web.rest.controller.FrequentSuppliersTimeIntervalController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author mpostelnicu
@@ -40,7 +41,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
         return flaggable.getAwards().stream().filter(award ->
                 awardsMap.get(award.getId()) != null).map(award -> rationale
-                .append("Award " + award.getId() + " flagged by tuple " + awardsMap.get(award.getId()))).count() > 0;
+                .append("Award " + award.getId() + " flagged by tuple " + awardsMap.get(award.getId()) + "; "))
+                .count() > 0;
     }
 
     @PostConstruct
