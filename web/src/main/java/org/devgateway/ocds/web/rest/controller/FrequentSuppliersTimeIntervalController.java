@@ -14,10 +14,6 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -28,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -113,7 +113,7 @@ public class FrequentSuppliersTimeIntervalController extends GenericOCDSControll
 
         @Override
         public String toString() {
-            return identifier.toString() + " count= " + count;
+            return identifier.toString() + "; count=" + count;
         }
     }
 
