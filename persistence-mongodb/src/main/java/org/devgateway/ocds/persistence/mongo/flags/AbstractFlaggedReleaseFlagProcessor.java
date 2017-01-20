@@ -18,6 +18,17 @@ public abstract class AbstractFlaggedReleaseFlagProcessor extends AbstractFlagPr
         }
     }
 
+    /**
+     * Set the predicates used by the flag processor, this is usually invoked
+     * in subclass services using @PostConstruct
+     */
     protected abstract void setPredicates();
+
+    /**
+     * Possible external reinitialization of internal state
+     */
+    public void reInitialize() {
+
+    }
 
 }

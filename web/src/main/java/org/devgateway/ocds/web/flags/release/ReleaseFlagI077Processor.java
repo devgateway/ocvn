@@ -45,13 +45,12 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
                 .count() > 0;
     }
 
-    @PostConstruct
+    /**
+     * Refreshes the internal awards map used to quicksearch after award ids. This needs to be triggered
+     * before each flagging process actually starts
+     */
     @Override
-    protected void setPredicates() {
-        preconditionsPredicates = Collections.synchronizedList(
-                Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD_WITH_DATE,
-                        FlaggedReleasePredicates.TENDER_PROCURING_ENTITY));
-
+    public void reInitialize() {
         List<FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple> frequentSuppliersTimeInterval
                 = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(INTERVAL_DAYS, MAX_AWARDS);
 
@@ -59,6 +58,17 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
 
         frequentSuppliersTimeInterval.
                 forEach(tuple -> tuple.getAwardIds().forEach(awardId -> awardsMap.put(awardId, tuple)));
+    }
+
+    @PostConstruct
+    @Override
+    protected void setPredicates() {
+        preconditionsPredicates = Collections.synchronizedList(
+                Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD_WITH_DATE,
+                        FlaggedReleasePredicates.TENDER_PROCURING_ENTITY));
+
+        reInitialize();
+
     }
 
 }

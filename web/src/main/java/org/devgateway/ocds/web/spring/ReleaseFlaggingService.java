@@ -55,6 +55,13 @@ public class ReleaseFlaggingService {
     private Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors;
 
 
+    /**
+     * Trigger {@link AbstractFlaggedReleaseFlagProcessor#reInitialize()} for all processors
+     */
+    private void reinitialize() {
+        releaseFlagProcessors.forEach(processor -> processor.reInitialize());
+    }
+
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {
         releaseFlagProcessors.forEach(processor -> processor.process(release));
         releaseRepository.save(release);
@@ -63,6 +70,8 @@ public class ReleaseFlaggingService {
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {
 
         logMessage.accept("<b>RUNNING CORRUPTION FLAGGING.</b>");
+
+        reinitialize();
 
         int pageNumber = 0;
         int processedCount = 0;
