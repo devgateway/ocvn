@@ -1,9 +1,9 @@
 package org.devgateway.ocds.persistence.mongo.flags.preconditions;
 
+
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.persistence.mongo.Tender.ProcurementMethod;
 
 /**
  * @author mpostelnicu
@@ -18,18 +18,23 @@ public final class FlaggedReleasePredicates {
             "Needs to have tender start date", p -> p.getTender() != null && p.getTender().getTenderPeriod() != null
             && p.getTender().getTenderPeriod().getStartDate() != null);
 
+    public static final NamedPredicate<FlaggedRelease> TENDER_PROCURING_ENTITY = new NamedPredicate<>(
+            "Needs to have tender procuring entity", p -> p.getTender() != null
+            && p.getTender().getProcuringEntity() != null);
+
     public static final NamedPredicate<FlaggedRelease> TENDER_END_DATE =
             new NamedPredicate<>("Needs to have tender end date", p -> p.getTender() != null
                     && p.getTender().getTenderPeriod() != null && p.getTender().getTenderPeriod().getEndDate() != null);
 
     public static final NamedPredicate<FlaggedRelease> OPEN_PROCUREMENT_METHOD =
             new NamedPredicate<>("Needs to have open tender procurement method",
-                    p -> p.getTender() != null && ProcurementMethod.open.equals(p.getTender().getProcurementMethod()));
+                    p -> p.getTender() != null
+                            && Tender.ProcurementMethod.open.equals(p.getTender().getProcurementMethod()));
 
     public static final NamedPredicate<FlaggedRelease> LIMITED_PROCUREMENT_METHOD =
             new NamedPredicate<>("Needs to have limited tender procurement method",
                     p -> p.getTender() != null
-                            && ProcurementMethod.limited.equals(p.getTender().getProcurementMethod()));
+                            && Tender.ProcurementMethod.limited.equals(p.getTender().getProcurementMethod()));
 
     public static final NamedPredicate<FlaggedRelease> ACTIVE_AWARD_WITH_DATE =
             new NamedPredicate<>("Needs to have at least one active award",

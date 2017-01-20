@@ -1,4 +1,4 @@
-package org.devgateway.ocds.persistence.mongo.flags.processors.release.vietnam;
+package org.devgateway.ocds.web.flags.release.vietnam;
 
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
@@ -6,7 +6,9 @@ import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagPro
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -15,18 +17,9 @@ import java.util.Collections;
  * 
  * i003 Only winning bidder was eligible for a tender that had multiple bidders.
  */
+@Component
 public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcessor {
 
-    public static final ReleaseFlagI003Processor INSTANCE = new ReleaseFlagI003Processor();
-
-    public ReleaseFlagI003Processor() {
-        preconditionsPredicates = Collections.unmodifiableList(Arrays.asList(
-                FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.UNSUCCESSFUL_AWARD,
-                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
-        ));
-    }
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -42,4 +35,14 @@ public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcesso
         return eligibleUnsuccessfulAwards == 0;
     }
 
+    @Override
+    @PostConstruct
+    protected void setPredicates() {
+        preconditionsPredicates = Collections.unmodifiableList(Arrays.asList(
+                FlaggedReleasePredicates.ACTIVE_AWARD,
+                FlaggedReleasePredicates.UNSUCCESSFUL_AWARD,
+                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
+                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
+        ));
+    }
 }

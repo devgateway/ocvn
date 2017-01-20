@@ -18,4 +18,6 @@ public abstract class AbstractFlaggedReleaseFlagProcessor extends AbstractFlagPr
         }
     }
 
+    protected abstract void setPredicates();
+
 }

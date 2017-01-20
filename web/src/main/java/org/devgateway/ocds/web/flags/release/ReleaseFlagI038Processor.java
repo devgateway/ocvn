@@ -1,34 +1,27 @@
 /**
  *
  */
-package org.devgateway.ocds.persistence.mongo.flags.processors.release;
+package org.devgateway.ocds.web.flags.release;
 
+
+import java.util.Arrays;
+import java.util.Collections;
+import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-
-import java.util.Arrays;
-import java.util.Collections;
+import org.springframework.stereotype.Component;
 
 /**
  * @author mpostelnicu
  */
+@Component
 public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcessor {
 
     public static final int MIN_ALLOWED_DAYS_BIDDING_PERIOD = 7;
-
-    public static final ReleaseFlagI038Processor INSTANCE = new ReleaseFlagI038Processor();
-
-    public ReleaseFlagI038Processor() {
-        preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
-                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                FlaggedReleasePredicates.TENDER_END_DATE,
-                FlaggedReleasePredicates.TENDER_START_DATE
-        ));
-    }
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -42,7 +35,16 @@ public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcesso
         rationale.append("Days between: ").append(daysBetween.getDays()).append("; Minimum allowed days: ")
                 .append(MIN_ALLOWED_DAYS_BIDDING_PERIOD).append(";");
         return daysBetween.getDays() < MIN_ALLOWED_DAYS_BIDDING_PERIOD;
+    }
 
+    @PostConstruct
+    @Override
+    protected void setPredicates() {
+        preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
+                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
+                FlaggedReleasePredicates.TENDER_END_DATE,
+                FlaggedReleasePredicates.TENDER_START_DATE
+        ));
     }
 
 }

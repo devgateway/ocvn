@@ -1,29 +1,22 @@
-package org.devgateway.ocds.persistence.mongo.flags.processors.release;
+package org.devgateway.ocds.web.flags.release;
 
+
+import java.util.Arrays;
+import java.util.Collections;
+import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
-
-import java.util.Arrays;
-import java.util.Collections;
+import org.springframework.stereotype.Component;
 
 /**
  * @author mpostelnicu
- * 
- * i007 This awarded competitive tender only featured a single bid
+ *         <p>
+ *         i007 This awarded competitive tender only featured a single bid
  */
+@Component
 public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcessor {
-
-    public static final ReleaseFlagI007Processor INSTANCE = new ReleaseFlagI007Processor();
-
-    public ReleaseFlagI007Processor() {
-        preconditionsPredicates = Collections.synchronizedList(
-                Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
-                ));
-    }
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
@@ -38,4 +31,13 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
         return countAwards == 1;
     }
 
+    @Override
+    @PostConstruct
+    protected void setPredicates() {
+        preconditionsPredicates = Collections.synchronizedList(
+                Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
+                        FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
+                        FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
+                ));
+    }
 }

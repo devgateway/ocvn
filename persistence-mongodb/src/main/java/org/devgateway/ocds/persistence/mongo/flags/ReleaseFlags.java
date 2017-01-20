@@ -21,7 +21,10 @@ public class ReleaseFlags implements FlagsWrappable {
     //i004: Sole source award above the threshold
     private Flag i004;
 
-    //i019: Long delays in contract negotiations or award
+    //i019: High number of contract awards to one supplier within a given time period by a single procurement entity
+    private Flag i077;
+
+    //i077: Long delays in contract negotiations or award
     private Flag i019;
 
     public Flag getI019() {
@@ -62,5 +65,13 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI007(Flag i007) {
         this.i007 = i007;
+    }
+
+    public Flag getI077() {
+        return i077;
+    }
+
+    public void setI077(Flag i077) {
+        this.i077 = i077;
     }
 }
