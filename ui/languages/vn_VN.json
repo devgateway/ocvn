@@ -123,6 +123,8 @@
 	"tables:frequentTenderers:supplier": "nhà cung cấp",
 	"tables:frequentTenderers:nrITB": "số gói thầu có nhà thầu đã từng cùng tham gia dự thầu",
 	"tables:frequentTenderers:title": "tần suất cùng tham gia dự thầu",
+  	"tables:frequentTenderers:supplier1wins": "Nhà cung cấp số 1 trúng thầu",
+	"tables:frequentTenderers:supplier2wins": "Nhà cung cấp số 2 trúng thầu",
 	"tables:showAll": "hiển thị tất cả",
 	"filters:locations:title": "Địa điểm (tỉnh thành)",
 	"filters:bidArea:title": "Lĩnh vực đấu thầu",
@@ -146,6 +148,9 @@
 	"charts:percentWithTenders:yAxisTitle": "Phần trăm",
 	"map:plannedLocations:title": "Lập kế hoạch",
 	"maps:invitationToBidLocations:title": "địa điểm thông báo mời thầu/ đấu thầu",
-	"tables:frequentTenderers:supplier1wins": "Nhà cung cấp số 1 trúng thầu",
-	"tables:frequentTenderers:supplier2wins": "Nhà cung cấp số 2 trúng thầu"
+	"tables:top10suppliers:supplierName": "Tên nhà cung cấp",
+	"tables:top10suppliers:nrAwardsWon": "Số lần trúng thầu",
+	"tables:top10suppliers:nrPE": "Số lượng Bên mời thầu đã trao thầu cho nhà cung cấp",
+	"tables:top10suppliers:totalAwardedValue": "Tổng trị giá các gói thầu được trao (VNĐ)",
+	"tables:top10suppliers:title": "Tốp đầu 10 nhà cung cấp"
 }
