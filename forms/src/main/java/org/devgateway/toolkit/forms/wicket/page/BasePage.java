@@ -47,14 +47,13 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.string.StringValue;
-import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
-import org.devgateway.ocds.forms.wicket.page.list.ListMyDashboardsPage;
+import org.devgateway.ocvn.forms.wicket.page.VietnamImportPage;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.forms.security.SecurityConstants;
 import org.devgateway.toolkit.forms.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListGroupPage;
-import org.devgateway.toolkit.forms.wicket.page.lists.ListTestFormPage;
 import org.devgateway.toolkit.forms.wicket.page.lists.ListUserPage;
+import org.devgateway.toolkit.forms.wicket.page.lists.ListVietnamImportSourceFiles;
 import org.devgateway.toolkit.forms.wicket.page.user.EditUserPage;
 import org.devgateway.toolkit.forms.wicket.page.user.LogoutPage;
 import org.devgateway.toolkit.forms.wicket.styles.BaseStyles;
@@ -64,6 +63,8 @@ import org.devgateway.toolkit.persistence.dao.Person;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
+import org.devgateway.ocds.forms.wicket.page.list.ListMyDashboardsPage;
 
 /**
  * Base wicket-bootstrap {@link org.apache.wicket.Page}
@@ -191,35 +192,33 @@ public abstract class BasePage extends GenericWebPage<Void> {
     }
 
     public NavbarDropDownButton newLanguageMenu() {
-        final NavbarDropDownButton languageDropDown = new NavbarDropDownButton(
-                new StringResourceModel("navbar.lang", this,
-                        null)) {
+        final NavbarDropDownButton languageDropDown =
+                new NavbarDropDownButton(new StringResourceModel("navbar.lang", this, null)) {
 
-            private static final long serialVersionUID = 319842753824102674L;
+                    private static final long serialVersionUID = 319842753824102674L;
 
-            @Override
-            protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
-                final List<AbstractLink> list = new ArrayList<>();
+                    @Override
+                    protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
+                        final List<AbstractLink> list = new ArrayList<>();
 
-                for (final Locale l : WebConstants.AVAILABLE_LOCALES) {
-                    final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
-                    params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
-                    list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params, Model.of(l
-                            .getDisplayName())));
-                }
+                        for (final Locale l : WebConstants.AVAILABLE_LOCALES) {
+                            final PageParameters params = new PageParameters(BasePage.this.getPageParameters());
+                            params.set(WebConstants.LANGUAGE_PARAM, l.getLanguage());
+                            list.add(new MenuBookmarkablePageLink<Page>(BasePage.this.getPageClass(), params,
+                                    Model.of(l.getDisplayName())));
+                        }
 
-                return list;
-            }
-        };
+                        return list;
+                    }
+                };
         languageDropDown.setIconType(GlyphIconType.flag);
         return languageDropDown;
     }
 
-
     protected NavbarButton<LogoutPage> newLogoutMenu() {
         // logout menu
-        NavbarButton<LogoutPage> logoutMenu = new NavbarButton<LogoutPage>(LogoutPage.class,
-                new StringResourceModel("navbar.logout", this, null));
+        NavbarButton<LogoutPage> logoutMenu =
+                new NavbarButton<LogoutPage>(LogoutPage.class, new StringResourceModel("navbar.logout", this, null));
         logoutMenu.setIconType(GlyphIconType.logout);
         MetaDataRoleAuthorizationStrategy.authorize(logoutMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
 
@@ -236,18 +235,17 @@ public abstract class BasePage extends GenericWebPage<Void> {
             pageParametersForAccountPage.add(WebConstants.PARAM_ID, person.getId());
         }
 
-        NavbarButton<EditUserPage> accountMenu = new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage,
-                account);
+        NavbarButton<EditUserPage> accountMenu =
+                new NavbarButton<>(EditUserPage.class, pageParametersForAccountPage, account);
         accountMenu.setIconType(GlyphIconType.user);
         MetaDataRoleAuthorizationStrategy.authorize(accountMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
         return accountMenu;
     }
 
-
     protected NavbarButton<Homepage> newHomeMenu() {
         // home
-        NavbarButton<Homepage> homeMenu = new NavbarButton<>(Homepage.class, this.getPageParameters(),
-                new ResourceModel("home"));
+        NavbarButton<Homepage> homeMenu =
+                new NavbarButton<>(Homepage.class, this.getPageParameters(), new ResourceModel("home"));
         homeMenu.setIconType(GlyphIconType.home);
         MetaDataRoleAuthorizationStrategy.authorize(homeMenu, Component.RENDER, SecurityConstants.Roles.ROLE_USER);
         return homeMenu;
@@ -276,22 +274,29 @@ public abstract class BasePage extends GenericWebPage<Void> {
                 list.add(new MenuBookmarkablePageLink<ListGroupPage>(ListGroupPage.class, null,
                         new StringResourceModel("navbar.groups", this, null)).setIconType(FontAwesomeIconType.tags));
 
-                list.add(new
-                        MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class, null,
-                        new StringResourceModel("navbar.testcomponents", this, null)).
-                        setIconType(FontAwesomeIconType.android));
+                // list.add(new
+                // MenuBookmarkablePageLink<ListTestFormPage>(ListTestFormPage.class,
+                // null,
+                // new StringResourceModel("navbar.testcomponents", this, null))
+                // .setIconType(FontAwesomeIconType.android));
+
+                list.add(new MenuBookmarkablePageLink<ListVietnamImportSourceFiles>(ListVietnamImportSourceFiles.class,
+                        null, new StringResourceModel("navbar.importfiles", this, null))
+                                .setIconType(FontAwesomeIconType.file_archive_o));
+
+                list.add(new MenuBookmarkablePageLink<VietnamImportPage>(VietnamImportPage.class, null,
+                        new StringResourceModel("navbar.import", this, null))
+                                .setIconType(FontAwesomeIconType.cloud_upload));
 
                 list.add(new MenuBookmarkablePageLink<ListUserPage>(ListUserPage.class, null,
                         new StringResourceModel("navbar.users", this, null)).setIconType(FontAwesomeIconType.users));
 
                 list.add(new MenuBookmarkablePageLink<SpringEndpointsPage>(SpringEndpointsPage.class, null,
                         new StringResourceModel("navbar.springendpoints", this, null))
-                        .setIconType(FontAwesomeIconType.anchor));
+                                .setIconType(FontAwesomeIconType.anchor));
 
                 list.add(new MenuBookmarkablePageLink<JminixRedirectPage>(JminixRedirectPage.class, null,
-                        new StringResourceModel("navbar.jminix", this, null))
-                        .setIconType(FontAwesomeIconType.bug));
-
+                        new StringResourceModel("navbar.jminix", this, null)).setIconType(FontAwesomeIconType.bug));
 
                 // MenuBookmarkablePageLink<HALRedirectPage> halBrowserLink =
                 // new MenuBookmarkablePageLink<HALRedirectPage>(
@@ -354,6 +359,7 @@ public abstract class BasePage extends GenericWebPage<Void> {
 
         /**
          * Make sure to update the BaseStyles when the navbar position changes.
+         * 
          * @see org.devgateway.toolkit.forms.wicket.styles.BaseStyles
          */
         navbar.setPosition(Navbar.Position.TOP);

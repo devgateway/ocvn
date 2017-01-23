@@ -29,7 +29,6 @@ public class Identifier {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists/#organization-identifier-scheme).
      *
      */
-    @ExcelExport
     @JsonProperty("scheme")
     @Merge(MergeStrategy.ocdsVersion)
     private String scheme;
@@ -38,7 +37,6 @@ public class Identifier {
      * The identifier of the organization in the selected scheme.
      *
      */
-    @ExcelExport
     @JsonProperty("id")
     @Merge(MergeStrategy.ocdsVersion)
     private String id;
@@ -47,7 +45,6 @@ public class Identifier {
      * The legally registered name of the organization.
      *
      */
-    @ExcelExport
     @JsonProperty("legalName")
     @Merge(MergeStrategy.ocdsVersion)
     private String legalName;
@@ -59,7 +56,6 @@ public class Identifier {
      * hat can be done through the url field of the Organization contact point.
      *
      */
-    @ExcelExport
     @JsonProperty("uri")
     @Merge(MergeStrategy.ocdsVersion)
     private String uri;

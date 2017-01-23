@@ -54,6 +54,33 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
     }
 
     @Test
+    public void numberCancelledFundingExcelChart() throws Exception {
+        tenderPercentagesExcelController.numberCancelledFundingExcelChart(
+                new YearFilterPagingRequest(),
+                mockHttpServletResponse);
+
+        final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
+        final Workbook workbook = new XSSFWorkbook(new ByteArrayInputStream(responseOutput));
+        Assert.assertNotNull(workbook);
+
+        final Sheet sheet = workbook.getSheet(ChartType.area.toString());
+        Assert.assertNotNull("check chart type, sheet name should be the same as the type", sheet);
+
+        final XSSFDrawing drawing = (XSSFDrawing) sheet.getDrawingPatriarch();
+        final List<XSSFChart> charts =  drawing.getCharts();
+        Assert.assertEquals("number of charts", 1, charts.size());
+
+        final XSSFChart chart = charts.get(0);
+        Assert.assertEquals("chart title", "Number of cancelled bids", chart.getTitle().getString());
+
+        final List<? extends XSSFChartAxis> axis = chart.getAxis();
+        Assert.assertEquals("number of axis", 2, axis.size());
+
+        final CTChart ctChart = chart.getCTChart();
+        Assert.assertEquals("Check if we have 1 area chart", 1, ctChart.getPlotArea().getAreaChartArray().length);
+    }
+
+    @Test
     public void percentTendersUsingEBidExcelChart() throws Exception {
         tenderPercentagesExcelController.percentTendersUsingEBidExcelChart(
                 new YearFilterPagingRequest(),
@@ -72,6 +99,87 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
         final XSSFChart chart = charts.get(0);
         Assert.assertEquals("chart title", "Percent of Tenders Using e-Bid", chart.getTitle().getString());
+
+        final List<? extends XSSFChartAxis> axis = chart.getAxis();
+        Assert.assertEquals("number of axis", 2, axis.size());
+
+        final CTChart ctChart = chart.getCTChart();
+        Assert.assertEquals("Check if we have 1 area chart", 1, ctChart.getPlotArea().getAreaChartArray().length);
+    }
+
+    @Test
+    public void numberTendersUsingEBidExcelChart() throws Exception {
+        tenderPercentagesExcelController.numberTendersUsingEBidExcelChart(
+                new YearFilterPagingRequest(),
+                mockHttpServletResponse);
+
+        final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
+        final Workbook workbook = new XSSFWorkbook(new ByteArrayInputStream(responseOutput));
+        Assert.assertNotNull(workbook);
+
+        final Sheet sheet = workbook.getSheet(ChartType.area.toString());
+        Assert.assertNotNull("check chart type, sheet name should be the same as the type", sheet);
+
+        final XSSFDrawing drawing = (XSSFDrawing) sheet.getDrawingPatriarch();
+        final List<XSSFChart> charts =  drawing.getCharts();
+        Assert.assertEquals("number of charts", 1, charts.size());
+
+        final XSSFChart chart = charts.get(0);
+        Assert.assertEquals("chart title", "Number of eBid Awards", chart.getTitle().getString());
+
+        final List<? extends XSSFChartAxis> axis = chart.getAxis();
+        Assert.assertEquals("number of axis", 2, axis.size());
+
+        final CTChart ctChart = chart.getCTChart();
+        Assert.assertEquals("Check if we have 1 area chart", 1, ctChart.getPlotArea().getAreaChartArray().length);
+    }
+
+    @Test
+    public void percentTendersUsingEgpExcelChart() throws Exception {
+        tenderPercentagesExcelController.percentTendersUsingEgpExcelChart(
+                new YearFilterPagingRequest(),
+                mockHttpServletResponse);
+
+        final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
+        final Workbook workbook = new XSSFWorkbook(new ByteArrayInputStream(responseOutput));
+        Assert.assertNotNull(workbook);
+
+        final Sheet sheet = workbook.getSheet(ChartType.area.toString());
+        Assert.assertNotNull("check chart type, sheet name should be the same as the type", sheet);
+
+        final XSSFDrawing drawing = (XSSFDrawing) sheet.getDrawingPatriarch();
+        final List<XSSFChart> charts =  drawing.getCharts();
+        Assert.assertEquals("number of charts", 1, charts.size());
+
+        final XSSFChart chart = charts.get(0);
+        Assert.assertEquals("chart title", "Percent of Tenders Using e-Procurement", chart.getTitle().getString());
+
+        final List<? extends XSSFChartAxis> axis = chart.getAxis();
+        Assert.assertEquals("number of axis", 2, axis.size());
+
+        final CTChart ctChart = chart.getCTChart();
+        Assert.assertEquals("Check if we have 1 area chart", 1, ctChart.getPlotArea().getAreaChartArray().length);
+    }
+
+    @Test
+    public void tendersWithLinkedProcurementPlanExcelChart() throws Exception {
+        tenderPercentagesExcelController.tendersWithLinkedProcurementPlanExcelChart(
+                new YearFilterPagingRequest(),
+                mockHttpServletResponse);
+
+        final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
+        final Workbook workbook = new XSSFWorkbook(new ByteArrayInputStream(responseOutput));
+        Assert.assertNotNull(workbook);
+
+        final Sheet sheet = workbook.getSheet(ChartType.area.toString());
+        Assert.assertNotNull("check chart type, sheet name should be the same as the type", sheet);
+
+        final XSSFDrawing drawing = (XSSFDrawing) sheet.getDrawingPatriarch();
+        final List<XSSFChart> charts =  drawing.getCharts();
+        Assert.assertEquals("number of charts", 1, charts.size());
+
+        final XSSFChart chart = charts.get(0);
+        Assert.assertEquals("chart title", "Percentage of plans with tender", chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

@@ -6,7 +6,7 @@ import javax.validation.Valid;
 
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
-import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +43,7 @@ public class ProcuringEntitySearchController extends AbstractOrganizationSearchC
             + "Procuring entities are organizations that have the label 'procuringEntity' "
             + "assigned to organization.types array"
             + "Allows full text search using the text parameter.")
-    public List<Organization> searchText(@Valid final OrganizationSearchRequest request) {
+    public List<Organization> searchText(@Valid final TextSearchRequest request) {
 
         return organizationSearchTextByType(request, OrganizationType.procuringEntity);
 
