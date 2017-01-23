@@ -1,13 +1,10 @@
 package org.devgateway.ocds.web.rest.controller.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
-import cz.jirutka.validator.collection.constraints.EachPattern;
-import io.swagger.annotations.ApiModelProperty;
-
 public class OrganizationIdWrapper {
-    
-    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+
     @ApiModelProperty(value = "List of organization identifiers")
     private List<String> id;
 
