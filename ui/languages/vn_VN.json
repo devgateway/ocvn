@@ -145,5 +145,10 @@
 	"charts:percentWithTenders:xAxisTitle": "Năm",
 	"charts:percentWithTenders:yAxisTitle": "Phần trăm",
 	"map:plannedLocations:title": "Lập kế hoạch",
-	"maps:invitationToBidLocations:title": "địa điểm thông báo mời thầu/ đấu thầu"
+	"maps:invitationToBidLocations:title": "địa điểm thông báo mời thầu/ đấu thầu",
+	"tables:top10suppliers:supplierName": "Tên nhà cung cấp",
+	"tables:top10suppliers:nrAwardsWon": "Số lần trúng thầu",
+	"tables:top10suppliers:nrPE": "Số lượng Bên mời thầu đã trao thầu cho nhà cung cấp",
+	"tables:top10suppliers:totalAwardedValue": "Tổng trị giá các gói thầu được trao (VNĐ)",
+	"tables:top10suppliers:title": "Tốp đầu 10 nhà cung cấp"
 }
