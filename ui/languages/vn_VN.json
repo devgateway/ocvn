@@ -123,6 +123,8 @@
 	"tables:frequentTenderers:supplier": "nhà cung cấp",
 	"tables:frequentTenderers:nrITB": "số gói thầu có nhà thầu đã từng cùng tham gia dự thầu",
 	"tables:frequentTenderers:title": "tần suất cùng tham gia dự thầu",
+  "tables:frequentTenderers:supplier1wins": "Nhà cung cấp số 1 trúng thầu",
+	"tables:frequentTenderers:supplier2wins": "Nhà cung cấp số 2 trúng thầu",
 	"tables:showAll": "hiển thị tất cả",
 	"filters:locations:title": "Địa điểm (tỉnh thành)",
 	"filters:bidArea:title": "Lĩnh vực đấu thầu",
