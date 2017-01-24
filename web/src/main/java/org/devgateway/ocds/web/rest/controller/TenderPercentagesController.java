@@ -14,6 +14,9 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.util.Arrays;
+import java.util.List;
+import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
@@ -31,11 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -341,7 +340,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                         MongoConstants.DAY_MS));
 
         DBObject project1 = new BasicDBObject();
-        project1.put(Keys.YEAR, new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
         project1.put("timeFromPlanToTenderPhase", timeFromPlanToTenderPhase);
 
         Aggregation agg = newAggregation(
@@ -349,8 +348,10 @@ public class TenderPercentagesController extends GenericOCDSController {
                         .and("planning.bidPlanProjectDateApprove").exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1),
-                group("year").avg("timeFromPlanToTenderPhase").as(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
-                sort(Sort.Direction.ASC, Fields.UNDERSCORE_ID), skip(filter.getSkip()), limit(filter.getPageSize()));
+                getYearlyMonthlyGroupingOperation(filter).avg("timeFromPlanToTenderPhase")
+                        .as(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
+                transformYearlyGrouping(filter).andInclude(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
