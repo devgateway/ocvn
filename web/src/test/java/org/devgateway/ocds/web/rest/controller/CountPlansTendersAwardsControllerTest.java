@@ -1,13 +1,11 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.DBObject;
+import java.util.List;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
-
-import java.util.List;
 
 /**
  * @author idobre
@@ -61,7 +59,7 @@ public class CountPlansTendersAwardsControllerTest extends AbstractEndPointContr
                 .countBidPlansByYear(new YearFilterPagingRequest());
 
         final DBObject first = countBidPlansByYear.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(CountPlansTendersAwardsController.Keys.YEAR);
         int count = (int) first.get(CountPlansTendersAwardsController.Keys.COUNT);
         Assert.assertEquals(2016, year);
         Assert.assertEquals(1, count);
