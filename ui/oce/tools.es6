@@ -24,15 +24,33 @@ export var toK = number => number >= 1000 ? Math.round(number / 1000) + "K" : nu
 
 export var identity = _ => _;
 
-export let response2obj = (field, arr) => arr.reduce((obj, elem) => {
-  obj[elem.year] = elem[field];
+export const deprecated = f => (...args) => {
+  console.warn('Deprecated!');
+  return f(...args);
+};
+
+/**
+ * Takes two strings and an array of objects, returning on object whose keys are the values of the first field and whose
+ * values are the values of the second field. I guess an example would be more clear
+ * fieldsToObj('field1', 'field2', [{
+ *   field1: 'a',
+ *   field2: '1'
+ * }, {
+ *   field1: 'b',
+ *   field2: '2'
+ * }])
+ * // => {a: 1, b: 2}
+ */
+const fieldsToObj = (keyField, valueField, arr) => arr.reduce((obj, elem) => {
+  obj[elem[keyField]] = elem[valueField];
   return obj;
 }, {});
 
-export const legacyResponse2obj = (field, arr) => arr.reduce((obj, elem) => {
-  obj[elem._id] = elem[field];
-  return obj;
-}, {});
+export const yearlyResponse2obj = fieldsToObj.bind(null, 'year');
+
+export const response2obj = deprecated(yearlyResponse2obj);
+
+export const monthlyResponse2obj = fieldsToObj.bind(null, 'month');
 
 var shallowCompArr = (a, b) => a.every((el, index) => el == b[index]);
 
