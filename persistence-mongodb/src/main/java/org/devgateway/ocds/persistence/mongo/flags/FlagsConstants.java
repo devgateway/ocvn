@@ -12,4 +12,5 @@ public final class FlagsConstants {
     public static final String I004_VALUE = "flags.i004.value";
     public static final String I019_VALUE = "flags.i019.value";
     public static final String I077_VALUE = "flags.i077.value";
+    public static final String I180_VALUE = "flags.i180.value";
 }

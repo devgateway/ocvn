@@ -23,8 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcessor {
 
-    public static final Integer INTERVAL_DAYS = 365;
-    public static final Integer MAX_AWARDS = 3;
+    private static final Integer INTERVAL_DAYS = 365;
+    private static final Integer MAX_AWARDS = 3;
 
     private ConcurrentHashMap<String, FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple>
             awardsMap;
@@ -52,12 +52,21 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     @Override
     public void reInitialize() {
         List<FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple> frequentSuppliersTimeInterval
-                = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(INTERVAL_DAYS, MAX_AWARDS);
+                = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(getIntervalDays(),
+                getMaxAwards());
 
         awardsMap = new ConcurrentHashMap<>();
 
         frequentSuppliersTimeInterval.
                 forEach(tuple -> tuple.getAwardIds().forEach(awardId -> awardsMap.put(awardId, tuple)));
+    }
+
+    protected Integer getMaxAwards() {
+        return MAX_AWARDS;
+    }
+
+    protected Integer getIntervalDays() {
+        return INTERVAL_DAYS;
     }
 
     @PostConstruct
