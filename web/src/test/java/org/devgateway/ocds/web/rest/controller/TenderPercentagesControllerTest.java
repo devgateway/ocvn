@@ -1,14 +1,11 @@
 package org.devgateway.ocds.web.rest.controller;
 
+import com.mongodb.DBObject;
 import java.util.List;
-
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
-
-import com.mongodb.DBObject;
 
 /**
  * @author idobre
@@ -195,7 +192,7 @@ public class TenderPercentagesControllerTest extends AbstractEndPointControllerT
                 .avgTimeFromPlanToTenderPhase(new YearFilterPagingRequest());
 
         final DBObject first = avgTimeFromPlanToTenderPhase.get(0);
-        int year = (int) first.get(Fields.UNDERSCORE_ID);
+        int year = (int) first.get(TenderPercentagesController.Keys.YEAR);
         double avgTimeFromPlanToTender = (double) first
                 .get(TenderPercentagesController.Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE);
         Assert.assertEquals(2015, year);

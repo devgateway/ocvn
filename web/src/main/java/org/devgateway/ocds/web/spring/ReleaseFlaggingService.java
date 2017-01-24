@@ -12,6 +12,7 @@ import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI077Processor;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI180Processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,6 +50,10 @@ public class ReleaseFlaggingService {
 
     @Autowired
     private VietnamReleaseFlagI004Processor vietnamReleaseFlagI004Processor;
+
+    @Autowired
+    private ReleaseFlagI180Processor releaseFlagI180Processor;
+
 
     public static final int FLAGGING_BATCH_SIZE = 5000;
 
@@ -95,7 +100,8 @@ public class ReleaseFlaggingService {
                 releaseFlagI007Processor,
                 vietnamReleaseFlagI004Processor,
                 releaseFlagI019Processor,
-                releaseFlagI077Processor
+                releaseFlagI077Processor,
+                releaseFlagI180Processor
         ));
     }
 }

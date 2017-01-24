@@ -27,6 +27,10 @@ public class ReleaseFlags implements FlagsWrappable {
     //i077: Long delays in contract negotiations or award
     private Flag i019;
 
+    //i180: Contractor receives multiple single-source/non-competitive contracts from a single procuring entity
+    // during a defined time period
+    private Flag i180;
+
     public Flag getI019() {
         return i019;
     }
@@ -73,5 +77,13 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI077(Flag i077) {
         this.i077 = i077;
+    }
+
+    public Flag getI180() {
+        return i180;
+    }
+
+    public void setI180(Flag i180) {
+        this.i180 = i180;
     }
 }

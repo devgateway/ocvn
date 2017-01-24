@@ -1,10 +1,10 @@
 import Overview from "../../oce/visualizations/charts/overview";
-import {pluckImm, legacyResponse2obj} from "../../oce/tools";
+import {pluckImm, response2obj} from "../../oce/tools";
 
 class OCVNOverview extends Overview{
   transform([bidplansResponse, tendersResponse, awardsResponse]){
     const transformed = super.transform([tendersResponse, awardsResponse]);
-    const bidplans = legacyResponse2obj('count', bidplansResponse);
+    const bidplans = response2obj('count', bidplansResponse);
     return transformed.map(datum => {
       datum.bidplan = bidplans[datum.year];
       return datum;

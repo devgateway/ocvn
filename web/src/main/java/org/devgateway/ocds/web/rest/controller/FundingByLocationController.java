@@ -14,6 +14,9 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.util.Arrays;
+import java.util.List;
+import javax.validation.Valid;
 import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -21,7 +24,6 @@ import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperatio
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -30,14 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -64,6 +62,8 @@ public class FundingByLocationController extends GenericOCDSController {
         public static final String PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION = "percentPlansWithAmountsAndLocation";
         public static final String TOTAL_PLANNED_AMOUNT = "totalPlannedAmount";
         public static final String YEAR = "year";
+        public static final String RECORDS_COUNT = "recordsCount";
+        public static final String PLANNING_BUDGET_PROJECTLOCATION = "planning.budget.projectLocation";
     }
 
     @ApiOperation(value = "Total estimated funding (tender.value) grouped by "
@@ -166,7 +166,7 @@ public class FundingByLocationController extends GenericOCDSController {
         project.put("cntprj", new BasicDBObject("$literal", 1));
         project.put("planning.budget.amount.amount", 1);
         project.put("dividedTotal", dividedTotal);
-        project.put(Keys.YEAR, new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"));
+        addYearlyMonthlyProjection(filter, project, "$planning.bidPlanProjectDateApprove");
 
         Aggregation agg =
                 newAggregation(
@@ -175,10 +175,10 @@ public class FundingByLocationController extends GenericOCDSController {
                                         getYearFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
                 new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
-                group("year", "planning.budget.projectLocation").sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
-                        .sum("$cntprj").as("recordsCount"),
-                sort(Sort.Direction.ASC, Keys.YEAR)
-                //, skip(filter.getSkip()), limit(filter.getPageSize())
+                group(getYearlyMonthlyGroupingFields(filter,  Keys.PLANNING_BUDGET_PROJECTLOCATION))
+                        .sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
+                        .sum("$cntprj").as(Keys.RECORDS_COUNT),
+                        getSortByYearMonth(filter)
                 );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
