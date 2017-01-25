@@ -423,6 +423,7 @@ public abstract class GenericOCDSController {
                 getSupplierIdCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter), 
                 getByTenderAmountIntervalCriteria(filter),
+                getByAwardAmountIntervalCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
     }
 
