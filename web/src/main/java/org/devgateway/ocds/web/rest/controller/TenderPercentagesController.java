@@ -249,23 +249,23 @@ public class TenderPercentagesController extends GenericOCDSController {
             + " This is read from tender.publicationMethod='eGP'")
     @RequestMapping(value = "/api/percentTendersUsingEgp",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    public List<DBObject> percentTendersUsingEgp(@ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+    public List<DBObject> percentTendersUsingEgp(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        project1.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
         project1.put("tender.publicationMethod", 1);
 
         DBObject group = new BasicDBObject();
-        group.put(Fields.UNDERSCORE_ID, "$year");
+        addYearlyMonthlyReferenceToGroup(filter, group);
         group.put("totalTenders", new BasicDBObject("$sum", 1));
         group.put(Keys.TOTAL_EGP, new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$tender.publicationMethod", "eGP")), 1, 0))));
 
         DBObject project2 = new BasicDBObject();
-        project2.put(Fields.UNDERSCORE_ID, 0);
-        project2.put("year", Fields.UNDERSCORE_ID_REF);
         project2.put("totalTenders", 1);
         project2.put(Keys.TOTAL_EGP, 1);
+        project2.put("year", 1);
+        project2.put("month", 1);
         project2.put("percentEgp", new BasicDBObject("$multiply",
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalEgp", "$totalTenders")), 100)));
 
@@ -273,7 +273,10 @@ public class TenderPercentagesController extends GenericOCDSController {
                 match(where("tender.tenderPeriod.startDate").exists(true)
                         .andOperator(getDefaultFilterCriteria(filter))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
-                new CustomProjectionOperation(project2), sort(Sort.Direction.ASC, "year"), skip(filter.getSkip()),
+                transformYearlyGrouping(filter).andInclude("totalTenders", "percentEgp", Keys.TOTAL_EGP),
+                new CustomProjectionOperation(project2),
+                getSortByYearMonth(filter),
+                skip(filter.getSkip()),
                 limit(filter.getPageSize()));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
