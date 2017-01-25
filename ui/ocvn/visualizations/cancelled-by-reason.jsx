@@ -1,6 +1,6 @@
-import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
+import FrontendDateFilterableChart from "../../oce/visualizations/charts/frontend-date-filterable";
 
-class CancelledFunding extends FrontendYearFilterableChart{
+class CancelledFunding extends FrontendDateFilterableChart{
   static getName(t){return t('charts:cancelledFunding:title')}
 
   getData(){
@@ -22,9 +22,9 @@ class CancelledFunding extends FrontendYearFilterableChart{
     }
 
     data.forEach(datum => {
-      let year = datum.get('year');
+      const date = datum.has('month') ? datum.get('month') : datum.get('year');
       let totalCancelledTendersAmount = datum.get('totalCancelledTendersAmount');
-      trace.x.push(year);
+      trace.x.push(date);
       trace.y.push(totalCancelledTendersAmount);
       if(hoverFormatter) trace.text.push(hoverFormatter(totalCancelledTendersAmount));
     });
@@ -36,7 +36,7 @@ class CancelledFunding extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.t('charts:cancelledFunding:xAxisTitle'),
+        title: this.props.monthly ? this.t('general:month') : this.t('general:year'),
         type: 'category'
       },
       yaxis: {
