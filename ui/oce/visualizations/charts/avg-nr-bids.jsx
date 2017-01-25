@@ -1,14 +1,19 @@
-import FrontendYearFilterableChart from "./frontend-filterable";
+import FrontendDateFilterableChart from "./frontend-date-filterable";
 import {pluckImm} from "../../tools";
 import {Map} from "immutable";
-import Plotly from "plotly.js/lib/core";
 
-class AvgNrBids extends FrontendYearFilterableChart{
+class AvgNrBids extends FrontendDateFilterableChart{
   getData(){
     let data = super.getData();
     if(!data) return [];
+
+    const monthly = data.hasIn([0, 'month']);
+    const dates = monthly ?
+        data.map(pluckImm('month')).map(month => this.t(`general:months:${month}`)).toArray() :
+        data.map(pluckImm('year')).toArray();
+
     return [{
-      x: data.map(pluckImm('year')).toArray(),
+      x: dates,
       y: data.map(pluckImm('averageNoTenderers')).toArray(),
       type: 'bar',
       marker: {
@@ -21,7 +26,7 @@ class AvgNrBids extends FrontendYearFilterableChart{
     const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
-        title: this.t('charts:avgNrBids:xAxisTitle'),
+        title: this.props.monthly ? this.t('general:month') : this.t('general:year'),
         type: "category"
       },
       yaxis: {
