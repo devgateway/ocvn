@@ -181,7 +181,8 @@ class OCApp extends React.Component{
   }
 
   content(){
-    let {filters, compareBy, comparisonCriteriaValues, currentTab, selectedYears, bidTypes, width, locale} = this.state;
+    let {filters, compareBy, comparisonCriteriaValues, currentTab, selectedYears, selectedMonths, bidTypes, width,
+        locale} = this.state;
     let Tab = this.tabs[currentTab];
     return <Tab
         filters={filters}
@@ -191,7 +192,9 @@ class OCApp extends React.Component{
         requestNewComparisonData={(path, data) => this.updateComparisonData([currentTab, ...path], data)}
         data={this.state.data.get(currentTab) || fromJS({})}
         comparisonData={this.state.comparisonData.get(currentTab) || fromJS({})}
+        monthly={this.showMonths()}
         years={selectedYears}
+        months={selectedMonths}
         bidTypes={bidTypes}
         width={width}
         translations={this.constructor.TRANSLATIONS[locale]}
