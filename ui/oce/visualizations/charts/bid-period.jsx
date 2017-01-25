@@ -1,30 +1,38 @@
-import FrontendYearFilterableChart from "./frontend-filterable";
-import {pluckImm, response2obj} from "../../tools";
+import FrontendDateFilterableChart from "./frontend-date-filterable";
+import {pluckImm, yearlyResponse2obj, monthlyResponse2obj} from "../../tools";
 import {Map} from "immutable";
 
 let ensureNonNegative = a => a < 0 ? 0 : a;
 
-class BidPeriod extends FrontendYearFilterableChart {
+class BidPeriod extends FrontendDateFilterableChart{
   transform([tenders, awards]) {
-    let awardsHash = response2obj('averageAwardDays', awards);
+    const monthly = tenders && tenders[0] && tenders[0].month;
+    const response2obj = monthly ? monthlyResponse2obj : yearlyResponse2obj;
+    const awardsHash = response2obj('averageAwardDays', awards);
+    const dateKey = monthly ? 'month' : 'year';
     return tenders.map(tender => ({
-      year: tender.year,
+      [dateKey]: tender[dateKey],
       tender: +tender.averageTenderDays,
-      award: +(awardsHash[tender.year] || 0)
+      award: +(awardsHash[tender[dateKey]] || 0)
     }))
   };
 
   getRawData(){
     return super.getData();
-  }  
+  }
 
   getData() {
     let data = super.getData();
     if (!data) return [];
-    let years = data.map(pluckImm('year')).toArray();
+
+    const monthly = data.hasIn([0, 'month']);
+    const dates = monthly ?
+        data.map(pluckImm('month')).map(month => this.t(`general:months:${month}`)).toArray() :
+        data.map(pluckImm('year')).toArray();
+
     return [{
       x: data.map(pluckImm('tender')).map(ensureNonNegative).toArray(),
-      y: years,
+      y: dates,
       name: this.t('charts:bidPeriod:traces:tender'),
       type: "bar",
       orientation: 'h',
@@ -33,7 +41,7 @@ class BidPeriod extends FrontendYearFilterableChart {
       }
     }, {
       x: data.map(pluckImm('award')).map(ensureNonNegative).toArray(),
-      y: years,
+      y: dates,
       name: this.t('charts:bidPeriod:traces:award'),
       type: "bar",
       orientation: 'h',
@@ -49,7 +57,7 @@ class BidPeriod extends FrontendYearFilterableChart {
     let data = super.getData();
     if(data){
       annotations = data.map((imm, index) => {
-			  let sum = imm.reduce((sum, val, key) => "year" == key ? sum : sum + ensureNonNegative(val), 0).toFixed(2);
+        let sum = imm.reduce((sum, val, key) => "year" == key || "month" == key ? sum : sum + ensureNonNegative(val), 0).toFixed(2);
         return {
           y: index,
           x: sum,
@@ -69,7 +77,7 @@ class BidPeriod extends FrontendYearFilterableChart {
         hoverformat: hoverFormat
       },
       yaxis: {
-        title: this.t('charts:bidPeriod:yAxisTitle'),
+        title: this.props.monthly ? this.t('general:month') : this.t('general:year'),
         type: "category"
       }
     }
