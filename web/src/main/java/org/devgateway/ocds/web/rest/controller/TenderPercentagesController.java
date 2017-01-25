@@ -268,7 +268,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 transformYearlyGrouping(filter).andInclude("totalTenders", "percentEgp", Keys.TOTAL_EGP),
                 new CustomProjectionOperation(project2),
@@ -315,7 +315,7 @@ public class TenderPercentagesController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
                         Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, Keys.PERCENT_TENDERS),
