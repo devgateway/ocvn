@@ -93,7 +93,7 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
         Aggregation agg = newAggregation(
                 match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
-                new CustomProjectionOperation(project), group( getYearlyMonthlyGroupingFields(
+                new CustomProjectionOperation(project), group(getYearlyMonthlyGroupingFields(
                         filter, "$tender.cancellationRationale"))
                         .sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 getSortByYearMonth(filter));
