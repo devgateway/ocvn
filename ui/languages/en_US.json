@@ -8,6 +8,8 @@
   "general:login": "Log in",
   "general:logout": "Log out",
   "general:viewOnGithub": "View code on Github",
+  "general:year": "Year",
+  "general:month": "Month",
   "general:months:1": "Jan",
   "general:months:2": "Feb",
   "general:months:3": "Mar",
