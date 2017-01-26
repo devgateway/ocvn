@@ -134,7 +134,9 @@ class OCApp extends React.Component{
         onClick={e => this.setMenuBox(e, MENU_BOX_COMPARISON)}
         className={cn("filters compare", {open: menuBox == MENU_BOX_COMPARISON})}
     >
-      <img className="top-nav-icon" src="assets/icons/compare.svg"/> {this.t('header:comparison:title')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/compare.svg" width="100%" height="100%"/>
+      {this.t('header:comparison:title')}
+      <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box" onClick={e => e.stopPropagation()}>
         <div className="col-sm-6">
           <label>{this.t('header:comparison:criteria')}</label>
@@ -294,7 +296,9 @@ class OCApp extends React.Component{
       )
     }
     return <div className="filters" onClick={e => this.downloadExcel()}>
-      <img className="top-nav-icon" src="assets/icons/export.svg"/> {this.t('export:export')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/export.svg" width="100%" height="100%"/>
+      {this.t('export:export')}
+      <i className="glyphicon glyphicon-menu-down"></i>
     </div>
   }
 }

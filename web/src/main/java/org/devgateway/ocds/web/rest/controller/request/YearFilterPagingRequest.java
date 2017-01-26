@@ -21,6 +21,15 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
     @EachRange(min = MIN_REQ_YEAR, max = MAX_REQ_YEAR)
     protected List<Integer> year;
 
+    @ApiModelProperty(value = "This parameter will filter the content based on month. "
+            + "The minimum month allowed is "
+            + MIN_MONTH + " and the maximum allowed is " + MAX_MONTH
+            + "This parameter does nothing if used without the year parameter, as filtering and aggregating by month "
+            + "makes no sense without filtering by year. This parameter is also ignored when using multiple year "
+            + "parameters, so it only works if and only if the year parameter has one value.")
+    @EachRange(min = MIN_MONTH, max = MAX_MONTH)
+    protected List<Integer> month;
+
     @ApiModelProperty(value = "When true, this parameter will add an extra layer of monthly grouping of all results."
             + " The default is false")
     private Boolean monthly = false;
@@ -48,4 +57,11 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
         this.year = year;
     }
 
+    public List<Integer> getMonth() {
+        return month;
+    }
+
+    public void setMonth(List<Integer> month) {
+        this.month = month;
+    }
 }
