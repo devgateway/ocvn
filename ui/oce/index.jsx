@@ -24,7 +24,7 @@ class OCApp extends React.Component{
       menuBox: "",
       compareBy: "",
       comparisonCriteriaValues: [],
-      selectedYears: Set(range(MIN_YEAR, MAX_YEAR)),
+      selectedYears: Set(),
       selectedMonths: Set(range(1, 12)),
       filters: fromJS({}),
       data: fromJS({}),
@@ -70,9 +70,13 @@ class OCApp extends React.Component{
   }
 
   fetchYears(){
-    fetchJson('/api/tendersAwardsYears').then(data => this.setState({
-      years: fromJS(data.map(pluck('_id')))
-    }))
+    fetchJson('/api/tendersAwardsYears').then(data => {
+      const years = fromJS(data.map(pluck('_id')));
+      this.setState({
+        years,
+        selectedYears: Set(years)
+      })
+    })
   }
 
   fetchUserInfo(){
