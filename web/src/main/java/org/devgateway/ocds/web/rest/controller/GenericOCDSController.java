@@ -5,6 +5,16 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
@@ -26,16 +36,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -47,8 +47,6 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  *
  */
 public abstract class GenericOCDSController {
-
-    private static final int LAST_DAY = 31;
 
     private static final int LAST_MONTH_ZERO = 11;
 
@@ -74,6 +72,39 @@ public abstract class GenericOCDSController {
     }
 
     /**
+     * This is used to build the start date filter query when a monthly filter is used.
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+    protected Date getMonthStartDate(final int year, final int month) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date start = cal.getTime();
+        return start;
+    }
+
+    /**
+     * This is used to build the end date filter query when a monthly filter is used.
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+    protected Date getMonthEndDate(final int year, final int month) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date end = cal.getTime();
+        return end;
+    }
+
+
+    /**
      * Gets the date of the last date of the year (31.12.year)
      *
      * @param year
@@ -83,7 +114,7 @@ public abstract class GenericOCDSController {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, LAST_MONTH_ZERO);
-        cal.set(Calendar.DAY_OF_MONTH, LAST_DAY);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date end = cal.getTime();
         return end;
     }
@@ -370,9 +401,22 @@ public abstract class GenericOCDSController {
                 yearCriteria[i] = where(dateProperty).gte(getStartDate(filter.getYear().get(i)))
                         .lte(getEndDate(filter.getYear().get(i)));
             }
+            criteria = criteria.orOperator(yearCriteria);
+
+            if (filter.getMonth() != null && filter.getYear().size() == 1) {
+                criteria = new Criteria(); //we reset the criteria because we use only one year
+                Criteria[] monthCriteria = new Criteria[filter.getMonth().size()];
+                for (int i = 0; i < filter.getMonth().size(); i++) {
+                    monthCriteria[i] = where(dateProperty).gte(getMonthStartDate(filter.getYear().get(0),
+                            filter.getMonth().get(i)))
+                            .lte(getMonthEndDate(filter.getYear().get(0),
+                                    filter.getMonth().get(i)));
+                }
+                criteria = criteria.orOperator(monthCriteria);
+            }
         }
 
-        return criteria.orOperator(yearCriteria);
+        return criteria;
     }
 
     /**
