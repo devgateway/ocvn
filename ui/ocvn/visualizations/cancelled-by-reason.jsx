@@ -22,7 +22,9 @@ class CancelledFunding extends FrontendDateFilterableChart{
     }
 
     data.forEach(datum => {
-      const date = datum.has('month') ? datum.get('month') : datum.get('year');
+      const date = datum.has('month') ?
+          this.t('general:months:' + datum.get('month')) :
+          datum.get('year');
       let totalCancelledTendersAmount = datum.get('totalCancelledTendersAmount');
       trace.x.push(date);
       trace.y.push(totalCancelledTendersAmount);
