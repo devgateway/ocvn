@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.OrganizationSearchRequest;
+import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -26,7 +26,7 @@ public abstract class AbstractOrganizationSearchController extends GenericOCDSCo
     @Autowired
     protected OrganizationRepository organizationRepository;
 
-    protected List<Organization> organizationSearchTextByType(final OrganizationSearchRequest request,
+    protected List<Organization> organizationSearchTextByType(final TextSearchRequest request,
                                                               Organization.OrganizationType type) {
         Query query = null;
 
@@ -47,7 +47,7 @@ public abstract class AbstractOrganizationSearchController extends GenericOCDSCo
 
     public abstract Organization byId(@PathVariable String id);
 
-    public abstract List<Organization> searchText(@Valid OrganizationSearchRequest request);
+    public abstract List<Organization> searchText(@Valid TextSearchRequest request);
 
 
 }
