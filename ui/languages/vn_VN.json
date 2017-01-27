@@ -8,6 +8,8 @@
 	"general:login": "đăng nhập",
 	"general:logout": "đăng xuất",
 	"general:viewOnGithub": "xem code trên github",
+    "general:year": "Năm",
+    "general:month": "Tháng",
 	"general:months:1": "T1",
 	"general:months:2": "T2",
 	"general:months:3": "T3",
