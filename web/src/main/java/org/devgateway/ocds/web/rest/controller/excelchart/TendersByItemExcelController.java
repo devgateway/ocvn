@@ -3,7 +3,7 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.NumberOfTendersByItemClassification;
+import org.devgateway.ocds.web.rest.controller.TendersByItemClassification;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.List;
  * Exports an excel chart based on *Number of bids by item* dashboard
  */
 @RestController
-public class NumberOfTendersByItemExcelController extends GenericOCDSController {
+public class TendersByItemExcelController extends GenericOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -34,10 +34,10 @@ public class NumberOfTendersByItemExcelController extends GenericOCDSController 
     private ExcelChartHelper excelChartHelper;
 
     @Autowired
-    private NumberOfTendersByItemClassification numberOfTendersByItemClassification;
+    private TendersByItemClassification tendersByItemClassification;
 
     @ApiOperation(value = "Exports *Number of bids by item* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/numberOfTendersByItemExcelChart",
+    @RequestMapping(value = "/api/ocds/tendersByItemExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
     public void numberOfTendersByItemExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
                                                 final HttpServletResponse response) throws IOException {
@@ -45,16 +45,16 @@ public class NumberOfTendersByItemExcelController extends GenericOCDSController 
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> numberOfTendersByItem =
-                numberOfTendersByItemClassification.numberOfTendersByItemClassification(filter);
+                tendersByItemClassification.tendersByItemClassification(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-                NumberOfTendersByItemClassification.Keys.DESCRIPTION, numberOfTendersByItem);
+                TendersByItemClassification.Keys.DESCRIPTION, numberOfTendersByItem);
 
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(numberOfTendersByItem,
-                categories, NumberOfTendersByItemClassification.Keys.DESCRIPTION,
-                NumberOfTendersByItemClassification.Keys.TOTAL_TENDERS);
+                categories, TendersByItemClassification.Keys.DESCRIPTION,
+                TendersByItemClassification.Keys.TOTAL_TENDERS);
         if (!totalTenderAmount.isEmpty()) {
             values.add(totalTenderAmount);
         }
