@@ -88,11 +88,8 @@ BidPeriod.endpoints = ['averageTenderPeriod', 'averageAwardPeriod'];
 BidPeriod.excelEP = 'bidTimelineExcelChart';
 BidPeriod.getName = t => t('charts:bidPeriod:title');
 BidPeriod.horizontal = true;
-BidPeriod.getFillerDatum = year => Map({
-  year,
-  tender: 0,
-  award: 0
-});
+
+BidPeriod.getFillerDatum = seed => Map(seed).set('tender', 0).set('award', 0);
 BidPeriod.getMaxField = imm => imm.get('tender', 0) + imm.get('award', 0);
 
 export default BidPeriod;
