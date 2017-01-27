@@ -28,16 +28,20 @@ public class TendersByItemClassificationTest extends AbstractEndPointControllerT
         String id = (String) first.get(Fields.UNDERSCORE_ID);
         String description = (String) first.get(TendersByItemClassification.Keys.DESCRIPTION);
         int totalTenders = (int) first.get(TendersByItemClassification.Keys.TOTAL_TENDERS);
+        double totalTenderAmount = (double) first.get(TendersByItemClassification.Keys.TOTAL_TENDER_AMOUNT);
         Assert.assertEquals("09100000", id);
         Assert.assertEquals("Fuels", description);
         Assert.assertEquals(1, totalTenders);
+        Assert.assertEquals(9000.0, totalTenderAmount,0);
 
         final DBObject second = numberOfTendersByItem.get(1);
         id = (String) second.get(Fields.UNDERSCORE_ID);
         description = (String) second.get(TendersByItemClassification.Keys.DESCRIPTION);
         totalTenders = (int) second.get(TendersByItemClassification.Keys.TOTAL_TENDERS);
+        totalTenderAmount = (double) second.get(TendersByItemClassification.Keys.TOTAL_TENDER_AMOUNT);
         Assert.assertEquals("45233130", id);
         Assert.assertEquals("Construction work for highways", description);
         Assert.assertEquals(2, totalTenders);
+        Assert.assertEquals(1000000, totalTenderAmount, 0);
     }
 }
