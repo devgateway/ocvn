@@ -38,7 +38,7 @@ class OCVNBidPeriod extends BidPeriod{
 
 OCVNBidPeriod.endpoints = BidPeriod.endpoints.concat('avgTimeFromPlanToTenderPhase');
 OCVNBidPeriod.excelEP = 'bidTimelineExcelChart';
-OCVNBidPeriod.getFillerDatum = year => BidPeriod.getFillerDatum(year).set('avg', 0);
+OCVNBidPeriod.getFillerDatum = seed => BidPeriod.getFillerDatum(seed).set('avg', 0);
 OCVNBidPeriod.getMaxField = imm => BidPeriod.getMaxField(imm) + imm.get('avg');
 
 export default OCVNBidPeriod;
