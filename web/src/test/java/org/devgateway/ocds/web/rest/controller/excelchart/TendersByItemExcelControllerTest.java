@@ -22,13 +22,13 @@ import java.util.List;
  *
  * @see {@link AbstractExcelControllerTest}
  */
-public class NumberOfTendersByItemExcelControllerTest extends AbstractExcelControllerTest {
+public class TendersByItemExcelControllerTest extends AbstractExcelControllerTest {
     @Autowired
-    private NumberOfTendersByItemExcelController numberOfTendersByItemExcelController;
+    private TendersByItemExcelController tendersByItemExcelController;
 
     @Test
     public void numberOfTendersByItemExcelChart() throws Exception {
-        numberOfTendersByItemExcelController.numberOfTendersByItemExcelChart(
+        tendersByItemExcelController.numberOfTendersByItemExcelChart(
                 new YearFilterPagingRequest(),
                 mockHttpServletResponse);
 

@@ -15,27 +15,27 @@ import java.util.List;
  *
  * @see {@link AbstractEndPointControllerTest}
  */
-public class NumberOfTendersByItemClassificationTest extends AbstractEndPointControllerTest {
+public class TendersByItemClassificationTest extends AbstractEndPointControllerTest {
     @Autowired
-    private NumberOfTendersByItemClassification numberOfTendersByItemClassification;
+    private TendersByItemClassification tendersByItemClassification;
 
     @Test
-    public void numberOfTendersByItemClassification() throws Exception {
-        final List<DBObject> numberOfTendersByItem = numberOfTendersByItemClassification
-                .numberOfTendersByItemClassification(new YearFilterPagingRequest());
+    public void tendersByItemClassification() throws Exception {
+        final List<DBObject> numberOfTendersByItem = tendersByItemClassification
+                .tendersByItemClassification(new YearFilterPagingRequest());
 
         final DBObject first = numberOfTendersByItem.get(0);
         String id = (String) first.get(Fields.UNDERSCORE_ID);
-        String description = (String) first.get(NumberOfTendersByItemClassification.Keys.DESCRIPTION);
-        int totalTenders = (int) first.get(NumberOfTendersByItemClassification.Keys.TOTAL_TENDERS);
+        String description = (String) first.get(TendersByItemClassification.Keys.DESCRIPTION);
+        int totalTenders = (int) first.get(TendersByItemClassification.Keys.TOTAL_TENDERS);
         Assert.assertEquals("09100000", id);
         Assert.assertEquals("Fuels", description);
         Assert.assertEquals(1, totalTenders);
 
         final DBObject second = numberOfTendersByItem.get(1);
         id = (String) second.get(Fields.UNDERSCORE_ID);
-        description = (String) second.get(NumberOfTendersByItemClassification.Keys.DESCRIPTION);
-        totalTenders = (int) second.get(NumberOfTendersByItemClassification.Keys.TOTAL_TENDERS);
+        description = (String) second.get(TendersByItemClassification.Keys.DESCRIPTION);
+        totalTenders = (int) second.get(TendersByItemClassification.Keys.TOTAL_TENDERS);
         Assert.assertEquals("45233130", id);
         Assert.assertEquals("Construction work for highways", description);
         Assert.assertEquals(2, totalTenders);
