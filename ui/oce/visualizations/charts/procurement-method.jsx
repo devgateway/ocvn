@@ -56,7 +56,7 @@ ProcurementMethod.PROCUREMENT_METHOD_FIELD = 'procurementMethod';
 class ProcurementMethodComparison extends Comparison{
   render(){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, translations,
-        styling, width} = this.props;
+        styling, width, months, monthly} = this.props;
     if(!comparisonCriteriaValues.length) return null;
     let Component = this.getComponent();
     let decoratedFilters = this.constructor.decorateFilters(filters, compareBy, comparisonCriteriaValues);
@@ -119,6 +119,8 @@ class ProcurementMethodComparison extends Comparison{
             requestNewData={(_, data) => requestNewComparisonData([index], data)}
             data={uniformData.get(index)}
             years={years}
+            months={months}
+            monthly={monthly}
             title={this.getTitle(index)}
             translations={translations}
             styling={styling}

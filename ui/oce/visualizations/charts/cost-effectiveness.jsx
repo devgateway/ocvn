@@ -67,6 +67,6 @@ CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
 CostEffectiveness.excelEP = 'costEffectivenessExcelChart';
 CostEffectiveness.getFillerDatum = seed => Map(seed).set('tender', 0).set('diff', 0);
 
-CostEffectiveness.getMaxField = imm => imm.get('tender') + imm.get('diff');
+CostEffectiveness.getMaxField = imm => imm.get('totalTenderAmount') + imm.get('diffTenderAwardAmount');
 
 export default CostEffectiveness;
