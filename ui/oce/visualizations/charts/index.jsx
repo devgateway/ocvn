@@ -80,9 +80,9 @@ class Chart extends Visualization{
   }
 }
 
-Chart.getFillerDatum = year => Map({year});
+Chart.getFillerDatum = seed => Map(seed);
 
-Chart.getMaxField = data => data.flatten().filter((value, key) => value && "year" != key).reduce(max, 0);
+Chart.getMaxField = data => data.flatten().filter((value, key) => value && "year" != key && "month" != key).reduce(max, 0);
 
 Chart.UPDATABLE_FIELDS = ['data'];
 

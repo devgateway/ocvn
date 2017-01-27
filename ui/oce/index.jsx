@@ -24,7 +24,7 @@ class OCApp extends React.Component{
       menuBox: "",
       compareBy: "",
       comparisonCriteriaValues: [],
-      selectedYears: Set(range(MIN_YEAR, MAX_YEAR)),
+      selectedYears: Set(),
       selectedMonths: Set(range(1, 12)),
       filters: fromJS({}),
       data: fromJS({}),
@@ -70,9 +70,13 @@ class OCApp extends React.Component{
   }
 
   fetchYears(){
-    fetchJson('/api/tendersAwardsYears').then(data => this.setState({
-      years: fromJS(data.map(pluck('_id')))
-    }))
+    fetchJson('/api/tendersAwardsYears').then(data => {
+      const years = fromJS(data.map(pluck('_id')));
+      this.setState({
+        years,
+        selectedYears: Set(years)
+      })
+    })
   }
 
   fetchUserInfo(){
@@ -183,7 +187,8 @@ class OCApp extends React.Component{
   }
 
   content(){
-    let {filters, compareBy, comparisonCriteriaValues, currentTab, selectedYears, bidTypes, width, locale} = this.state;
+    let {filters, compareBy, comparisonCriteriaValues, currentTab, selectedYears, selectedMonths, bidTypes, width,
+        locale} = this.state;
     let Tab = this.tabs[currentTab];
     return <Tab
         filters={filters}
@@ -193,7 +198,9 @@ class OCApp extends React.Component{
         requestNewComparisonData={(path, data) => this.updateComparisonData([currentTab, ...path], data)}
         data={this.state.data.get(currentTab) || fromJS({})}
         comparisonData={this.state.comparisonData.get(currentTab) || fromJS({})}
+        monthly={this.showMonths()}
         years={selectedYears}
+        months={selectedMonths}
         bidTypes={bidTypes}
         width={width}
         translations={this.constructor.TRANSLATIONS[locale]}

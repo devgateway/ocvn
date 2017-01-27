@@ -1,15 +1,7 @@
-import FrontendYearFilterableChart from "./frontend-filterable";
+import FrontendDateFilterableChart from "./frontend-date-filterable";
 import {Map} from "immutable";
 
-class CostEffectiveness extends FrontendYearFilterableChart{
-  transform(data){
-    return data.map(datum => ({
-      year: datum.year,
-      tender: datum.totalTenderAmount,
-      diff: datum.diffTenderAwardAmount
-    }));
-  }
-
+class CostEffectiveness extends FrontendDateFilterableChart{
   mkTrace(name, colorIndex){
     let {traceColors, hoverFormatter} = this.props.styling.charts;
     let trace = {
@@ -39,10 +31,12 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     let {hoverFormatter} = this.props.styling.charts;
 
     data.forEach(datum => {
-      let year = datum.get('year');
-      traces.forEach(trace => trace.x.push(year));
-      let tender = datum.get('tender');
-      let diff = datum.get('diff');
+      const date = datum.has('month') ?
+          this.t('general:months:' + datum.get('month')) :
+          datum.get('year');
+      traces.forEach(trace => trace.x.push(date));
+      let tender = datum.get('totalTenderAmount');
+      let diff = datum.get('diffTenderAwardAmount');
       traces[0].y.push(tender);
       traces[1].y.push(diff);
       if(hoverFormatter){
@@ -58,7 +52,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
     return {
       barmode: "relative",
       xaxis: {
-        title: this.t('charts:costEffectiveness:xAxisTitle'),
+        title: this.props.monthly ? this.t('general:month') : this.t('general:year'),
         type: "category"
       },
       yaxis: {
@@ -71,11 +65,7 @@ class CostEffectiveness extends FrontendYearFilterableChart{
 CostEffectiveness.getName = t => t('charts:costEffectiveness:title');
 CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
 CostEffectiveness.excelEP = 'costEffectivenessExcelChart';
-CostEffectiveness.getFillerDatum = year => Map({
-  year,
-  tender: 0,
-  diff: 0
-});
+CostEffectiveness.getFillerDatum = seed => Map(seed).set('tender', 0).set('diff', 0);
 
 CostEffectiveness.getMaxField = imm => imm.get('tender') + imm.get('diff');
 

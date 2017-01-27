@@ -38,7 +38,7 @@ class Tab extends Visualization{
 
   compare(Component, index){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, bidTypes
-        , width, translations, styling} = this.props;
+        , width, translations, styling, monthly, months} = this.props;
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
@@ -49,6 +49,8 @@ class Tab extends Visualization{
         filters={filters}
         requestNewComparisonData={(path, data) => requestNewComparisonData([index, ...path], data)}
         years={years}
+        monthly={monthly}
+        months={months}
         Component={Component}
         bidTypes={bidTypes}
         width={width}
@@ -58,7 +60,7 @@ class Tab extends Visualization{
   }
 
   render(){
-    let {filters, compareBy, requestNewData, data, years, width, translations, styling} = this.props;
+    let {filters, compareBy, requestNewData, data, years, months, monthly, width, translations, styling} = this.props;
     return <div className="col-sm-12 content">
       {this.constructor.visualizations.map((Component, index) =>
           compareBy && Component.comparable ? this.compare(Component, index) :
@@ -68,7 +70,9 @@ class Tab extends Visualization{
                       filters={filters}
                       requestNewData={(_, data) => requestNewData([index], data)}
                       data={data.get(index)}
+                      monthly={monthly}
                       years={years}
+                      months={months}
                       width={width}
                       translations={translations}
                       styling={styling}
