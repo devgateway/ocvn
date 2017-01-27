@@ -38,7 +38,7 @@ class Tab extends Visualization{
 
   compare(Component, index){
     let {compareBy, comparisonData, comparisonCriteriaValues, filters, requestNewComparisonData, years, bidTypes
-        , width, translations, styling} = this.props;
+        , width, translations, styling, monthly, months} = this.props;
     let {compareWith: CustomComparison} = Component;
     let Comparison = CustomComparison || DefaultComparison;
     return <Comparison
@@ -49,6 +49,8 @@ class Tab extends Visualization{
         filters={filters}
         requestNewComparisonData={(path, data) => requestNewComparisonData([index, ...path], data)}
         years={years}
+        monthly={monthly}
+        months={months}
         Component={Component}
         bidTypes={bidTypes}
         width={width}
