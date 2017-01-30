@@ -49,3 +49,9 @@ html {
     margin-top: 2em;
     margin-bottom: 2em;
 }
+
+/* file upload
+-------------------------------------------------- */
+.file-preview.loading {
+    background: transparent url('./assets/img/ajax-loader.gif') no-repeat scroll center center content-box !important;
+}

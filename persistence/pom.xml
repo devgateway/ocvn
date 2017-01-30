@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.devgateway.toolkit.persistence.spring.PersistenceApplication</start-class>
         <java.version>1.8</java.version>
-        <joda.time.version>2.7</joda.time.version>
+        <joda.time.version>2.9.7</joda.time.version>
         <jadira.usertype.version>5.0.0.GA</jadira.usertype.version>
         <ehcache.version>2.6.11</ehcache.version>
         <dozer.hibernate.model.version>0.3.5-06032016</dozer.hibernate.model.version>
