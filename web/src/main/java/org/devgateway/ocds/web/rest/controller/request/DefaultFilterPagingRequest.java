@@ -196,7 +196,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setElectronicSubmission(Boolean electronicSubmission) {
         this.electronicSubmission = electronicSubmission;
     }
-}
 
     public void setProcuringEntityCityId(List<String> procuringEntityCityId) {
         this.procuringEntityCityId = procuringEntityCityId;
