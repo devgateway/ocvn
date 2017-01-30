@@ -75,6 +75,7 @@ public class OcdsController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/release/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}",
             method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
+    @JsonView(Views.Public.class)
     public Release ocdsByPlanningBidNo(@PathVariable final String bidNo) {
 
         Release release = releaseRepository.findByPlanningBidNo(bidNo);
@@ -125,6 +126,7 @@ public class OcdsController extends GenericOCDSController {
     @RequestMapping(value = "/api/ocds/package/planningBidNo/{bidNo:^[a-zA-Z0-9]*$}",
             method = { RequestMethod.POST, RequestMethod.GET },
             produces = "application/json")
+    @JsonView(Views.Public.class)
     public ReleasePackage packagedReleaseByPlanningBidNo(@PathVariable final String bidNo) {
         Release release = ocdsByPlanningBidNo(bidNo);
 
