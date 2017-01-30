@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bson.types.ObjectId;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
@@ -354,6 +355,20 @@ public abstract class GenericOCDSController {
                 filter.getProcuringEntityCityId(), filter);
     }
 
+    /**
+     * Adds the filter by electronic submission criteria for tender.submissionMethod.
+     *
+     * @param filter
+     * @return
+     */
+    protected Criteria getElectronicSubmissionCriteria(final DefaultFilterPagingRequest filter) {
+        if (filter.getElectronicSubmission() != null && filter.getElectronicSubmission()) {
+            return where("tender.submissionMethod").is(Tender.SubmissionMethod.electronicSubmission.toString());
+        }
+
+        return new Criteria();
+    }
+
     protected Criteria getNotProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
         return createNotFilterCriteria("tender.procuringEntity._id", filter.getNotProcuringEntityId(), filter);
     }
@@ -449,7 +464,8 @@ public abstract class GenericOCDSController {
                 getSupplierIdCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter), 
                 getByTenderAmountIntervalCriteria(filter),
-                getByAwardAmountIntervalCriteria(filter));
+                getByAwardAmountIntervalCriteria(filter),
+                getElectronicSubmissionCriteria(filter));
     }
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
@@ -468,6 +484,7 @@ public abstract class GenericOCDSController {
                 getByTenderDeliveryLocationIdentifier(filter), 
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
+                getElectronicSubmissionCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
     }
 

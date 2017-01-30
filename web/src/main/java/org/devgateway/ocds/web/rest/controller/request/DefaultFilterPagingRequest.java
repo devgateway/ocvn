@@ -45,7 +45,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     @ApiModelProperty(value = "This corresponds the negated bidSelectionMethod filter,"
             + " matches elements that are NOT in the list of Ids")
     private List<String> notBidSelectionMethod;
-    
+
     @ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     private List<String> contrMethod;
@@ -68,21 +68,24 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     @ApiModelProperty(value = "This will filter after awards.value.amount and will specify a maximum."
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
-    
+
     @ApiModelProperty(value = "This will search after the City Id of the procuring entity."
             + "The field is organization.address.postalCode")
     private List<String> procuringEntityCityId;
 
-    
+    @ApiModelProperty(value = "Filters after tender.submissionMethod='electronicSubmission', also known as"
+            + " eBids")
+    private Boolean electronicSubmission;
+
     @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
             + "The field is organization.department._id")
     private List<Integer> procuringEntityDepartmentId;
-    
-        @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+
+    @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
             + "The field is organization.group._id")
     private List<Integer> procuringEntityGroupId;
 
-    
+
     public DefaultFilterPagingRequest() {
         super();
     }
@@ -110,7 +113,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setBidSelectionMethod(final List<String> bidSelectionMethod) {
         this.bidSelectionMethod = bidSelectionMethod;
     }
-    
+
     public List<String> getContrMethod() {
         return contrMethod;
     }
@@ -166,7 +169,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setSupplierId(final List<String> supplierId) {
         this.supplierId = supplierId;
     }
-    
+
     public List<String> getNotBidTypeId() {
         return notBidTypeId;
     }
@@ -186,6 +189,14 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public List<String> getProcuringEntityCityId() {
         return procuringEntityCityId;
     }
+    public Boolean getElectronicSubmission() {
+        return electronicSubmission;
+    }
+
+    public void setElectronicSubmission(Boolean electronicSubmission) {
+        this.electronicSubmission = electronicSubmission;
+    }
+}
 
     public void setProcuringEntityCityId(List<String> procuringEntityCityId) {
         this.procuringEntityCityId = procuringEntityCityId;
