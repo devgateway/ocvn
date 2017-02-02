@@ -32,13 +32,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RepositoryRestResource
 public interface UserDashboardRepository extends TextSearchableRepository<UserDashboard, Long> {
 
-    @Query("select d from Person p JOIN p.dashboards d where p.id = ?1")
+    @Query("select d from UserDashboard d JOIN d.users p where p.id=:userId")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
-    Page<UserDashboard> findDashboardsForPersonId(long userId, Pageable pageable);
+    Page<UserDashboard> findDashboardsForPersonId(@Param("userId") long  userId, Pageable pageable);
 
-    @Query("select p.defaultDashboard from Person p where p.id = ?1")
+    @Query("select d from UserDashboard d JOIN d.users p where p.id=:userId")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
-    UserDashboard getDefaultDashboardForPersonId(long userId);
+    List<UserDashboard> findDashboardsForPersonId(@Param("userId") long  userId);
+
+    @Query("select p.defaultDashboard from Person p where p.id = :userId")
+    @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
+    UserDashboard getDefaultDashboardForPersonId(@Param("userId") long userId);
 
     @Override
     @Query("select e from  #{#entityName} e where lower(e.name) like %:code%")
@@ -51,7 +55,6 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
     List<UserDashboard> findAll();
 
     UserDashboard findByName(@Param("name") String name);
-
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     Page<UserDashboard> findAll(Pageable pageable);

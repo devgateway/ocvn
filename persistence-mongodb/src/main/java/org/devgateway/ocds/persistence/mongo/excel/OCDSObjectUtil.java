@@ -4,13 +4,24 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
-import org.devgateway.ocds.persistence.mongo.DefaultLocation;
+import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.Budget;
+import org.devgateway.ocds.persistence.mongo.Item;
 import org.devgateway.ocds.persistence.mongo.Location;
+import org.devgateway.ocds.persistence.mongo.Organization;
+import org.devgateway.ocds.persistence.mongo.Planning;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExportSepareteSheet;
 import org.devgateway.ocds.persistence.mongo.info.ClassFields;
 import org.devgateway.ocds.persistence.mongo.info.ClassFieldsDefault;
 import org.devgateway.ocds.persistence.mongo.info.ClassFieldsExcelExport;
+import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
+import org.devgateway.ocvn.persistence.mongo.dao.VNBudget;
+import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
+import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
+import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -170,6 +181,12 @@ public final class OCDSObjectUtil {
      *      .put(Budget.class, VNBudget.class)
      */
     public static final ImmutableMap<Class, Class> INHERITEDOCDSOBJECTS = new ImmutableMap.Builder<Class, Class>()
-            .put(Location.class, DefaultLocation.class)
+            .put(Award.class, VNAward.class)
+            .put(Budget.class, VNBudget.class)
+            .put(Item.class, VNItem.class)
+            .put(Location.class, VNLocation.class)
+            .put(Organization.class, Organization.class)
+            .put(Planning.class, VNPlanning.class)
+            .put(Tender.class, VNTender.class)
             .build();
 }
