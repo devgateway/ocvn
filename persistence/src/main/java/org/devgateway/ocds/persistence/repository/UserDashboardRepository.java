@@ -38,7 +38,7 @@ public interface UserDashboardRepository extends TextSearchableRepository<UserDa
 
     @Query("select d from UserDashboard d JOIN d.users p where p.id=:userId")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")
-    List<UserDashboard> findDashboardsForPersonId(@Param("userId") long  userId);
+    List<UserDashboard> getDashboardsForPersonId(@Param("userId") long  userId);
 
     @Query("select p.defaultDashboard from Person p where p.id = :userId")
     @PreAuthorize("hasRole('ROLE_PROCURING_ENTITY')")

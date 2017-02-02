@@ -131,7 +131,7 @@ public class EditUserPage extends AbstractEditPage<Person> {
             private static final long serialVersionUID = 1877838564684430669L;
 
             protected void removeUserLinkFromDashboards(Person person) {
-                userDashboardRepository.findDashboardsForPersonId(person.getId()).forEach(dashboard -> {
+                userDashboardRepository.getDashboardsForPersonId(person.getId()).forEach(dashboard -> {
                     dashboard.getUsers().remove(person);
                     userDashboardRepository.save(dashboard);
                 });
