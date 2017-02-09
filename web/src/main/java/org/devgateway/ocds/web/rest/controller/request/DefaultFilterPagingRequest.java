@@ -50,6 +50,9 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     @EachPattern(regexp = "^[a-zA-Z0-9]*$")
     private List<String> contrMethod;
 
+    @ApiModelProperty(value = "This will filter after planning.budget.projectLocation._id")
+    private List<String> planningLoc;
+
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
     private List<String> tenderLoc;
 
@@ -225,4 +228,11 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.notBidSelectionMethod = notBidSelectionMethod;
     }
 
+    public List<String> getPlanningLoc() {
+        return planningLoc;
+    }
+
+    public void setPlanningLoc(List<String> planningLoc) {
+        this.planningLoc = planningLoc;
+    }
 }
