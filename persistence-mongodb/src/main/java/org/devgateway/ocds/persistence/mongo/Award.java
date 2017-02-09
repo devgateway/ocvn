@@ -65,7 +65,6 @@ public class Award implements Identifiable {
      * Award title
      *
      */
-    @ExcelExport
     @JsonProperty("title")
     @Merge(MergeStrategy.ocdsVersion)
     private String title;
@@ -74,7 +73,6 @@ public class Award implements Identifiable {
      * Award description
      *
      */
-    @ExcelExport
     @JsonProperty("description")
     @Merge(MergeStrategy.ocdsVersion)
     private String description;
@@ -136,7 +134,6 @@ public class Award implements Identifiable {
      * <p>
      *
      */
-    @ExcelExport
     @JsonProperty("contractPeriod")
     private Period contractPeriod;
 

@@ -43,7 +43,7 @@ public class ReleaseJsonImportTest extends AbstractMongoTest {
                 + "        }\n"
                 + "    }\n"
                 + "}";
-        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, jsonRelease);
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, jsonRelease, false);
         final Release release = (Release) releaseJsonImport.importObject();
         final Release releaseById = releaseRepository.findById(release.getId());
 

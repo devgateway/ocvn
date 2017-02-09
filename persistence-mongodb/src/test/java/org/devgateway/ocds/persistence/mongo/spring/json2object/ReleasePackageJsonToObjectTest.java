@@ -44,7 +44,7 @@ public class ReleasePackageJsonToObjectTest {
                 + "}";
 
 
-        final JsonToObject releasePackageJsonToObject = new ReleasePackageJsonToObject(jsonReleasePackage);
+        final JsonToObject releasePackageJsonToObject = new ReleasePackageJsonToObject(jsonReleasePackage, false);
 
         Assert.assertTrue("Object is a ReleasePackage",
                 releasePackageJsonToObject.toObject() instanceof ReleasePackage);

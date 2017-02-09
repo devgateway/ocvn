@@ -3,7 +3,7 @@
 
 .content{
   margin-top: 3em;
-  margin-bottom: 64px;
+  margin-bottom: 96px;
 }
 
 .container-fluid{
@@ -69,6 +69,9 @@ header.branding{
 
   .header-icons{
     cursor: pointer;
+    &.user-tools{
+      cursor: default;
+    }
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,7 +125,7 @@ aside {
   position: fixed;
   bottom: @yearsBarBottom;
   border-bottom: 2px solid #c5c5c5;
-  z-index: 1;
+  z-index: 9999;
   padding-left: 0;
   padding-right: 0;
   display: table;
@@ -164,7 +167,7 @@ footer.main-footer{
   right: 0;
   bottom: 0;
   background: @red;
-  z-index: 1;
+  z-index: 9999;
 }
 
 @active-color: #808080;

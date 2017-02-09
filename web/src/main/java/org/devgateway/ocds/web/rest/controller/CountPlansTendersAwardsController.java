@@ -11,17 +11,11 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,10 +27,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  *
@@ -63,11 +60,11 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
      */
     @ApiOperation(value = "Count the tenders and group the results by year. The year is calculated from "
             + "tender.tenderPeriod.startDate.")
-    @RequestMapping(value = "/api/countTendersByYear",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    @RequestMapping(value = "/api/countTendersByYear", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
     public List<DBObject> countTendersByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
-        DBObject project = new BasicDBObject();        
+        DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
 
         Aggregation agg = Aggregation.newAggregation(match(where("tender.tenderPeriod.startDate").exists(true).
@@ -93,8 +90,8 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
      */
     @ApiOperation(value = "Count the awards and group the results by year. "
             + "The year is calculated from the awards.date field.")
-    @RequestMapping(value = "/api/countAwardsByYear",
-            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    @RequestMapping(value = "/api/countAwardsByYear", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
     public List<DBObject> countAwardsByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project0 = new BasicDBObject();
@@ -103,11 +100,10 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         DBObject project = new BasicDBObject();
         addYearlyMonthlyProjection(filter, project, "$awards.date");
 
-        Aggregation agg = Aggregation.newAggregation(match(where("awards.0").exists(true).
-                andOperator(getDefaultFilterCriteria(filter))),
-                new CustomOperation(new BasicDBObject("$project", project0)),
-                unwind("$awards"), match(where("awards.date").exists(true).
-                        andOperator(getYearFilterCriteria(filter, "awards.date"))),
+        Aggregation agg = Aggregation.newAggregation(
+                match(where("awards.0").exists(true).andOperator(getDefaultFilterCriteria(filter))),
+                new CustomOperation(new BasicDBObject("$project", project0)), unwind("$awards"),
+                match(where("awards.date").exists(true).andOperator(getYearFilterCriteria(filter, "awards.date"))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 group(getYearlyMonthlyGroupingFields(filter)).count().as(Keys.COUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.COUNT),
@@ -118,5 +114,37 @@ public class CountPlansTendersAwardsController extends GenericOCDSController {
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
         return tagCount;
+    }
+
+    /**
+     * db.release.aggregate( [ {$match : { "planning.bidPlanProjectDateApprove":
+     * { $exists: true } }}, {$project: { planning:1, year: {$year :
+     * "$planning.bidPlanProjectDateApprove"} } }, {$group: {_id: "$year",
+     * count: { $sum:1}}}, {$sort: { _id:1}} ])
+     *
+     * @return
+     */
+    @ApiOperation(value = "Count of bid plans, by year. This will count the releases that have the field"
+            + "planning.bidPlanProjectDateApprove populated. "
+            + "The year grouping is taken from planning.bidPlanProjectDateApprove")
+    @RequestMapping(value = "/api/countBidPlansByYear", method = { RequestMethod.POST, RequestMethod.GET },
+            produces = "application/json")
+    public List<DBObject> countBidPlansByYear(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        DBObject project = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project, "$planning.bidPlanProjectDateApprove");
+
+        Aggregation agg = Aggregation.newAggregation(
+                match(where("planning.bidPlanProjectDateApprove").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
+                new CustomOperation(new BasicDBObject("$project", project)),
+                getYearlyMonthlyGroupingOperation(filter).count().as("count"),
+                transformYearlyGrouping(filter).andInclude(Keys.COUNT),
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+
     }
 }
