@@ -55,7 +55,6 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
                 getExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(countTendersByYear, categories,
                 getExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
-                FgetExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueBidPlans = excelChartHelper.getValuesFromDBObject(countBidPlansByYear, categories,
                 getExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
         if (!valueAwards.isEmpty()) {

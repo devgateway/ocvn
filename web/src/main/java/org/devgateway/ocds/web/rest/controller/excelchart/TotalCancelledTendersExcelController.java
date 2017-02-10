@@ -94,11 +94,11 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
                 .totalCancelledTendersByYearByRationale(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-                TotalCancelledTendersByYearController.Keys.YEAR, totalCancelledTenders);
+                getExportYearMonthXAxis(filter), totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TotalCancelledTendersByYearController.Keys.YEAR,
+                getExportYearMonthXAxis(filter),
                 TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < cancelledAmount.size(); i++) {

@@ -56,7 +56,7 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> valueAvgTime = excelChartHelper.getValuesFromDBObject(avgTimeFromPlanToTenderPhase,
-                categories, TenderPercentagesController.Keys.YEAR,
+                categories, getExportYearMonthXAxis(filter),
                 TenderPercentagesController.Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(averageTenderPeriod, categories,
                 getExportYearMonthXAxis(filter), AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
