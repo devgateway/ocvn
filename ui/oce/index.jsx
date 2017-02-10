@@ -275,13 +275,14 @@ class OCApp extends React.Component{
   }
 
   downloadExcel(){
-    let {filters, selectedYears: years} = this.state;
+    let {filters, selectedYears: years, selectedMonths: months} = this.state;
     let onDone = () => this.setState({exporting: false});
     this.setState({exporting: true});
     download({
       ep: 'excelExport',
       filters,
       years,
+      months,
       t: this.t.bind(this)
     }).then(onDone).catch(onDone);
 
