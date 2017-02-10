@@ -254,6 +254,17 @@ public abstract class GenericOCDSController {
     }
 
     /**
+     * Appends the planning.budget.projectLocation._id
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getByBidPlanLocationIdentifier(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("planning.budget.projectLocation._id",
+                filter.getPlanningLoc(), filter);
+    }
+
+    /**
      * Creates a search criteria filter based on tender.value.amount and uses
      * {@link DefaultFilterPagingRequest#getMinTenderValue()} and
      * {@link DefaultFilterPagingRequest#getMaxTenderValue()} to create
@@ -462,7 +473,8 @@ public abstract class GenericOCDSController {
                 getBidSelectionMethod(filter),
                 getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter), 
+                getByTenderDeliveryLocationIdentifier(filter),
+                getByBidPlanLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
                 getElectronicSubmissionCriteria(filter));
@@ -481,7 +493,8 @@ public abstract class GenericOCDSController {
                 getNotBidSelectionMethod(filter),
                 getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
-                getByTenderDeliveryLocationIdentifier(filter), 
+                getByTenderDeliveryLocationIdentifier(filter),
+                getByBidPlanLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
                 getElectronicSubmissionCriteria(filter),

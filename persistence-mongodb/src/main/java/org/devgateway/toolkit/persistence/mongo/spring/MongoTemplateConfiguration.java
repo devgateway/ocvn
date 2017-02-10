@@ -118,6 +118,8 @@ public class MongoTemplateConfiguration {
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("planning.budget.projectLocation.geometry.coordinates", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("planning.budget.projectLocation._id", Direction.ASC));
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
