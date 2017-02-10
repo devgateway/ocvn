@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
-import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -41,7 +40,8 @@ public class LocationInfowindowController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender").exists(true).orOperator(
-                        where("tender.items.deliveryLocation._id").exists(true)
+                        where("tender.items.deliveryLocation._id").exists(true),
+                        where("planning.budget.projectLocation._id").exists(true)
                 )
                         .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
                 project("tender").andExclude(Fields.UNDERSCORE_ID),
@@ -59,13 +59,15 @@ public class LocationInfowindowController extends GenericOCDSController {
             RequestMethod.GET}, produces = "application/json")
     @JsonView(Views.Public.class)
     public List<DBObject> planningByLocation(
-            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
                 match(where("planning.budget").exists(true).orOperator(
-                        where("tender.items.deliveryLocation._id").exists(true)
+                        where("tender.items.deliveryLocation._id").exists(true),
+                        where("planning.budget.projectLocation._id").exists(true)
                 )
-                        .andOperator(getDefaultFilterCriteria(filter))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                "planning.bidPlanProjectDateApprove"))),
                 project("planning").andExclude(Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );
@@ -85,7 +87,8 @@ public class LocationInfowindowController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("awards.0").exists(true).orOperator(
-                        where("tender.items.deliveryLocation._id").exists(true)
+                        where("tender.items.deliveryLocation._id").exists(true),
+                        where("planning.budget.projectLocation._id").exists(true)
                 )
                         .andOperator(getYearDefaultFilterCriteria(filter, "awards.date"))),
                 project("awards").andExclude(Fields.UNDERSCORE_ID),

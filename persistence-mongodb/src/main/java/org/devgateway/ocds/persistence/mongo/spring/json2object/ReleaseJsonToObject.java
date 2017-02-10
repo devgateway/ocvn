@@ -15,16 +15,16 @@ import java.io.InputStream;
 public class ReleaseJsonToObject extends AbstractJsonToObject<Release> {
     private Release release;
 
-    public ReleaseJsonToObject(final String jsonObject) {
-        super(jsonObject);
+    public ReleaseJsonToObject(final String jsonObject, final Boolean mapDeserializer) {
+        super(jsonObject, mapDeserializer);
     }
 
-    public ReleaseJsonToObject(final InputStream inputStream) throws IOException {
-        super(inputStream);
+    public ReleaseJsonToObject(final InputStream inputStream, final Boolean mapDeserializer) throws IOException {
+        super(inputStream, mapDeserializer);
     }
 
-    public ReleaseJsonToObject(final File file) throws IOException {
-        super(file);
+    public ReleaseJsonToObject(final File file, final Boolean mapDeserializer) throws IOException {
+        super(file, mapDeserializer);
     }
 
     @Override

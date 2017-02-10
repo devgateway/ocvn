@@ -54,8 +54,16 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
                 categories, getExportYearMonthXAxis(filter),
                 CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories,  getExportYearMonthXAxis(filter),
-                CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+                categories,  getExportYearMonthXAxis(filter), CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+        // use trillions for amounts
+        for (int i = 0; i < tenderPrice.size(); i++) {
+            if (tenderPrice.get(i) != null) {
+                tenderPrice.set(i, tenderPrice.get(i).doubleValue() / 1000000000);
+            }
+            if (diffPrice.get(i) != null) {
+                diffPrice.set(i, diffPrice.get(i).doubleValue() / 1000000000);
+            }
+        }
         if (!tenderPrice.isEmpty()) {
             values.add(tenderPrice);
         }
