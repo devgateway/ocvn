@@ -46,12 +46,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentCancelled = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENT_CANCELLED);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENT_CANCELLED);
         if (!percentCancelled.isEmpty()) {
             values.add(percentCancelled);
         }
@@ -85,12 +85,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> totalCancelled = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.TOTAL_CANCELLED);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.TOTAL_CANCELLED);
         if (!totalCancelled.isEmpty()) {
             values.add(totalCancelled);
         }
@@ -124,12 +124,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
         if (!percentUsingEBid.isEmpty()) {
             values.add(percentUsingEBid);
         }
@@ -163,12 +163,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> countUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
         if (!countUsingEBid.isEmpty()) {
             values.add(countUsingEBid);
         }
@@ -202,12 +202,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         // fetch the data that will be displayed in the chart
         final List<DBObject> percentTendersUsingEgp = tenderPercentagesController.percentTendersUsingEgp(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 percentTendersUsingEgp);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentEgp = excelChartHelper.getValuesFromDBObject(percentTendersUsingEgp, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_EGP);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENTAGE_EGP);
         values.add(percentEgp);
 
         final List<String> seriesTitle = Arrays.asList(
@@ -234,12 +234,12 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
                 .percentTendersWithLinkedProcurementPlan(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 percentTendersWithLinkedProcurementPlan);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentTenders = excelChartHelper.getValuesFromDBObject(
-                percentTendersWithLinkedProcurementPlan, categories, TenderPercentagesController.Keys.YEAR,
+                percentTendersWithLinkedProcurementPlan, categories, getExportYearMonthXAxis(filter),
                 TenderPercentagesController.Keys.PERCENT_TENDERS);
         values.add(percentTenders);
 

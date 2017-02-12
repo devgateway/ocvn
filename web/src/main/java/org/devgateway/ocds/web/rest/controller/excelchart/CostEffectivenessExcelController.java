@@ -2,23 +2,21 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author idobre
@@ -47,15 +45,17 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
         final List<DBObject> costEffectivenessTenderAwardAmount =
                 costEffectivenessVisualsController.costEffectivenessTenderAwardAmount(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 costEffectivenessTenderAwardAmount);
 
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> tenderPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories, Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
+                categories, getExportYearMonthXAxis(filter),
+                CostEffectivenessVisualsController.Keys.TOTAL_TENDER_AMOUNT);
         final List<Number> diffPrice = excelChartHelper.getValuesFromDBObject(costEffectivenessTenderAwardAmount,
-                categories,  Fields.UNDERSCORE_ID, CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
+                categories,  getExportYearMonthXAxis(filter),
+                CostEffectivenessVisualsController.Keys.DIFF_TENDER_AWARD_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < tenderPrice.size(); i++) {
             if (tenderPrice.get(i) != null) {

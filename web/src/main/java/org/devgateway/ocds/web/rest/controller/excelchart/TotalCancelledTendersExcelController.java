@@ -2,23 +2,21 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author idobre
@@ -47,12 +45,13 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
         final List<DBObject> totalCancelledTenders = totalCancelledTendersByYearController
                 .totalCancelledTendersByYear(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                Fields.UNDERSCORE_ID, TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
+                getExportYearMonthXAxis(filter),
+                TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < cancelledAmount.size(); i++) {
             if (cancelledAmount.get(i) != null) {
@@ -95,11 +94,11 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
                 .totalCancelledTendersByYearByRationale(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-                TotalCancelledTendersByYearController.Keys.YEAR, totalCancelledTenders);
+                getExportYearMonthXAxis(filter), totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TotalCancelledTendersByYearController.Keys.YEAR,
+                getExportYearMonthXAxis(filter),
                 TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
         // use trillions for amounts
         for (int i = 0; i < cancelledAmount.size(); i++) {

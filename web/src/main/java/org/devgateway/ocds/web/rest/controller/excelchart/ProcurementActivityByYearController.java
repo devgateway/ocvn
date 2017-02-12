@@ -2,23 +2,21 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.toolkit.web.excelcharts.ChartType;
-import org.devgateway.ocds.web.rest.controller.CountPlansTendersAwardsController;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Fields;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import org.devgateway.ocds.web.rest.controller.CountPlansTendersAwardsController;
+import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
+import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.web.excelcharts.ChartType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author idobre
@@ -48,16 +46,17 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
         final List<DBObject> countTendersByYear = countPlansTendersAwardsController.countTendersByYear(filter);
         final List<DBObject> countBidPlansByYear = countPlansTendersAwardsController.countBidPlansByYear(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(Fields.UNDERSCORE_ID,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
+                getExportYearMonthXAxis(filter),
                 countAwardsByYear, countTendersByYear, countBidPlansByYear);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(countAwardsByYear, categories,
-                Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
+                getExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(countTendersByYear, categories,
-                Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
+                getExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
         final List<Number> valueBidPlans = excelChartHelper.getValuesFromDBObject(countBidPlansByYear, categories,
-                Fields.UNDERSCORE_ID, CountPlansTendersAwardsController.Keys.COUNT);
+                getExportYearMonthXAxis(filter), CountPlansTendersAwardsController.Keys.COUNT);
         if (!valueAwards.isEmpty()) {
             values.add(valueAwards);
         }

@@ -8,7 +8,7 @@ import {download} from '../tools';
 class Tab extends Visualization{
   maybeWrap(Component, index, rendered){
     let {dontWrap, getName} = Component;
-    let {filters, years} = this.props;
+    let {filters, years, months} = this.props;
     let ref = `section${index}`;
     let exportable = Component.prototype instanceof Chart;
     return dontWrap ? rendered : <section key={index} ref={ref}>
@@ -23,6 +23,7 @@ class Tab extends Visualization{
               ep: Component.excelEP,
               filters,
               years,
+              months,
               t: this.t.bind(this)
             })}
         />}

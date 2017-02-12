@@ -110,6 +110,7 @@ class ProcurementMethodComparison extends Comparison{
         ep: Component.excelEP,
         filters: comparisonFilters,
         years,
+        months,
         t: this.t.bind(this)
       });
       return <div className="col-md-6 comparison" key={index}>

@@ -73,12 +73,17 @@ export const send = url => fetch(url.clone().query(""), {
 export const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
     || navigator.userAgent.match(/rv 11/));
 
-export let download = ({ep, filters, years, t}) => {
-  const url = new URI(`/api/ocds/${ep}`)
+export let download = ({ep, filters, years, months, t}) => {
+  let url = new URI(`/api/ocds/${ep}`)
       .addSearch(filters.toJS())
       .addSearch('year', years.toArray())
       //this sin shall be atoned for in the future
       .addSearch('language', localStorage.oceLocale);
+
+  if(years.count() == 1){
+    url = url.addSearch('month', months && months.toJS())
+  }
+
   return send(url).then(response => {
     let {userAgent} = navigator;
     let isSafari = -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium

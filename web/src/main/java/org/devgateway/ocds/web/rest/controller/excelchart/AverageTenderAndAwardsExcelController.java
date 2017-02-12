@@ -51,19 +51,17 @@ public class AverageTenderAndAwardsExcelController extends GenericOCDSController
         final List<DBObject> avgTimeFromPlanToTenderPhase = tenderPercentagesController
                 .avgTimeFromPlanToTenderPhase(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 averageTenderPeriod, averageAwardPeriod);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> valueAvgTime = excelChartHelper.getValuesFromDBObject(avgTimeFromPlanToTenderPhase,
-                categories, TenderPercentagesController.Keys.YEAR,
+                categories, getExportYearMonthXAxis(filter),
                 TenderPercentagesController.Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE);
         final List<Number> valueTenders = excelChartHelper.getValuesFromDBObject(averageTenderPeriod, categories,
-                AverageTenderAndAwardPeriodsController.Keys.YEAR,
-                AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
+                getExportYearMonthXAxis(filter), AverageTenderAndAwardPeriodsController.Keys.AVERAGE_TENDER_DAYS);
         final List<Number> valueAwards = excelChartHelper.getValuesFromDBObject(averageAwardPeriod, categories,
-                AverageTenderAndAwardPeriodsController.Keys.YEAR,
-                AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
+                getExportYearMonthXAxis(filter), AverageTenderAndAwardPeriodsController.Keys.AVERAGE_AWARD_DAYS);
         if (!valueAvgTime.isEmpty()) {
             values.add(valueAvgTime);
         }

@@ -47,12 +47,12 @@ public class AverageNumberOfTenderersExcelController extends GenericOCDSControll
                 averageNumberOfTenderersController.averageNumberOfTenderers(filter);
 
         final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
-                AverageNumberOfTenderersController.Keys.YEAR, averageNumberOfTenderers);
+                getExportYearMonthXAxis(filter), averageNumberOfTenderers);
 
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> totalTenderAmount = excelChartHelper.getValuesFromDBObject(averageNumberOfTenderers,
-                categories, AverageNumberOfTenderersController.Keys.YEAR,
+                categories, getExportYearMonthXAxis(filter),
                 AverageNumberOfTenderersController.Keys.AVERAGE_NO_OF_TENDERERS);
         if (!totalTenderAmount.isEmpty()) {
             values.add(totalTenderAmount);

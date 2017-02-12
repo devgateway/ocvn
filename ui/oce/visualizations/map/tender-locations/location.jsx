@@ -104,6 +104,7 @@ export class ChartTab extends Tab{
       ep: this.constructor.Chart.excelEP,
       filters: decoratedFilters,
       years,
+      months,
       t: this.t.bind(this)
     });
     return <div className={cn("map-chart", this.getChartClass())}>
