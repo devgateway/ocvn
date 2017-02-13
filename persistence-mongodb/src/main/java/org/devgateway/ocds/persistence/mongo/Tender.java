@@ -78,7 +78,6 @@ public class Tender implements Identifiable {
      * Tender title
      *
      */
-    @ExcelExport
     @JsonProperty("title")
     @Merge(MergeStrategy.ocdsVersion)
     private String title;
@@ -87,7 +86,6 @@ public class Tender implements Identifiable {
      * Tender description
      *
      */
-    @ExcelExport
     @JsonProperty("description")
     @Merge(MergeStrategy.ocdsVersion)
     private String description;
@@ -118,7 +116,6 @@ public class Tender implements Identifiable {
     @Merge(MergeStrategy.arrayMergeById)
     private Set<Item> items = new LinkedHashSet<Item>();
 
-    @ExcelExport
     @JsonProperty("minValue")
     private Amount minValue;
 
@@ -133,7 +130,6 @@ public class Tender implements Identifiable {
      * Open, Selective, Limited
      *
      */
-    @ExcelExport
     @JsonProperty("procurementMethod")
     @Merge(MergeStrategy.ocdsVersion)
     private ProcurementMethod procurementMethod;
@@ -142,7 +138,6 @@ public class Tender implements Identifiable {
      * Rationale of procurement method, especially in the case of Limited tendering.
      *
      */
-    @ExcelExport
     @JsonProperty("procurementMethodRationale")
     @Merge(MergeStrategy.ocdsVersion)
     private String procurementMethodRationale;
@@ -152,7 +147,6 @@ public class Tender implements Identifiable {
      * [award criteria codelist](http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#award-criteria)
      *
      */
-    @ExcelExport
     @JsonProperty("awardCriteria")
     @Merge(MergeStrategy.ocdsVersion)
     private String awardCriteria;
@@ -161,7 +155,6 @@ public class Tender implements Identifiable {
      * Any detailed or further information on the award or selection criteria.
      *
      */
-    @ExcelExport
     @JsonProperty("awardCriteriaDetails")
     @Merge(MergeStrategy.ocdsVersion)
     private String awardCriteriaDetails;
@@ -173,7 +166,6 @@ public class Tender implements Identifiable {
      *  (http://ocds.open-contracting.org/standard/r/1__0__0/en/schema/codelists#submission-method)
      *
      */
-    @ExcelExport
     @JsonProperty("submissionMethod")
     @Merge(MergeStrategy.ocdsVersion)
     private Set<SubmissionMethod> submissionMethod = new TreeSet<SubmissionMethod>();
@@ -184,7 +176,6 @@ public class Tender implements Identifiable {
      * and any special requirements to be followed for submissions.
      *
      */
-    @ExcelExport
     @JsonProperty("submissionMethodDetails")
     @Merge(MergeStrategy.ocdsVersion)
     private String submissionMethodDetails;
@@ -264,7 +255,6 @@ public class Tender implements Identifiable {
      * for details of potential documents to include.
      *
      */
-    @ExcelExport
     @JsonProperty("documents")
     @Merge(MergeStrategy.arrayMergeById)
     private List<Document> documents = new ArrayList<Document>();

@@ -1,29 +1,30 @@
 import ReactDOM from "react-dom";
 import OCApp from "./oce";
-import OverviewTab from './oce/tabs/overview';
-import LocationTab from './oce/tabs/location';
-import CompetitivenessTab from './oce/tabs/competitiveness';
-import EfficiencyTab from './oce/tabs/efficiency';
-import EProcurementTab from './oce/tabs/e-procurement';
+import OCVNOverviewTab from './ocvn/tabs/overview';
+import OCVNLocation from "./ocvn/tabs/location";
+import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
+import OCVNEfficiency from './ocvn/tabs/efficiency';
+import OCVNEProcurement from './ocvn/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
+import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 
-class OCEChild extends OCApp{
+class OCVN extends OCApp{
   constructor(props) {
     super(props);
-    this.registerTab(OverviewTab);
-    this.registerTab(LocationTab);
-    this.registerTab(CompetitivenessTab);
-    this.registerTab(EfficiencyTab);
-    this.registerTab(EProcurementTab);
+    this.registerTab(OCVNOverviewTab);
+    this.registerTab(OCVNLocation);
+    this.registerTab(OCVNCompetitiveness);
+    this.registerTab(OCVNEfficiency);
+    this.registerTab(OCVNEProcurement);
   }
 
   fetchBidTypes(){
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-              map.set(datum.id, datum.description), Map())
+            map.set(datum.id, datum.description), Map())
         })
     );
   }
@@ -58,9 +59,18 @@ class OCEChild extends OCApp{
             <h3><strong>{this.t('general:description:title')}</strong></h3>
             <p>
               <small>
-                {this.t('general:description:content')}
+                  {this.t('general:description:content')}
               </small>
             </p>
+          </section>
+          <section className="col-sm-12 github">
+            <a href="https://github.com/devgateway/ocvn" target="_blank">
+              <button className="btn btn-default btn-block">
+                <img src="/ui/assets/icons/octocat.png" width={16} height={16}/>
+                &nbsp;
+                {this.t("general:viewOnGithub")}
+              </button>
+            </a>
           </section>
         </div>
       </aside>
@@ -80,11 +90,38 @@ class OCEChild extends OCApp{
   }
 }
 
-OCEChild.TRANSLATIONS = {
+OCVN.Filters = OCVNFilters;
+
+OCVN.TRANSLATIONS = {
   en_US: require('./languages/en_US.json'),
+  vn_VN: require('./languages/vn_VN.json'),
 };
 
-ReactDOM.render(<OCEChild/>, document.getElementById('dg-container'));
+const BILLION = 1000000000;
+const MILLION = 1000000;
+const THOUSAND = 1000;
+const formatNumber = number => number.toLocaleString(undefined, {maximumFractionDigits: 2});
+
+OCVN.STYLING = {
+  charts: {
+    axisLabelColor: "#cc3c3b",
+    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
+    hoverFormat: ',.2f',
+    hoverFormatter: number => {
+      if(typeof number == "undefined") return number;
+      let abs = Math.abs(number);
+      if(abs >= BILLION) return formatNumber(number/BILLION) + "B";
+      if(abs >= MILLION) return formatNumber(number/MILLION) + "M";
+      if(abs >= THOUSAND) return formatNumber(number/THOUSAND) + "K";
+      return formatNumber(number);
+    }
+  },
+  tables: {
+    currencyFormatter: formatNumber
+  }
+};
+
+ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +20,7 @@ public class ReleaseExportFileTest {
     public void createWorkbook() throws Exception {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("json/release-excel-export.json").getFile());
-        final JsonToObject releasePackageJsonToObject = new ReleasePackageJsonToObject(file);
+        final JsonToObject releasePackageJsonToObject = new ReleasePackageJsonToObject(file, false);
 
         final ReleasePackage releasePackage = (ReleasePackage) releasePackageJsonToObject.toObject();
 
@@ -32,10 +33,9 @@ public class ReleaseExportFileTest {
         Assert.assertEquals("Number of sheets", 5, workbook.getNumberOfSheets());
 
         Assert.assertNotNull("release sheet", workbook.getSheet("release"));
-        Assert.assertNotNull("tender sheet", workbook.getSheet("tender"));
-        Assert.assertNotNull("award sheet", workbook.getSheet("award"));
-        Assert.assertNotNull("item sheet", workbook.getSheet("item"));
-        Assert.assertNotNull("contract sheet", workbook.getSheet("contract"));
+        Assert.assertNotNull("tender sheet", workbook.getSheet("vntender"));
+        Assert.assertNotNull("award sheet", workbook.getSheet("vnaward"));
+        Assert.assertNotNull("item sheet", workbook.getSheet("vnitem"));
 
         Assert.assertEquals("release id", "ocds-213czf-000-00001-01-planning",
                 workbook.getSheet("release").getRow(3).getCell(0).toString());
@@ -43,16 +43,12 @@ public class ReleaseExportFileTest {
                 workbook.getSheet("release").getRow(5).getCell(0).toString());
 
         Assert.assertEquals("tender parent", "release - ocds-213czf-000-00001",
-                workbook.getSheet("tender").getRow(1).getCell(0).toString());
+                workbook.getSheet("vntender").getRow(1).getCell(0).toString());
         Assert.assertEquals("tender id", "ocds-213czf-000-00001-01-planning",
-                workbook.getSheet("tender").getRow(1).getCell(1).toString());
+                workbook.getSheet("vntender").getRow(1).getCell(1).toString());
 
+        Assert.assertEquals("award number of rows", 4, workbook.getSheet("vnaward").getLastRowNum());
 
-        Assert.assertEquals("award number of rows", 4, workbook.getSheet("award").getLastRowNum());
-
-        Assert.assertEquals("item number of rows", 9, workbook.getSheet("item").getLastRowNum());
-
-        Assert.assertEquals("contract flatten organizatio id", "E09000003 | E09000003",
-                workbook.getSheet("contract").getRow(2).getCell(17).toString());
+        Assert.assertEquals("item number of rows", 7, workbook.getSheet("vnitem").getLastRowNum());
     }
 }

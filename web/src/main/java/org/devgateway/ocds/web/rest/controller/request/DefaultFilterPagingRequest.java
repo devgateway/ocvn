@@ -4,10 +4,10 @@
 package org.devgateway.ocds.web.rest.controller.request;
 
 import java.math.BigDecimal;
-import java.util.List;
-
 import cz.jirutka.validator.collection.constraints.EachPattern;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * @author mpostelnicu Filtering bean applied to all endpoints
@@ -38,6 +38,21 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Corresponds to the OCDS Organization.identifier")
     private List<String> supplierId;
 
+    @ApiModelProperty(value = "This will filter after tender.procurementMethodDetails."
+            + "Valid examples are Đấu thầu rộng rãi, Đấu thầu hạn chế, etc...")
+    private List<String> bidSelectionMethod;
+
+    @ApiModelProperty(value = "This corresponds the negated bidSelectionMethod filter,"
+            + " matches elements that are NOT in the list of Ids")
+    private List<String> notBidSelectionMethod;
+
+    @ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+    private List<String> contrMethod;
+
+    @ApiModelProperty(value = "This will filter after planning.budget.projectLocation._id")
+    private List<String> planningLoc;
+
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
     private List<String> tenderLoc;
 
@@ -57,10 +72,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
 
+    @ApiModelProperty(value = "This will search after the City Id of the procuring entity."
+            + "The field is organization.address.postalCode")
+    private List<String> procuringEntityCityId;
 
     @ApiModelProperty(value = "Filters after tender.submissionMethod='electronicSubmission', also known as"
             + " eBids")
     private Boolean electronicSubmission;
+
+    @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+            + "The field is organization.department._id")
+    private List<Integer> procuringEntityDepartmentId;
+
+    @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+            + "The field is organization.group._id")
+    private List<Integer> procuringEntityGroupId;
+
 
     public DefaultFilterPagingRequest() {
         super();
@@ -80,6 +107,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setProcuringEntityId(final List<String> procuringEntityId) {
         this.procuringEntityId = procuringEntityId;
+    }
+
+    public List<String> getBidSelectionMethod() {
+        return bidSelectionMethod;
+    }
+
+    public void setBidSelectionMethod(final List<String> bidSelectionMethod) {
+        this.bidSelectionMethod = bidSelectionMethod;
+    }
+
+    public List<String> getContrMethod() {
+        return contrMethod;
+    }
+
+    public void setContrMethod(List<String> contrMethod) {
+        this.contrMethod = contrMethod;
     }
 
     public List<String> getTenderLoc() {
@@ -146,11 +189,50 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.notProcuringEntityId = notProcuringEntityId;
     }
 
+    public List<String> getProcuringEntityCityId() {
+        return procuringEntityCityId;
+    }
     public Boolean getElectronicSubmission() {
         return electronicSubmission;
     }
 
     public void setElectronicSubmission(Boolean electronicSubmission) {
         this.electronicSubmission = electronicSubmission;
+    }
+
+    public void setProcuringEntityCityId(List<String> procuringEntityCityId) {
+        this.procuringEntityCityId = procuringEntityCityId;
+    }
+
+    public List<Integer> getProcuringEntityDepartmentId() {
+        return procuringEntityDepartmentId;
+    }
+
+    public void setProcuringEntityDepartmentId(List<Integer> procuringEntityDepartmentId) {
+        this.procuringEntityDepartmentId = procuringEntityDepartmentId;
+    }
+
+    public List<Integer> getProcuringEntityGroupId() {
+        return procuringEntityGroupId;
+    }
+
+    public void setProcuringEntityGroupId(List<Integer> procuringEntityGroupId) {
+        this.procuringEntityGroupId = procuringEntityGroupId;
+    }
+
+    public List<String> getNotBidSelectionMethod() {
+        return notBidSelectionMethod;
+    }
+
+    public void setNotBidSelectionMethod(List<String> notBidSelectionMethod) {
+        this.notBidSelectionMethod = notBidSelectionMethod;
+    }
+
+    public List<String> getPlanningLoc() {
+        return planningLoc;
+    }
+
+    public void setPlanningLoc(List<String> planningLoc) {
+        this.planningLoc = planningLoc;
     }
 }

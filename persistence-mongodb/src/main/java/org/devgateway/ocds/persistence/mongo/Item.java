@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devgateway.ocds.persistence.mongo.excel.annotation.ExcelExport;
 import org.devgateway.ocds.persistence.mongo.merge.Merge;
 import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -37,7 +38,7 @@ public class Item implements Identifiable {
      * see https://jira.dgfoundation.org/browse/OCE-35
      */
     @SuppressWarnings("rawtypes")
-    private DefaultLocation deliveryLocation;
+    private VNLocation deliveryLocation;
 
     /**
      * A local identifier to reference and merge the items by. Must be unique within a given array of items.
@@ -272,14 +273,14 @@ public class Item implements Identifiable {
                 isEquals();
     }
 
-    public DefaultLocation getDeliveryLocation() {
+    public VNLocation getDeliveryLocation() {
         return deliveryLocation;
     }
 
-    public void setDeliveryLocation(final DefaultLocation deliveryLocation) {
+    public void setDeliveryLocation(VNLocation deliveryLocation) {
         this.deliveryLocation = deliveryLocation;
     }
-
+    
     @Override
     public Serializable getIdProperty() {
         return id;
