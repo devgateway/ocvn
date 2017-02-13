@@ -100,6 +100,7 @@ OCVN.TRANSLATIONS = {
 const BILLION = 1000000000;
 const MILLION = 1000000;
 const THOUSAND = 1000;
+const formatNumber = number => number.toLocaleString(undefined, {maximumFractionDigits: 2});
 
 OCVN.STYLING = {
   charts: {
@@ -108,13 +109,15 @@ OCVN.STYLING = {
     hoverFormat: ',.2f',
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
-      const format = number => number.toLocaleString(undefined, {maximumFractionDigits: 2});
       let abs = Math.abs(number);
-      if(abs >= BILLION) return format(number/BILLION) + "B";
-      if(abs >= MILLION) return format(number/MILLION) + "M";
-      if(abs >= THOUSAND) return format(number/THOUSAND) + "K";
-      return format(number);
+      if(abs >= BILLION) return formatNumber(number/BILLION) + "B";
+      if(abs >= MILLION) return formatNumber(number/MILLION) + "M";
+      if(abs >= THOUSAND) return formatNumber(number/THOUSAND) + "K";
+      return formatNumber(number);
     }
+  },
+  tables: {
+    currencyFormatter: formatNumber
   }
 };
 
