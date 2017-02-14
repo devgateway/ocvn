@@ -81,7 +81,7 @@ export let download = ({ep, filters, years, months, t}) => {
       .addSearch('language', localStorage.oceLocale);
 
   if(years.count() == 1){
-    url = url.addSearch('month', months && months.toJS())
+    url = url.addSearch('month', months && months.toJS()).addSearch('monthly', true);
   }
 
   return send(url).then(response => {
