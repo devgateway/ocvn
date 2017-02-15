@@ -15,9 +15,9 @@ public class TranslationServiceTest extends AbstractWebTest {
     private TranslationService translationService;
 
     @Test
-    public void testEnUs() {
+    public void testKeys() {
 
-        Assert.assertEquals(translationService.getValue("en_US", "general:login"), "Log in");
+        Assert.assertEquals("Log in", translationService.getValue("en_US", "general:login"));
 
 
     }
