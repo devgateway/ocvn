@@ -36,7 +36,7 @@ public abstract class AbstractOrganizationSearchController extends GenericOCDSCo
             query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
         }
         if (type != null) {
-            query.addCriteria(Criteria.where("types").is(type))
+            query.addCriteria(Criteria.where("roles").is(type))
                     .with(new PageRequest(request.getPageNumber(), request.getPageSize()));
         }
 
