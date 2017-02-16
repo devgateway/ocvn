@@ -64,8 +64,8 @@ public class OrganizationEndpointsTest extends AbstractWebTest {
         final Identifier identifier = new Identifier();
         identifier.setId(ORG_ID);
         organization.getAdditionalIdentifiers().add(identifier);
-        organization.getTypes().add(Organization.OrganizationType.procuringEntity);
-        organization.getTypes().add(Organization.OrganizationType.buyer);
+        organization.getRoles().add(Organization.OrganizationType.procuringEntity);
+        organization.getRoles().add(Organization.OrganizationType.buyer);
 
         final Organization savedOrganization = organizationRepository.save(organization);
 

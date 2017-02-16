@@ -40,7 +40,7 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(
-                new Index().on("types", Direction.ASC));
+                new Index().on("roles", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
         mongoTemplate.indexOps(VNLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
