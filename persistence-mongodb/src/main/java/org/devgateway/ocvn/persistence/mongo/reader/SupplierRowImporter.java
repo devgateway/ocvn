@@ -49,7 +49,7 @@ public class SupplierRowImporter extends OrganizationRowImporter<Organization> {
             addAditionalIdentifierOrFail(organization, identifier, Organization.OrganizationType.supplier);
         }
 
-        organization.getTypes().add(Organization.OrganizationType.supplier);
+        organization.getRoles().add(Organization.OrganizationType.supplier);
 
         repository.save(organization);
 

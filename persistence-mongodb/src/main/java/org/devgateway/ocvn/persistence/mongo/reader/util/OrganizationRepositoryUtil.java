@@ -40,7 +40,7 @@ public final class OrganizationRepositoryUtil {
     public static Organization newAndInsertOrganization(Organization.OrganizationType type, String name, String id,
             OrganizationRepository repository) {
         Organization org = new Organization();
-        org.getTypes().add(type);
+        org.getRoles().add(type);
         org.setName(name);
         org.setId(id);
         Identifier identifier = new Identifier();
@@ -62,8 +62,8 @@ public final class OrganizationRepositoryUtil {
      */
     public static Organization ensureOrgIsOfTypeAndSave(Organization org, Organization.OrganizationType type,
             OrganizationRepository repository) {
-        if (!org.getTypes().contains(type)) {
-            org.getTypes().add(Organization.OrganizationType.procuringEntity);
+        if (!org.getRoles().contains(type)) {
+            org.getRoles().add(Organization.OrganizationType.procuringEntity);
             return repository.save(org);
         }
         return org;

@@ -3,11 +3,6 @@
  */
 package org.devgateway.ocvn.persistence.mongo.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import org.devgateway.ocds.persistence.mongo.Address;
 import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
@@ -23,6 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author mpostelnicu
@@ -67,7 +68,7 @@ public class OrganizationRepositoryTests {
         i.setLegalName("Development Gateway");
         o.setIdentifier(i);
 
-        o.getTypes().add(OrganizationType.procuringEntity);
+        o.getRoles().add(OrganizationType.procuringEntity);
 
         o.getAdditionalIdentifiers().add(i);
 
