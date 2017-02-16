@@ -11,7 +11,7 @@ class Tenders extends Table{
       <td>{new Date(tenderPeriod.get('startDate')).toLocaleDateString(undefined, Table.DATE_FORMAT)}</td>
       <td>{new Date(tenderPeriod.get('endDate')).toLocaleDateString(undefined, Table.DATE_FORMAT)}</td>
       <td className="procuring-entity-title">{tender.getIn(['procuringEntity', 'name'])}</td>
-      <td>{value.get('amount')} {value.get('currency')}</td>
+      <td>{this.maybeFormat(value.get('amount'))} {value.get('currency')}</td>
     </tr>
   }
 
@@ -29,7 +29,7 @@ class Tenders extends Table{
         </tr>
         </thead>
         <tbody>
-          {this.props.data.map(this.row)}
+          {this.props.data.map(this.row.bind(this))}
         </tbody>
       </table>
     )

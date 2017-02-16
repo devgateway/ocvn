@@ -14,7 +14,7 @@ class Suppliers extends orgnamesFetching(Table){
       <td>{this.getOrgName(id)}</td>
       <td>{entry.get('totalContracts')}</td>
       <td>{entry.get('procuringEntityIdsCount')}</td>
-      <td>{entry.get('totalAwardAmount')}</td>
+      <td>{this.maybeFormat(entry.get('totalAwardAmount'))}</td>
     </tr>
   }
 

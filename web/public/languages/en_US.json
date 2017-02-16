@@ -154,5 +154,6 @@
   "tables:top10suppliers:nrAwardsWon": "Number of awards won",
   "tables:top10suppliers:nrPE": "Number of PEs from which an award has been received",
   "tables:top10suppliers:totalAwardedValue": "Total awarded value (in VND)",
-  "tables:top10suppliers:title": "Top 10 suppliers"
+  "tables:top10suppliers:title": "Top 10 suppliers",
+  "yearsBar:ctrlClickHint": "To select a single year only, press 'control' while clicking, or simply double click."
 }
