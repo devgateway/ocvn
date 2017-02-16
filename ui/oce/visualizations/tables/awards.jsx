@@ -12,7 +12,7 @@ class Awards extends Table{
       <td className="supplier-name">
         {awards.get('suppliers').map(pluckImm('name')).join(', ')}
       </td>
-      <td>{value.get('amount')} {value.get('currency')}</td>
+      <td>{this.maybeFormat(value.get('amount'))} {value.get('currency')}</td>
     </tr>
   }
 
@@ -29,7 +29,7 @@ class Awards extends Table{
         </tr>
         </thead>
         <tbody>
-        {this.props.data.map(this.row)}
+        {this.props.data.map(this.row.bind(this))}
         </tbody>
       </table>
     )

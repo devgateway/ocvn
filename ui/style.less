@@ -154,6 +154,21 @@ aside {
       }
     }
   }
+
+  .ctrl-click-hint{
+    display: none;
+    position: absolute;
+    top: @yearsBarHeight + 10;
+    color: #fff;
+  }
+
+  a:last-child .ctrl-click-hint{
+    right: 10px;
+  }
+
+  a:hover .ctrl-click-hint{
+    display: block;
+  }
 }
 
 .months-bar{

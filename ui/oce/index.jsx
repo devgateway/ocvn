@@ -6,8 +6,7 @@ import Filters from "./filters";
 import OCEStyle from "./style.less";
 
 let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
-const MIN_YEAR = 2010;
-const MAX_YEAR = 2020;
+
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
 const ROLE_ADMIN = 'ROLE_ADMIN';
@@ -210,18 +209,28 @@ class OCApp extends React.Component{
 
   yearsBar(){
     const {years, selectedYears} = this.state;
+    const toggleYear = year => this.setState({
+      selectedYears: selectedYears.has(+year) ?
+          selectedYears.delete(+year) :
+          selectedYears.add(+year)
+    });
+    const toggleOthersYears = year => this.setState({
+      selectedYears: 1 == selectedYears.count() && selectedYears.has(year) ?
+          Set(years) :
+          Set([year])
+    });
     return years.sort().map(year =>
         <a
             key={year}
             href="javascript:void(0);"
             className={cn({active: selectedYears.has(+year)})}
-            onClick={_ => this.setState({
-              selectedYears: selectedYears.has(+year) ?
-                  selectedYears.delete(+year) :
-                  selectedYears.add(+year)
-            })}
+            onDoubleClick={e => toggleOthersYears(year)}
+            onClick={e => e.ctrlKey ? toggleOthersYears(year) : toggleYear(year)}
         >
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
+          <span className="ctrl-click-hint">
+            {this.t('yearsBar:ctrlClickHint')}
+          </span>
         </a>
     ).toArray();
   }

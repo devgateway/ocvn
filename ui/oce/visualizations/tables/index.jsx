@@ -1,7 +1,14 @@
 import Visualization from '../../visualization';
 import backendYearFilterable from "../../backend-year-filterable";
 
-class Table extends backendYearFilterable(Visualization){}
+class Table extends backendYearFilterable(Visualization){
+  maybeFormat(number){
+    const {tables: tableStyling} = this.props.styling;
+    return tableStyling && tableStyling.currencyFormatter ?
+        tableStyling.currencyFormatter(number) :
+        number;
+  }
+}
 
 Table.DATE_FORMAT = {
   year: 'numeric',

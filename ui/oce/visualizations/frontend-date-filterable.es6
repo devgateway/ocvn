@@ -1,5 +1,5 @@
 import {Set} from "immutable";
-import {pluckImm, cacheFn} from "../tools";
+import {cacheFn} from "../tools";
 
 let frontendDateFilterable = Class => {
   class Filterable extends Class{
@@ -20,7 +20,9 @@ let frontendDateFilterable = Class => {
     }
 
     componentDidUpdate(prevProps){
-      if(this.props.monthly != prevProps.monthly){
+      const monthlyToggled = this.props.monthly != prevProps.monthly;
+      const isMonthlyAndYearChanged = this.props.monthly && this.props.years != prevProps.years;
+      if(monthlyToggled || isMonthlyAndYearChanged){
         this.fetch();
       } else super.componentDidUpdate(prevProps);
     }
