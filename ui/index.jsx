@@ -93,8 +93,8 @@ class OCVN extends OCApp{
 OCVN.Filters = OCVNFilters;
 
 OCVN.TRANSLATIONS = {
-  en_US: require('./languages/en_US.json'),
-  vn_VN: require('./languages/vn_VN.json'),
+  en_US: require('../web/public/languages/en_US.json'),
+  vn_VN: require('../web/public/languages/vn_VN.json'),
 };
 
 const BILLION = 1000000000;
