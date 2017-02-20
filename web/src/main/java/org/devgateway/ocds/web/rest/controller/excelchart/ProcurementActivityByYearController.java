@@ -9,8 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.CountPlansTendersAwardsController;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author idobre
  * @since 8/17/16
- *
+ * <p>
  * Exports an excel chart based on *Procurement activity by year* dashboard
  */
 @RestController
-public class ProcurementActivityByYearController extends GenericOCDSController {
+public class ProcurementActivityByYearController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -37,9 +36,9 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Procurement activity by year* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/procurementActivityExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void procurementActivityExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void procurementActivityExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                               final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Procurement activity by year";
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:overview:title");
 
         // fetch the data that will be displayed in the chart (we have multiple sources for this dashboard)
         final List<DBObject> countAwardsByYear = countPlansTendersAwardsController.countAwardsByYear(filter);
@@ -72,8 +71,8 @@ public class ProcurementActivityByYearController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Award",
-                    "Tender",
+                    translationService.getValue(filter.getLanguage(), "charts:overview:traces:award"),
+                    translationService.getValue(filter.getLanguage(), "charts:overview:traces:tender"),
                     "Bidplan");
         } else {
             seriesTitle = new ArrayList<>();

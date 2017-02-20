@@ -9,8 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.CostEffectivenessVisualsController;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
-import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangGroupingFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Exports an excel chart based on *Cost effectiveness* dashboard
  */
 @RestController
-public class CostEffectivenessExcelController extends GenericOCDSController {
+public class CostEffectivenessExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -37,9 +36,10 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Cost effectiveness* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/costEffectivenessExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void costEffectivenessExcelChart(@ModelAttribute @Valid final GroupingFilterPagingRequest filter,
+    public void costEffectivenessExcelChart(@ModelAttribute @Valid final LangGroupingFilterPagingRequest filter,
                                             final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Cost effectiveness";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:costEffectiveness:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> costEffectivenessTenderAwardAmount =
@@ -76,8 +76,9 @@ public class CostEffectivenessExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Bid price",
-                    "Difference"
+                    translationService.getValue(filter.getLanguage(),
+                            "charts:costEffectiveness:traces:tenderPrice"),
+                    translationService.getValue(filter.getLanguage(), "charts:costEffectiveness:traces:awardPrice")
             );
         } else {
             seriesTitle = new ArrayList<>();

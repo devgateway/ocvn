@@ -1,20 +1,19 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.charts.XSSFChartAxis;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.ByteArrayInputStream;
-import java.util.List;
 
 /**
  * @author idobre
@@ -28,8 +27,9 @@ public class TenderPriceExcelControllerTest extends AbstractExcelControllerTest 
 
     @Test
     public void procurementMethodExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPriceExcelController.procurementMethodExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -44,7 +44,9 @@ public class TenderPriceExcelControllerTest extends AbstractExcelControllerTest 
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Procurement method", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(),"charts:procurementMethod:title"),
+                chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

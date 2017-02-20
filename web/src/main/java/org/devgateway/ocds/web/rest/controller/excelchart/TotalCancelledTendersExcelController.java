@@ -8,9 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TotalCancelledTendersByYearController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Exports an excel chart based on *Cancelled funding* dashboard
  */
 @RestController
-public class TotalCancelledTendersExcelController extends GenericOCDSController {
+public class TotalCancelledTendersExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -37,9 +36,10 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
 
     @ApiOperation(value = "Exports *Cancelled funding* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledFundingExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void cancelledFundingExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void cancelledFundingExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                            final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Cancelled funding";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:cancelledAmounts:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = totalCancelledTendersByYearController
@@ -66,7 +66,7 @@ public class TotalCancelledTendersExcelController extends GenericOCDSController 
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Amount (trillions)");
+                    translationService.getValue(filter.getLanguage(), "charts:cancelledAmounts:yAxisName"));
         } else {
             seriesTitle = new ArrayList<>();
         }

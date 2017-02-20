@@ -2,22 +2,20 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.TendersByItemClassification;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author idobre
@@ -26,7 +24,7 @@ import java.util.List;
  * Exports an excel chart based on *Number of bids by item* dashboard
  */
 @RestController
-public class TendersByItemExcelController extends GenericOCDSController {
+public class TendersByItemExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -39,9 +37,10 @@ public class TendersByItemExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Number of bids by item* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/tendersByItemExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void numberOfTendersByItemExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void numberOfTendersByItemExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                 final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Number of bids by item";
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:bidsByItem:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> numberOfTendersByItem =
@@ -63,7 +62,7 @@ public class TendersByItemExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Item");
+                    translationService.getValue(filter.getLanguage(), "charts:bidsByItem:xAxisTitle"));
         } else {
             seriesTitle = new ArrayList<>();
         }
