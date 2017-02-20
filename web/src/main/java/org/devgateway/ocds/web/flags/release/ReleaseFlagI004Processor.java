@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
@@ -34,10 +36,9 @@ public abstract class ReleaseFlagI004Processor extends AbstractFlaggedReleaseFla
     }
 
     @Override
-    protected FlagType[] flagTypes() {
-        return new FlagType[]{FlagType.RIGGING};
+    protected Set<FlagType> flagTypes() {
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
     }
-
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
         //classificationIds are the same for all items, so we just get the 1st

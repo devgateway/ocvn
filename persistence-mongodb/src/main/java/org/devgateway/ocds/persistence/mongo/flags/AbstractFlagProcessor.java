@@ -66,7 +66,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
      * These are the flag types related to the current flag. They are defined in {@link FlagType}
      * @return
      */
-    protected abstract FlagType[] flagTypes();
+    protected abstract Set<FlagType> flagTypes();
 
     /**
      * Sets the flag to the {@link Flaggable}

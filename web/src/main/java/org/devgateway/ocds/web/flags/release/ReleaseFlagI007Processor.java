@@ -3,6 +3,8 @@ package org.devgateway.ocds.web.flags.release;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
@@ -33,8 +35,8 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
     }
 
     @Override
-    protected FlagType[] flagTypes() {
-        return new FlagType[]{FlagType.RIGGING};
+    protected Set<FlagType> flagTypes() {
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
     }
 
     @Override
