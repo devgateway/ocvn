@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -45,6 +46,11 @@ public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcesso
                 FlaggedReleasePredicates.TENDER_END_DATE,
                 FlaggedReleasePredicates.TENDER_START_DATE
         ));
+    }
+
+    @Override
+    protected FlagType[] flagTypes() {
+        return new FlagType[]{FlagType.RIGGING};
     }
 
 }

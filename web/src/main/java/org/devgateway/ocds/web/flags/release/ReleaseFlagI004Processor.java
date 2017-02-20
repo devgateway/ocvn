@@ -1,14 +1,14 @@
 package org.devgateway.ocds.web.flags.release;
 
 import com.google.common.collect.ImmutableMap;
-import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
-import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
-import org.devgateway.ocds.persistence.mongo.flags.Flag;
-import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
+import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
+import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 
 /**
  * @author mpostelnicu
@@ -31,6 +31,11 @@ public abstract class ReleaseFlagI004Processor extends AbstractFlaggedReleaseFla
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {
         flaggable.getFlags().setI004(flag);
+    }
+
+    @Override
+    protected FlagType[] flagTypes() {
+        return new FlagType[]{FlagType.RIGGING};
     }
 
     @Override

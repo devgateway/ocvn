@@ -9,6 +9,7 @@ import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -43,6 +44,12 @@ public class ReleaseFlagI019Processor extends AbstractFlaggedReleaseFlagProcesso
         rationale.append("Days between: ").append(daysBetween.getDays()).append("; Max allowed days: ")
                 .append(MAX_ALLOWED_DAYS_TENDER_END_DATE_AWARD_DATE).append(";");
         return daysBetween.getDays() > MAX_ALLOWED_DAYS_TENDER_END_DATE_AWARD_DATE;
+    }
+
+
+    @Override
+    protected FlagType[] flagTypes() {
+        return new FlagType[]{FlagType.RIGGING};
     }
 
     @Override

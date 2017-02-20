@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,11 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
 
         rationale.append("Number of bids: ").append(countAwards);
         return countAwards == 1;
+    }
+
+    @Override
+    protected FlagType[] flagTypes() {
+        return new FlagType[]{FlagType.RIGGING};
     }
 
     @Override
