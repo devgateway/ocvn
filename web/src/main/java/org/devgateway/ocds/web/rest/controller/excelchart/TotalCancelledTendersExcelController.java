@@ -85,9 +85,11 @@ public class TotalCancelledTendersExcelController extends ExcelChartOCDSControll
     @ApiOperation(value = "Exports *Cancelled funding by reason* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledTendersByYearByRationaleExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void cancelledTendersByYearByRationaleExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void cancelledTendersByYearByRationaleExcelChart(@ModelAttribute @Valid
+                                                            final LangYearFilterPagingRequest filter,
                                                             final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Cancelled funding by reason";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:cancelledFunding:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = totalCancelledTendersByYearController
@@ -114,7 +116,7 @@ public class TotalCancelledTendersExcelController extends ExcelChartOCDSControll
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Amount (trillions)");
+                    translationService.getValue(filter.getLanguage(), "charts:cancelledFunding:yAxisTitle"));
         } else {
             seriesTitle = new ArrayList<>();
         }

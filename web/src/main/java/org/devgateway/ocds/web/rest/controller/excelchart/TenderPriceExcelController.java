@@ -36,9 +36,10 @@ public class TenderPriceExcelController extends ExcelChartOCDSController {
 
     @ApiOperation(value = "Exports *Bid selection* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void bidSelectionExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void bidSelectionExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                        final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Bid selection method";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:bidSelectionMethod:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> tenderPriceByBidSelection =
@@ -60,7 +61,7 @@ public class TenderPriceExcelController extends ExcelChartOCDSController {
         values.add(totalTenderAmount);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Bid selection method (trillions)");
+                translationService.getValue(filter.getLanguage(), "charts:cancelledFunding:yAxisTitle"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

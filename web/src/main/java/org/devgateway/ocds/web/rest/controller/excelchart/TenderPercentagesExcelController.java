@@ -76,9 +76,11 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
     @ApiOperation(value = "Exports *Number of cancelled bids* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/numberCancelledFundingExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void numberCancelledFundingExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void numberCancelledFundingExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                  final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Number of cancelled bids";
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:cancelledPercents:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
@@ -97,7 +99,8 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Count");
+                    translationService.getValue(filter.getLanguage(),
+                    "charts:cancelledPercents:yAxisName"));
         } else {
             seriesTitle = new ArrayList<>();
         }
@@ -154,9 +157,10 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
     @ApiOperation(value = "Exports *Number of eBid Awards* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/numberTendersUsingEBidExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void numberTendersUsingEBidExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void numberTendersUsingEBidExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                  final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Number of eBid Awards";
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:nrEBid:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
@@ -175,7 +179,7 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Count");
+                    translationService.getValue(filter.getLanguage(), "charts:nrEBid:yAxisTitle"));
         } else {
             seriesTitle = new ArrayList<>();
         }
@@ -193,9 +197,10 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Procurement* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEgpExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                  final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Percent of Tenders Using e-Procurement";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:percentEProcurement:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> percentTendersUsingEgp = tenderPercentagesController.percentTendersUsingEgp(filter);
@@ -209,7 +214,8 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         values.add(percentEgp);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Percent");
+                translationService.getValue(filter.getLanguage(),
+                        "charts:percentEProcurement:yAxisTitle"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
@@ -224,9 +230,13 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
     @ApiOperation(value = "Exports *Percentage of plans with tender* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/tendersWithLinkedProcurementPlanExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid
+                                                               final LangYearFilterPagingRequest filter,
                                                            final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Percentage of plans with tender";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:percentWithTenders:title");
+
+
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
@@ -242,7 +252,8 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
         values.add(percentTenders);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Percent");
+                translationService.getValue(filter.getLanguage(),
+                        "charts:percentWithTenders:yAxisTitle"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

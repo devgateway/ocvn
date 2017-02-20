@@ -57,8 +57,9 @@ public class TotalCancelledTendersExcelControllerTest extends AbstractExcelContr
 
     @Test
     public void cancelledTendersByYearByRationaleExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         totalCancelledTendersExcelController.cancelledTendersByYearByRationaleExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -73,7 +74,10 @@ public class TotalCancelledTendersExcelControllerTest extends AbstractExcelContr
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Cancelled funding by reason", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(),
+                        "charts:cancelledFunding:title")
+                , chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

@@ -57,8 +57,9 @@ public class TenderPriceExcelControllerTest extends AbstractExcelControllerTest 
 
     @Test
     public void bidSelectionExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPriceExcelController.bidSelectionExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -73,7 +74,9 @@ public class TenderPriceExcelControllerTest extends AbstractExcelControllerTest 
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Bid selection method", chart.getTitle().getString());
+        Assert.assertEquals("chart title",translationService.getValue(filter.getLanguage(),
+                "charts:bidSelectionMethod:title")
+                , chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

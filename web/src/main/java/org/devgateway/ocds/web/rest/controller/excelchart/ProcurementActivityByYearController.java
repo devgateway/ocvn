@@ -73,7 +73,7 @@ public class ProcurementActivityByYearController extends ExcelChartOCDSControlle
             seriesTitle = Arrays.asList(
                     translationService.getValue(filter.getLanguage(), "charts:overview:traces:award"),
                     translationService.getValue(filter.getLanguage(), "charts:overview:traces:tender"),
-                    "Bidplan");
+                    translationService.getValue(filter.getLanguage(), "charts:overview:traces:bidplan"));
         } else {
             seriesTitle = new ArrayList<>();
         }

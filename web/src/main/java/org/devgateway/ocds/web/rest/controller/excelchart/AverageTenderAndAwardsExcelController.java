@@ -9,10 +9,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
-import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.TenderPercentagesController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -77,7 +75,7 @@ public class AverageTenderAndAwardsExcelController extends ExcelChartOCDSControl
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Average time from plan to tender phase",
+                    translationService.getValue(filter.getLanguage(), "charts:bidPeriod:traces:avgTime"),
                     translationService.getValue(filter.getLanguage(), "charts:bidPeriod:traces:tender"),
                     translationService.getValue(filter.getLanguage(), "charts:bidPeriod:traces:award"));
         } else {
