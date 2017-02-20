@@ -2,22 +2,20 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.TenderPriceByTypeYearController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author idobre
@@ -26,7 +24,7 @@ import java.util.List;
  * Exports an excel chart based on *Bid selection method* dashboard
  */
 @RestController
-public class TenderPriceExcelController extends GenericOCDSController {
+public class TenderPriceExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -38,9 +36,10 @@ public class TenderPriceExcelController extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Bid selection* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/bidSelectionExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void bidSelectionExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void bidSelectionExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                        final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Bid selection method";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:bidSelectionMethod:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> tenderPriceByBidSelection =
@@ -62,7 +61,7 @@ public class TenderPriceExcelController extends GenericOCDSController {
         values.add(totalTenderAmount);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Bid selection method (trillions)");
+                translationService.getValue(filter.getLanguage(), "charts:cancelledFunding:yAxisTitle"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
@@ -76,9 +75,10 @@ public class TenderPriceExcelController extends GenericOCDSController {
 
     @ApiOperation(value = "Exports *Procurement method* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/procurementMethodExcelChart", method = {RequestMethod.GET, RequestMethod.POST})
-    public void procurementMethodExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void procurementMethodExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                             final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Procurement method";
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:procurementMethod:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> tenderPriceByBidSelection =
@@ -99,7 +99,8 @@ public class TenderPriceExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Procurement method");
+                    translationService.getValue(filter.getLanguage(), "charts:procurementMethod:xAxisName")
+                    );
         } else {
             seriesTitle = new ArrayList<>();
         }

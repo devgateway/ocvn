@@ -1,10 +1,16 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
+import java.io.File;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImportPackage;
 import org.devgateway.ocds.persistence.mongo.spring.json.ReleasePackageJsonImport;
+import org.devgateway.ocds.web.rest.controller.request.LangGroupingFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
+import org.devgateway.ocds.web.spring.TranslationService;
+import org.devgateway.ocds.web.util.SettingsUtils;
 import org.devgateway.toolkit.web.AbstractWebTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,9 +19,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.mock.web.MockHttpServletResponse;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * @author idobre
@@ -34,6 +37,9 @@ public abstract class AbstractExcelControllerTest extends AbstractWebTest {
 
     @Autowired
     private CacheManager cacheManager;
+
+    @Autowired
+    protected TranslationService translationService;
 
     @Before
     public final void setUp() throws Exception {
@@ -66,5 +72,18 @@ public abstract class AbstractExcelControllerTest extends AbstractWebTest {
         final List<Release> importedRelease = releaseRepository.findAll();
         Assert.assertNotNull(importedRelease);
         Assert.assertEquals(3, importedRelease.size());
+    }
+
+
+    public LangYearFilterPagingRequest getLangYearFilterMockRequest() {
+        LangYearFilterPagingRequest filter = new LangYearFilterPagingRequest();
+        filter.setLanguage(SettingsUtils.DEFAULT_LANGUAGE);
+        return filter;
+    }
+
+    public LangGroupingFilterPagingRequest getLangGroupingFilterMockRequest() {
+        LangGroupingFilterPagingRequest filter = new LangGroupingFilterPagingRequest();
+        filter.setLanguage(SettingsUtils.DEFAULT_LANGUAGE);
+        return filter;
     }
 }
