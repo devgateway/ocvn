@@ -1,19 +1,21 @@
 package org.devgateway.ocds.web.flags.release;
 
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.devgateway.ocds.web.rest.controller.FrequentSuppliersTimeIntervalController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author mpostelnicu
@@ -80,4 +82,9 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
 
     }
 
+
+    @Override
+    protected Set<FlagType> flagTypes() {
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
+    }
 }

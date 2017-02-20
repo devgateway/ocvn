@@ -4,6 +4,7 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.spring.ReleaseFlaggingService;
 import org.junit.Assert;
@@ -40,10 +41,14 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         FlaggedRelease release1 = flaggedReleaseRepository.findByOcid("ocds-endpoint-001");
         Assert.assertNotNull(release1);
         Assert.assertEquals(false, release1.getFlags().getI038().getValue());
+        Assert.assertEquals(true, release1.getFlags().getI038().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release1.getFlags().getI038().getTypes().size());
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
         Assert.assertNotNull(release2);
         Assert.assertEquals(null, release2.getFlags().getI038().getValue());
+        Assert.assertEquals(true, release2.getFlags().getI038().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release2.getFlags().getI038().getTypes().size());
     }
 
     @Test
@@ -51,10 +56,14 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         FlaggedRelease release1 = flaggedReleaseRepository.findByOcid("ocds-endpoint-001");
         Assert.assertNotNull(release1);
         Assert.assertEquals(true, release1.getFlags().getI019().getValue());
+        Assert.assertEquals(true, release1.getFlags().getI019().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release1.getFlags().getI019().getTypes().size());
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
         Assert.assertNotNull(release2);
         Assert.assertEquals(null, release2.getFlags().getI019().getValue());
+        Assert.assertEquals(true, release2.getFlags().getI019().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release2.getFlags().getI019().getTypes().size());
     }
 
     @Test
@@ -62,10 +71,14 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         FlaggedRelease release1 = flaggedReleaseRepository.findByOcid("ocds-endpoint-001");
         Assert.assertNotNull(release1);
         Assert.assertEquals(true, release1.getFlags().getI007().getValue());
+        Assert.assertEquals(true, release1.getFlags().getI007().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release1.getFlags().getI007().getTypes().size());
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
         Assert.assertNotNull(release2);
         Assert.assertEquals(null, release2.getFlags().getI007().getValue());
+        Assert.assertEquals(true, release2.getFlags().getI007().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release2.getFlags().getI007().getTypes().size());
     }
 
     @Test
@@ -73,10 +86,14 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         FlaggedRelease release1 = flaggedReleaseRepository.findByOcid("ocds-endpoint-001");
         Assert.assertNotNull(release1);
         Assert.assertEquals(false, release1.getFlags().getI077().getValue());
+        Assert.assertEquals(true, release1.getFlags().getI077().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release1.getFlags().getI077().getTypes().size());
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
         Assert.assertNotNull(release2);
         Assert.assertEquals(false, release2.getFlags().getI077().getValue());
+        Assert.assertEquals(true, release2.getFlags().getI077().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release2.getFlags().getI077().getTypes().size());
     }
 
     @Test
@@ -97,10 +114,14 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         FlaggedRelease release1 = flaggedReleaseRepository.findByOcid("ocds-endpoint-001");
         Assert.assertNotNull(release1);
         Assert.assertEquals(null, release1.getFlags().getI180().getValue());
+        Assert.assertEquals(true, release1.getFlags().getI180().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release1.getFlags().getI180().getTypes().size());
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
         Assert.assertNotNull(release2);
         Assert.assertEquals(null, release2.getFlags().getI180().getValue());
+        Assert.assertEquals(true, release2.getFlags().getI180().getTypes().contains(FlagType.RIGGING));
+        Assert.assertEquals(1, release2.getFlags().getI180().getTypes().size());
     }
 
 }

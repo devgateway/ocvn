@@ -1,14 +1,16 @@
 package org.devgateway.ocds.web.flags.release;
 
 import com.google.common.collect.ImmutableMap;
-import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
-import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
-import org.devgateway.ocds.persistence.mongo.flags.Flag;
-import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
+import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
+import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 
 /**
  * @author mpostelnicu
@@ -33,6 +35,10 @@ public abstract class ReleaseFlagI004Processor extends AbstractFlaggedReleaseFla
         flaggable.getFlags().setI004(flag);
     }
 
+    @Override
+    protected Set<FlagType> flagTypes() {
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
+    }
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
         //classificationIds are the same for all items, so we just get the 1st

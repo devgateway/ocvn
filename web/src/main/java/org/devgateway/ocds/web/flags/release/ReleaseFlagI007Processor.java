@@ -3,10 +3,13 @@ package org.devgateway.ocds.web.flags.release;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +32,11 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
 
         rationale.append("Number of bids: ").append(countAwards);
         return countAwards == 1;
+    }
+
+    @Override
+    protected Set<FlagType> flagTypes() {
+        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
     }
 
     @Override

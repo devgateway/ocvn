@@ -59,8 +59,14 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
         logger.debug("Setting flag with value " + flagValue + " to flaggable " + flaggable.getIdProperty());
 
         initializeFlags(flaggable);
-        setFlag(new Flag(flagValue, rationale.toString()), flaggable);
+        setFlag(new Flag(flagValue, rationale.toString(), flagTypes()), flaggable);
     }
+
+    /**
+     * These are the flag types related to the current flag. They are defined in {@link FlagType}
+     * @return
+     */
+    protected abstract Set<FlagType> flagTypes();
 
     /**
      * Sets the flag to the {@link Flaggable}
