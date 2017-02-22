@@ -25,6 +25,14 @@ function() {
         this.flags.i180.types.forEach(agg);
     }
 
+    if(this.flags.i004.value) {
+            this.flags.i004.types.forEach(agg);
+    }
+
+    if(this.flags.i003.value) {
+                this.flags.i003.types.forEach(agg);
+    }
+
     for(var key in typesMap) {
         emit(key,typesMap[key]);
     }
