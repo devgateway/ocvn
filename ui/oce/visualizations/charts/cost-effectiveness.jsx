@@ -65,7 +65,7 @@ class CostEffectiveness extends FrontendDateFilterableChart{
 CostEffectiveness.getName = t => t('charts:costEffectiveness:title');
 CostEffectiveness.endpoint = 'costEffectivenessTenderAwardAmount';
 CostEffectiveness.excelEP = 'costEffectivenessExcelChart';
-CostEffectiveness.getFillerDatum = seed => Map(seed).set('totalTenderAmount', 0).set('diffTenderAwardAmount', 0);
+CostEffectiveness.getFillerDatum = seed => Map(seed).set('tender', 0).set('diff', 0);
 
 CostEffectiveness.getMaxField = imm => imm.get('totalTenderAmount') + imm.get('diffTenderAwardAmount');
 

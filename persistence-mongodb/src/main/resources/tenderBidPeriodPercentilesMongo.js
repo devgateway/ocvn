@@ -1,4 +1,4 @@
-function(yearsStr,procuringEntityIdStr,bidTypeIdStr) {
+function(yearsStr,procuringEntityIdStr,bidTypeIdStr,bidSelectionMethod) {
    db.loadServerScripts();		
    if(yearsStr!=undefined) {	
 	   var years=JSON.parse(yearsStr.replace(/'/g, ""));
@@ -18,6 +18,14 @@ function(yearsStr,procuringEntityIdStr,bidTypeIdStr) {
    } else
 	   matchProcuringEntityId={};
    
+   //vietnam specific
+   if(bidSelectionMethod!=undefined) {	
+	   matchBidSelectionMethod= {"tender.succBidderMethodName" : {$in : bidSelectionMethod.split(",") }  };
+   } else
+	   matchBidSelectionMethod={};
+	      
+	      
+   
    if(bidTypeIdStr!=undefined) {	
 	   matchBidTypeId= {"tender.items.classification._id" : {$in : bidTypeIdStr.split(",") }  };
    } else
@@ -32,7 +40,7 @@ function(yearsStr,procuringEntityIdStr,bidTypeIdStr) {
 		$and: [
 		       {"tender.tenderPeriod.startDate" : { "$ne" : null} } , 
 		       {"tender.tenderPeriod.endDate" : { "$ne" : null} },
-		       match, matchProcuringEntityId, matchBidTypeId
+		       match, matchProcuringEntityId, matchBidTypeId, matchBidSelectionMethod
 		       ]
 	    }
 	} ,	
