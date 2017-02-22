@@ -1,9 +1,7 @@
 package org.devgateway.ocds.web.rest.controller;
 
 import java.util.List;
-import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
-import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocds.web.spring.ReleaseFlaggingService;
 import org.junit.Assert;
@@ -25,12 +23,6 @@ public class TotalFlagsByIndicatorTypeControllerTest extends AbstractEndPointCon
     @Autowired
     private ReleaseFlaggingService releaseFlaggingService;
 
-
-    @Autowired
-    private FlaggedReleaseRepository flaggedReleaseRepository;;
-
-
-
     public static void logMessage(String message) {
         logger.info(message);
     }
@@ -43,7 +35,6 @@ public class TotalFlagsByIndicatorTypeControllerTest extends AbstractEndPointCon
 
     @Test
     public void totalFlagsByIndicatorTypeTest() throws Exception {
-        List<FlaggedRelease> all = flaggedReleaseRepository.findAll();
         final List<TotalFlagsByIndicatorTypeController.TypeValue> result = totalFlagsByIndicatorTypeController
                 .totalFlagsByIndicatorType(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
