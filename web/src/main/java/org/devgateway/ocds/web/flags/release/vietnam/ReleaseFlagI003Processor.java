@@ -1,16 +1,18 @@
 package org.devgateway.ocds.web.flags.release.vietnam;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
+import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * @author mpostelnicu
@@ -33,6 +35,11 @@ public class ReleaseFlagI003Processor extends AbstractFlaggedReleaseFlagProcesso
                 .count();
         rationale.append("Number of eligible unsuccessful awards: ").append(eligibleUnsuccessfulAwards);
         return eligibleUnsuccessfulAwards == 0;
+    }
+
+    @Override
+    protected Set<FlagType> flagTypes() {
+        return new HashSet<FlagType>(Arrays.asList(FlagType.FRAUD, FlagType.RIGGING));
     }
 
     @Override
