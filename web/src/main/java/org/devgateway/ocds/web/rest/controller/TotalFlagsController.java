@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
-public class TotalFlagsByIndicatorTypeController extends GenericOCDSController {
+public class TotalFlagsController extends GenericOCDSController {
 
     public static class TypeValue {
         private String id;
@@ -54,8 +54,13 @@ public class TotalFlagsByIndicatorTypeController extends GenericOCDSController {
         }
     }
 
+    public static final class Keys {
+        public static final String ALL = "all";
+    }
 
-    @ApiOperation(value = "Counts ")
+
+    @ApiOperation(value = "Counts the indicators flagged as true, and groups them by indicator type. "
+            + "An indicator that has two types it will be counted twice, once in each group.")
     @RequestMapping(value = "/api/totalFlagsByIndicatorType", method = {RequestMethod.POST, RequestMethod.GET},
             produces = "application/json")
     public List<TypeValue> totalFlagsByIndicatorType(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
@@ -68,5 +73,21 @@ public class TotalFlagsByIndicatorTypeController extends GenericOCDSController {
                         TypeValue.class).spliterator(), false)
                 .collect(Collectors.toList());
     }
+
+    @ApiOperation(value = "Counts the indicators flagged as true. An indicator that has two types will be counted"
+            + "only once.")
+    @RequestMapping(value = "/api/totalFlags", method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<TypeValue> totalFlags(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        return StreamSupport
+                .stream(mongoTemplate.mapReduce(
+                        new Query(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate")),
+                        "release", "classpath:total-flags-map.js",
+                        "classpath:total-flags-reduce.js",
+                        TypeValue.class).spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
 
 }

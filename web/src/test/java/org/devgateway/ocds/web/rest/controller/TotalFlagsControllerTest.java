@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @see {@link AbstractEndPointControllerTest}
  */
-public class TotalFlagsByIndicatorTypeControllerTest extends AbstractEndPointControllerTest {
+public class TotalFlagsControllerTest extends AbstractEndPointControllerTest {
     @Autowired
-    private TotalFlagsByIndicatorTypeController totalFlagsByIndicatorTypeController;
+    private TotalFlagsController totalFlagsController;
 
 
     @Autowired
@@ -35,10 +35,19 @@ public class TotalFlagsByIndicatorTypeControllerTest extends AbstractEndPointCon
 
     @Test
     public void totalFlagsByIndicatorTypeTest() throws Exception {
-        final List<TotalFlagsByIndicatorTypeController.TypeValue> result = totalFlagsByIndicatorTypeController
+        final List<TotalFlagsController.TypeValue> result = totalFlagsController
                 .totalFlagsByIndicatorType(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).getId());
+        Assert.assertEquals(2, result.get(0).getValue(),0);
+    }
+
+    @Test
+    public void totalFlagsTest() throws Exception {
+        final List<TotalFlagsController.TypeValue> result = totalFlagsController
+                .totalFlags(new YearFilterPagingRequest());
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(TotalFlagsController.Keys.ALL, result.get(0).getId());
         Assert.assertEquals(2, result.get(0).getValue(),0);
     }
 
