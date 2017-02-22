@@ -56,7 +56,9 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
             failedPreconditionsPredicates.forEach(p -> rationale.append(p.toString()).append("; "));
         }
 
-        logger.debug("Setting flag with value " + flagValue + " to flaggable " + flaggable.getIdProperty());
+        if (flagValue != null && flagValue) {
+            logger.debug("Setting flag with value " + flagValue + " to flaggable " + flaggable.getIdProperty());
+        }
 
         initializeFlags(flaggable);
         setFlag(new Flag(flagValue, rationale.toString(), flagTypes()), flaggable);
