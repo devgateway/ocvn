@@ -52,6 +52,12 @@ public class TotalCancelledTendersExcelController extends ExcelChartOCDSControll
         final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
                 getExportYearMonthXAxis(filter),
                 TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
+        // use trillions for amounts
+        for (int i = 0; i < cancelledAmount.size(); i++) {
+            if (cancelledAmount.get(i) != null) {
+                cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+            }
+        }
         if (!cancelledAmount.isEmpty()) {
             values.add(cancelledAmount);
         }
@@ -70,6 +76,56 @@ public class TotalCancelledTendersExcelController extends ExcelChartOCDSControll
         response.getOutputStream().write(
                 excelChartGenerator.getExcelChart(
                         ChartType.area,
+                        chartTitle,
+                        seriesTitle,
+                        categories, values));
+    }
+
+
+    @ApiOperation(value = "Exports *Cancelled funding by reason* dashboard in Excel format.")
+    @RequestMapping(value = "/api/ocds/cancelledTendersByYearByRationaleExcelChart",
+            method = {RequestMethod.GET, RequestMethod.POST})
+    public void cancelledTendersByYearByRationaleExcelChart(@ModelAttribute @Valid
+                                                            final LangYearFilterPagingRequest filter,
+                                                            final HttpServletResponse response) throws IOException {
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:cancelledFunding:title");
+
+        // fetch the data that will be displayed in the chart
+        final List<DBObject> totalCancelledTenders = totalCancelledTendersByYearController
+                .totalCancelledTendersByYearByRationale(filter);
+
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(
+                getExportYearMonthXAxis(filter), totalCancelledTenders);
+        final List<List<? extends Number>> values = new ArrayList<>();
+
+        final List<Number> cancelledAmount = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
+                getExportYearMonthXAxis(filter),
+                TotalCancelledTendersByYearController.Keys.TOTAL_CANCELLED_TENDERS_AMOUNT);
+        // use trillions for amounts
+        for (int i = 0; i < cancelledAmount.size(); i++) {
+            if (cancelledAmount.get(i) != null) {
+                cancelledAmount.set(i, cancelledAmount.get(i).doubleValue() / 1000000000);
+            }
+        }
+        if (!cancelledAmount.isEmpty()) {
+            values.add(cancelledAmount);
+        }
+
+        // check if we have anything to display before setting the *seriesTitle*.
+        final List<String> seriesTitle;
+        if (!values.isEmpty()) {
+            seriesTitle = Arrays.asList(
+                    translationService.getValue(filter.getLanguage(), "charts:cancelledFunding:yAxisTitle"));
+        } else {
+            seriesTitle = new ArrayList<>();
+        }
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
+        response.getOutputStream().write(
+                excelChartGenerator.getExcelChart(
+                        ChartType.barcol,
                         chartTitle,
                         seriesTitle,
                         categories, values));

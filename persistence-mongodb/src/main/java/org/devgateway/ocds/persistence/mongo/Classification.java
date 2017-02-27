@@ -34,7 +34,6 @@ public class Classification implements Identifiable {
      *  wherever possible.
      *
      */
-    @ExcelExport
     @JsonProperty("scheme")
     @Merge(MergeStrategy.ocdsVersion)
     private String scheme;

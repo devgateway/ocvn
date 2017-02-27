@@ -21,6 +21,14 @@ function() {
         noFlags++;
     }
 
+    if(this.flags.i004.value) {
+        noFlags++;
+    }
+
+    if(this.flags.i003.value) {
+        noFlags++;
+    }
+
     emit('all',noFlags);
 
 };

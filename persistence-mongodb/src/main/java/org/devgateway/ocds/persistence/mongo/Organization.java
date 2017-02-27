@@ -40,7 +40,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 })
 @Document
 public class Organization implements Identifiable {
-    @ExcelExport
     @Id
     private String id;
 
