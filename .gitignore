@@ -22,4 +22,4 @@ rebel.xml
 /web/nbactions.xml
 /forms/.rebel.xml.bak
 /derby.log
-/logger.log
+/LOG_DIR_IS_UNDEFINED/
