@@ -21,3 +21,5 @@ rebel.xml
 /ui/nb-configuration.xml
 /web/nbactions.xml
 /forms/.rebel.xml.bak
+/derby.log
+/logger.log
