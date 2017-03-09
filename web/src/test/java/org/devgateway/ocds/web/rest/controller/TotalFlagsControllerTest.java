@@ -1,6 +1,5 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
@@ -44,15 +43,15 @@ public class TotalFlagsControllerTest extends AbstractEndPointControllerTest {
         releaseFlaggingService.processAndSaveFlagsForAllReleases(ReleaseFlaggingServiceTest::logMessage);
 
 
-        //debugging
-        releaseRepository.findAll().forEach(r -> {
-            try {
-                System.out.println("date=" + r.getTender().getTenderPeriod().getStartDate() + " " +
-                        objectMapper.writeValueAsString(r.getFlags()));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
+//        //debugging
+//        releaseRepository.findAll().forEach(r -> {
+//            try {
+//                System.out.println("date=" + r.getTender().getTenderPeriod().getStartDate() + " " +
+//                        objectMapper.writeValueAsString(r.getFlags()));
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//        });
     }
 
     @Test
