@@ -3,8 +3,9 @@
  */
 package org.devgateway.ocds.persistence.mongo.flags;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
+import org.springframework.data.annotation.Transient;
 
 /**
  * @author mpostelnicu Represents the list of red flags at the Release level
@@ -34,26 +35,49 @@ public class ReleaseFlags implements FlagsWrappable {
     // during a defined time period
     private Flag i180;
 
-    private Map<FlagType, Integer> flaggedTypes = new HashMap<>();
+    private Collection<FlagTypeCount> flaggedStats;
 
-    private Map<FlagType, Integer> eligibleTypes = new HashMap<>();
+    private Collection<FlagTypeCount> eligibleStats;
+
+    @Transient
+    private HashMap<FlagType, FlagTypeCount> flaggedStatsMap = new HashMap<>();
+
+    @Transient
+    private HashMap<FlagType, FlagTypeCount> eligibleStatsMap = new HashMap<>();
+
+
+    public Collection<FlagTypeCount> getFlaggedStats() {
+        return flaggedStats;
+    }
+
+    public void setFlaggedStats(Collection<FlagTypeCount> flaggedStats) {
+        this.flaggedStats = flaggedStats;
+    }
+
+    public Collection<FlagTypeCount> getEligibleStats() {
+        return eligibleStats;
+    }
+
+    public void setEligibleStats(Collection<FlagTypeCount> eligibleStats) {
+        this.eligibleStats = eligibleStats;
+    }
 
     @Override
-    public Map<FlagType, Integer> getFlaggedTypes() {
-        return flaggedTypes;
+    public HashMap<FlagType, FlagTypeCount> getFlaggedStatsMap() {
+        return flaggedStatsMap;
     }
 
-    public void setFlaggedTypes(Map<FlagType, Integer> flaggedTypes) {
-        this.flaggedTypes = flaggedTypes;
+    public void setFlaggedStatsMap(HashMap<FlagType, FlagTypeCount> flaggedStatsMap) {
+        this.flaggedStatsMap = flaggedStatsMap;
     }
 
     @Override
-    public Map<FlagType, Integer> getEligibleTypes() {
-        return eligibleTypes;
+    public HashMap<FlagType, FlagTypeCount> getEligibleStatsMap() {
+        return eligibleStatsMap;
     }
 
-    public void setEligibleTypes(Map<FlagType, Integer> eligibleTypes) {
-        this.eligibleTypes = eligibleTypes;
+    public void setEligibleStatsMap(HashMap<FlagType, FlagTypeCount> eligibleStatsMap) {
+        this.eligibleStatsMap = eligibleStatsMap;
     }
 
     public Flag getI019() {

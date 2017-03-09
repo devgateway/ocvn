@@ -64,7 +64,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class CostEffectivenessVisualsController extends GenericOCDSController {
 
-    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
+
 
     @Autowired
     private AsyncControllerLookupService controllerLookupService;

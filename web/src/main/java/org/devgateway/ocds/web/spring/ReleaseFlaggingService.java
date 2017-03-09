@@ -69,7 +69,18 @@ public class ReleaseFlaggingService {
 
     private void processAndSaveFlagsForRelease(FlaggedRelease release) {
         releaseFlagProcessors.forEach(processor -> processor.process(release));
+        prepareStats(release);
         releaseRepository.save(release);
+    }
+
+    /**
+     * Saves the stats map in a collection format that Mongo can persist easily
+     *
+     * @param release
+     */
+    private void prepareStats(FlaggedRelease release) {
+        release.getFlags().setFlaggedStats(release.getFlags().getFlaggedStatsMap().values());
+        release.getFlags().setEligibleStats(release.getFlags().getEligibleStatsMap().values());
     }
 
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {
