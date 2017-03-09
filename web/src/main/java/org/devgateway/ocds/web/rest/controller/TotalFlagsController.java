@@ -224,15 +224,16 @@ public class TotalFlagsController extends GenericOCDSController {
     }
 
     /**
-     * Finds a specific {@link DBObject} by year and (if available) month.
+     * Finds a specific {@link DBObject} by year and by type (if available) and (if available) month.
      * Very inefficient but we have only 10-12 entries so simplicity prevails :-)
      *
      * @param year
      * @param month
      * @return
      */
-    private List<DBObject> findByYearAndMonth(List<DBObject> source, Integer year, Integer month) {
+    private List<DBObject> findByYearAndTypeAndMonth(List<DBObject> source, Integer year, String type, Integer month) {
         return source.stream().filter(o -> year.equals(o.get(Keys.YEAR))
+                && (type == null || type.equals(o.get(Keys.TYPE)))
                 && (month == null || month.equals(o.get(Keys.MONTH)))).collect(Collectors.toList());
     }
 
@@ -248,7 +249,8 @@ public class TotalFlagsController extends GenericOCDSController {
         List<DBObject> totalProjectsByYear = totalProjectsByYear(filter);
 
         totalFlaggedProjects.forEach(e -> {
-            findByYearAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR), (Integer) e.get(Keys.MONTH))
+            findByYearAndTypeAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR), null,
+                    (Integer) e.get(Keys.MONTH))
                     .forEach(f -> {
                         e.put(Keys.PROJECT_COUNT, f.get(Keys.PROJECT_COUNT));
                         e.put(Keys.PERCENT, (BigDecimal.valueOf((Integer) e.get(Keys.FLAGGED_PROJECT_COUNT))
@@ -273,7 +275,8 @@ public class TotalFlagsController extends GenericOCDSController {
         List<DBObject> totalProjectsByYear = totalProjectsByYear(filter);
 
         totalEligibleProjects.forEach(e -> {
-            findByYearAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR), (Integer) e.get(Keys.MONTH))
+            findByYearAndTypeAndMonth(totalProjectsByYear, (Integer) e.get(Keys.YEAR), null,
+                    (Integer) e.get(Keys.MONTH))
                     .forEach(f -> {
                         e.put(Keys.PROJECT_COUNT, f.get(Keys.PROJECT_COUNT));
                         e.put(Keys.PERCENT, (BigDecimal.valueOf((Integer) e.get(Keys.ELIGIBLE_PROJECT_COUNT))
@@ -305,7 +308,8 @@ public class TotalFlagsController extends GenericOCDSController {
         });
 
         totalEligibleProjectsByYear.forEach(e -> {
-            findByYearAndMonth(totalFlaggedProjects, (Integer) e.get(Keys.YEAR), (Integer) e.get(Keys.MONTH))
+            findByYearAndTypeAndMonth(totalFlaggedProjects, (Integer) e.get(Keys.YEAR), (String) e.get(Keys.TYPE),
+                    (Integer) e.get(Keys.MONTH))
                     .forEach(f -> {
                         e.put(Keys.FLAGGED_PROJECT_COUNT, f.get(Keys.FLAGGED_PROJECT_COUNT));
                         e.put(Keys.PERCENT, (BigDecimal.valueOf((Integer) f.get(Keys.FLAGGED_PROJECT_COUNT))
