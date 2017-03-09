@@ -5,16 +5,6 @@ package org.devgateway.ocds.web.rest.controller;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bson.types.ObjectId;
 import org.devgateway.ocds.persistence.mongo.Tender;
@@ -37,6 +27,17 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -45,11 +46,14 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  * @author mpostelnicu
- *
  */
 public abstract class GenericOCDSController {
 
     private static final int LAST_MONTH_ZERO = 11;
+    public static final int BIGDECIMAL_SCALE = 15;
+
+    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
+
 
     protected Map<String, Object> filterProjectMap;
 
@@ -178,9 +182,9 @@ public abstract class GenericOCDSController {
      */
     protected String[] getYearlyMonthlyGroupingFields(YearFilterPagingRequest filter) {
         if (filter.getMonthly()) {
-            return new String[] { "$year", "$month" };
+            return new String[]{"$year", "$month"};
         } else {
-            return new String[] { "$year" };
+            return new String[]{"$year"};
         }
     }
 
@@ -190,6 +194,7 @@ public abstract class GenericOCDSController {
      * @param filter
      * @param extraGroups adds extra groups
      * @return
+     * @see #getYearlyMonthlyGroupingFields(YearFilterPagingRequest)
      */
     protected String[] getYearlyMonthlyGroupingFields(YearFilterPagingRequest filter, String... extraGroups) {
         return ArrayUtils.addAll(getYearlyMonthlyGroupingFields(filter), extraGroups);
@@ -218,7 +223,7 @@ public abstract class GenericOCDSController {
     protected Criteria getNotBidTypeIdFilterCriteria(final DefaultFilterPagingRequest filter) {
         return createNotFilterCriteria("tender.items.classification._id", filter.getNotBidTypeId(), filter);
     }
-    
+
 
     /**
      * Creates a mongodb query for searching based on text index, sorts the results by score
@@ -334,7 +339,7 @@ public abstract class GenericOCDSController {
     }
 
     private <S> Criteria createNotFilterCriteria(final String filterName, final List<S> filterValues,
-            final DefaultFilterPagingRequest filter) {
+                                                 final DefaultFilterPagingRequest filter) {
         if (filterValues == null) {
             return new Criteria();
         }
@@ -384,7 +389,6 @@ public abstract class GenericOCDSController {
         return createNotFilterCriteria("tender.procuringEntity._id", filter.getNotProcuringEntityId(), filter);
     }
 
-    
 
     /**
      * Appends the supplier entity id for this filter, this will fitler based
@@ -463,7 +467,7 @@ public abstract class GenericOCDSController {
 
     protected Criteria getDefaultFilterCriteria(final DefaultFilterPagingRequest filter) {
         return new Criteria().andOperator(
-                getBidTypeIdFilterCriteria(filter), 
+                getBidTypeIdFilterCriteria(filter),
                 getNotBidTypeIdFilterCriteria(filter),
                 getProcuringEntityIdCriteria(filter),
                 getNotProcuringEntityIdCriteria(filter),
@@ -482,7 +486,7 @@ public abstract class GenericOCDSController {
 
     protected Criteria getYearDefaultFilterCriteria(final YearFilterPagingRequest filter, final String dateProperty) {
         return new Criteria().andOperator(
-                getBidTypeIdFilterCriteria(filter), 
+                getBidTypeIdFilterCriteria(filter),
                 getNotBidTypeIdFilterCriteria(filter),
                 getProcuringEntityIdCriteria(filter),
                 getNotProcuringEntityIdCriteria(filter),
