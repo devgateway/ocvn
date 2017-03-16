@@ -16,6 +16,7 @@ class OCApp extends React.Component{
     super(props);
     this.tabs = [];
     this.state = {
+      dashboardSwitcherOpen: false,
       exporting: false,
       locale: localStorage.oceLocale || "en_US",
       width: 0,
@@ -314,6 +315,33 @@ class OCApp extends React.Component{
       {this.t('export:export')}
       <i className="glyphicon glyphicon-menu-down"></i>
     </div>
+  }
+
+  toggleDashboardSwitcher(e){
+    e.stopPropagation();
+    const {dashboardSwitcherOpen} = this.state;
+    this.setState({dashboardSwitcherOpen: !dashboardSwitcherOpen});
+  }
+
+  dashboardSwitcher(){
+    const {dashboardSwitcherOpen} = this.state;
+    const {onSwitch} = this.props;
+    return (
+      <div className={cn('dash-switcher-wrapper', {open: dashboardSwitcherOpen})}>
+        <h1 onClick={this.toggleDashboardSwitcher.bind(this)}>
+          {this.t('general:title')}
+          <i className="glyphicon glyphicon-menu-down"></i>
+          <small>{this.t('general:subtitle')}</small>
+        </h1>
+        {dashboardSwitcherOpen &&
+         <div className="dashboard-switcher">
+           <a href="javascript:void(0);" onClick={e => onSwitch('corruptionRiskDashboard')}>
+             Corruption Risk Dashboard
+           </a>
+         </div>
+        }
+      </div>
+    )
   }
 }
 
