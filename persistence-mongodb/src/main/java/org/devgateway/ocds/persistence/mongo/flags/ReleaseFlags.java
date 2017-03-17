@@ -1,7 +1,11 @@
 /**
- *
+ * 
  */
 package org.devgateway.ocds.persistence.mongo.flags;
+
+import java.util.Collection;
+import java.util.HashMap;
+import org.springframework.data.annotation.Transient;
 
 /**
  * @author mpostelnicu Represents the list of red flags at the Release level
@@ -17,6 +21,80 @@ public class ReleaseFlags implements FlagsWrappable {
 
     //i007 This awarded competitive tender only featured a single bid`
     private Flag i007;
+
+    //i004: Sole source award above the threshold
+    private Flag i004;
+
+    //i019: High number of contract awards to one supplier within a given time period by a single procurement entity
+    private Flag i077;
+
+    //i077: Long delays in contract negotiations or award
+    private Flag i019;
+
+    //i180: Contractor receives multiple single-source/non-competitive contracts from a single procuring entity
+    // during a defined time period
+    private Flag i180;
+
+    private Collection<FlagTypeCount> flaggedStats;
+
+    private Collection<FlagTypeCount> eligibleStats;
+
+    @Transient
+    private HashMap<FlagType, FlagTypeCount> flaggedStatsMap = new HashMap<>();
+
+    @Transient
+    private HashMap<FlagType, FlagTypeCount> eligibleStatsMap = new HashMap<>();
+
+
+    public Collection<FlagTypeCount> getFlaggedStats() {
+        return flaggedStats;
+    }
+
+    public void setFlaggedStats(Collection<FlagTypeCount> flaggedStats) {
+        this.flaggedStats = flaggedStats;
+    }
+
+    public Collection<FlagTypeCount> getEligibleStats() {
+        return eligibleStats;
+    }
+
+    public void setEligibleStats(Collection<FlagTypeCount> eligibleStats) {
+        this.eligibleStats = eligibleStats;
+    }
+
+    @Override
+    public HashMap<FlagType, FlagTypeCount> getFlaggedStatsMap() {
+        return flaggedStatsMap;
+    }
+
+    public void setFlaggedStatsMap(HashMap<FlagType, FlagTypeCount> flaggedStatsMap) {
+        this.flaggedStatsMap = flaggedStatsMap;
+    }
+
+    @Override
+    public HashMap<FlagType, FlagTypeCount> getEligibleStatsMap() {
+        return eligibleStatsMap;
+    }
+
+    public void setEligibleStatsMap(HashMap<FlagType, FlagTypeCount> eligibleStatsMap) {
+        this.eligibleStatsMap = eligibleStatsMap;
+    }
+
+    public Flag getI019() {
+        return i019;
+    }
+
+    public void setI019(Flag i019) {
+        this.i019 = i019;
+    }
+
+    public Flag getI004() {
+        return i004;
+    }
+
+    public void setI004(Flag i004) {
+        this.i004 = i004;
+    }
 
     public Flag getI038() {
         return i038;
@@ -40,5 +118,21 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI007(Flag i007) {
         this.i007 = i007;
+    }
+
+    public Flag getI077() {
+        return i077;
+    }
+
+    public void setI077(Flag i077) {
+        this.i077 = i077;
+    }
+
+    public Flag getI180() {
+        return i180;
+    }
+
+    public void setI180(Flag i180) {
+        this.i180 = i180;
     }
 }

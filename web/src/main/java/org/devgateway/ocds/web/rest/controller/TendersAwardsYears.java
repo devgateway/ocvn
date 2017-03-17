@@ -37,8 +37,9 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @CacheConfig(cacheNames = "tendersAwardsYears")
 public class TendersAwardsYears extends GenericOCDSController {
 
-    @ApiOperation(value = "")
-    @RequestMapping(value = "/api/tendersAwardsYears", method = { RequestMethod.POST,
+    @ApiOperation(value = "Computes all available years from awards.date, tender.tenderPeriod.startDate"
+            + "and planning.bidPlanProjectDateApprove")
+    @RequestMapping(value = "/api/tendersAwardsYears", method = {RequestMethod.POST,
             RequestMethod.GET }, produces = "application/json")
     public List<DBObject> tendersAwardsYears() {
 
@@ -49,20 +50,28 @@ public class TendersAwardsYears extends GenericOCDSController {
                         Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
                                 new BasicDBObject("$year", "$tender.tenderPeriod.startDate"), null)));
 
+        project1.put("bidPlanYear",
+                new BasicDBObject("$cond",
+                        Arrays.asList(new BasicDBObject("$gt",
+                                        Arrays.asList("$planning.bidPlanProjectDateApprove", null)),
+                                new BasicDBObject("$year", "$planning.bidPlanProjectDateApprove"), null)));
+
         project1.put("awardYear",
                 new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$awards.date", null)),
                         new BasicDBObject("$year", "$awards.date"), null)));
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         BasicDBObject project2 = new BasicDBObject();
-        project2.put("year", Arrays.asList("$tenderYear", "$awardYear"));
+        project2.put("year", Arrays.asList("$tenderYear", "$awardYear", "$bidPlanYear"));
 
         Aggregation agg = Aggregation.newAggregation(
-                project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").and("awards.date")
-                        .as("awards.date"),
+                project().and("tender.tenderPeriod.startDate").as("tender.tenderPeriod.startDate").
+                        and("awards.date")
+                        .as("awards.date").and("planning.bidPlanProjectDateApprove").
+                        as("planning.bidPlanProjectDateApprove"),
                 match(new Criteria().orOperator(where("tender.tenderPeriod.startDate").exists(true),
-                        where("awards.date").exists(true))),
-                new CustomUnwindOperation("$awards"), new CustomProjectionOperation(project1),
+                        where("awards.date").exists(true), where("planning.bidPlanProjectDateApprove").exists(true))),
+                new CustomUnwindOperation("$awards", true), new CustomProjectionOperation(project1),
                 new CustomProjectionOperation(project2), new CustomUnwindOperation("$year"),
                 match(where("year").ne(null)),
                 new CustomGroupingOperation(new BasicDBObject(Fields.UNDERSCORE_ID, "$year")),

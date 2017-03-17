@@ -47,8 +47,8 @@ public class OrganizationRepositoryTest extends AbstractMongoTest {
 
         final Identifier identifier = new Identifier();
         organization.getAdditionalIdentifiers().add(identifier);
-        organization.getTypes().add(Organization.OrganizationType.procuringEntity);
-        organization.getTypes().add(Organization.OrganizationType.buyer);
+        organization.getRoles().add(Organization.OrganizationType.procuringEntity);
+        organization.getRoles().add(Organization.OrganizationType.buyer);
 
         final Organization savedOrganization = organizationRepository.save(organization);
 

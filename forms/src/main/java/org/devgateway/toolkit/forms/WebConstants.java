@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.devgateway.toolkit.forms;
 
+import org.apache.wicket.validation.validator.StringValidator;
+import org.devgateway.toolkit.persistence.dao.DBConstants;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import org.apache.wicket.validation.validator.StringValidator;
-import org.devgateway.toolkit.persistence.dao.DBConstants;
 
 public final class WebConstants {
 

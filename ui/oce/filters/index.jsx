@@ -110,7 +110,7 @@ class Filters extends translatable(Component){
     let {onClick, onUpdate, open, user} = this.props;
     const {savingDashboard, dashboardName, dashboards} = this.state;
     return <div className={cn('filters', {open})}  onClick={onClick}>
-      <img className="top-nav-icon" src="assets/icons/filter.svg"/> {this.t('filters:title')} <i className="glyphicon glyphicon-menu-down"></i>
+      <img className="top-nav-icon" src="assets/icons/filter.svg" width="100%" height="100%"/> {this.t('filters:title')} <i className="glyphicon glyphicon-menu-down"></i>
       <div className="box row" onClick={e => e.stopPropagation()}>
         <ul className="nav nav-pills nav-stacked col-xs-4">
           {this.listTabs()}

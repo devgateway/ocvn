@@ -1,0 +1,98 @@
+@headerHeight: 64px;
+.corruption-risk-dashboard{
+    &>header{
+        background: #144361;
+        .logo-wrapper{
+            padding-left: 40px;
+            padding-top: 10px;
+            cursor: pointer;
+        }
+
+        .dash-switcher-wrapper{
+            display: inline-block;
+            color: #9fa9ba;
+            h1{
+                cursor: pointer;
+                padding: 5px;
+                .glyphicon{
+                    font-size: .33em;
+                    margin-left: 20px;
+                    top: -5px;
+                }
+            }
+            .dashboard-switcher{
+                background: rgb(20, 67, 97);
+                font-weight: 500;
+                padding: 5px;
+                border-top: 1px dotted white;
+                a{
+                    color: white;
+                }
+            }
+        }
+
+        .login-wrapper{
+            padding: 15px;
+            text-align: right;
+            button{
+                width: 150px;
+                background: #35ae46;
+            }
+        }
+    }
+
+  &>.filters-bar{
+    background: #c3e6fc;
+    margin-top: @headerHeight;
+    height: @headerHeight;
+    .title{
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 20px 0;
+      @media (max-width: 969px) {
+        padding: 0 5px;
+      }
+    }
+    .filter{
+      float: left;
+      height: 100%;
+      padding: 20px 0;
+      margin-left: 3%;
+      color: #899cb1;
+      cursor: pointer;
+      .glyphicon-menu-down{
+        font-size: .75em;
+        margin-left: 20px;
+      }
+      .dropdown{
+        display: none;
+      }
+      @boxFilterColor: #0083e5;
+      @boxWidth: 500px;
+      &.open{
+          position: relative;
+          border-bottom: 3px solid @boxFilterColor;
+          .dropdown{
+              display: block;
+              position: absolute;
+              top: 100%;
+              left: 50%;
+              margin-top: 3px;
+              margin-left: -@boxWidth/2;
+              width: @boxWidth;
+              height: 300px;
+              padding: 25px;
+              border: 3px @boxFilterColor solid;
+              border-radius: 3px;
+          }
+      }
+    }
+    .download{
+      padding: 10px 0;
+      button{
+        padding: 10px 25px;
+      };
+    }
+  };
+}

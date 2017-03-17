@@ -1,10 +1,15 @@
 let backendFilterable = Class => class extends Class{
   buildUrl(ep){
-    return super.buildUrl(ep).addSearch('year', this.props.years.toArray());
+    const {years, months, monthly} = this.props;
+    const yearDecoratedUrl = super.buildUrl(ep).addSearch('year', years.toArray());
+    return monthly ?
+        yearDecoratedUrl.addSearch('monthly', true).addSearch('month', months.toArray()) :
+        yearDecoratedUrl;
   }
 
   componentDidUpdate(prevProps){
-    if(this.props.years != prevProps.years){
+    const shouldRefetch = ['years', 'months', 'monthly'].some(prop => this.props[prop] != prevProps[prop]);
+    if(shouldRefetch){
       this.fetch()
     } else super.componentDidUpdate(prevProps);
   }

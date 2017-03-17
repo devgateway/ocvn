@@ -35,16 +35,17 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "additionalIdentifiers",
         "name",
         "address",
-        "contactPoint"
+        "contactPoint",
+        "roles"
 })
 @Document
 public class Organization implements Identifiable {
     @Id
     private String id;
 
-    @JsonProperty("types")
+    @JsonProperty("roles")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
-    private Set<OrganizationType> types = new LinkedHashSet<OrganizationType>();
+    private Set<OrganizationType> roles = new LinkedHashSet<OrganizationType>();
 
     @ExcelExport
     @JsonProperty("identifier")
@@ -294,12 +295,12 @@ public class Organization implements Identifiable {
     }
 
 
-    public Set<OrganizationType> getTypes() {
-        return types;
+    public Set<OrganizationType> getRoles() {
+        return roles;
     }
 
-    public void setTypes(final Set<OrganizationType> types) {
-        this.types = types;
+    public void setRoles(final Set<OrganizationType> roles) {
+        this.roles = roles;
     }
 
     @Override

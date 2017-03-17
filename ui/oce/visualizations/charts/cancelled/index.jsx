@@ -16,7 +16,7 @@ class Cancelled extends translatable(React.Component){
 
   render(){
     let {percents} = this.state;
-    let {filters, years} = this.props;
+    let {filters, years, months} = this.props;
     let Chart = percents ? Percents : Amounts;
     return <section>
       <h4 className="page-header">
@@ -36,6 +36,7 @@ class Cancelled extends translatable(React.Component){
               ep: Chart.excelEP,
               filters,
               years,
+              months,
               t: this.t.bind(this)
             })}
         />

@@ -23,6 +23,9 @@ public class GenericPagingRequest {
 
     public static final int MIN_REQ_YEAR = 1900;
 
+    public static final int MAX_MONTH = 12;
+    public static final int MIN_MONTH = 1;
+
     @Min(0)
     @ApiModelProperty(value = "This is the page number to be displayed. "
             + "If unspecified it starts with the first page which is page 0")

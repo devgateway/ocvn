@@ -12,11 +12,14 @@ npm-debug.log
 .idea
 rebel.xml
 /logs/
-/forms/nbactions.xml
-/nb-configuration.xml
 /forms/nb-configuration.xml
 /persistence-mongodb/nb-configuration.xml
-/forms/.rebel.xml.bak
+/nb-configuration.xml
+/forms/nbactions.xml
 /persistence/nb-configuration.xml
 /web/nb-configuration.xml
 /ui/nb-configuration.xml
+/web/nbactions.xml
+/forms/.rebel.xml.bak
+/derby.log
+/LOG_DIR_IS_UNDEFINED/

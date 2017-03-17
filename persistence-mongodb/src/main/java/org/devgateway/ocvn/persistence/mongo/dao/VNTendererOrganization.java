@@ -25,7 +25,7 @@ public class VNTendererOrganization extends Organization {
         this.setContactPoint(organization.getContactPoint());
         this.setIdentifier(organization.getIdentifier());
         this.setName(organization.getName());
-        this.setTypes(organization.getTypes());
+        this.setRoles(organization.getRoles());
     }
 
     public Amount getBidValue() {

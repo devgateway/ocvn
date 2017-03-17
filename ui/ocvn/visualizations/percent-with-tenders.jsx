@@ -1,14 +1,20 @@
-import FrontendYearFilterableChart from "../../oce/visualizations/charts/frontend-filterable";
+import FrontendDateFilterableChart from "../../oce/visualizations/charts/frontend-date-filterable";
 import {pluckImm} from "../../oce/tools";
 
-class PercentWithTenders extends FrontendYearFilterableChart{
+class PercentWithTenders extends FrontendDateFilterableChart{
   static getName(t){return t('charts:percentWithTenders:title')}
 
   getData(){
     let data = super.getData();
     if(!data) return [];
+
+    const monthly = data.hasIn([0, 'month']);
+    const dates = monthly ?
+        data.map(pluckImm('month')).map(month => this.t(`general:months:${month}`)).toArray() :
+        data.map(pluckImm('year')).toArray();
+
     return [{
-      x: data.map(pluckImm('year')).toArray(),
+      x: dates,
       y: data.map(pluckImm('percentTenders')).toArray(),
       type: 'scatter',
       fill: 'tonexty',
@@ -21,7 +27,7 @@ class PercentWithTenders extends FrontendYearFilterableChart{
   getLayout(){
     return {
       xaxis: {
-        title: this.t('charts:percentWithTenders:xAxisTitle'),
+        title: this.props.monthly ? this.t('general:month') : this.t('general:year'),
         type: 'category'
       },
       yaxis: {

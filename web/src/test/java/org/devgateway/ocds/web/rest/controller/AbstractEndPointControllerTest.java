@@ -32,7 +32,7 @@ public abstract class AbstractEndPointControllerTest extends AbstractWebTest {
     private CacheManager cacheManager;
 
     @Before
-    public final void setUp() throws Exception {
+    public void setUp() throws Exception {
         // be sure that the release collection is empty
         releaseRepository.deleteAll();
 

@@ -38,11 +38,11 @@ public abstract class OrganizationRowImporter<O extends Organization>
     protected void addAditionalIdentifierOrFail(Organization organization, Identifier identifier,
             OrganizationType type) {
         if (containsIdentifier(organization, identifier)) {
-            if (type == null || organization.getTypes().contains(type)) {
+            if (type == null || organization.getRoles().contains(type)) {
                 throw new RuntimeException(
                         "Duplicate identifier " + identifier.getId() + " for organization " + organization);
             } else {
-                organization.getTypes().add(type);
+                organization.getRoles().add(type);
             }
         } else {
             organization.getAdditionalIdentifiers().add(identifier);

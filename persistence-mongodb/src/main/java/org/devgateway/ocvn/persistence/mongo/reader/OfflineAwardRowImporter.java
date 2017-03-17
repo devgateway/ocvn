@@ -1,8 +1,5 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Organization;
@@ -16,6 +13,9 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
 import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
 
 /**
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format
@@ -105,6 +105,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
         if (getRowCell(row, 12) != null) {
             award.setDate(getExcelDate(getRowCell(row, 12)));
+            award.setPublishedDate(getExcelDate(getRowCell(row, 12)));
         }
 
         if (getRowCell(row, 11) != null) {

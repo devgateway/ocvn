@@ -1,20 +1,19 @@
 package org.devgateway.ocds.web.rest.controller.excelchart;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.charts.XSSFChartAxis;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTChart;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.ByteArrayInputStream;
-import java.util.List;
 
 /**
  * @author idobre
@@ -28,8 +27,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
     @Test
     public void cancelledFundingPercentageExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.cancelledFundingPercentageExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -44,7 +44,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Cancelled funding (percentage)", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(),"charts:cancelledPercents:title")
+                , chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());
@@ -55,8 +57,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
     @Test
     public void numberCancelledFundingExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.numberCancelledFundingExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -71,7 +74,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Number of cancelled bids", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(), "charts:cancelledPercents:title")
+                , chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());
@@ -82,8 +87,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
     @Test
     public void percentTendersUsingEBidExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.percentTendersUsingEBidExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -98,7 +104,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Percent of Tenders Using e-Bid", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(),"charts:percentEBid:title"),
+                chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());
@@ -109,8 +117,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
     @Test
     public void numberTendersUsingEBidExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.numberTendersUsingEBidExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -125,7 +134,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Number of eBid Awards", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(), "charts:nrEBid:title")
+                , chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());
@@ -136,8 +147,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
     @Test
     public void percentTendersUsingEgpExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.percentTendersUsingEgpExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -152,7 +164,8 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Percent of Tenders Using e-Procurement", chart.getTitle().getString());
+        Assert.assertEquals("chart title",  translationService.getValue(filter.getLanguage(),
+                "charts:percentEProcurement:title"), chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());
@@ -163,8 +176,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
 
     @Test
     public void tendersWithLinkedProcurementPlanExcelChart() throws Exception {
+        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.tendersWithLinkedProcurementPlanExcelChart(
-                new YearFilterPagingRequest(),
+                filter,
                 mockHttpServletResponse);
 
         final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
@@ -179,7 +193,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title", "Percentage of plans with tender", chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(), "charts:percentWithTenders:title")
+                , chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

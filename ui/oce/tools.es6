@@ -24,10 +24,26 @@ export var toK = number => number >= 1000 ? Math.round(number / 1000) + "K" : nu
 
 export var identity = _ => _;
 
-export let response2obj = (field, arr) => arr.reduce((obj, elem) => {
-  obj[elem._id] = elem[field];
+/**
+ * Takes two strings and an array of objects, returning on object whose keys are the values of the first field and whose
+ * values are the values of the second field. I guess an example would be more clear
+ * fieldsToObj('field1', 'field2', [{
+ *   field1: 'a',
+ *   field2: '1'
+ * }, {
+ *   field1: 'b',
+ *   field2: '2'
+ * }])
+ * // => {a: 1, b: 2}
+ */
+const fieldsToObj = (keyField, valueField, arr) => arr.reduce((obj, elem) => {
+  obj[elem[keyField]] = elem[valueField];
   return obj;
 }, {});
+
+export const yearlyResponse2obj = fieldsToObj.bind(null, 'year');
+
+export const monthlyResponse2obj = fieldsToObj.bind(null, 'month');
 
 var shallowCompArr = (a, b) => a.every((el, index) => el == b[index]);
 
@@ -54,17 +70,24 @@ export const send = url => fetch(url.clone().query(""), {
   body: url.query()
 });
 
-export let download = ({ep, filters, years, t}) => {
-  const url = new URI(`/api/ocds/${ep}`)
+export const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
+    || navigator.userAgent.match(/rv 11/));
+
+export let download = ({ep, filters, years, months, t}) => {
+  let url = new URI(`/api/ocds/${ep}`)
       .addSearch(filters.toJS())
       .addSearch('year', years.toArray())
       //this sin shall be atoned for in the future
       .addSearch('language', localStorage.oceLocale);
+
+  if(years.count() == 1){
+    url = url.addSearch('month', months && months.toJS()).addSearch('monthly', true);
+  }
+
   return send(url).then(response => {
     let {userAgent} = navigator;
     let isSafari = -1 < userAgent.indexOf("Safari") && -1 == userAgent.indexOf("Chrom");//excludes both Chrome and Chromium
-    const isIE = navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/)
-        || navigator.userAgent.match(/rv 11/));
+
     if (isSafari || isIE) {
       location.href = url;
       return response;

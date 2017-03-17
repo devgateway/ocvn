@@ -20,7 +20,7 @@ class LocationWrapper extends translatable(Component){
 
   render(){
     let {currentTab} = this.state;
-    let {data, translations, filters, years, styling} = this.props;
+    let {data, translations, filters, years, styling, monthly, months} = this.props;
     let CurrentTab = this.constructor.TABS[currentTab];
     return (
         <Marker {...this.props}>
@@ -44,6 +44,8 @@ class LocationWrapper extends translatable(Component){
                   translations={translations}
                   filters={filters}
                   years={years}
+                  monthly={monthly}
+                  months={months}
                   styling={styling}
               />
             </div>
@@ -96,12 +98,13 @@ export class ChartTab extends Tab{
   getChartClass(){return ""}
 
   render(){
-    let {filters, styling, years, translations, data} = this.props;
+    let {filters, styling, years, translations, data, monthly, months} = this.props;
     let decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
     let doExcelExport = e => download({
       ep: this.constructor.Chart.excelEP,
       filters: decoratedFilters,
       years,
+      months,
       t: this.t.bind(this)
     });
     return <div className={cn("map-chart", this.getChartClass())}>
@@ -109,6 +112,8 @@ export class ChartTab extends Tab{
           filters={decoratedFilters}
           styling={styling}
           years={years}
+          monthly={monthly}
+          months={months}
           translations={translations}
           data={this.state.chartData}
           requestNewData={(_, chartData) => this.setState({chartData})}

@@ -2,22 +2,20 @@ package org.devgateway.ocds.web.rest.controller.excelchart;
 
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.TenderPercentagesController;
-import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.ocds.web.rest.controller.request.LangYearFilterPagingRequest;
 import org.devgateway.toolkit.web.excelcharts.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author idobre
@@ -26,7 +24,7 @@ import java.util.List;
  * Exports an excel chart based on *Cancelled funding (percentage)* dashboard
  */
 @RestController
-public class TenderPercentagesExcelController extends GenericOCDSController {
+public class TenderPercentagesExcelController extends ExcelChartOCDSController {
     @Autowired
     private ExcelChartGenerator excelChartGenerator;
 
@@ -39,19 +37,19 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Cancelled funding (percentage)* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/cancelledFundingPercentageExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void cancelledFundingPercentageExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                      final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Cancelled funding (percentage)";
-
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:cancelledPercents:title");
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentCancelled = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENT_CANCELLED);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENT_CANCELLED);
         if (!percentCancelled.isEmpty()) {
             values.add(percentCancelled);
         }
@@ -60,7 +58,7 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Percent");
+                    translationService.getValue(filter.getLanguage(), "charts:cancelledPercents:yAxisName"));
         } else {
             seriesTitle = new ArrayList<>();
         }
@@ -78,19 +76,21 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Number of cancelled bids* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/numberCancelledFundingExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void numberCancelledFundingExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void numberCancelledFundingExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                  final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Number of cancelled bids";
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:cancelledPercents:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersCancelled(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> totalCancelled = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.TOTAL_CANCELLED);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.TOTAL_CANCELLED);
         if (!totalCancelled.isEmpty()) {
             values.add(totalCancelled);
         }
@@ -99,7 +99,8 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Count");
+                    translationService.getValue(filter.getLanguage(),
+                    "charts:cancelledPercents:yAxisName"));
         } else {
             seriesTitle = new ArrayList<>();
         }
@@ -117,19 +118,19 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Bid* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEBidExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void percentTendersUsingEBidExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                   final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Percent of Tenders Using e-Bid";
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:percentEBid:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENTAGE_TENDERS_USING_EBID);
         if (!percentUsingEBid.isEmpty()) {
             values.add(percentUsingEBid);
         }
@@ -138,7 +139,7 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Percent");
+                    translationService.getValue(filter.getLanguage(), "charts:percentEBid:yAxisName"));
         } else {
             seriesTitle = new ArrayList<>();
         }
@@ -156,19 +157,20 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Number of eBid Awards* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/numberTendersUsingEBidExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void numberTendersUsingEBidExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void numberTendersUsingEBidExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                  final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Number of eBid Awards";
+
+        final String chartTitle = translationService.getValue(filter.getLanguage(), "charts:nrEBid:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> totalCancelledTenders = tenderPercentagesController.percentTendersUsingEBid(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 totalCancelledTenders);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> countUsingEBid = excelChartHelper.getValuesFromDBObject(totalCancelledTenders, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.TOTAL_TENDERS_USING_EBID);
         if (!countUsingEBid.isEmpty()) {
             values.add(countUsingEBid);
         }
@@ -177,7 +179,7 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
         final List<String> seriesTitle;
         if (!values.isEmpty()) {
             seriesTitle = Arrays.asList(
-                    "Count");
+                    translationService.getValue(filter.getLanguage(), "charts:nrEBid:yAxisTitle"));
         } else {
             seriesTitle = new ArrayList<>();
         }
@@ -195,23 +197,25 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percent of Tenders Using e-Procurement* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/percentTendersUsingEgpExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
                                                  final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Percent of Tenders Using e-Procurement";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:percentEProcurement:title");
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> percentTendersUsingEgp = tenderPercentagesController.percentTendersUsingEgp(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 percentTendersUsingEgp);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentEgp = excelChartHelper.getValuesFromDBObject(percentTendersUsingEgp, categories,
-                TenderPercentagesController.Keys.YEAR, TenderPercentagesController.Keys.PERCENTAGE_EGP);
+                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENTAGE_EGP);
         values.add(percentEgp);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Percent");
+                translationService.getValue(filter.getLanguage(),
+                        "charts:percentEProcurement:yAxisTitle"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
@@ -226,25 +230,30 @@ public class TenderPercentagesExcelController extends GenericOCDSController {
     @ApiOperation(value = "Exports *Percentage of plans with tender* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/tendersWithLinkedProcurementPlanExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
-    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid final YearFilterPagingRequest filter,
+    public void tendersWithLinkedProcurementPlanExcelChart(@ModelAttribute @Valid
+                                                               final LangYearFilterPagingRequest filter,
                                                            final HttpServletResponse response) throws IOException {
-        final String chartTitle = "Percentage of plans with tender";
+        final String chartTitle = translationService.getValue(filter.getLanguage(),
+                "charts:percentWithTenders:title");
+
+
 
         // fetch the data that will be displayed in the chart
         final List<DBObject> percentTendersWithLinkedProcurementPlan = tenderPercentagesController
                 .percentTendersWithLinkedProcurementPlan(filter);
 
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(TenderPercentagesController.Keys.YEAR,
+        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
                 percentTendersWithLinkedProcurementPlan);
         final List<List<? extends Number>> values = new ArrayList<>();
 
         final List<Number> percentTenders = excelChartHelper.getValuesFromDBObject(
-                percentTendersWithLinkedProcurementPlan, categories, TenderPercentagesController.Keys.YEAR,
+                percentTendersWithLinkedProcurementPlan, categories, getExportYearMonthXAxis(filter),
                 TenderPercentagesController.Keys.PERCENT_TENDERS);
         values.add(percentTenders);
 
         final List<String> seriesTitle = Arrays.asList(
-                "Percent");
+                translationService.getValue(filter.getLanguage(),
+                        "charts:percentWithTenders:yAxisTitle"));
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");

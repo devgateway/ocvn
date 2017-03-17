@@ -40,7 +40,7 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Organization.class)
                 .ensureIndex(new Index().on("additionalIdentifiers._id", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(
-                new Index().on("types", Direction.ASC));
+                new Index().on("roles", Direction.ASC));
         mongoTemplate.indexOps(Organization.class).ensureIndex(new Index().on("name", Direction.ASC).unique());
         mongoTemplate.indexOps(VNLocation.class).ensureIndex(new Index().on("description", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.contrMethod.details", Direction.ASC));
@@ -49,9 +49,14 @@ public class MongoTemplateConfiguration {
     }
     
     public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.eligibleStats", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I003_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I007_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I004_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I077_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I019_VALUE, Direction.ASC));
     }
 
     @PostConstruct
@@ -59,16 +64,16 @@ public class MongoTemplateConfiguration {
         createMandatoryImportIndexes();
         createPostImportStructures();
     }
-    
+
     private void createProcuringEntityIndexes() {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity._id", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id", 
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procuringEntity.group._id",
                 Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.procuringEntity.department._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.procuringEntity.address.postalCode", Direction.ASC));
-     
+
         mongoTemplate.indexOps(City.class)
         .ensureIndex(new TextIndexDefinitionBuilder().onField("name").onField("id").build());
 
@@ -115,20 +120,22 @@ public class MongoTemplateConfiguration {
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("planning.budget.projectLocation.geometry.coordinates", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
+                on("planning.budget.projectLocation._id", Direction.ASC));
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().
                 on("tender.items.deliveryLocation.geometry.coordinates", Direction.ASC));
-                
+
         mongoTemplate.indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
                 .onField("id").onField("additionalIdentifiers._id").build());
-                
+
         mongoTemplate.indexOps(VNLocation.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 
         //vietnam specific indexes:
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("planning.bidPlanProjectDateApprove", Direction.ASC));
-        
+
         createProcuringEntityIndexes();
 
         logger.info("Added extra Mongo indexes");

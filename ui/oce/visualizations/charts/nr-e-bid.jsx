@@ -1,12 +1,18 @@
-import FrontendYearFilterableChart from "./frontend-filterable";
+import FrontendDateFilterableChart from "./frontend-date-filterable";
 import {pluckImm} from "../../tools";
 
-class NrEbid extends FrontendYearFilterableChart{
+class NrEbid extends FrontendDateFilterableChart{
   getData(){
     let data = super.getData();
     if(!data) return [];
+
+    const monthly = data.hasIn([0, 'month']);
+    const dates = monthly ?
+        data.map(pluckImm('month')).map(month => this.t(`general:months:${month}`)).toArray() :
+        data.map(pluckImm('year')).toArray();
+
     return [{
-      x: data.map(pluckImm('year')).toArray(),
+      x: dates,
       y: data.map(pluckImm('totalTendersUsingEbid')).toArray(),
       type: 'scatter',
       fill: 'tonexty',
@@ -17,14 +23,15 @@ class NrEbid extends FrontendYearFilterableChart{
   }
 
   getLayout(){
+    const {hoverFormat} = this.props.styling.charts;
     return {
       xaxis: {
-        title: this.t('charts:nrEBid:xAxisTitle'),
+        title: this.props.monthly ? this.t('general:month') : this.t('general:year'),
         type: 'category'
       },
       yaxis: {
         title: this.t('charts:nrEBid:yAxisTitle'),
-        hoverformat: '.2f'
+        hoverformat: hoverFormat
       }
     }
   }

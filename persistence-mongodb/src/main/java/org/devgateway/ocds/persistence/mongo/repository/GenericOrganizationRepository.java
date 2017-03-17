@@ -16,13 +16,13 @@ public interface GenericOrganizationRepository<T extends Organization> extends M
     @Query(value = "{'additionalIdentifiers._id': ?0}")
     T findByAllIds(String id);
     
-    @Query(value = "{$and: [ { $or: [ {'_id' : ?0 }, " + "{'name': ?0 } ] }  , { 'types': ?1 } ]}")
+    @Query(value = "{$and: [ { $or: [ {'_id' : ?0 }, " + "{'name': ?0 } ] }  , { 'roles': ?1 } ]}")
     T findByIdOrNameAndTypes(String idName, Organization.OrganizationType type);
 
     @Query(value = "{ $or: [ {'_id' : ?0 }, " + "{'name': ?0} ] }")
     T findByIdOrName(String idName);
 
-    T findByIdAndTypes(String id, Organization.OrganizationType type);
-    
+    T findByIdAndRoles(String id, Organization.OrganizationType type);
+
     T findByName(String name);
 }
