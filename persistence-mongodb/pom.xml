@@ -17,8 +17,8 @@
     <artifactId>persistence-mongodb</artifactId>
     <packaging>jar</packaging>
 
-    <name>OCExplorer MongoDB Persistence</name>
-    <description>OCExplorer MongoDB Persistence</description>
+    <name>OCVN MongoDB Persistence</name>
+    <description>OCVN MongoDB Persistence</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,9 +33,9 @@
     </properties>
 
     <parent>
-        <groupId>org.devgateway.ocds</groupId>
-        <artifactId>oce</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>org.devgateway.ocvn</groupId>
+        <artifactId>ocvn</artifactId>
+        <version>1.1.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -155,7 +155,6 @@
                     <include>**/*.sql</include>
                     <include>**/*.xml</include>
                 </includes>
-
             </resource>
 
             <resource>
@@ -169,13 +168,26 @@
                     <include>**/*.js</include>
                     <include>**/*.json</include>
                 </includes>
-
             </resource>
         </resources>
 
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xlsx</include>
+                    <include>**/*.json</include>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+        </testResources>
+
         <plugins>
+
             <!--
-                <plugin>
+			<plugin>
                     <groupId>org.jsonschema2pojo</groupId>
                     <artifactId>jsonschema2pojo-maven-plugin</artifactId>
                     <version>0.4.23</version>
@@ -217,7 +229,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -51,7 +51,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Cacheable
 public class AverageTenderAndAwardPeriodsController extends GenericOCDSController {
 
-    private static final int DAY_MS = 86400000;
+
 
     public static final class Keys {
         public static final String AVERAGE_TENDER_DAYS = "averageTenderDays";
@@ -123,6 +123,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
+        project1.put(Fields.UNDERSCORE_ID, 0);
         project1.put(Keys.TOTAL_TENDER_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_TENDERS, 1);
         project1.put(Keys.PERCENTAGE_TENDER_WITH_START_END_DATES,
@@ -135,6 +136,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 group().sum("tenderWithStartEndDates").as(Keys.TOTAL_TENDER_WITH_START_END_DATES).count().
                         as(Keys.TOTAL_TENDERS),
                 new CustomProjectionOperation(project1));
+
+
+
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
@@ -201,6 +205,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
+        project1.put(Fields.UNDERSCORE_ID, 0);
         project1.put(Keys.TOTAL_AWARD_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_AWARDS, 1);
         project1.put(Keys.PERCENTAGE_AWARD_WITH_START_END_DATES,

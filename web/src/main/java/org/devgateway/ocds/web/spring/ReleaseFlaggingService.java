@@ -3,13 +3,10 @@
  */
 package org.devgateway.ocds.web.spring;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Consumer;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
+import org.devgateway.ocds.web.flags.release.vietnam.ReleaseFlagI003Processor;
+import org.devgateway.ocds.web.flags.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
@@ -20,6 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 /**
  * @author mpostelnicu
@@ -41,6 +44,12 @@ public class ReleaseFlaggingService {
 
     @Autowired
     private ReleaseFlagI077Processor releaseFlagI077Processor;
+
+    @Autowired
+    private ReleaseFlagI003Processor releaseFlagI003Processor;
+
+    @Autowired
+    private VietnamReleaseFlagI004Processor vietnamReleaseFlagI004Processor;
 
     @Autowired
     private ReleaseFlagI180Processor releaseFlagI180Processor;
@@ -76,7 +85,7 @@ public class ReleaseFlaggingService {
 
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {
 
-        logMessage.accept("<b>RUNNING SCHEMA VALIDATION.</b>");
+        logMessage.accept("<b>RUNNING CORRUPTION FLAGGING.</b>");
 
         reinitialize();
 
@@ -98,7 +107,9 @@ public class ReleaseFlaggingService {
     protected void setProcessors() {
         releaseFlagProcessors = Collections.unmodifiableList(Arrays.asList(
                 releaseFlagI038Processor,
+                releaseFlagI003Processor,
                 releaseFlagI007Processor,
+                vietnamReleaseFlagI004Processor,
                 releaseFlagI019Processor,
                 releaseFlagI077Processor,
                 releaseFlagI180Processor

@@ -17,10 +17,12 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +70,34 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
                 getYearlyMonthlyGroupingOperation(filter).
                 sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
+                getSortByYearMonth(filter));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+    @ApiOperation(value = "Total Cancelled tenders by year by cancel reason. "
+            + "The tender amount is read from tender.value."
+            + "The tender status has to be 'cancelled'. The year is retrieved from tender.tenderPeriod.startDate."
+            + "The cancellation reason is read from tender.cancellationRationale.")
+    @RequestMapping(value = "/api/totalCancelledTendersByYearByRationale", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> totalCancelledTendersByYearByRationale(
+            @ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        DBObject project = new BasicDBObject();
+        project.put(Fields.UNDERSCORE_ID, 0);
+        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
+        project.put("tender.value.amount", 1);
+        project.put("tender.cancellationRationale", 1);
+
+        Aggregation agg = newAggregation(
+                match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomProjectionOperation(project), group(getYearlyMonthlyGroupingFields(
+                        filter, "$tender.cancellationRationale"))
+                        .sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
                 getSortByYearMonth(filter));
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

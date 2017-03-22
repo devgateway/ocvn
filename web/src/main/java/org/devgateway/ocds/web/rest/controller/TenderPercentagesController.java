@@ -60,6 +60,10 @@ public class TenderPercentagesController extends GenericOCDSController {
         public static final String TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS = "totalTendersWithOneOrMoreTenderers";
         public static final String TOTAL_TENDERS_USING_EBID = "totalTendersUsingEbid";
         public static final String PERCENTAGE_TENDERS_USING_EBID = "percentageTendersUsingEbid";
+        public static final String PERCENTAGE_EGP = "percentEgp";
+        public static final String TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN = "totalTendersWithLinkedProcurementPlan";
+        public static final String AVG_TIME_FROM_PLAN_TO_TENDER_PHASE = "avgTimeFromPlanToTenderPhase";
+        public static final String TOTAL_EGP = "totalEgp";
     }
 
     @ApiOperation("Returns the percent of tenders that were cancelled, grouped by year."
@@ -244,5 +248,122 @@ public class TenderPercentagesController extends GenericOCDSController {
     }
 
 
+    @ApiOperation("Returns the percent of tenders that are using eProcurement."
+            + " This is read from tender.publicationMethod='eGP'")
+    @RequestMapping(value = "/api/percentTendersUsingEgp",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> percentTendersUsingEgp(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        project1.put("tender.publicationMethod", 1);
+
+        DBObject group = new BasicDBObject();
+        addYearlyMonthlyReferenceToGroup(filter, group);
+        group.put("totalTenders", new BasicDBObject("$sum", 1));
+        group.put(Keys.TOTAL_EGP, new BasicDBObject("$sum", new BasicDBObject("$cond",
+                Arrays.asList(new BasicDBObject("$eq", Arrays.asList("$tender.publicationMethod", "eGP")), 1, 0))));
+
+        DBObject project2 = new BasicDBObject();
+        project2.put("totalTenders", 1);
+        project2.put(Keys.TOTAL_EGP, 1);
+        project2.put("year", 1);
+        project2.put("month", 1);
+        project2.put("percentEgp", new BasicDBObject("$multiply",
+                Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalEgp", "$totalTenders")), 100)));
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+                transformYearlyGrouping(filter).andInclude("totalTenders", "percentEgp", Keys.TOTAL_EGP),
+                new CustomProjectionOperation(project2),
+                getSortByYearMonth(filter),
+                skip(filter.getSkip()),
+                limit(filter.getPageSize()));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+
+    @ApiOperation("Percentage of tenders that are associated in releases that "
+            + "have the planning.budget.amount non empty,"
+            + "meaning there really is a planning entity correlated with the tender entity."
+            + "This endpoint uses tender.tenderPeriod.startDate to calculate the tender year.")
+    @RequestMapping(value = "/api/percentTendersWithLinkedProcurementPlan",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> percentTendersWithLinkedProcurementPlan(@ModelAttribute
+                                                                  @Valid final YearFilterPagingRequest filter) {
+
+        DBObject project1 = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        project1.put("tender._id", 1);
+        project1.put("planning.budget.amount", 1);
+
+        DBObject group = new BasicDBObject();
+        addYearlyMonthlyReferenceToGroup(filter, group);
+        group.put(Keys.TOTAL_TENDERS, new BasicDBObject("$sum", 1));
+        group.put(Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, new BasicDBObject("$sum", new BasicDBObject("$cond",
+                Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$planning.budget.amount", null)), 1, 0))));
+
+        DBObject project2 = new BasicDBObject();
+        project2.put(Keys.YEAR, 1);
+        project2.put("month", 1);
+        project2.put(Keys.TOTAL_TENDERS, 1);
+        project2.put(Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, 1);
+        project2.put(Keys.PERCENT_TENDERS,
+                new BasicDBObject("$multiply",
+                        Arrays.asList(new BasicDBObject("$divide", Arrays.asList(
+                                "$" + Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, "$" + Keys.TOTAL_TENDERS)),
+                                100)));
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
+                transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
+                        Keys.TOTAL_TENDERS_WITH_LINKED_PROCUREMENT_PLAN, Keys.PERCENT_TENDERS),
+                new CustomProjectionOperation(project2),
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize())
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+    @ApiOperation("For all tenders that have both tender.tenderPeriod.startDate and planning.bidPlanProjectDateApprove"
+            + "calculates the number o days from planning.bidPlanProjectDateApprove to tender.tenderPeriod.startDate"
+            + "and creates the average. Groups results by tender year, calculatedfrom tender.tenderPeriod.startDate")
+    @RequestMapping(value = "/api/avgTimeFromPlanToTenderPhase", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> avgTimeFromPlanToTenderPhase(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        DBObject timeFromPlanToTenderPhase = new BasicDBObject("$divide",
+                Arrays.asList(
+                        new BasicDBObject("$subtract",
+                                Arrays.asList("$tender.tenderPeriod.startDate", "$planning.bidPlanProjectDateApprove")),
+                        MongoConstants.DAY_MS));
+
+        DBObject project1 = new BasicDBObject();
+        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        project1.put("timeFromPlanToTenderPhase", timeFromPlanToTenderPhase);
+
+        Aggregation agg = newAggregation(
+                match(where("tender.tenderPeriod.startDate").exists(true).and("planning.budget.amount").exists(true)
+                        .and("planning.bidPlanProjectDateApprove").exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                new CustomProjectionOperation(project1),
+                getYearlyMonthlyGroupingOperation(filter).avg("timeFromPlanToTenderPhase")
+                        .as(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
+                transformYearlyGrouping(filter).andInclude(Keys.AVG_TIME_FROM_PLAN_TO_TENDER_PHASE),
+                getSortByYearMonth(filter), skip(filter.getSkip()), limit(filter.getPageSize()));
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
 
 }

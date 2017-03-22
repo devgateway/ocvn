@@ -16,7 +16,7 @@ class OCApp extends React.Component{
     super(props);
     this.tabs = [];
     this.state = {
-      dashboardSwitcherOpen: true,//false,
+      dashboardSwitcherOpen: false,
       exporting: false,
       locale: localStorage.oceLocale || "en_US",
       width: 0,
