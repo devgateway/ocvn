@@ -78,7 +78,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         new BasicDBObject("$subtract",
                                 Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF)),
-                        DAY_MS));
+                        MongoConstants.DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -154,7 +154,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
                 new BasicDBObject("$subtract", Arrays.asList("$awards.date",
-                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF)), DAY_MS));
+                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF)), MongoConstants.DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
