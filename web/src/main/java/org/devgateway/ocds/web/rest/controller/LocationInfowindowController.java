@@ -3,8 +3,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.Valid;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -43,7 +44,8 @@ public class LocationInfowindowController extends GenericOCDSController {
                         where("tender.items.deliveryLocation._id").exists(true),
                         where("planning.budget.projectLocation._id").exists(true)
                 )
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 project("tender").andExclude(Fields.UNDERSCORE_ID),
                 skip(filter.getSkip()), limit(filter.getPageSize())
         );

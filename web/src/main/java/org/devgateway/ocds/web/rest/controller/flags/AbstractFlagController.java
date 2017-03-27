@@ -1,5 +1,6 @@
 package org.devgateway.ocds.web.rest.controller.flags;
 
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 
 /**
@@ -11,7 +12,7 @@ public abstract class AbstractFlagController extends GenericOCDSController {
 
 
     protected String getYearProperty() {
-        return "tender.tenderPeriod.startDate";
+        return MongoConstants.FieldNames.TENDER_PERIOD_START_DATE;
     }
 
 }

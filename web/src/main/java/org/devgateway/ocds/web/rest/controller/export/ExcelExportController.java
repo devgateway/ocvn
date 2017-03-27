@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileCleaningTracker;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocds.web.util.SettingsUtils;
@@ -55,7 +56,8 @@ public class ExcelExportController extends GenericOCDSController {
         filter.setPageSize(settingsUtils.getExcelBatchSize());
 
         long numberOfReleases = mongoTemplate
-                .count(query(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate")), Release.class);
+                .count(query(getYearDefaultFilterCriteria(filter, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)),
+                        Release.class);
 
         // if we need to export just one file then we don't create an archive
         if (numberOfReleases <= settingsUtils.getExcelBatchSize()) {

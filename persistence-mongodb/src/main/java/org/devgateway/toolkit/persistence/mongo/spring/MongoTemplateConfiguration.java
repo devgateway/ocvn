@@ -3,6 +3,7 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
@@ -110,8 +111,9 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.publicationMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
-                .ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index()
+                .on(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE, Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().

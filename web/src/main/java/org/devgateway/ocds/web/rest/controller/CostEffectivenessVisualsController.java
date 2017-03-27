@@ -16,6 +16,7 @@ import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Tender;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.GroupingFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
@@ -46,12 +47,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -91,28 +92,31 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
 
     @ApiOperation(value = "Cost effectiveness of Awards: Displays the total amount of active awards grouped by year."
             + "The tender entity, for each award, has to have amount value. The year is calculated from "
-            + "tender.tenderPeriod.startDate")
+            + MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
     @RequestMapping(value = "/api/costEffectivenessAwardAmount",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
     public List<DBObject> costEffectivenessAwardAmount(
             @ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project.put("awards.value.amount", 1);
         project.put("totalAwardsWithTender", new BasicDBObject("$cond",
-                Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)), 1, 0)));
+                Arrays.asList(new BasicDBObject("$gt",
+                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)), 1, 0)));
         project.put("awardsWithTenderValue",
                 new BasicDBObject("$cond",
-                        Arrays.asList(new BasicDBObject("$gt", Arrays.asList("$tender.tenderPeriod.startDate", null)),
+                        Arrays.asList(new BasicDBObject("$gt",
+                                        Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF, null)),
                                 "$awards.value.amount", 0)));
 
         Aggregation agg = Aggregation.newAggregation(
                 match(where("awards").elemMatch(where("status").is(Award.Status.active.toString())).and("awards.date")
-                        .exists(true).and("tender.tenderPeriod.startDate").exists(true)),
+                        .exists(true).and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)),
                 getMatchDefaultFilterOperation(filter), unwind("$awards"),
                 match(where("awards.status").is(Award.Status.active.toString()).and("awards.value").exists(true).
-                        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project),
                 getYearlyMonthlyGroupingOperation(filter)
                         .sum("awardsWithTenderValue").as(Keys.TOTAL_AWARD_AMOUNT).count().as(Keys.TOTAL_AWARDS)
@@ -144,8 +148,8 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
             @ModelAttribute @Valid final GroupingFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        project.put("year", new BasicDBObject("$year", "$tender.tenderPeriod.startDate"));
-        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
+        project.put("year", new BasicDBObject("$year", MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF));
+        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project.put("tender.value.amount", 1);
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put("tenderWithAwards",
@@ -172,9 +176,11 @@ public class CostEffectivenessVisualsController extends GenericOCDSController {
                                 new BasicDBObject("$first", "$" + k)));
 
         Aggregation agg = Aggregation.newAggregation(
-                match(where("tender.status").is(Tender.Status.active.toString()).and("tender.tenderPeriod.startDate")
+                match(where("tender.status").is(Tender.Status.active.toString()).
+                        and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
                         .exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 getMatchDefaultFilterOperation(filter),
                 new CustomUnwindOperation("$awards", true),
                 new CustomProjectionOperation(project),

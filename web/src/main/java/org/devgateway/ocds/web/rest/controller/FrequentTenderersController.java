@@ -11,14 +11,8 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import javax.validation.Valid;
-
+import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,7 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  *
@@ -124,7 +123,8 @@ public class FrequentTenderersController extends GenericOCDSController {
         return StreamSupport
                 .stream(mongoTemplate.mapReduce(
                         new Query(where("tender.tenderers.1").exists(true)
-                                .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                                .andOperator(getYearDefaultFilterCriteria(filter,
+                                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                         "release", "classpath:frequent-tenderers-map.js", "classpath:frequent-tenderers-reduce.js",
                         ValueObject.class).spliterator(), false)
                 .filter(vo -> vo.getValue().getPairCount() > 1).sorted((p1, p2) -> p2.getValue().

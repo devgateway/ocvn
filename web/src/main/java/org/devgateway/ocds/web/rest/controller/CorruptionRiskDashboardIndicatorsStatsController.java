@@ -14,6 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -44,7 +45,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @RestController
 @CacheConfig(keyGenerator = "genericPagingRequestKeyGenerator", cacheNames = "genericPagingRequestJson")
 @Cacheable
-public class TotalFlagsController extends GenericOCDSController {
+public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCDSController {
 
     public static final class Keys {
         public static final String TYPE = "type";
@@ -89,7 +90,8 @@ public class TotalFlagsController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("flags." + statsProperty + ".0").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("flags." + statsProperty),
                 project("flags." + statsProperty),
                 group(statsProperty + ".type").sum(statsProperty + ".count").as(Keys.INDICATOR_COUNT),
@@ -130,14 +132,15 @@ public class TotalFlagsController extends GenericOCDSController {
                                                                 final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put("stats", "$flags." + statsProperty);
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .and("flags." + statsProperty + ".0").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("flags." + statsProperty),
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
@@ -176,14 +179,15 @@ public class TotalFlagsController extends GenericOCDSController {
                                                               final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put("stats", "$flags." + statsProperty);
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
                         .and("flags." + statsProperty + ".0").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("flags." + statsProperty),
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
@@ -205,12 +209,13 @@ public class TotalFlagsController extends GenericOCDSController {
     public List<DBObject> totalProjectsByYear(final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put(Fields.UNDERSCORE_ID, 0);
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true).
-                        andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true).
+                        andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter)).
                         count().as(Keys.PROJECT_COUNT),

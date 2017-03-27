@@ -14,8 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.Valid;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
@@ -29,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -58,12 +59,14 @@ public class TotalCancelledTendersByYearController extends GenericOCDSController
 
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project.put("tender.value.amount", 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.status").is("cancelled").and("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where("tender.status").is("cancelled")
+                        .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 getYearlyMonthlyGroupingOperation(filter).
                 sum("$tender.value.amount").as(Keys.TOTAL_CANCELLED_TENDERS_AMOUNT),
