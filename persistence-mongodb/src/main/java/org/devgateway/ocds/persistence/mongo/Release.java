@@ -130,6 +130,7 @@ public class Release implements Identifiable {
      *
      */
     @ExcelExport
+    @ExcelExportSepareteSheet
     @JsonProperty("planning")
     private Planning planning;
 
@@ -188,8 +189,6 @@ public class Release implements Identifiable {
      * Information from the contract creation phase of the procurement process.
      *
      */
-    @ExcelExport
-    @ExcelExportSepareteSheet
     @JsonProperty("contracts")
     @JsonDeserialize(as = java.util.LinkedHashSet.class)
     @Merge(MergeStrategy.arrayMergeById)
@@ -202,7 +201,6 @@ public class Release implements Identifiable {
      * The use of two-letter codes from ISO 639-1 is strongly recommended.
      *
      */
-    @ExcelExport
     @JsonProperty("language")
     @Merge(MergeStrategy.ocdsVersion)
     private String language = "en";

@@ -3,9 +3,9 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
-import javax.validation.constraints.Min;
-
 import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.Min;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -20,6 +20,7 @@ public class GenericPagingRequest {
     public static final int MAX_PAGE_SIZE = 1000;
 
     public static final int MAX_REQ_YEAR = 2200;
+
     public static final int MIN_REQ_YEAR = 1900;
 
     public static final int MAX_MONTH = 12;
