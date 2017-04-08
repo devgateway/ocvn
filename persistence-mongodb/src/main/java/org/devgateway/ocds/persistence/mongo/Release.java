@@ -157,7 +157,7 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonPropertyDescription("Summary and detailed information about bids received and evaluated as part"
             + " of this contracting process.")
-    private Bids bids;
+    private Bids bids = new Bids();
 
     /**
      * Organization
