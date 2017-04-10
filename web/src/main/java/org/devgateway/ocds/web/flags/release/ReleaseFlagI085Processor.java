@@ -70,11 +70,11 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
                         multiply(GenericOCDSController.ONE_HUNDRED);
 
 
-                rationale.append("Award=").append(award.getValue().getAmount())
-                        .append(";bid=").append(bid.getValue().getAmount());
+                rationale.append(";Award=").append(award.getValue().getAmount())
+                        .append(" with bid=").append(bid.getValue().getAmount());
 
-                if (BigDecimal.valueOf(dLeft.intValue()).equals(dLeft)
-                        || BigDecimal.valueOf(dRight.intValue()).equals(dRight)) {
+                //using the same logic as owen here...
+                if (dLeft.doubleValue() % 1 == 0 || dRight.doubleValue() % 1 == 0) {
                     result = true;
                     break;
                 }
