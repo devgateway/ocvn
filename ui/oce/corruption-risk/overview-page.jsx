@@ -1,31 +1,12 @@
-import Chart from "../visualizations/charts/index";
 import {Map} from "immutable";
 import {pluck} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
-import ReactIgnore from "../react-ignore.jsx";
+import CustomPopupChart from "./custom-popup-chart";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
-class CorruptionType extends Chart{
-  constructor(...args){
-    super(...args);
-    this.state = {
-      popup: {
-        show: false,
-        left: 0,
-        top: 0
-      }
-    }
-  }
-
-  componentDidMount(){
-    super.componentDidMount();
-    const {chartContainer} = this.refs;
-    chartContainer.on('plotly_hover', this.showPopup.bind(this));
-    chartContainer.on('plotly_unhover', data => this.hidePopup());
-  }
-
+class CorruptionType extends CustomPopupChart{
   groupData(data){
     let grouped = {};
 
@@ -63,40 +44,16 @@ class CorruptionType extends Chart{
     }
   }
 
-  showPopup(data){
-    const year = data.points[0].x;
-    const corruptionType = data.points[0].data.name;
-    const POPUP_WIDTH = 300;
-    const POPUP_HEIGHT = 150;
-    const POPUP_ARROW_SIZE = 8;
-    const hovertext = this.refs.chartContainer.querySelector('.hovertext');
-    const {top: targetTop, left: targetLeft} = hovertext.getBoundingClientRect();
-    const {top: parentTop, left: parentLeft} = this.refs.chartContainer.getBoundingClientRect();
-    this.setState({
-      popup: {
-        show: true,
-        top: targetTop-parentTop-POPUP_HEIGHT,
-        left: targetLeft-parentLeft-POPUP_WIDTH/2 - POPUP_ARROW_SIZE/2,
-        year,
-        corruptionType
-      }
-    });
-  }
-
-  hidePopup(){
-    this.setState({popup: {show: false}});
-  }
-
   getPopup(){
     const {popup} = this.state;
-    const {year, corruptionType} = popup;
+    const {year, traceName: corruptionType} = popup;
     const data = this.groupData(super.getData());
     const dataForPoint = data[corruptionType][year];
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
           <div className="col-sm-12 info text-center">
-            2016
+            {year}
           </div>
           <div className="col-sm-12">
             <hr/>
@@ -111,26 +68,6 @@ class CorruptionType extends Chart{
           <div className="col-sm-5 text-left info">{dataForPoint.percent.toFixed(2)}%</div>
         </div>
         <div className="arrow"/>
-      </div>
-    )
-  }
-
-  render(){
-    const {loading, popup} = this.state;
-    let hasNoData = !loading && this.hasNoData();
-    return (
-      <div className="chart-container">
-    	  {hasNoData && <div className="message">{this.t('charts:general:noData')}</div>}
-	      {loading && <div className="message">
-  	      Loading...<br/>
-    	    <img src="assets/loading-bubbles.svg" alt=""/>
-	      </div>}
-
-  	    {popup.show && this.getPopup()}
-
-	      <ReactIgnore>
-  	      <div ref="chartContainer"/>
-	      </ReactIgnore>
       </div>
     )
   }

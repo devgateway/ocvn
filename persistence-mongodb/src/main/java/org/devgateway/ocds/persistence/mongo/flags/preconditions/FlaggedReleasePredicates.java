@@ -22,6 +22,10 @@ public final class FlaggedReleasePredicates {
             "Needs to have tender procuring entity", p -> p.getTender() != null
             && p.getTender().getProcuringEntity() != null);
 
+    public static final NamedPredicate<FlaggedRelease> TENDER_VALUE_AMOUNT = new NamedPredicate<>(
+            "Needs to have tender value amount", p -> p.getTender() != null
+            && p.getTender().getValue() != null && p.getTender().getValue().getAmount() != null);
+
     public static final NamedPredicate<FlaggedRelease> TENDER_END_DATE =
             new NamedPredicate<>("Needs to have tender end date", p -> p.getTender() != null
                     && p.getTender().getTenderPeriod() != null && p.getTender().getTenderPeriod().getEndDate() != null);

@@ -111,6 +111,9 @@
             color: #34ac45;
             float: right;
         }
+        .crd-overview-link{
+            cursor: pointer;
+        }
         [role=navigation]{
             margin-top: 20px;
             margin-left: -@leftPadding;
@@ -139,54 +142,124 @@
 
     .content{
         margin-top: @headerHeight * 2;
+        margin-bottom: auto;
+        padding: 20px 40px 0 40px;
+
+        .crd-popup{
+            @popupColor: #222c3c;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 150px;
+            z-index: 1;
+            background: @popupColor;
+            padding: 15px 5px;
+            border-radius: 5px;
+            pointer-events: none;
+            .title{
+                color: #70819b;
+                font-weight: bold;
+                padding-right: 0;
+            }
+            .info{
+                color: white;
+            }
+            hr{
+                width: 50%;
+                opacity: .1;
+                margin: 5px auto;
+            }
+            .arrow{
+                @arrowSize: 8px;
+                background: @popupColor;
+                position: absolute;
+                left: 50%;
+                bottom: -@arrowSize/2;
+                width: @arrowSize;
+                height: @arrowSize;
+                margin-left: -@arrowSize/2;
+                transform: rotate(45deg);
+            }
+        }
+
         .chart-corruption-types{
             position: relative;
             .hovertext{
                 opacity: 0;
             }
-            .crd-popup{
-                @popupColor: #222c3c;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 300px;
-                height: 150px;
-                z-index: 1;
-                background: @popupColor;
-                padding: 15px 5px;
-                border-radius: 5px;
-                .title{
-                    color: #70819b;
-                    font-weight: bold;
-                    padding-right: 0;
-                }
-                .info{
-                    color: white;
-                }
-                hr{
-                    width: 50%;
-                    opacity: .1;
-                    margin: 5px auto;
-                }
-                .arrow{
-                    @arrowSize: 8px;
-                    background: @popupColor;
-                    position: absolute;
-                    left: 50%;
-                    bottom: -@arrowSize/2;
-                    width: @arrowSize;
-                    height: @arrowSize;
-                    margin-left: -@arrowSize/2;
-                    transform: rotate(45deg);
-                }
-            }
         }
+
         .table-top-flagged-contracts{
             th{
                 color: #7f8fa4;
             }
             th, td{
                 width: 11.11%;
+            }
+        }
+
+        .indicator-tile-container{
+            padding: 10px;
+            .border{
+                border: 1px solid #e6eaee;
+                border-radius: 5px;
+                padding: 20px;
+                cursor: pointer;
+                h4, p{
+                    font-weight: bold;
+                }
+                p{
+                    margin-bottom: 10px;
+                    color: #156d03;
+                    height: 3em;
+                }
+            }
+        }
+
+        .table-crosstab{
+            .nr-flags{
+                color: #004f99;
+            }
+
+            td, th{
+                text-align: center;
+            }
+
+            td:first-child{
+                text-align: right;
+            }
+
+            .not-applicable{
+                color: #b6cddc;
+                background: #f1faff;
+            }
+
+            td.hoverable{
+                position: relative;
+                .crd-popup{
+                    display: none;
+                    padding: 15px;
+                    height: auto;
+                    .and{
+                        text-transform: uppercase;
+                        color: #387ab2;
+                    }
+                    hr{
+                        width: auto;
+                    }
+                }
+
+                &:hover {
+                    box-shadow: inset 0px 0px 0px 5px #ffd307;
+                    .crd-popup{
+                        display: block;
+                        top: auto;
+                        bottom: 100%;
+                        left: 50%;
+                        margin-left: -150px;
+                    }
+                }
             }
         }
     }

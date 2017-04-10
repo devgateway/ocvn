@@ -42,6 +42,9 @@ public class ReleaseFlags implements FlagsWrappable {
     //i085: Bids are an exact percentage apart
     private Flag i085;
 
+    //i171: Bid is too close to budget, estimate or preferred solution
+    private Flag i171;
+
     private Collection<FlagTypeCount> flaggedStats;
 
     private Collection<FlagTypeCount> eligibleStats;
@@ -157,5 +160,13 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI085(Flag i085) {
         this.i085 = i085;
+    }
+
+    public Flag getI171() {
+        return i171;
+    }
+
+    public void setI171(Flag i171) {
+        this.i171 = i171;
     }
 }

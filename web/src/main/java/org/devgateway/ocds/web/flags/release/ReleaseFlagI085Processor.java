@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -25,9 +24,6 @@ import java.util.Set;
  */
 @Component
 public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcessor {
-
-    public static final BigDecimal MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT = new BigDecimal(0.25);
-
 
     @PostConstruct
     @Override
@@ -51,11 +47,6 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-
-        //get smallest bid
-        Optional<Detail> smallestBid = flaggable.getBids().getDetails().stream()
-                .min((o1, o2) -> o1.getValue().getAmount().compareTo(o2.getValue().getAmount()));
-
         boolean result = false;
 
         for (Detail bid : flaggable.getBids().getDetails()) {
