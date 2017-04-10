@@ -14,9 +14,11 @@ public final class FlagsConstants {
     public static final String I077_VALUE = "flags.i077.value";
     public static final String I180_VALUE = "flags.i180.value";
     public static final String I002_VALUE = "flags.i002.value";
+    public static final String I085_VALUE = "flags.i085.value";
+
     public static final List<String> FLAGS_LIST = Collections.unmodifiableList(
             Arrays.asList(new String[]{I038_VALUE, I004_VALUE, I007_VALUE, I019_VALUE,
-                    I077_VALUE, I180_VALUE, I002_VALUE}));
+                    I077_VALUE, I180_VALUE, I002_VALUE, I085_VALUE}));
 
     private FlagsConstants() {
     }

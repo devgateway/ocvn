@@ -15,6 +15,7 @@ import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI019Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI038Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI077Processor;
+import org.devgateway.ocds.web.flags.release.ReleaseFlagI085Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI180Processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,9 +63,10 @@ public class ReleaseFlaggingService {
 
     @Autowired
     private ReleaseFlagI180Processor releaseFlagI180Processor;
-
     @Autowired
     private ReleaseFlagI002Processor releaseFlagI002Processor;
+    @Autowired
+    private ReleaseFlagI085Processor releaseFlagI085Processor;
 
     private Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors;
 
@@ -140,9 +142,10 @@ public class ReleaseFlaggingService {
                 releaseFlagI019Processor,
                 releaseFlagI077Processor,
                 releaseFlagI180Processor,
-                releaseFlagI002Processor
+                releaseFlagI002Processor,
+                releaseFlagI085Processor
         ));
 
-        processAndSaveFlagsForAllReleases(this::logMessage);
+   //   processAndSaveFlagsForAllReleases(this::logMessage);
     }
 }

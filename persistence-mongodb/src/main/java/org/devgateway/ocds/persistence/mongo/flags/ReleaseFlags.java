@@ -39,6 +39,9 @@ public class ReleaseFlags implements FlagsWrappable {
     //i002: Winning supplier provides a substantially lower bid price than competitors
     private Flag i002;
 
+    //i085: Bids are an exact percentage apart
+    private Flag i085;
+
     private Collection<FlagTypeCount> flaggedStats;
 
     private Collection<FlagTypeCount> eligibleStats;
@@ -146,5 +149,13 @@ public class ReleaseFlags implements FlagsWrappable {
 
     public void setI002(Flag i002) {
         this.i002 = i002;
+    }
+
+    public Flag getI085() {
+        return i085;
+    }
+
+    public void setI085(Flag i085) {
+        this.i085 = i085;
     }
 }
