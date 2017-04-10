@@ -58,25 +58,30 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
         boolean result = false;
 
-        flaggable.getBids().getDetails().forEach(bid -> {
-                    flaggable.getAwards().stream().filter(a ->
-                            Award.Status.active.equals(a.getStatus())).forEach(a -> {
-                        BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), a.getValue().getAmount()).
-                                multiply(GenericOCDSController.ONE_HUNDRED);
-
-                        BigDecimal rounded = BigDecimal.valueOf(dLeft.intValue());
-                        logger.info("rounded " + rounded + " dLeft " + dLeft);
-//                        if(BigDecimal.valueOf(dLeft.intValue()).equals(dLeft)) {
-//                            result=true;
-
-                    });
+        for (Detail bid : flaggable.getBids().getDetails()) {
+            for (Award award : flaggable.getAwards()) {
+                if (!Award.Status.active.equals(award.getStatus())) {
+                    continue;
                 }
-        );
+                BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), award.getValue().getAmount()).
+                        multiply(GenericOCDSController.ONE_HUNDRED);
+
+                BigDecimal dRight = relativeDistanceRight(bid.getValue().getAmount(), award.getValue().getAmount()).
+                        multiply(GenericOCDSController.ONE_HUNDRED);
 
 
-//        rationale.append("Award ").append(award.isPresent() ? award.get().getValue().getAmount() : "not present"
-//        ).append("; smallest bid ").append(smallestBid.isPresent() ? smallestBid.get().getValue().getAmount()
-//                : "not present");
+                rationale.append("Award=").append(award.getValue().getAmount())
+                        .append(";bid=").append(bid.getValue().getAmount());
+
+                if (BigDecimal.valueOf(dLeft.intValue()).equals(dLeft)
+                        || BigDecimal.valueOf(dRight.intValue()).equals(dRight)) {
+                    result = true;
+                    break;
+                }
+
+
+            }
+        }
         return result;
     }
 
