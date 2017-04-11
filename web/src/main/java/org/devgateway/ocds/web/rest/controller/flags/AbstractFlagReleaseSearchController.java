@@ -29,7 +29,7 @@ public abstract class AbstractFlagReleaseSearchController extends AbstractFlagCo
 
 
     @JsonView(Views.Internal.class)
-    protected List<DBObject> releaseFlagSearch(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<DBObject> releaseFlagSearch(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         Aggregation agg = newAggregation(
                 match(where("flags.flaggedStats.0").exists(true).and(getFlagProperty()).is(true)
