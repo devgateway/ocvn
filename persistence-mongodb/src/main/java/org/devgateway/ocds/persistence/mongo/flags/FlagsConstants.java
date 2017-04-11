@@ -19,7 +19,7 @@ public final class FlagsConstants {
 
     public static final List<String> FLAGS_LIST = Collections.unmodifiableList(
             Arrays.asList(new String[]{I038_VALUE, I004_VALUE, I007_VALUE, I019_VALUE,
-                    I077_VALUE, I180_VALUE, I002_VALUE, I085_VALUE, I171_VALUE}));
+                    I077_VALUE, I180_VALUE, I002_VALUE, I085_VALUE, I171_VALUE, I003_VALUE}));
 
     private FlagsConstants() {
     }
