@@ -7,15 +7,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.sun.org.glassfish.external.statistics.Statistic;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -40,7 +42,9 @@ public class Bids {
     @JsonPropertyDescription("Summary statistics on the number and nature of bids received. Where information"
             + " is provided on individual bids, these statistics should match those that can be calculated from the "
             + "bid details array.")
-    private List<Statistic> statistics = new ArrayList<Statistic>();
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
+    private Set<Statistic> statistics = new LinkedHashSet<>();
     /**
      * Bid details
      * <p>
@@ -52,7 +56,9 @@ public class Bids {
     @JsonPropertyDescription("An array of bids, providing information on the bidders, and where applicable,"
             + " bid status, bid values and related documents. The extent to which this information can be disclosed "
             + "varies from jurisdiction to jurisdiction.")
-    private List<Detail> details = new ArrayList<Detail>();
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
+    private Set<Detail> details = new LinkedHashSet<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -63,7 +69,7 @@ public class Bids {
      * bids, these statistics should match those that can be calculated from the bid details array.
      */
     @JsonProperty("statistics")
-    public List<Statistic> getStatistics() {
+    public Set<Statistic> getStatistics() {
         return statistics;
     }
 
@@ -74,7 +80,7 @@ public class Bids {
      * bids, these statistics should match those that can be calculated from the bid details array.
      */
     @JsonProperty("statistics")
-    public void setStatistics(List<Statistic> statistics) {
+    public void setStatistics(Set<Statistic> statistics) {
         this.statistics = statistics;
     }
 
@@ -86,7 +92,7 @@ public class Bids {
      * to jurisdiction.
      */
     @JsonProperty("details")
-    public List<Detail> getDetails() {
+    public Set<Detail> getDetails() {
         return details;
     }
 
@@ -98,7 +104,7 @@ public class Bids {
      * to jurisdiction.
      */
     @JsonProperty("details")
-    public void setDetails(List<Detail> details) {
+    public void setDetails(Set<Detail> details) {
         this.details = details;
     }
 
@@ -115,6 +121,10 @@ public class Bids {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.additionalProperties = additionalProperties;
     }
 
     @Override

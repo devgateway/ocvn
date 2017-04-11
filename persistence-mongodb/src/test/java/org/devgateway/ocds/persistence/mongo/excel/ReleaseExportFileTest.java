@@ -30,7 +30,7 @@ public class ReleaseExportFileTest {
         //     workbook.write(outputStream);
         // }
 
-        Assert.assertEquals("Number of sheets", 5, workbook.getNumberOfSheets());
+        Assert.assertEquals("Number of sheets", 6, workbook.getNumberOfSheets());
 
         Assert.assertNotNull("release sheet", workbook.getSheet("release"));
         Assert.assertNotNull("tender sheet", workbook.getSheet("vntender"));
