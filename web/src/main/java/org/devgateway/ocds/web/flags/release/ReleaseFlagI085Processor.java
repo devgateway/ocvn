@@ -30,7 +30,7 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
                 FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
+                FlaggedReleasePredicates.ELECTRONIC_AUCTION
         ));
     }
 
@@ -51,7 +51,10 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
         for (Detail bid : flaggable.getBids().getDetails()) {
             for (Award award : flaggable.getAwards()) {
-                if (!Award.Status.active.equals(award.getStatus())) {
+                if (!Award.Status.active.equals(award.getStatus()) || bid.getValue() == null
+                        || bid.getValue().getAmount() == null || award.getValue() == null || award.getValue()
+                        .getAmount()
+                        == null) {
                     continue;
                 }
                 BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), award.getValue().getAmount()).

@@ -34,7 +34,7 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
         preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
                 FlaggedReleasePredicates.ACTIVE_AWARD,
                 FlaggedReleasePredicates.UNSUCCESSFUL_AWARD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION,
+                FlaggedReleasePredicates.ELECTRONIC_AUCTION,
                 FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD
         ));
     }
@@ -61,11 +61,14 @@ public class ReleaseFlagI002Processor extends AbstractFlaggedReleaseFlagProcesso
         Optional<Award> award = flaggable.getAwards().stream().filter(a ->
                 Award.Status.active.equals(a.getStatus())).findFirst();
 
-        boolean result = smallestBid.isPresent() && award.isPresent()
-                && (relativeDistanceLeft(award.get().getValue().getAmount(),
-                smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT)
-                > 0 || relativeDistanceRight(award.get().getValue().getAmount(),
-                smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT) > 0);
+        boolean result =
+                smallestBid.isPresent() && award.isPresent() &&
+                        award.get().getValue() != null && award.get().getValue().getAmount() != null &&
+                        smallestBid.get().getValue() != null && smallestBid.get().getValue().getAmount() != null &&
+                        (relativeDistanceLeft(award.get().getValue().getAmount(),
+                                smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT)
+                                > 0 || relativeDistanceRight(award.get().getValue().getAmount(),
+                                smallestBid.get().getValue().getAmount()).compareTo(MAX_ALLOWED_PERCENT_BID_AWARD_AMOUNT) > 0);
 
 
         rationale.append("Award ").append(award.isPresent() ? award.get().getValue().getAmount() : "not present"
