@@ -11,12 +11,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.devgateway.ocds.persistence.mongo.merge.Merge;
+import org.devgateway.ocds.persistence.mongo.merge.MergeStrategy;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,7 +71,9 @@ public class Detail {
     @JsonProperty("tenderers")
     @JsonPropertyDescription("The party, or parties, responsible for this bid. This should provide a name and "
             + "identifier, cross-referenced to an entry in the parties array at the top level of the release.")
-    private List<Organization> tenderers = new ArrayList<Organization>();
+    @JsonDeserialize(as = java.util.LinkedHashSet.class)
+    @Merge(MergeStrategy.ocdsVersion)
+    private Set<Organization> tenderers = new LinkedHashSet<>();
     @JsonProperty("value")
     private Amount value;
     /**
@@ -155,7 +157,7 @@ public class Detail {
      * to an entry in the parties array at the top level of the release.
      */
     @JsonProperty("tenderers")
-    public List<Organization> getTenderers() {
+    public Set<Organization> getTenderers() {
         return tenderers;
     }
 
@@ -166,7 +168,7 @@ public class Detail {
      * to an entry in the parties array at the top level of the release.
      */
     @JsonProperty("tenderers")
-    public void setTenderers(List<Organization> tenderers) {
+    public void setTenderers(Set<Organization> tenderers) {
         this.tenderers = tenderers;
     }
 
@@ -213,6 +215,10 @@ public class Detail {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.additionalProperties = additionalProperties;
     }
 
     @Override

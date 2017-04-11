@@ -129,7 +129,7 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         Assert.assertNotNull(release1);
         Assert.assertEquals(2, release1.getFlags().getFlaggedStats().
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
-        Assert.assertEquals(4, release1.getFlags().getEligibleStats().
+        Assert.assertEquals(6, release1.getFlags().getEligibleStats().
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
 
         FlaggedRelease release2 = flaggedReleaseRepository.findByOcid("ocds-endpoint-002");
@@ -138,7 +138,7 @@ public class ReleaseFlaggingServiceTest extends AbstractEndPointControllerTest {
         Assert.assertEquals(false, release2.getFlags().getFlaggedStats().
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().isPresent());
 
-        Assert.assertEquals(1, release2.getFlags().getEligibleStats().
+        Assert.assertEquals(2, release2.getFlags().getEligibleStats().
                 stream().filter(f -> f.getType().equals(FlagType.RIGGING)).findFirst().get().getCount(), 0);
     }
 
