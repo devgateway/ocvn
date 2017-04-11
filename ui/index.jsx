@@ -36,10 +36,7 @@ class OCVN extends OCApp{
       <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>
         <header className="branding row">
           <div className="col-sm-offset-1 col-sm-4">
-            <h1>
-              {this.t('general:title')}
-              <small>{this.t('general:subtitle')}</small>
-            </h1>
+            {this.dashboardSwitcher()}
           </div>
           <div className="col-sm-6 menu">
             {this.filters()}
@@ -125,7 +122,12 @@ OCVN.STYLING = {
   }
 };
 
-ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
+class OceSwitcher extends ViewSwitcher{}
+
+OceSwitcher.views.default = OCVN;
+OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
+
+ReactDOM.render(<OceSwitcher/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
