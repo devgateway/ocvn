@@ -94,7 +94,7 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
         return project2;
     }
 
-    protected List<DBObject> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+    public List<DBObject> flagStats(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
 
         DBObject projectPrepare = getProjectPrepare(filter);
