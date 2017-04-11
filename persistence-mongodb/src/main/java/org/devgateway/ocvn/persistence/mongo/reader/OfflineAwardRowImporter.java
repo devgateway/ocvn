@@ -28,7 +28,8 @@ import java.text.ParseException;
 public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
     public OfflineAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-                                   OrganizationRepository organizationRepository, int skipRows, BigDecimal maxTenderValue) {
+                                   OrganizationRepository organizationRepository,
+                                   int skipRows, BigDecimal maxTenderValue) {
         super(releaseRepository, importService, organizationRepository, skipRows, maxTenderValue);
     }
 
