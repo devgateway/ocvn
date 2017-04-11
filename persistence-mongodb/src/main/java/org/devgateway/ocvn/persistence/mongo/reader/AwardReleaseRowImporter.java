@@ -27,7 +27,8 @@ public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {
     protected BigDecimal maxTenderValue;
 
     public AwardReleaseRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-                                   final OrganizationRepository organizationRepository, final int skipRows, BigDecimal maxTenderValue) {
+                                   final OrganizationRepository organizationRepository,
+                                   final int skipRows, BigDecimal maxTenderValue) {
         super(releaseRepository, importService, skipRows);
         this.organizationRepository = organizationRepository;
         this.maxTenderValue = maxTenderValue;
