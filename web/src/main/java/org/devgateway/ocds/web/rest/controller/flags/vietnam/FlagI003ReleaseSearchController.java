@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.flags.vietnam;
 
+import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.web.rest.controller.flags.AbstractFlagReleaseSearchController;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -31,7 +31,7 @@ public class FlagI003ReleaseSearchController extends AbstractFlagReleaseSearchCo
     @ApiOperation(value = "Search releases by flag i003")
     @RequestMapping(value = "/api/flags/i003/releases",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    protected List<FlaggedRelease> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+    protected List<DBObject> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.releaseFlagSearch(filter);
     }
 }

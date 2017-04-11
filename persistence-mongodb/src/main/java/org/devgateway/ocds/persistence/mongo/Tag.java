@@ -35,6 +35,8 @@ public enum Tag {
 
     contractTermination("contractTermination"),
 
+    bid("bid"),
+
     compiled("compiled");
 
     private final String value;

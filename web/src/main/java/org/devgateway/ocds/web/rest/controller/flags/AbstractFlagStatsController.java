@@ -36,13 +36,14 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
     protected DBObject getProjectPrepare(final YearFilterPagingRequest year) {
         DBObject projectPrepare = new BasicDBObject();
         projectPrepare.put(getFlagProperty(), 1);
+        addYearlyMonthlyProjection(year, projectPrepare, ref(getYearProperty()));
         return projectPrepare;
     }
 
 
     protected DBObject getGroup(final YearFilterPagingRequest filter) {
         DBObject group = new BasicDBObject();
-        group.put(Fields.UNDERSCORE_ID, null);
+        addYearlyMonthlyReferenceToGroup(filter, group);
         group.put(GenericKeys.TOTAL, new BasicDBObject("$sum", 1));
         group.put(GenericKeys.TOTAL_TRUE, new BasicDBObject("$sum", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$eq", Arrays.asList(ref(getFlagProperty()), true)), 1, 0))));
@@ -55,17 +56,38 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
 
     protected DBObject getProjectPercentage(final YearFilterPagingRequest filter) {
         DBObject project2 = new BasicDBObject();
-        project2.put(Fields.UNDERSCORE_ID, 0);
+        if (filter.getMonthly()) {
+            project2.put("year", 1);
+            project2.put("month", 1);
+        } else {
+            project2.put(Fields.UNDERSCORE_ID, 1);
+        }
         project2.put(GenericKeys.TOTAL, 1);
         project2.put(GenericKeys.TOTAL_TRUE, 1);
         project2.put(GenericKeys.TOTAL_FALSE, 1);
         project2.put(GenericKeys.TOTAL_PRECOND_MET, 1);
-        project2.put(GenericKeys.PERCENT_TRUE_PRECOND_MET, new BasicDBObject("$multiply",
-                Arrays.asList(new BasicDBObject("$divide", Arrays.asList(ref(GenericKeys.TOTAL_TRUE),
-                        ref(GenericKeys.TOTAL_PRECOND_MET))), 100)));
-        project2.put(GenericKeys.PERCENT_FALSE_PRECOND_MET, new BasicDBObject("$multiply",
-                Arrays.asList(new BasicDBObject("$divide", Arrays.asList(ref(GenericKeys.TOTAL_FALSE),
-                        ref(GenericKeys.TOTAL_PRECOND_MET))), 100)));
+        project2.put(GenericKeys.PERCENT_TRUE_PRECOND_MET,
+                new BasicDBObject("$cond",
+                        Arrays.asList(new BasicDBObject("$eq", Arrays.asList(ref(GenericKeys.TOTAL_PRECOND_MET),
+                                0)), new BasicDBObject("$literal", 0),
+                                new BasicDBObject("$multiply",
+                                        Arrays.asList(new BasicDBObject("$divide",
+                                                Arrays.asList(ref(GenericKeys.TOTAL_TRUE),
+                                                ref(GenericKeys.TOTAL_PRECOND_MET))), 100))
+                        ))
+
+        );
+        project2.put(GenericKeys.PERCENT_FALSE_PRECOND_MET,
+                new BasicDBObject("$cond",
+                        Arrays.asList(new BasicDBObject("$eq", Arrays.asList(ref(GenericKeys.TOTAL_PRECOND_MET),
+                                0)), new BasicDBObject("$literal", 0),
+                                new BasicDBObject("$multiply",
+                                        Arrays.asList(new BasicDBObject("$divide",
+                                                Arrays.asList(ref(GenericKeys.TOTAL_FALSE),
+                                                ref(GenericKeys.TOTAL_PRECOND_MET))), 100))
+                        ))
+
+        );
         project2.put(GenericKeys.PERCENT_PRECOND_MET, new BasicDBObject("$multiply",
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList(ref(GenericKeys.TOTAL_PRECOND_MET),
                         ref(GenericKeys.TOTAL))), 100)));
@@ -82,10 +104,13 @@ public abstract class AbstractFlagStatsController extends AbstractFlagController
         DBObject projectPercentage = getProjectPercentage(filter);
 
         Aggregation agg = newAggregation(
-                match(getYearDefaultFilterCriteria(filter, getYearProperty())),
+                match(getYearDefaultFilterCriteria(filter, getYearProperty()).and(getYearProperty()).exists(true)),
                 new CustomProjectionOperation(projectPrepare),
                 new CustomGroupingOperation(group),
-                new CustomProjectionOperation(projectPercentage)
+                new CustomProjectionOperation(projectPercentage),
+                transformYearlyGrouping(filter).andInclude(GenericKeys.TOTAL, GenericKeys.TOTAL_TRUE,
+                        GenericKeys.TOTAL_FALSE, GenericKeys.TOTAL_PRECOND_MET, GenericKeys.PERCENT_TRUE_PRECOND_MET,
+                        GenericKeys.PERCENT_FALSE_PRECOND_MET, GenericKeys.PERCENT_PRECOND_MET)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);

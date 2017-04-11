@@ -32,21 +32,24 @@
     <cache name="organizations" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
 
+    <cache name="indicatorTypesMappingJson" eternal="true" overflowToDisk="false"
+           diskPersistent="false" diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000"/>
+
     <cache name="locations" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="100000" />
 
     <cache name="contrMethods" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="10000" />
-           
+
     <cache name="orgGroups" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="10000" />
 
     <cache name="orgDepartments" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="10000" />
-    
+
     <cache name="cities" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="10000" />
- 
+
     <cache name="tendersAwardsYears" eternal="true" overflowToDisk="false" diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120" statistics="true" maxEntriesLocalHeap="1000" />
 

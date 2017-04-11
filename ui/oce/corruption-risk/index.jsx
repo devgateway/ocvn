@@ -2,6 +2,10 @@ import style from "./style.less";
 import cn from "classnames";
 import URI from "urijs";
 import {fetchJson} from "../tools";
+import OverviewPage from "./overview-page";
+import CorruptionTypePage from "./corruption-type";
+import {Map} from "immutable";
+import IndividualIndicatorPage from "./individual-indicator";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
@@ -25,7 +29,7 @@ class Filters extends React.Component{
     const setBox = box => e => {
       e.stopPropagation();
       requestNewFilterBox(box);
-    }
+    };
 
     const filters = [{
       title: "Organizations",
@@ -68,6 +72,44 @@ class Filters extends React.Component{
   }
 }
 
+import Chart from "../visualizations/charts/index.jsx";
+import Plotly from "plotly.js/lib/core";
+Plotly.register([
+  require('plotly.js/lib/pie')
+]);
+
+class TotalFlags extends Chart{
+  constructor(...args){
+    super(...args);
+    this.state = {
+
+    }
+  }
+
+  getData(){
+    return [{
+      values: [22565, 5450, 5850],
+      labels: ["Fraud", "Process rigging", "Collusion"],
+      textinfo: 'value',
+      hole: .85,
+      type: 'pie'
+    }];
+  }
+
+  getLayout(){
+    const {width} = this.props;
+    return {
+      legend: {
+        orientation: 'h',
+        width,
+        height: 50,
+        x: '0',
+        y: '0'
+      },
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    }
+  }
+}
 
 class CorruptionRiskDashboard extends React.Component{
   constructor(...args){
@@ -78,7 +120,9 @@ class CorruptionRiskDashboard extends React.Component{
       user: {
         loggedIn: false,
         isAdmin: false
-      }
+      },
+      page: 'overview',
+      indicatorTypesMapping: {}
     }
   }
 
@@ -93,16 +137,20 @@ class CorruptionRiskDashboard extends React.Component{
         }
       })
     ).catch(
-      () => this.setState({
-        user: {
-          loggedIn: false
-        }
-      })
+      err => {
+        alert('You must be logged in to access Corruption Risk Dashboard');
+        location.href = '/login?referrer=/ui/index.html'
+      }
     )
+  }
+
+  fetchIndicatorTypesMapping(){
+    fetchJson('/api/indicatorTypesMapping').then(data => this.setState({indicatorTypesMapping: data}));
   }
 
   componentDidMount(){
     this.fetchUserInfo();
+    this.fetchIndicatorTypesMapping()
   }
 
   toggleDashboardSwitcher(e){
@@ -122,11 +170,46 @@ class CorruptionRiskDashboard extends React.Component{
     </a>
   }
 
+  getPage(){
+    const {page} = this.state;
+    if(page == 'overview'){
+      return <OverviewPage/>;
+    } else if(page == 'corruption-type') {
+      const {corruptionType, indicatorTypesMapping} = this.state;
+      const indicatorType = {
+        process_rigging: 'RIGGING'
+      }[corruptionType];
+
+      const indicators =
+        Object.keys(indicatorTypesMapping).filter(key => indicatorTypesMapping[key].types.indexOf(indicatorType) > -1);
+
+      return <CorruptionTypePage
+                 indicators={indicators}
+                 onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
+             />;
+    } else if(page == 'individual-indicator'){
+      const {individualIndicator} = this.state;
+      return <IndividualIndicatorPage
+                 indicator={individualIndicator}
+             />
+    }
+  }
+
   render(){
-    const {dashboardSwitcherOpen, filterBox} = this.state;
+    const {dashboardSwitcherOpen, filterBox, corruptionType, page} = this.state;
     const {onSwitch} = this.props;
+    const tabs = [{
+	    slug: "fraud",
+	    name: "Fraud"
+    }, {
+	    slug: "process_rigging",
+	    name: "Process rigging"
+    }, {
+	    slug: "collusion",
+	    name: "Collusion"
+    }];
     return (
-      <div className="container-fluid corruption-risk-dashboard"
+      <div className="container-fluid dashboard-corruption-risk"
            onClick={e => this.setState({dashboardSwitcherOpen: false, filterBox: ""})}
       >
         <header className="branding row">
@@ -155,6 +238,50 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
         </header>
         <Filters box={filterBox} requestNewFilterBox={filterBox => this.setState({filterBox})}/>
+        <aside className="col-xs-4 col-md-3 col-lg-2">
+          <div className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
+            <h4>
+              Corruption Risk Overview
+              <i className="glyphicon glyphicon-info-sign"></i>
+            </h4>
+            <p>
+              <small>
+                The Corruption Risk Dashboard employs a
+                red flagging approach to help users understand
+                the potential presence of fraud, collusion or
+                rigging in public contracting. White flags may
+                indicate the presence of corruption, they may
+                also be attributable to data quality issues or
+                approved practices.
+              </small>
+            </p>
+          </div>
+          <section role="navigation" className="row">
+            {tabs.map(({name, slug}, index) =>
+              <a
+                  href="javascript:void(0);"
+                  onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
+                  className={cn({active: 'corruption-type' == page && slug == corruptionType})}
+                  key={index}
+              >
+                <img src={`assets/icons/${slug}.png`}/>
+                {name} <span className="count">(0)</span>
+              </a>
+						 )}
+          </section>
+          <TotalFlags
+              filters={Map()}
+              requestNewData={e => null}
+              translations={{}}
+              data={Map({a: 1})}
+              width={250}
+              height={300}
+              margin={{l:40, r:40, t:40, b: 40, pad:40}}
+          />
+        </aside>
+        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 content">
+          {this.getPage()}
+        </div>
       </div>
     )
   }

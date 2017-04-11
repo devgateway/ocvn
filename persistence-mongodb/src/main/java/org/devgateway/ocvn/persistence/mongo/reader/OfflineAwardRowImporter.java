@@ -2,6 +2,7 @@ package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.Detail;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tender;
@@ -27,7 +28,7 @@ import java.text.ParseException;
 public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
     public OfflineAwardRowImporter(ReleaseRepository releaseRepository, ImportService importService,
-            OrganizationRepository organizationRepository, int skipRows, BigDecimal maxTenderValue) {
+                                   OrganizationRepository organizationRepository, int skipRows, BigDecimal maxTenderValue) {
         super(releaseRepository, importService, organizationRepository, skipRows, maxTenderValue);
     }
 
@@ -94,6 +95,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
         award.setBidSuccMethod(getInteger(getRowCell(row, 9)));
 
         Organization supplierOrganization = supplier;
+        Detail detail = null;
         if (supplierOrganization != null && getRowCell(row, 10) != null) {
             Amount value2 = new Amount();
             value2.setCurrency("VND");
@@ -101,6 +103,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
             VNTendererOrganization tendererOrganization = new VNTendererOrganization(supplier);
             tendererOrganization.setBidValue(value2);
             supplierOrganization = tendererOrganization;
+            detail = newBidDetailFromAwardData(getRowCell(row, 0), value2, supplier);
         }
 
         if (getRowCell(row, 12) != null) {
@@ -110,6 +113,7 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
 
         if (getRowCell(row, 11) != null) {
             award.setAlternateDate(getExcelDate(getRowCell(row, 11)));
+            detail.setDate(award.getAlternateDate());
         }
 
         // regardless if the award is active or not, we add the supplier to
@@ -119,6 +123,10 @@ public class OfflineAwardRowImporter extends AwardReleaseRowImporter {
         }
 
         release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
+
+        if (detail != null) {
+            release.getBids().getDetails().add(detail);
+        }
 
         // copy items from tender
         award.getItems().addAll(release.getTender().getItems());
