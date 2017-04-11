@@ -51,7 +51,8 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
         for (Detail bid : flaggable.getBids().getDetails()) {
             for (Award award : flaggable.getAwards()) {
-                if (!Award.Status.active.equals(award.getStatus())) {
+                if (!Award.Status.active.equals(award.getStatus())
+                        || bid.getValue().getAmount().equals(award.getValue().getAmount())) {
                     continue;
                 }
                 BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), award.getValue().getAmount()).
