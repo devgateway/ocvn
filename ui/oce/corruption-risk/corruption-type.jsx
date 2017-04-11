@@ -139,11 +139,11 @@ class Crosstab extends Table{
              const style = {backgroundColor: `rgb(${color}, 255, ${color})`}
              return (
                <td key={indicatorID} className="hoverable" style={style}>
-                 {percent.toFixed(2)} %
+                 {percent ? percent.toFixed(2) : 0} %
                  <div className="crd-popup text-left">
                    <div className="row">
                      <div className="col-sm-12 info">
-                       {percent.toFixed(2)}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
+                       {percent ? percent.toFixed(2) : 0}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
                      </div>
                      <div className="col-sm-12">
                        <hr/>
