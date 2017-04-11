@@ -31,7 +31,7 @@ public class FlagI003ReleaseSearchController extends AbstractFlagReleaseSearchCo
     @ApiOperation(value = "Search releases by flag i003")
     @RequestMapping(value = "/api/flags/i003/releases",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    protected List<DBObject> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+    public List<DBObject> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.releaseFlagSearch(filter);
     }
 }
