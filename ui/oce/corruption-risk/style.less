@@ -59,21 +59,14 @@
             }
         }
         .filter{
+            @boxFilterColor: #0083e5;
+            @boxWidth: 500px;
             float: left;
             height: 100%;
             padding: 20px 0;
             margin-left: 3%;
             color: #899cb1;
             cursor: pointer;
-            .glyphicon-menu-down{
-                font-size: .75em;
-                margin-left: 20px;
-            }
-            .dropdown{
-                display: none;
-            }
-            @boxFilterColor: #0083e5;
-            @boxWidth: 500px;
             &.open{
                 position: relative;
                 border-bottom: 3px solid @boxFilterColor;
@@ -89,7 +82,20 @@
                     padding: 25px;
                     border: 3px @boxFilterColor solid;
                     border-radius: 3px;
+                    background-color: white;
+                    overflow-y: scroll;
+                    header{
+                        display: none;
+                    }
                 }
+            }
+
+            .glyphicon-menu-down{
+                font-size: .75em;
+                margin-left: 20px;
+            }
+            .dropdown{
+                display: none;
             }
         }
         .download{

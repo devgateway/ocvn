@@ -2,6 +2,7 @@ import CustomPopupChart from "./custom-popup-chart";
 import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import Table from "../visualizations/tables/index";
+import INDICATOR_NAMES from "./indicator-names";
 
 class IndividualIndicatorChart extends CustomPopupChart{
   getCustomEP(){
@@ -144,7 +145,8 @@ class IndividualIndicatorPage extends React.Component{
     const {indicator} = this.props;
     return (
       <div className="page-corruption-type">
-        <h4>Individual Indicator Page</h4>
+        <h4>{INDICATOR_NAMES[indicator].name}</h4>
+        <pre>{INDICATOR_NAMES[indicator].long_desc}</pre>
         <IndividualIndicatorChart
             indicator={indicator}
             translations={{}}

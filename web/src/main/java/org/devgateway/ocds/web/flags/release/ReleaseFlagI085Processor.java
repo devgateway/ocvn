@@ -42,7 +42,7 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Set<FlagType> flagTypes() {
-        return new HashSet<FlagType>(Arrays.asList(FlagType.RIGGING));
+        return new HashSet<FlagType>(Arrays.asList(FlagType.FRAUD, FlagType.COLLUSION));
     }
 
     @Override
@@ -53,8 +53,8 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
             for (Award award : flaggable.getAwards()) {
                 if (!Award.Status.active.equals(award.getStatus()) || bid.getValue() == null
                         || bid.getValue().getAmount() == null || award.getValue() == null || award.getValue()
-                        .getAmount()
-                        == null) {
+                        .getAmount()  == null
+                        ||  bid.getValue().getAmount().equals(award.getValue().getAmount())) {
                     continue;
                 }
                 BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), award.getValue().getAmount()).

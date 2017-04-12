@@ -31,7 +31,7 @@ public class FlagI085StatsController extends AbstractFlagStatsController {
     @ApiOperation(value = "Stats for flag i085")
     @RequestMapping(value = "/api/flags/i085/stats",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    protected List<DBObject> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+    public List<DBObject> flagStats(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.flagStats(filter);
     }
 }
