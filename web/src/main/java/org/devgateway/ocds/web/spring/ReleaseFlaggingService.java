@@ -7,8 +7,6 @@ import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
-import org.devgateway.ocds.web.flags.release.vietnam.ReleaseFlagI003Processor;
-import org.devgateway.ocds.web.flags.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI002Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
@@ -18,6 +16,8 @@ import org.devgateway.ocds.web.flags.release.ReleaseFlagI077Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI085Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI171Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI180Processor;
+import org.devgateway.ocds.web.flags.release.vietnam.ReleaseFlagI003Processor;
+import org.devgateway.ocds.web.flags.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,6 +72,7 @@ public class ReleaseFlaggingService {
     private ReleaseFlagI171Processor releaseFlagI171Processor;
 
     private Collection<AbstractFlaggedReleaseFlagProcessor> releaseFlagProcessors;
+
 
     public void logMessage(String message) {
         logger.info(message);
@@ -138,18 +139,18 @@ public class ReleaseFlaggingService {
     @PostConstruct
     protected void setProcessors() {
         releaseFlagProcessors = Collections.unmodifiableList(Arrays.asList(
-      //          releaseFlagI038Processor,
-      //          releaseFlagI003Processor,
+                releaseFlagI038Processor,
+                //          releaseFlagI003Processor,
                 releaseFlagI007Processor,
-      //          vietnamReleaseFlagI004Processor,
+                //          vietnamReleaseFlagI004Processor,
 //                releaseFlagI019Processor,
-//                releaseFlagI077Processor,
+//             releaseFlagI077Processor,
 //                releaseFlagI180Processor,
                 releaseFlagI002Processor,
                 releaseFlagI085Processor,
                 releaseFlagI171Processor
         ));
 
-   //   processAndSaveFlagsForAllReleases(this::logMessage);
+        //   processAndSaveFlagsForAllReleases(this::logMessage);
     }
 }

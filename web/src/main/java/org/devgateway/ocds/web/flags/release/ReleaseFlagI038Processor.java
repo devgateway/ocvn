@@ -4,11 +4,6 @@
 package org.devgateway.ocds.web.flags.release;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
@@ -18,13 +13,19 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author mpostelnicu
  */
 @Component
 public class ReleaseFlagI038Processor extends AbstractFlaggedReleaseFlagProcessor {
 
-    public static final int MIN_ALLOWED_DAYS_BIDDING_PERIOD = 7;
+    public static final int MIN_ALLOWED_DAYS_BIDDING_PERIOD = 2;
 
     @Override
     protected void setFlag(Flag flag, FlaggedRelease flaggable) {

@@ -29,8 +29,7 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
     @Override
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
-                FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.ELECTRONIC_AUCTION
+                FlaggedReleasePredicates.ACTIVE_AWARD
         ));
     }
 
