@@ -213,7 +213,6 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setProcurementMethod(List<String> procurementMethod) {
         this.procurementMethod = procurementMethod;
     }
-}
 
     public List<Integer> getProcuringEntityDepartmentId() {
         return procuringEntityDepartmentId;
