@@ -401,6 +401,17 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
     }
 
+    /**
+     * Appends the procurement method for this filter, this will fitler based
+     * on tender.procurementMethod
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getProcurementMethodCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procurementMethod", filter.getProcurementMethod(), filter);
+    }
+
     @PostConstruct
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
@@ -408,6 +419,8 @@ public abstract class GenericOCDSController {
         tmpMap.put("tender.procuringEntity.group._id", 1);
         tmpMap.put("tender.procuringEntity.department._id", 1);
         tmpMap.put("tender.procuringEntity.address.postalCode", 1);
+        tmpMap.put("tender.procurementMethod", 1);
+        tmpMap.put("tender.submissionMethod", 1);
         tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
@@ -477,6 +490,7 @@ public abstract class GenericOCDSController {
                 getBidSelectionMethod(filter),
                 getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByBidPlanLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
@@ -497,6 +511,7 @@ public abstract class GenericOCDSController {
                 getNotBidSelectionMethod(filter),
                 getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByBidPlanLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
