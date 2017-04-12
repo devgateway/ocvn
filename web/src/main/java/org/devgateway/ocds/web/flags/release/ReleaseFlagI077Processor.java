@@ -1,13 +1,6 @@
 package org.devgateway.ocds.web.flags.release;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
@@ -16,6 +9,14 @@ import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleaseP
 import org.devgateway.ocds.web.rest.controller.FrequentSuppliersTimeIntervalController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author mpostelnicu
@@ -76,7 +77,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(
                 Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD_WITH_DATE,
-                        FlaggedReleasePredicates.TENDER_PROCURING_ENTITY));
+                        FlaggedReleasePredicates.TENDER_PROCURING_ENTITY,
+                        FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD));
 
         reInitialize();
 
