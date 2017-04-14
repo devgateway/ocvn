@@ -29,10 +29,11 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-        long countAwards = flaggable.getAwards().size();
+        long countBids = flaggable.getBids() != null && flaggable.getBids().getDetails() != null
+                ? flaggable.getBids().getDetails().size() : 0;
 
-        rationale.append("Number of bids: ").append(countAwards);
-        return countAwards == 1;
+        rationale.append("Number of bids: ").append(countBids);
+        return countBids == 1;
     }
 
     @Override
