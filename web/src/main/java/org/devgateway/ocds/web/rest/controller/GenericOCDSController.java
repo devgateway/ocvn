@@ -166,6 +166,25 @@ public abstract class GenericOCDSController {
         return new CustomSortingOperation(sort);
     }
 
+    /**
+     * Similar to {@link #getSortByYearMonth(YearFilterPagingRequest)} but it can be used
+     * if additional grouping elements are present, besides month and year
+     *
+     * @param filter
+     * @return
+     */
+    protected CustomSortingOperation getSortByYearMonthWhenOtherGroups(YearFilterPagingRequest filter) {
+        DBObject sort = new BasicDBObject();
+        if (filter.getMonthly()) {
+            sort.put("_id.year", 1);
+            sort.put("_id.month", 1);
+        } else {
+            sort.put("_id.year", 1);
+        }
+        return new CustomSortingOperation(sort);
+    }
+
+
     protected void addYearlyMonthlyReferenceToGroup(YearFilterPagingRequest filter, DBObject group) {
         if (filter.getMonthly()) {
             group.put(Fields.UNDERSCORE_ID, new BasicDBObject("year", "$year").append("month", "$month"));
