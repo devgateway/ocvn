@@ -19,6 +19,7 @@ import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -36,6 +37,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.grou
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -52,6 +54,8 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
         public static final String INDICATOR_COUNT = "indicatorCount";
         public static final String ELIGIBLE_PROJECT_COUNT = "eligibleProjectCount";
         public static final String FLAGGED_PROJECT_COUNT = "flaggedProjectCount";
+        public static final String ELIGIBLE_COUNT = "eligibleCount";
+        public static final String FLAGGED_COUNT = "flaggedCount";
         public static final String YEAR = "year";
         public static final String MONTH = "month";
         public static final String PROJECT_COUNT = "projectCount";
@@ -95,9 +99,9 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 unwind("flags." + statsProperty),
                 project("flags." + statsProperty),
                 group(statsProperty + ".type").sum(statsProperty + ".count").as(Keys.INDICATOR_COUNT),
-                project(Keys.INDICATOR_COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID)
+                project(Keys.INDICATOR_COUNT).and(Fields.UNDERSCORE_ID).as(Keys.TYPE).andExclude(Fields.UNDERSCORE_ID),
+                sort(Sort.Direction.ASC,   "type")
         );
-
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
                 DBObject.class);
@@ -145,8 +149,7 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
                         sum("stats.count").as(Keys.INDICATOR_COUNT),
-                getSortByYearMonthWhenOtherGroups(filter)
-
+                getSortByYearMonthWhenOtherGroups(filter, "_id.type")
         );
 
 
@@ -193,10 +196,11 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 unwind("flags." + statsProperty),
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
-                        sum("stats.count").as(Keys.INDICATOR_COUNT).count()
+                        sum("stats.count").as(
+                        statsProperty.equals(ELIGIBLE_STATS) ? Keys.ELIGIBLE_COUNT : Keys.FLAGGED_COUNT).count()
                         .as(statsProperty.equals(ELIGIBLE_STATS)
                                 ? Keys.ELIGIBLE_PROJECT_COUNT : Keys.FLAGGED_PROJECT_COUNT),
-                getSortByYearMonthWhenOtherGroups(filter)
+                getSortByYearMonthWhenOtherGroups(filter, "_id.type")
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",

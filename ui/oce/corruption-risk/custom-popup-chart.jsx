@@ -1,4 +1,4 @@
-import Chart from "../visualizations/charts/index";
+import Chart from "../visualizations/charts/frontend-date-filterable";
 import ReactIgnore from "../react-ignore.jsx";
 
 class CustomPopupChart extends Chart{

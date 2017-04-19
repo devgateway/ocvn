@@ -114,4 +114,6 @@ export const shallowCopy = original => {
 
 export const arrReplace = (a, b, [head, ...tail]) => "undefined" == typeof head ?
     tail :
-    [a == head ? b : head].concat(arrReplace(a, b, tail));
+  [a == head ? b : head].concat(arrReplace(a, b, tail));
+
+export const range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));

@@ -1,20 +1,51 @@
 import {Map} from "immutable";
-import {pluck} from "../tools";
+import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
-class CorruptionType extends CustomPopupChart{
-  groupData(data){
-    let grouped = {};
+//copypasted from https://www.sitepoint.com/javascript-generate-lighter-darker-color/
+function colorLuminance(hex, lum) {
 
+	// validate hex string
+	hex = String(hex).replace(/[^0-9a-f]/gi, '');
+	if (hex.length < 6) {
+		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+	}
+	lum = lum || 0;
+
+	// convert to decimal and change luminosity
+	var rgb = "#", c, i;
+	for (i = 0; i < 3; i++) {
+		c = parseInt(hex.substr(i*2,2), 16);
+		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+		rgb += ("00"+c).substr(c.length);
+	}
+
+	return rgb;
+}
+
+class CorruptionType extends CustomPopupChart{
+	groupData(data){
+    let grouped = {
+			COLLUSION: {},
+			FRAUD: {},
+			RIGGING: {}
+		};
+    const {monthly} = this.props;
     data.forEach(datum => {
       const type = datum.get('type');
-      const year = datum.get('year');
+			let date;
+			if(monthly){
+				const month = datum.get('month');
+				date = this.t(`general:months:${month}`);
+			} else {
+				date = datum.get('year');
+			}
       grouped[type] = grouped[type] || {};
-      grouped[type][year] = datum.toJS();
+      grouped[type][date] = datum.toJS();
     });
 
     return grouped;
@@ -23,14 +54,31 @@ class CorruptionType extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
+		const {styling, months, monthly, years} = this.props;
     const grouped = this.groupData(data);
-    return Object.keys(grouped).map(type => {
+    return Object.keys(grouped).map((type, index) => {
       const dataForType = grouped[type];
-      return {
-        x: pluckObj('year', dataForType),
-        y: pluckObj('indicatorCount', dataForType),
-        type: 'scatter',
-        name: type
+			let values = [], dates = [];
+			if(monthly){
+				dates = range(1, 12)
+					.filter(month => months.has(month))
+					.map(month => this.t(`general:months:${month}`));
+
+				values = dates.map(month => dataForType[month] ? dataForType[month].flaggedCount : 0);
+			} else {
+				dates = years.sort().toArray();
+				values = dates.map(year => dataForType[year] ? dataForType[year].flaggedCount : 0);
+			}
+			return {
+        x: dates,
+        y: values,
+				type: 'scatter',
+        fill: 'tonexty',
+        name: type,
+        fillcolor: styling.charts.traceColors[index],
+        line: {
+          color: colorLuminance(styling.charts.traceColors[index], -.3)
+        }
       }
     });
   }
@@ -40,15 +88,24 @@ class CorruptionType extends CustomPopupChart{
       hovermode: 'closest',
       xaxis: {
         type: 'category'
-      }
+      },
+      yaxis: {}
     }
   }
 
   getPopup(){
     const {popup} = this.state;
     const {year, traceName: corruptionType} = popup;
+		const {indicatorTypesMapping} = this.props;
     const data = this.groupData(super.getData());
+		if(!data[corruptionType]) return null;
     const dataForPoint = data[corruptionType][year];
+		if(!dataForPoint) return null;
+		const indicatorCount =
+			Object.keys(indicatorTypesMapping).filter(indicatorId =>
+				indicatorTypesMapping[indicatorId].types.indexOf(dataForPoint.type) > -1
+			).length;
+
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -59,12 +116,12 @@ class CorruptionType extends CustomPopupChart{
             <hr/>
           </div>
           <div className="col-sm-7 text-right title">Indicators</div>
-          <div className="col-sm-5 text-left info">{dataForPoint.indicatorCount}</div>
-          <div className="col-sm-7 text-right title">Flags</div>
+          <div className="col-sm-5 text-left info">{indicatorCount}</div>
+          <div className="col-sm-7 text-right title">Total Flags</div>
+          <div className="col-sm-5 text-left info">{dataForPoint.flaggedCount}</div>
+          <div className="col-sm-7 text-right title">Total Projects Flagged</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedProjectCount}</div>
-          <div className="col-sm-7 text-right title">Projects</div>
-          <div className="col-sm-5 text-left info">{dataForPoint.projectCount}</div>
-          <div className="col-sm-7 text-right title">% of Projects Flagged</div>
+          <div className="col-sm-7 text-right title">% Total Projects Flagged</div>
           <div className="col-sm-5 text-left info">{dataForPoint.percent.toFixed(2)}%</div>
         </div>
         <div className="arrow"/>
@@ -101,8 +158,8 @@ class TopFlaggedContracts extends Table{
   render(){
     const {data} = this.props;
     return (
-        <table className="table table-striped table-hover table-top-flagged-contracts">
-          <thead>
+      <table className="table table-striped table-hover table-top-flagged-contracts">
+        <thead>
           <tr>
             <th>Status</th>
             <th>Contract ID</th>
@@ -114,11 +171,11 @@ class TopFlaggedContracts extends Table{
             <th className="flag-type">Flag Type</th>
             <th>Number of<br/>risk type flags</th>
           </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
           {data && data.map(this.row.bind(this))}
-          </tbody>
-        </table>
+        </tbody>
+      </table>
     )
   }
 }
@@ -136,7 +193,7 @@ class OverviewPage extends React.Component{
 
   render(){
     const {corruptionType, topFlaggedContracts} = this.state;
-    const {filters} = this.props;
+    const {filters, translations, years, monthly, months, indicatorTypesMapping, styling, width} = this.props;
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
@@ -144,8 +201,14 @@ class OverviewPage extends React.Component{
           <CorruptionType
               filters={filters}
               requestNewData={(_, corruptionType) => this.setState({corruptionType})}
-              translations={{}}
+              translations={translations}
               data={corruptionType}
+              years={years}
+							monthly={monthly}
+							months={months}
+              styling={styling}
+							indicatorTypesMapping={indicatorTypesMapping}
+							width={width}
           />
         </section>
         <section>
@@ -153,8 +216,10 @@ class OverviewPage extends React.Component{
           <TopFlaggedContracts
               filters={filters}
               data={topFlaggedContracts}
-              translations={{}}
-              years={Map()}
+              translations={translations}
+							years={years}
+							monthly={monthly}
+							months={months}
               requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
           />
         </section>
