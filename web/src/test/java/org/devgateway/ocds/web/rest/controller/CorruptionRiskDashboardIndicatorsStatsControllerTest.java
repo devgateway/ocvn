@@ -67,9 +67,23 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
     public void totalEligibleIndicatorsByIndicatorTypeTest() throws Exception {
         final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalEligibleIndicatorsByIndicatorType(new YearFilterPagingRequest());
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(6, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(3, result.size());
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .INDICATOR_COUNT));
+
+        Assert.assertEquals(FlagType.FRAUD.toString(), result.get(1).get
+                (CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(3, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .INDICATOR_COUNT));
+
+        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(2).get
+                (CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(6, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .INDICATOR_COUNT));
     }
 
     @Test
@@ -86,12 +100,15 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
     public void totalEligibleIndicatorsByIndicatorTypeByYearTest() throws Exception {
         final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalEligibleIndicatorsByIndicatorTypeByYear(new YearFilterPagingRequest());
-        Assert.assertEquals(2, result.size());
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(5, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(5, result.size());
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(2014, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .INDICATOR_COUNT));
 
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
+        Assert.assertEquals(FlagType.FRAUD.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
         Assert.assertEquals(2014, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
         Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
     }
@@ -103,7 +120,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
         Assert.assertEquals(1, result.size());
         Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
         Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_COUNT));
         Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_PROJECT_COUNT));
     }
 
@@ -111,17 +128,39 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
     public void totalEligibleProjectsByIndicatorTypeByYearTest() throws Exception {
         final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
                 .totalEligibleProjectsByIndicatorTypeByYear(new YearFilterPagingRequest());
-        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(5, result.size());
 
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(5, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_PROJECT_COUNT));
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(2014, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_COUNT));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_PROJECT_COUNT));
 
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
+        Assert.assertEquals(FlagType.FRAUD.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
         Assert.assertEquals(2014, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_COUNT));
         Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_PROJECT_COUNT));
+
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(2).get
+                (CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(2015, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(1, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_COUNT));
+        Assert.assertEquals(1, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_PROJECT_COUNT));
+
+        Assert.assertEquals(FlagType.FRAUD.toString(), result.get(3).get
+                (CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(2015, result.get(3).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(2, result.get(3).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_COUNT));
+        Assert.assertEquals(1, result.get(3).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_PROJECT_COUNT));
     }
 
     @Test
@@ -130,11 +169,11 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
                 .totalProjectsByYear(new YearFilterPagingRequest());
         Assert.assertEquals(2, result.size());
 
-        Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
+        Assert.assertEquals(2014, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
 
-        Assert.assertEquals(2014, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
+        Assert.assertEquals(2015, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(2, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
     }
 
 
@@ -146,7 +185,7 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
 
         Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
         Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_COUNT));
         Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_PROJECT_COUNT));
         Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
         Assert.assertTrue(BigDecimal.valueOf(50).
@@ -158,42 +197,64 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
     public void percentTotalProjectsEligibleByYearTest() throws Exception {
         final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
                 .percentTotalProjectsEligibleByYear(new YearFilterPagingRequest());
-        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(5, result.size());
 
-        Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(5, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_PROJECT_COUNT));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
+        Assert.assertEquals(2014, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_COUNT));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_PROJECT_COUNT));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
         Assert.assertTrue(BigDecimal.valueOf(100).
                 compareTo((BigDecimal)result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PERCENT))==0);
 
         Assert.assertEquals(2014, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(FlagType.FRAUD.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_COUNT));
         Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_PROJECT_COUNT));
         Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
         Assert.assertTrue(BigDecimal.valueOf(100).
                 compareTo((BigDecimal)result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PERCENT))==0);
+
+        Assert.assertEquals(2015, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(2).get
+                (CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(1, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_COUNT));
+        Assert.assertEquals(1, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_PROJECT_COUNT));
+        Assert.assertEquals(2, result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PROJECT_COUNT));
+        Assert.assertTrue(BigDecimal.valueOf(50).
+                compareTo((BigDecimal)result.get(2).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                        .PERCENT))==0);
     }
 
     @Test
     public void percentOfEligibleProjectsFlaggedByYearTest() throws Exception {
         final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController
                 .percentOfEligibleProjectsFlaggedByYear(new YearFilterPagingRequest());
-        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(5, result.size());
 
-        Assert.assertEquals(2015, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(5, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
-        Assert.assertEquals(2, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_PROJECT_COUNT));
-        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_PROJECT_COUNT));
-        Assert.assertTrue(BigDecimal.valueOf(50).
+        Assert.assertEquals(2014, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
+        Assert.assertEquals(FlagType.COLLUSION.toString(), result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_COUNT));
+        Assert.assertEquals(1, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .ELIGIBLE_PROJECT_COUNT));
+        Assert.assertEquals(0, result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys
+                .FLAGGED_PROJECT_COUNT));
+        Assert.assertTrue(BigDecimal.valueOf(0).
                 compareTo((BigDecimal)result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PERCENT))==0);
 
         Assert.assertEquals(2014, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.YEAR));
-        Assert.assertEquals(FlagType.RIGGING.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.TYPE));
-        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.INDICATOR_COUNT));
+        Assert.assertEquals(FlagType.FRAUD.toString(), result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController
+                .Keys.TYPE));
+        Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_COUNT));
         Assert.assertEquals(1, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.ELIGIBLE_PROJECT_COUNT));
         Assert.assertEquals(0, result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_PROJECT_COUNT));
         Assert.assertTrue(BigDecimal.ZERO.

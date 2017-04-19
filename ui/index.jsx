@@ -93,17 +93,19 @@ class OCVN extends OCApp{
 
 OCVN.Filters = OCVNFilters;
 
-OCVN.TRANSLATIONS = {
+const translations = {
   en_US: require('../web/public/languages/en_US.json'),
   vn_VN: require('../web/public/languages/vn_VN.json'),
 };
+
+OCVN.TRANSLATIONS = translations;
 
 const BILLION = 1000000000;
 const MILLION = 1000000;
 const THOUSAND = 1000;
 const formatNumber = number => number.toLocaleString(undefined, {maximumFractionDigits: 2});
 
-OCVN.STYLING = {
+const styling = {
   charts: {
     axisLabelColor: "#cc3c3b",
     traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
@@ -122,12 +124,18 @@ OCVN.STYLING = {
   }
 };
 
+OCVN.STYLING = styling;
+OCVN.TRANSLATIONS = translations;
+
 class OceSwitcher extends ViewSwitcher{}
 
 OceSwitcher.views.default = OCVN;
 OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
 
-ReactDOM.render(<OceSwitcher/>, document.getElementById('dg-container'));
+ReactDOM.render(<OceSwitcher
+                    translations={translations['en_US']}
+                    styling={styling}
+                />, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

@@ -24,7 +24,7 @@ class Range extends translatable(Component){
               minValue={min}
               maxValue={max}
               value={{min: minValue, max: maxValue}}
-              onChange={(_, newVal) => onUpdate(newVal)}
+              onChange={(_, newVal) => onUpdate(newVal, {min, max})}
               formatLabel={labelFormatter}
           />
       )
@@ -53,7 +53,7 @@ class Range extends translatable(Component){
                 type="number"
                 className="form-control input-sm"
                 value={minValue}
-                onChange={e => onUpdate({min: +e.target.value, max: maxValue})}
+                onChange={e => onUpdate({min: +e.target.value, max: maxValue}, {min, max})}
             />
             &nbsp;
             {this.t('general:range:max')}
@@ -62,7 +62,7 @@ class Range extends translatable(Component){
                 type="number"
                 className="form-control input-sm"
                 value={maxValue}
-                onChange={e => onUpdate({min: minValue, max: +e.target.value})}
+                onChange={e => onUpdate({min: minValue, max: +e.target.value}, {min, max})}
             />
           </div>
         </section>
