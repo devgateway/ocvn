@@ -144,7 +144,9 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 unwind("flags." + statsProperty),
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
-                        sum("stats.count").as(Keys.INDICATOR_COUNT)
+                        sum("stats.count").as(Keys.INDICATOR_COUNT),
+                getSortByYearMonthWhenOtherGroups(filter)
+
         );
 
 
@@ -193,7 +195,8 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 group(getYearlyMonthlyGroupingFields(filter, "stats.type")).
                         sum("stats.count").as(Keys.INDICATOR_COUNT).count()
                         .as(statsProperty.equals(ELIGIBLE_STATS)
-                                ? Keys.ELIGIBLE_PROJECT_COUNT : Keys.FLAGGED_PROJECT_COUNT)
+                                ? Keys.ELIGIBLE_PROJECT_COUNT : Keys.FLAGGED_PROJECT_COUNT),
+                getSortByYearMonthWhenOtherGroups(filter)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
@@ -219,7 +222,8 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
                 new CustomProjectionOperation(project1),
                 group(getYearlyMonthlyGroupingFields(filter)).
                         count().as(Keys.PROJECT_COUNT),
-                transformYearlyGrouping(filter).andInclude(Keys.PROJECT_COUNT)
+                transformYearlyGrouping(filter).andInclude(Keys.PROJECT_COUNT),
+                getSortByYearMonth(filter)
         );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
