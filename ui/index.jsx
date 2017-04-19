@@ -93,34 +93,12 @@ class OCVN extends OCApp{
 
 OCVN.Filters = OCVNFilters;
 
-OCVN.TRANSLATIONS = {
+const translations = {
   en_US: require('../web/public/languages/en_US.json'),
   vn_VN: require('../web/public/languages/vn_VN.json'),
 };
 
-const BILLION = 1000000000;
-const MILLION = 1000000;
-const THOUSAND = 1000;
-const formatNumber = number => number.toLocaleString(undefined, {maximumFractionDigits: 2});
-
-OCVN.STYLING = {
-  charts: {
-    axisLabelColor: "#cc3c3b",
-    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
-    hoverFormat: ',.2f',
-    hoverFormatter: number => {
-      if(typeof number == "undefined") return number;
-      let abs = Math.abs(number);
-      if(abs >= BILLION) return formatNumber(number/BILLION) + "B";
-      if(abs >= MILLION) return formatNumber(number/MILLION) + "M";
-      if(abs >= THOUSAND) return formatNumber(number/THOUSAND) + "K";
-      return formatNumber(number);
-    }
-  },
-  tables: {
-    currencyFormatter: formatNumber
-  }
-};
+OCVN.TRANSLATIONS = translations;
 
 const BILLION = 1000000000;
 const MILLION = 1000000;
@@ -146,7 +124,8 @@ const styling = {
   }
 };
 
-OCEChild.TRANSLATIONS = translations;
+OCVN.STYLING = styling;
+OCVN.TRANSLATIONS = translations;
 
 class OceSwitcher extends ViewSwitcher{}
 
