@@ -1,6 +1,17 @@
 import Map from "./index.jsx";
 
 class PlannedLocations extends Map{
+  transform(data){
+    return data.filter(location => {
+      if(!location['budget.projectLocation'].geometry){
+        console.warn("Invalid project location! Missing geometry!", location);
+        return false;
+      }
+      return true;
+    });
+  }
+
+
   getData(){
     let data = super.getData();
     if(!data) return [];
