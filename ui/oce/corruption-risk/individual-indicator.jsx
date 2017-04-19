@@ -13,29 +13,34 @@ class IndividualIndicatorChart extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-    const sortedData = data.sort((a, b) => a.get('year') - b.get('year'));
-    const years = sortedData.map(pluckImm('year')).toJS();
+		const {monthly} = this.props;
+		const dates = monthly ?
+									data.map(datum => {
+										const month = datum.get('month');
+										return this.t(`general:months:${month}`);
+									}).toJS() :
+									data.map(pluckImm('year')).toJS();
     return [{
-      x: years,
-      y: sortedData.map(pluckImm('totalTrue')).toJS(),
+      x: dates,
+      y: data.map(pluckImm('totalTrue')).toJS(),
       type: 'scatter',
-      fill: 'tozerox',
+      fill: 'tonexty',
       name: 'Flagged',
       hoverinfo: 'name',
       fillcolor: '#85cbfe',
       line: {
-        color: '#85cbfe'
+        color: '#63a0cd'
       }
     }, {
-      x: years,
-      y: sortedData.map(pluckImm('totalPrecondMet')).toJS(),
+      x: dates,
+      y: data.map(pluckImm('totalPrecondMet')).toJS(),
       type: 'scatter',
       fill: 'tonexty',
       name: 'Eligible to be flagged',
       hoverinfo: 'name',
       fillcolor: '#336ba6',
       line: {
-        color: '#336ba6'
+        color: '#224a74'
       }
     }];
   }
@@ -52,11 +57,20 @@ class IndividualIndicatorChart extends CustomPopupChart{
   }
 
   getPopup(){
-    const {indicator} = this.props;
+    const {indicator, monthly} = this.props;
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
-    const datum = data.find(datum => datum.get('year') == year);
+		if(!data) return null;
+		let datum;
+		if(monthly){
+			datum = data.find(datum => {
+				const month = datum.get('month');
+				return year == this.t(`general:months:${month}`);
+			})
+		} else {
+			datum = data.find(datum => datum.get('year') == year);
+		}
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -66,14 +80,14 @@ class IndividualIndicatorChart extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-7 text-right title">Projects Flagged</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects</div>
-          <div className="col-sm-5 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-7 text-right title">Eligible Projects %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-7 text-right title">Total Eligible %</div>
-          <div className="col-sm-5 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+          <div className="col-sm-8 text-right title">Projects Flagged</div>
+          <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
+          <div className="col-sm-8 text-right title">Eligible Projects</div>
+          <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
+          <div className="col-sm-8 text-right title">% Eligible Projects Flagged</div>
+          <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
+          <div className="col-sm-8 text-right title">% Projects Eligible</div>
+          <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
       </div>
@@ -142,24 +156,33 @@ class IndividualIndicatorPage extends React.Component{
 
   render(){
     const {chart, table} = this.state;
-    const {indicator} = this.props;
+    const {indicator, translations, filters, years, monthly, months, width} = this.props;
     return (
       <div className="page-corruption-type">
         <h4>{INDICATOR_NAMES[indicator].name}</h4>
-        <pre>{INDICATOR_NAMES[indicator].long_desc}</pre>
-        <IndividualIndicatorChart
+        <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
+        <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
+        <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
+        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>        <IndividualIndicatorChart
             indicator={indicator}
-            translations={{}}
-            filters={Map()}
+            translations={translations}
+						filters={filters}
+						years={years}
+						monthly={monthly}
+						months={months}
             requestNewData={(_, data) => this.setState({chart: data})}
             data={chart}
+						width={width}
         />
         <ProjectTable
             indicator={indicator}
             requestNewData={(_, data) => this.setState({table: data})}
             data={table}
-            filters={Map()}
-            years={Map()}
+						translations={translations}
+            filters={filters}
+            years={years}
+						monthly={monthly}
+						months={months}
         />
       </div>
     )

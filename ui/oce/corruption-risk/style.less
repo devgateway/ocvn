@@ -1,11 +1,22 @@
 @headerHeight: 64px;
+.introduction {
+  font-size: 16px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
 .dashboard-corruption-risk{
     &>header{
         background: #144361;
+        &.branding {
+          height: 54px;
+        }
         .logo-wrapper{
             padding-left: 40px;
-            padding-top: 10px;
+            padding-top: 8px;
             cursor: pointer;
+            img {
+              height: 38px;
+            }
         }
 
         .dash-switcher-wrapper{
@@ -14,10 +25,15 @@
             h1{
                 cursor: pointer;
                 padding: 5px;
+                &.corruption-dash-title{
+                  color: #9fa9ba;
+                  font-size: 20px;
+                  margin-top: 10px;
+                }
                 .glyphicon{
-                    font-size: .33em;
-                    margin-left: 20px;
-                    top: -5px;
+                    font-size: .53em;
+                    margin-left: 10px;
+                    top: 0px;
                 }
             }
             .dashboard-switcher{
@@ -32,7 +48,7 @@
         }
 
         .login-wrapper{
-            padding: 15px;
+            padding: 10px 0 15px 15px;
             text-align: right;
             button{
                 width: 150px;
@@ -43,17 +59,18 @@
 
     &>.filters-bar{
         background: #c3e6fc;
-        top: @headerHeight;
-        height: @headerHeight;
+        top: @headerHeight - 15;
+        height: @headerHeight - 15;
         left: 0;
         right: 0;
         position: fixed;
         z-index: 2;
         .title{
             text-transform: uppercase;
+            float: left;
             font-size: 14px;
             font-weight: bold;
-            padding: 20px 0;
+            padding: 17px 30px 20px 8px;
             @media (max-width: 969px) {
                 padding: 0 5px;
             }
@@ -63,13 +80,25 @@
             @boxWidth: 500px;
             float: left;
             height: 100%;
-            padding: 20px 0;
-            margin-left: 3%;
+            padding: 12px 0;
+            margin-right: 16px;
+            margin-top: 5px;
             color: #899cb1;
             cursor: pointer;
+            &.active{
+              border-bottom: 3px solid @boxFilterColor;
+            }
+            .glyphicon-menu-down{
+                font-size: .55em;
+                margin-left: 4px;
+                margin-top: 3px;
+            }
+
             &.open{
                 position: relative;
-                border-bottom: 3px solid @boxFilterColor;
+                .box-title{
+                    font-weight: bold;
+                }
                 .dropdown{
                     display: block;
                     position: absolute;
@@ -78,14 +107,27 @@
                     margin-top: 3px;
                     margin-left: -@boxWidth/2;
                     width: @boxWidth;
-                    height: 300px;
-                    padding: 25px;
+                    height: 400px;
                     border: 3px @boxFilterColor solid;
                     border-radius: 3px;
                     background-color: white;
-                    overflow-y: scroll;
-                    header{
-                        display: none;
+                    .box-content{
+                        overflow-y: auto;
+                        padding: 25px 25px 80px 25px;
+                        height: 100%;
+                    }
+                    .controls{
+                        background: white;
+                        position: absolute;
+                        bottom: 0;
+                        left: 25px;
+                        right: 25px;
+                        padding-bottom: 25px;
+                        padding-top: 25px;
+                        .btn.btn-primary{
+                            background-color: #286090;
+                            border-color: #204d74;
+                        }
                     }
                 }
             }
@@ -99,39 +141,86 @@
             }
         }
         .download{
-            padding: 10px 0;
+            padding: 11px 0;
+            text-align: right;
             button{
-                padding: 10px 25px;
+                padding: 5px 25px;
             };
         }
+
+				.box-date{
+					.toggleable-wrapper{
+						width: 40*4px;
+					}
+					.toggleable-item{
+						display: inline-block;
+						background: #add3ee;
+						color: white;
+						padding: 5px;
+						margin: 1px;
+						font-weight: bold;
+						text-transform: uppercase;
+						width: 40px;
+						&.selected{
+							background: #4278b0;
+						}
+					}
+				}
     }
 
     aside{
         @leftPadding: 30px;
-        top: @headerHeight * 2;
-        padding-left: @leftPadding;
-        padding-top: 20px;
+        bottom:0;
         background: #fafafa;
-        border-right-width: 1px;
+        border-right: 1px solid #e6eaee;
+        height: 100%;
+        padding-left: @leftPadding;
+        padding-top: 10px;
+        top: @headerHeight * 1.5;
+        // overflow-y: auto;
+        .small {
+          font-size: 80%;
+          line-height:128%;
+        }
         i{
             color: #34ac45;
             float: right;
         }
+        .chart-container {
+          background: #eff9ff;
+          margin-left: -30px;
+          padding-bottom: 150px;
+          padding-left: 13%;
+          position: absolute;
+          width: 100%;
+        }
         .crd-overview-link{
             cursor: pointer;
+            &:hover {
+              color: #35ae46;
+            }
         }
         [role=navigation]{
-            margin-top: 20px;
-            margin-left: -@leftPadding;
+          margin-left: -@leftPadding;
+          margin-top: 20px;
             a{
-                border-bottom: 1px solid #c5c5c5;
-                padding-left: @leftPadding;
+                border-bottom: 1px solid #e6eaee;
+                color: #000000;
+                cursor: pointer;
+                display: block;
+                font-size: 0.9em;
+                line-height: 190%;
+                padding: 8px 0 8px 25px;
+                text-decoration: none;
+                text-transform: uppercase;
+                white-space: nowrap;
+
                 &:first-child{
-                    border-top: 1px solid #c5c5c5;
+                    border-top: 1px solid #e6eaee;
                 }
                 &.active, &:hover{
-                    background: white;
-                    color: black;
+                    background: #ffffff;
+                    color: #2b9ff6;
                 }
                 .count{
                     color: #a9b2c0;
@@ -141,15 +230,22 @@
                 img{
                     display: inline-block;
                     margin-right: 10px;
+                    width: 32px;
                 }
             }
         }
     }
 
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background-color:  #ffffff;
+    }
+    .table-striped>tbody>tr:nth-of-type(even){
+      background: #f5f8fa;
+    }
     .content{
-        margin-top: @headerHeight * 2;
+        margin-top: 89px;
         margin-bottom: auto;
-        padding: 20px 40px 0 40px;
+        padding: 20px 40px 0 30px;
 
         .crd-popup{
             @popupColor: #222c3c;
@@ -197,12 +293,23 @@
         }
 
         .table-top-flagged-contracts{
-            th{
-                color: #7f8fa4;
-            }
+          margin-top: 20px;
             th, td{
-                width: 11.11%;
+              font-weight: normal;
+              line-height: 110%;
+              padding: 8px 0 8px 5px;
+              width: 10%;
+
             }
+            th{
+              border-bottom: none;
+              color: #7f8fa4;
+            }
+            td{
+              border-bottom: 1px solid #e7e9ed;
+              border-top: none;
+            }
+
         }
 
         .indicator-tile-container{
@@ -212,33 +319,43 @@
                 border-radius: 5px;
                 padding: 20px;
                 cursor: pointer;
+                &:hover {
+                  border: 1px solid #1f77b4;
+                  h4 {
+                    color: #1f77b4;
+                  }
+                }
                 h4, p{
-                    font-weight: bold;
+                  font-weight: bold;
                 }
                 p{
-                    margin-bottom: 10px;
-                    color: #156d03;
-                    height: 3em;
+                  color: #156d03;
+                  height: 5.3em;
+                  margin-bottom: 10px;
                 }
             }
         }
 
         .table-crosstab{
+            border-top: none;
             .nr-flags{
                 color: #004f99;
             }
-
+            thead thead tr th {
+              border-bottom-width: 1px;
+            }
             td, th{
                 text-align: center;
             }
-
-            td:first-child{
-                text-align: right;
+            th:first-child{
+              border-left: 1px solid transparent;
             }
-
+            td:first-child{
+              text-align: right;
+            }
             .not-applicable{
-                color: #b6cddc;
-                background: #f1faff;
+              color: #b6cddc;
+              background: #f1faff;
             }
 
             td.hoverable{
@@ -269,4 +386,10 @@
             }
         }
     }
+
+		.chart-container .message{
+			background: #234e6d;
+			border: 1px solid #d9effd;
+		}
+
 }

@@ -1,11 +1,9 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce, download, pluck} from "./tools";
+import {fetchJson, debounce, download, pluck, range} from "./tools";
 import URI from "urijs";
 import Filters from "./filters";
 import OCEStyle from "./style.less";
-
-let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';

@@ -173,13 +173,17 @@ public abstract class GenericOCDSController {
      * @param filter
      * @return
      */
-    protected CustomSortingOperation getSortByYearMonthWhenOtherGroups(YearFilterPagingRequest filter) {
+    protected CustomSortingOperation getSortByYearMonthWhenOtherGroups(YearFilterPagingRequest filter,
+                                                                       String... otherSort) {
         DBObject sort = new BasicDBObject();
         if (filter.getMonthly()) {
             sort.put("_id.year", 1);
             sort.put("_id.month", 1);
         } else {
             sort.put("_id.year", 1);
+        }
+        if (otherSort != null) {
+            Arrays.asList(otherSort).forEach(s -> sort.put(s, 1));
         }
         return new CustomSortingOperation(sort);
     }
