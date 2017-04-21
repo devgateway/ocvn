@@ -11,6 +11,12 @@ import {TotalFlags, TotalFlagsCounter} from "./total-flags";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
+const CORRUPTION_TYPES = {
+  FRAUD: "Fraud",
+  RIGGING: "Process rigging",
+  COLLUSION: "Collusion"
+};
+
 class CorruptionRiskDashboard extends React.Component{
   constructor(...args){
     super(...args);
@@ -103,13 +109,11 @@ class CorruptionRiskDashboard extends React.Component{
     } else if(page == 'corruption-type') {
       const {corruptionType} = this.state;
       const indicatorType = {
-        fraud: 'FRAUD',
-        process_rigging: 'RIGGING',
-        collusion: 'COLLUSION'
+
       }[corruptionType];
 
       const indicators =
-        Object.keys(indicatorTypesMapping).filter(key => indicatorTypesMapping[key].types.indexOf(indicatorType) > -1);
+        Object.keys(indicatorTypesMapping).filter(key => indicatorTypesMapping[key].types.indexOf(corruptionType) > -1);
 
       return <CorruptionTypePage
                  indicators={indicators}
@@ -140,18 +144,9 @@ class CorruptionRiskDashboard extends React.Component{
 
   render(){
     const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex
-				 , totalFlags, totalFlagsCounter} = this.state;
+				 , totalFlags, totalFlagsCounter, indicatorTypesMapping} = this.state;
     const {onSwitch, translations} = this.props;
-    const tabs = [{
-	    slug: "fraud",
-	    name: "Fraud"
-    }, {
-	    slug: "process_rigging",
-	    name: "Process rigging"
-    }, {
-	    slug: "collusion",
-	    name: "Collusion"
-    }];
+
 		const monthly = years.count() == 1;
     return (
       <div className="container-fluid dashboard-corruption-risk"
@@ -209,17 +204,24 @@ class CorruptionRiskDashboard extends React.Component{
             </p>
           </div>
           <section role="navigation" className="row">
-            {tabs.map(({name, slug}, index) =>
-              <a
-                  href="javascript:void(0);"
-                  onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
-                  className={cn({active: 'corruption-type' == page && slug == corruptionType})}
-                  key={index}
-              >
-                <img src={`assets/icons/${slug}.png`}/>
-                {name} <span className="count">(0)</span>
-              </a>
-						 )}
+            {Object.keys(CORRUPTION_TYPES).map(slug => {
+              const name = CORRUPTION_TYPES[slug];
+							const count = Object.keys(indicatorTypesMapping)
+																	.filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
+																	.length;
+
+              return (
+                  <a
+                      href="javascript:void(0);"
+                      onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
+                      className={cn({active: 'corruption-type' == page && slug == corruptionType})}
+                      key={slug}
+                  >
+                    <img src={`assets/icons/${slug}.png`}/>
+                    {name} <span className="count">({count})</span>
+                  </a>
+              )
+            })}
           </section>
 					{/* <TotalFlagsCounter
 							data={totalFlagsCounter}

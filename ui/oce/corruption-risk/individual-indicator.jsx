@@ -107,17 +107,43 @@ class ProjectTable extends Table{
     const tenderPeriod = entry.get('tenderPeriod');
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
-    const flaggedStats = entry.get('flaggedStats');
+		const flags = entry.get('flags');
+    const flaggedStats = flags.get('flaggedStats');
+		const type = flaggedStats.get('type');
+		const flagIds = 
+			flags
+				.filter(
+					flag =>	flag.has('types') && flag.get('types').includes(type) && flag.get('value')
+				)
+				.keySeq();
+
     return (
       <tr key={index}>
-        <td></td>
+        <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
         <td>{entry.getIn(['procuringEntity', 'name'])}</td>
-        <td>{tenderValue.get('amount')} {tenderValue.get('currency')}</td>
+        <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{flaggedStats.get('type')}</td>
+        <td>{type}</td>
+				<td className="hoverable">
+					{flaggedStats.get('count')}
+					<div className="crd-popup text-center">
+            <div className="row">
+              <div className="col-sm-12 info">
+								{type}
+              </div>
+              <div className="col-sm-12">
+                <hr/>
+              </div>
+              <div className="col-sm-12 info">
+								{flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
+              </div>
+            </div>
+            <div className="arrow"/>
+          </div>
+				</td>
       </tr>
     )
   }
@@ -137,6 +163,7 @@ class ProjectTable extends Table{
             <th>Award Amount</th>
             <th>Tender Date</th>
             <th>Flag Type</th>
+						<th>Number of<br/>risk type flags</th>
           </tr>
         </thead>
         <tbody>
@@ -163,7 +190,8 @@ class IndividualIndicatorPage extends React.Component{
         <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
-        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>        <IndividualIndicatorChart
+        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>
+        <IndividualIndicatorChart
             indicator={indicator}
             translations={translations}
 						filters={filters}

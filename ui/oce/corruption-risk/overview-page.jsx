@@ -89,7 +89,14 @@ class CorruptionType extends CustomPopupChart{
       xaxis: {
         type: 'category'
       },
-      yaxis: {}
+      yaxis: {},
+			legend: {
+				orientation: 'h',
+				xanchor: 'right',
+				yanchor: 'top',
+				x: 1,
+				y: 1.3
+			}
     }
   }
 
@@ -142,11 +149,11 @@ class TopFlaggedContracts extends Table{
     const flaggedStats = entry.get('flaggedStats');
     return (
       <tr key={index}>
-        <td></td>
+        <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
         <td>{entry.getIn(['procuringEntity', 'name'])}</td>
-        <td>{tenderValue.get('amount')} {tenderValue.get('currency')}</td>
+        <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
         <td>{flaggedStats.get('type')}</td>
