@@ -3,10 +3,6 @@
  */
 package org.devgateway.ocds.web.rest.controller.request;
 
-import javax.validation.constraints.Min;
-
-import org.hibernate.validator.constraints.Range;
-
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Range;
 
