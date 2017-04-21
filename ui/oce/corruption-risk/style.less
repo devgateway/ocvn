@@ -243,9 +243,10 @@
       background: #f5f8fa;
     }
     .content{
-        margin-top: 89px;
-        margin-bottom: auto;
-        padding: 20px 40px 0 30px;
+			@arrowSize: 8px;
+      margin-top: 89px;
+      margin-bottom: auto;
+      padding: 20px 40px 0 30px;
 
         .crd-popup{
             @popupColor: #222c3c;
@@ -273,7 +274,6 @@
                 margin: 5px auto;
             }
             .arrow{
-                @arrowSize: 8px;
                 background: @popupColor;
                 position: absolute;
                 left: 50%;
@@ -357,34 +357,49 @@
               color: #b6cddc;
               background: #f1faff;
             }
-
-            td.hoverable{
-                position: relative;
-                .crd-popup{
-                    display: none;
-                    padding: 15px;
-                    height: auto;
-                    .and{
-                        text-transform: uppercase;
-                        color: #387ab2;
-                    }
-                    hr{
-                        width: auto;
-                    }
-                }
-
-                &:hover {
-                    box-shadow: inset 0px 0px 0px 5px #ffd307;
-                    .crd-popup{
-                        display: block;
-                        top: auto;
-                        bottom: 100%;
-                        left: 50%;
-                        margin-left: -150px;
-                    }
-                }
-            }
         }
+
+				td.hoverable{
+          position: relative;
+          .crd-popup{
+            display: none;
+            padding: 15px;
+            height: auto;
+            .and{
+              text-transform: uppercase;
+              color: #387ab2;
+            }
+            hr{
+              width: auto;
+            }
+          }
+
+          &:hover {
+            box-shadow: inset 0px 0px 0px 5px #ffd307;
+            .crd-popup{
+              display: block;
+              top: auto;
+              bottom: 100%;
+              left: 50%;
+              margin-left: -150px;
+            }
+          }
+        }
+
+				.table-project-table{
+					td.hoverable:hover .crd-popup{
+						left: auto;
+						right: 100%;
+						top: -100%;
+						bottom: auto;
+						margin-left:0;
+						margin-right: @arrowSize;
+						.arrow{
+							left: 100%;
+							bottom: 50%;
+						}
+					}
+				}
     }
 
 		.chart-container .message{
