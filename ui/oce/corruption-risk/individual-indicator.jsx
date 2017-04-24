@@ -119,7 +119,7 @@ class ProjectTable extends Table{
 
     return (
       <tr key={index}>
-        <td>{entry.get('tag', []).join(', ')}</td>
+        <td></td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
         <td>{entry.getIn(['procuringEntity', 'name'])}</td>
