@@ -33,6 +33,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.limi
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -61,10 +62,11 @@ public class CorruptionRiskDashboardTablesController extends GenericOCDSControll
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("flags.flaggedStats"),
                 project("ocid", "tender.procuringEntity.name", "tender.tenderPeriod", "flags.flaggedStats",
-                        "contracts.title")
+                        "tender.title", "tag")
                         .and("tender.value").as("tender.value").and("awards.value").as("awards.value")
                         .andExclude(Fields.UNDERSCORE_ID),
                 sort(Sort.Direction.DESC, "flaggedStats.count"),
+                skip(filter.getSkip()),
                 limit(filter.getPageSize())
         );
 
