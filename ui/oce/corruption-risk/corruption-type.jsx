@@ -47,6 +47,7 @@ class IndicatorTile extends CustomPopupChart{
       values.unshift(0);
       values.push(0);
     }
+
     return [{
       x: dates,
       y: values,
@@ -169,7 +170,7 @@ class Crosstab extends Table{
                  <div className="crd-popup text-left">
                    <div className="row">
                      <div className="col-sm-12 info">
-                       {percent.toFixed(2)}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
+                       {percent ? percent.toFixed(2) : 0}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
                      </div>
                      <div className="col-sm-12">
                        <hr/>

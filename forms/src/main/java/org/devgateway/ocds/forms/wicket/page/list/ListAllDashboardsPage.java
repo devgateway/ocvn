@@ -38,6 +38,9 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
     private static final long serialVersionUID = -324298525712620234L;
     @SpringBean
     protected UserDashboardRepository userDashboardRepository;
+    protected PropertyColumn<UserDashboard, String> columnName;
+    protected PropertyColumn<UserDashboard, String> columnDefaultDashboardUsers;
+    protected PropertyColumn<UserDashboard, String> columnUsers;
 
     public class DashboardsActionPanel extends ActionPanel {
 
@@ -64,16 +67,24 @@ public class ListAllDashboardsPage extends AbstractListPage<UserDashboard> {
         super(pageParameters);
         this.jpaRepository = userDashboardRepository;
         this.editPageClass = EditUserDashboardPage.class;
-        columns.add(new PropertyColumn<UserDashboard, String>(
-                new Model<String>((new StringResourceModel("name", ListAllDashboardsPage.this, null)).getString()),
-                "name", "name"));
-        columns.add(new PropertyColumn<UserDashboard, String>(new Model<String>(
-                (new StringResourceModel("defaultDashboardUsers", ListAllDashboardsPage.this, null)).getString()),
-                "defaultDashboardUsers", "defaultDashboardUsers"));
 
-        columns.add(new PropertyColumn<UserDashboard, String>(new Model<String>(
-                (new StringResourceModel("users", ListAllDashboardsPage.this, null)).getString()),
-                "users", "users"));
+        columnName = new PropertyColumn<UserDashboard, String>(
+                new Model<String>((new StringResourceModel("name", ListAllDashboardsPage.this, null)).getString()),
+                "name", "name");
+
+        columns.add(columnName);
+
+        columnDefaultDashboardUsers = new PropertyColumn<UserDashboard, String>(new Model<String>(
+                (new StringResourceModel("defaultDashboardUsers", ListAllDashboardsPage.this, null)).getString()),
+                "defaultDashboardUsers");
+
+        columns.add(columnDefaultDashboardUsers);
+
+        columnUsers = new PropertyColumn<UserDashboard, String>(
+                new Model<String>((new StringResourceModel("users", ListAllDashboardsPage.this, null)).getString()),
+                "users");
+
+        columns.add(columnUsers);
 
     }
 

@@ -69,6 +69,14 @@ class CorruptionType extends CustomPopupChart{
         dates = years.sort().toArray();
         values = dates.map(year => dataForType[year] ? dataForType[year].flaggedCount : 0);
       }
+
+      if(dates.length == 1){
+        dates.unshift("");
+        dates.push(" ");
+        values.unshift(0);
+        values.push(0);
+      }
+
       return {
         x: dates,
         y: values,

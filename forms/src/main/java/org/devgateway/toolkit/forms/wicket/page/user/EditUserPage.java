@@ -124,6 +124,27 @@ public class EditUserPage extends AbstractEditPage<Person> {
         this.jpaRepository = userRepository;
         this.listPageClass = ListUserPage.class;
     }
+    
+    @Override
+    public AbstractEditPage<Person>.DeleteEditPageButton getDeleteEditPageButton() {
+        return new DeleteEditPageButton("delete", new StringResourceModel("deleteButton", this, null)) {
+            private static final long serialVersionUID = 1877838564684430669L;
+
+            protected void removeUserLinkFromDashboards(Person person) {
+                userDashboardRepository.findDashboardsForPersonId(person.getId()).forEach(dashboard -> {
+                    dashboard.getUsers().remove(person);
+                    userDashboardRepository.save(dashboard);
+                });
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                Person person = editForm.getModelObject();
+                removeUserLinkFromDashboards(person);
+                super.onSubmit(target, form);
+            }
+        };
+    }
 
     protected class UniqueUsernameValidator implements IValidator<String> {
 
@@ -312,8 +333,9 @@ public class EditUserPage extends AbstractEditPage<Person> {
 
     private void ensureDefaultDashboardIsAlsoAssignedDashboard(Person person) {
         if (person.getDefaultDashboard() != null && !person.getDashboards().contains(person.getDefaultDashboard())) {
-            person.getDefaultDashboard().getUsers().add(person);
-            person.getDashboards().add(person.getDefaultDashboard());
+            UserDashboard dashboard = userDashboardRepository.findOne(person.getDefaultDashboard().getId());
+            dashboard.getUsers().add(person);
+            userDashboardRepository.save(dashboard);
         }
     }
     
@@ -344,10 +366,10 @@ public class EditUserPage extends AbstractEditPage<Person> {
                     saveable.setChangePassword(false);
                 }
 
+                saveable = jpaRepository.save(saveable);
                 
                 ensureDefaultDashboardIsAlsoAssignedDashboard(saveable);
                 
-                jpaRepository.save(saveable);
                 if (!SecurityUtil.isCurrentUserAdmin()) {
                     setResponsePage(Homepage.class);
                 } else {

@@ -14,15 +14,28 @@ class IndividualIndicatorChart extends CustomPopupChart{
     const data = super.getData();
     if(!data) return [];
     const {monthly} = this.props;
-    const dates = monthly ?
-                  data.map(datum => {
-                    const month = datum.get('month');
-                    return this.t(`general:months:${month}`);
-                  }).toJS() :
-                  data.map(pluckImm('year')).toJS();
+    let dates = monthly ?
+                data.map(datum => {
+                  const month = datum.get('month');
+                  return this.t(`general:months:${month}`);
+                }).toJS() :
+                data.map(pluckImm('year')).toJS();
+
+    let totalTrueValues = data.map(pluckImm('totalTrue', 0)).toJS();
+    let totalPrecondMetValues = data.map(pluckImm('totalPrecondMet', 0)).toJS();
+
+    if(dates.length == 1){
+      dates.unshift("");
+      dates.push(" ");
+      totalTrueValues.unshift(0);
+      totalTrueValues.push(0);
+      totalPrecondMetValues.unshift(0);
+      totalPrecondMetValues.push(0);
+    }
+
     return [{
       x: dates,
-      y: data.map(pluckImm('totalTrue', 0)).toJS(),
+      y: totalTrueValues,
       type: 'scatter',
       fill: 'tonexty',
       name: 'Flagged',
@@ -33,7 +46,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       }
     }, {
       x: dates,
-      y: data.map(pluckImm('totalPrecondMet', 0)).toJS(),
+      y: totalPrecondMetValues,
       type: 'scatter',
       fill: 'tonexty',
       name: 'Eligible to be flagged',

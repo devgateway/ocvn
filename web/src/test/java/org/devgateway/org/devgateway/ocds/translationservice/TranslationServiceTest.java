@@ -19,6 +19,7 @@ public class TranslationServiceTest extends AbstractWebTest {
 
         Assert.assertEquals("Log in", translationService.getValue("en_US", "general:login"));
 
+        Assert.assertEquals("đăng nhập", translationService.getValue("vn_VN", "general:login"));
 
     }
 }
