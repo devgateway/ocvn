@@ -1,7 +1,7 @@
 import style from "./style.less";
 import cn from "classnames";
 import URI from "urijs";
-import {fetchJson, debounce} from "../tools";
+import {fetchJson, debounce, cacheFn, range, pluck} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
 import {Map, Set} from "immutable";
@@ -28,12 +28,21 @@ class CorruptionRiskDashboard extends React.Component{
       },
       page: 'overview',
       indicatorTypesMapping: {},
-      filters: Map(),
-			years: Set(),
-			months: Set(),
+      currentFiltersState: Map(),
+      appliedFilters: Map(),
       filterBoxIndex: null,
-			width: 0
-    }
+      allMonths: range(1, 12),
+      allYears: [],
+      width: 0
+    };
+
+    this.destructFilters = cacheFn(filters => {
+      return {
+        filters: filters.delete('years').delete('months'),
+        years: filters.get('years', Set()),
+        months: filters.get('months', Set())
+      }
+    });
   }
 
   fetchUserInfo(){
@@ -58,10 +67,28 @@ class CorruptionRiskDashboard extends React.Component{
     fetchJson('/api/indicatorTypesMapping').then(data => this.setState({indicatorTypesMapping: data}));
   }
 
+  fetchYears(){
+    fetchJson('/api/tendersAwardsYears').then(data => {
+      const years = data.map(pluck('_id'));
+      const {allMonths, currentFiltersState, appliedFilters} = this.state;
+      this.setState({
+        currentFiltersState: currentFiltersState
+          .set('years', Set(years))
+          .set('months', Set(allMonths)),
+        appliedFilters: appliedFilters
+          .set('years', Set(years))
+          .set('months', Set(allMonths)),
+        allYears: years
+      });
+    });
+  }
+
   componentDidMount(){
     this.fetchUserInfo();
-    this.fetchIndicatorTypesMapping()
-		this.setState({
+    this.fetchIndicatorTypesMapping();
+    this.fetchYears();
+
+    this.setState({
       width: document.querySelector('.content').offsetWidth - 30
     });
 
@@ -81,36 +108,36 @@ class CorruptionRiskDashboard extends React.Component{
   loginBox(){
     if(this.state.user.loggedIn){
       return (
-			 <a href="/preLogout?referrer=/ui/index.html?corruption-risk-dashboard">
-				 <button className="btn btn-success">Logout</button>
-       </a>
-			)
+        <a href="/preLogout?referrer=/ui/index.html?corruption-risk-dashboard">
+          <button className="btn btn-success">Logout</button>
+        </a>
+      )
     }
     return <a href="/login?referrer=/ui/index.html?corruption-risk-dashboard">
-        <button className="btn btn-success">Login</button>
+          <button className="btn btn-success">Login</button>
     </a>
   }
 
   getPage(){
-		const {translations, styling} = this.props;
-    const {page, filters, years, months, indicatorTypesMapping, width} = this.state;
-		const monthly = years.count() == 1;
+    const {translations, styling} = this.props;
+    const {page, appliedFilters, indicatorTypesMapping, width} = this.state;
+
+    const {filters, years, months} = this.destructFilters(appliedFilters);
+    const monthly = years.count() == 1;
+
     if(page == 'overview'){
       return <OverviewPage
                  filters={filters}
-								 translations={translations}
-								 years={years}
-								 monthly={monthly}
-								 months={months}
-								 indicatorTypesMapping={indicatorTypesMapping}
+                 translations={translations}
+                 years={years}
+                 monthly={monthly}
+                 months={months}
+                 indicatorTypesMapping={indicatorTypesMapping}
                  styling={styling}
-								 width={width}
+                 width={width}
              />;
     } else if(page == 'corruption-type') {
       const {corruptionType} = this.state;
-      const indicatorType = {
-
-      }[corruptionType];
 
       const indicators =
         Object.keys(indicatorTypesMapping).filter(key => indicatorTypesMapping[key].types.indexOf(corruptionType) > -1);
@@ -119,35 +146,37 @@ class CorruptionRiskDashboard extends React.Component{
                  indicators={indicators}
                  onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
                  filters={filters}
-								 translations={translations}
+                 translations={translations}
                  corruptionType={corruptionType}
-								 years={years}
-								 monthly={monthly}
-								 months={months}
-								 width={width}
+                 years={years}
+                 monthly={monthly}
+                 months={months}
+                 width={width}
              />;
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
       return (
-				<IndividualIndicatorPage
-						indicator={individualIndicator}
-						filters={filters}
-						translations={translations}
-						years={years}
-						monthly={monthly}
-						months={months}
-						width={width}
-				/>
-			)
+        <IndividualIndicatorPage
+            indicator={individualIndicator}
+            filters={filters}
+            translations={translations}
+            years={years}
+            monthly={monthly}
+            months={months}
+            width={width}
+        />
+      )
     }
   }
 
   render(){
-    const {dashboardSwitcherOpen, corruptionType, page, filters, years, months, filterBoxIndex
-				 , totalFlags, totalFlagsCounter, indicatorTypesMapping} = this.state;
+    const {dashboardSwitcherOpen, corruptionType, page, filterBoxIndex, currentFiltersState, appliedFilters
+         , totalFlags, totalFlagsCounter, indicatorTypesMapping, allYears, allMonths} = this.state;
     const {onSwitch, translations} = this.props;
 
-		const monthly = years.count() == 1;
+    const {filters, years, months} = this.destructFilters(appliedFilters);
+    const monthly = years.count() == 1;
+
     return (
       <div className="container-fluid dashboard-corruption-risk"
            onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
@@ -178,14 +207,15 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
         </header>
         <Filters
-            onUpdate={filters => this.setState({
-								filters: filters.delete('years').delete('months'),
-								years: filters.get('years'),
-								months: filters.get('months')
-							})}
+            onUpdate={currentFiltersState => this.setState({currentFiltersState})}
+            onApply={filtersToApply => this.setState({filterBoxIndex: null, appliedFilters: filtersToApply, currentFiltersState: filtersToApply})}
             translations={translations}
             currentBoxIndex={filterBoxIndex}
             requestNewBox={index => this.setState({filterBoxIndex: index})}
+            state={currentFiltersState}
+            appliedFilters={appliedFilters}
+            allYears={allYears}
+            allMonths={allMonths}
         />
         <aside className="col-xs-4 col-md-4 col-lg-3">
           <div>
@@ -205,33 +235,33 @@ class CorruptionRiskDashboard extends React.Component{
           </div>
           <section role="navigation" className="row">
             {Object.keys(CORRUPTION_TYPES).map(slug => {
-              const name = CORRUPTION_TYPES[slug];
-							const count = Object.keys(indicatorTypesMapping)
-																	.filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
-																	.length;
+               const name = CORRUPTION_TYPES[slug];
+               const count = Object.keys(indicatorTypesMapping)
+                                   .filter(key => indicatorTypesMapping[key].types.indexOf(slug) > -1)
+                                   .length;
 
-              return (
-                  <a
-                      href="javascript:void(0);"
-                      onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
-                      className={cn({active: 'corruption-type' == page && slug == corruptionType})}
-                      key={slug}
-                  >
-                    <img src={`assets/icons/${slug}.png`}/>
-                    {name} <span className="count">({count})</span>
-                  </a>
-              )
-            })}
+               return (
+                 <a
+                     href="javascript:void(0);"
+                     onClick={e => this.setState({page: 'corruption-type', corruptionType: slug})}
+                     className={cn({active: 'corruption-type' == page && slug == corruptionType})}
+                     key={slug}
+                 >
+                   <img src={`assets/icons/${slug}.png`}/>
+                   {name} <span className="count">({count})</span>
+                 </a>
+               )
+             })}
           </section>
-					{/* <TotalFlagsCounter
-							data={totalFlagsCounter}
-							requestNewData={(_, totalFlagsCounter) => this.setState({totalFlagsCounter})}
-							translations={translations}
-							filters={filters}
-							years={years}
-							monthly={monthly}
-							months={months}
-							/> */}
+          {/* <TotalFlagsCounter
+              data={totalFlagsCounter}
+              requestNewData={(_, totalFlagsCounter) => this.setState({totalFlagsCounter})}
+              translations={translations}
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+              /> */}
           <TotalFlags
               filters={filters}
               requestNewData={(_, totalFlags) => this.setState({totalFlags})}
@@ -240,9 +270,9 @@ class CorruptionRiskDashboard extends React.Component{
               width={250}
               height={250}
               margin={{l:40, r:40, t:40, b: 10, pad:20}}
-							years={years}
-							months={months}
-							monthly={monthly}
+              years={years}
+              months={months}
+              monthly={monthly}
           />
         </aside>
         <div className="col-xs-offset-4 col-md-offset-4 col-lg-offset-3 col-xs-8 col-md-8 col-lg-9 content">

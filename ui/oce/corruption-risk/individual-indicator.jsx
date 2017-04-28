@@ -13,16 +13,29 @@ class IndividualIndicatorChart extends CustomPopupChart{
   getData(){
     const data = super.getData();
     if(!data) return [];
-		const {monthly} = this.props;
-		const dates = monthly ?
-									data.map(datum => {
-										const month = datum.get('month');
-										return this.t(`general:months:${month}`);
-									}).toJS() :
-									data.map(pluckImm('year')).toJS();
+    const {monthly} = this.props;
+    let dates = monthly ?
+                data.map(datum => {
+                  const month = datum.get('month');
+                  return this.t(`general:months:${month}`);
+                }).toJS() :
+                data.map(pluckImm('year')).toJS();
+
+    let totalTrueValues = data.map(pluckImm('totalTrue', 0)).toJS();
+    let totalPrecondMetValues = data.map(pluckImm('totalPrecondMet', 0)).toJS();
+
+    if(dates.length == 1){
+      dates.unshift("");
+      dates.push(" ");
+      totalTrueValues.unshift(0);
+      totalTrueValues.push(0);
+      totalPrecondMetValues.unshift(0);
+      totalPrecondMetValues.push(0);
+    }
+
     return [{
       x: dates,
-      y: data.map(pluckImm('totalTrue')).toJS(),
+      y: totalTrueValues,
       type: 'scatter',
       fill: 'tonexty',
       name: 'Flagged',
@@ -33,7 +46,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       }
     }, {
       x: dates,
-      y: data.map(pluckImm('totalPrecondMet')).toJS(),
+      y: totalPrecondMetValues,
       type: 'scatter',
       fill: 'tonexty',
       name: 'Eligible to be flagged',
@@ -61,16 +74,16 @@ class IndividualIndicatorChart extends CustomPopupChart{
     const {popup} = this.state;
     const {year} = popup;
     const data = super.getData();
-		if(!data) return null;
-		let datum;
-		if(monthly){
-			datum = data.find(datum => {
-				const month = datum.get('month');
-				return year == this.t(`general:months:${month}`);
-			})
-		} else {
-			datum = data.find(datum => datum.get('year') == year);
-		}
+    if(!data) return null;
+    let datum;
+    if(monthly){
+      datum = data.find(datum => {
+        const month = datum.get('month');
+        return year == this.t(`general:months:${month}`);
+      })
+    } else {
+      datum = data.find(datum => datum.get('year') == year);
+    }
     return (
       <div className="crd-popup" style={{top: popup.top, left: popup.left}}>
         <div className="row">
@@ -107,15 +120,15 @@ class ProjectTable extends Table{
     const tenderPeriod = entry.get('tenderPeriod');
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
-		const flags = entry.get('flags');
+    const flags = entry.get('flags');
     const flaggedStats = flags.get('flaggedStats');
-		const type = flaggedStats.get('type');
-		const flagIds = 
-			flags
-				.filter(
-					flag =>	flag.has('types') && flag.get('types').includes(type) && flag.get('value')
-				)
-				.keySeq();
+    const type = flaggedStats.get('type');
+    const flagIds = 
+      flags
+        .filter(
+          flag => flag.has('types') && flag.get('types').includes(type) && flag.get('value')
+        )
+        .keySeq();
 
     return (
       <tr key={index}>
@@ -127,23 +140,23 @@ class ProjectTable extends Table{
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
         <td>{type}</td>
-				<td className="hoverable">
-					{flaggedStats.get('count')}
-					<div className="crd-popup text-center">
+        <td className="hoverable popup-left">
+          {flaggedStats.get('count')}
+          <div className="crd-popup text-center">
             <div className="row">
               <div className="col-sm-12 info">
-								{type}
+                Associated {type[0] + type.substr(1).toLowerCase()} Flags
               </div>
               <div className="col-sm-12">
                 <hr/>
               </div>
               <div className="col-sm-12 info">
-								{flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
+                {flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
               </div>
             </div>
             <div className="arrow"/>
           </div>
-				</td>
+        </td>
       </tr>
     )
   }
@@ -163,7 +176,7 @@ class ProjectTable extends Table{
             <th>Award Amount</th>
             <th>Tender Date</th>
             <th>Flag Type</th>
-						<th>Number of<br/>risk type flags</th>
+            <th>No. of Flags</th>
           </tr>
         </thead>
         <tbody>
@@ -194,23 +207,23 @@ class IndividualIndicatorPage extends React.Component{
         <IndividualIndicatorChart
             indicator={indicator}
             translations={translations}
-						filters={filters}
-						years={years}
-						monthly={monthly}
-						months={months}
+            filters={filters}
+            years={years}
+            monthly={monthly}
+            months={months}
             requestNewData={(_, data) => this.setState({chart: data})}
             data={chart}
-						width={width}
+            width={width}
         />
         <ProjectTable
             indicator={indicator}
             requestNewData={(_, data) => this.setState({table: data})}
             data={table}
-						translations={translations}
+            translations={translations}
             filters={filters}
             years={years}
-						monthly={monthly}
-						months={months}
+            monthly={monthly}
+            months={months}
         />
       </div>
     )

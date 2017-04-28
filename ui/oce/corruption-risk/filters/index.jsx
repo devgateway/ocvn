@@ -7,40 +7,15 @@ import DateBox from "./date";
 import {fetchJson, range, pluck} from "../../tools";
 
 class Filters extends React.Component{
-  constructor(...args){
-    super(...args);
-		const months = range(1, 12);
-    this.state = {
-			allMonths: months,
-			allYears: [],
-      state: Map({
-				months: Set(months),
-				years: Set()
-			})
-    }
-  }
-
-	componentDidMount(){
-		fetchJson('/api/tendersAwardsYears').then(data => {
-			const years = data.map(pluck('_id'));
-			const {state} = this.state;
-			this.setState({
-				allYears: years,
-				state: state.set('years', Set(years))
-			}, () => this.props.onUpdate(this.state.state));
-    });
-	}
-
   render(){
-    const {onUpdate, translations, currentBoxIndex, requestNewBox} = this.props;
-    const {state, allYears, allMonths} = this.state;
+    const {onUpdate, translations, currentBoxIndex, requestNewBox, state, allYears, allMonths, onApply, appliedFilters} = this.props;
     const {BOXES} = this.constructor;
     return (
       <div className="row filters-bar" onClick={e => e.stopPropagation()}>
         <div className="col-lg-1 col-md-1 col-sm-1">
         </div>
         <div className="col-lg-9 col-md-9 col-sm-9">
-        <div className="title">Filter your data</div>
+          <div className="title">Filter your data</div>
           {BOXES.map((Box, index) => {
              return (
                <Box
@@ -48,11 +23,12 @@ class Filters extends React.Component{
                    open={currentBoxIndex === index}
                    onClick={e => requestNewBox(currentBoxIndex === index ? null : index)}
                    state={state}
-                   onUpdate={(slug, newState) => this.setState({state: state.set(slug, newState)})}
+                   onUpdate={(slug, newState) => onUpdate(state.set(slug, newState))}
                    translations={translations}
-                   onApply={e => {requestNewBox(null); onUpdate(state)}}
-									 allYears={allYears}
-									 allMonths={allMonths}
+                   onApply={newState => onApply(newState)}
+                   allYears={allYears}
+                   allMonths={allMonths}
+                   appliedFilters={appliedFilters}
                />
              )
            })}
@@ -72,7 +48,7 @@ Filters.BOXES = [
   Organizations,
   ProcurementMethodBox,
   ValueAmount,
-	DateBox
+  DateBox
 ];
 
 export default Filters;
