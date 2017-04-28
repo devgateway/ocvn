@@ -51,7 +51,9 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
         return flaggable.getAwards().stream().filter(award -> award.getSuppliers().stream().anyMatch(supplier ->
-                frequentSuppliersMap.containsKey(FrequentSuppliersTimeIntervalController.
+                flaggable.getTender() != null && flaggable.getTender().getProcuringEntity() != null
+                        && supplier != null
+                        && frequentSuppliersMap.containsKey(FrequentSuppliersTimeIntervalController.
                         getFrequentSuppliersResponseKey(flaggable.getTender().getProcuringEntity().getId(),
                                 supplier.getId(), getInterval(award.getDate()))
                 ))
