@@ -1,5 +1,6 @@
 import Chart from "../visualizations/charts/frontend-date-filterable";
 import ReactIgnore from "../react-ignore.jsx";
+import cn from "classnames";
 
 class CustomPopupChart extends Chart{
   constructor(...args){
@@ -21,19 +22,34 @@ class CustomPopupChart extends Chart{
   }
 
   showPopup(data){
-    const year = data.points[0].x;
-    const traceName = data.points[0].data.name;
+    const point = data.points[0];
+    const year = point.x;
+    const traceName = point.data.name;
     const POPUP_WIDTH = 300;
     const POPUP_HEIGHT = 150;
     const POPUP_ARROW_SIZE = 8;
-    const hovertext = this.refs.chartContainer.querySelector('.hovertext');
-    const {top: targetTop, left: targetLeft} = hovertext.getBoundingClientRect();
-    const {top: parentTop, left: parentLeft} = this.refs.chartContainer.getBoundingClientRect();
+
+    const {xaxis, yaxis} = point;
+    const markerLeft = xaxis.l2p(point.pointNumber) + xaxis._offset;
+    const markerTop = yaxis.l2p(point.y) + yaxis._offset;
+    const {left: parentLeft} = this.refs.chartContainer.getBoundingClientRect();
+    const toTheLeft = (markerLeft + parentLeft + POPUP_WIDTH) >= window.innerWidth;
+    let top, left;
+
+    if(toTheLeft){
+      top = markerTop - POPUP_HEIGHT / 2;
+      left = markerLeft - POPUP_WIDTH - POPUP_ARROW_SIZE * 1.5;
+    } else {
+      top = markerTop - POPUP_HEIGHT - POPUP_ARROW_SIZE * 1.5;
+      left = markerLeft - POPUP_WIDTH / 2;
+    }
+
     this.setState({
       popup: {
         show: true,
-        top: targetTop-parentTop-POPUP_HEIGHT,
-        left: targetLeft-parentLeft-POPUP_WIDTH/2 - POPUP_ARROW_SIZE/2,
+        toTheLeft,
+        top,
+        left,
         year,
         traceName
       }
@@ -52,7 +68,7 @@ class CustomPopupChart extends Chart{
     const {loading, popup} = this.state;
     let hasNoData = !loading && this.hasNoData();
     return (
-      <div className="chart-container">
+      <div className={cn("chart-container", {"popup-left": popup.toTheLeft})}>
     	  {hasNoData && <div className="message">{this.t('charts:general:noData')}</div>}
 	      {loading && <div className="message">
   	      Loading...<br/>

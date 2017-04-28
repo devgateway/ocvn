@@ -8,7 +8,7 @@ export var callFunc = funcName => obj => obj[funcName]();
 
 export var pluck = fieldName => obj => obj[fieldName];
 
-export var pluckImm = fieldName => imm => imm.get(fieldName);
+export var pluckImm = (fieldName, ...args) => imm => imm.get(fieldName, ...args);
 
 export var fetchJson = url => fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
 
