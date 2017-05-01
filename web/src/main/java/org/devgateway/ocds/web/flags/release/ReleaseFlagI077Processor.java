@@ -45,7 +45,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     }
 
     protected Integer getInterval(Date awardDate) {
-        return new Double(Math.ceil((now.getTime() - awardDate.getTime()) / GenericOCDSController.DAY_MS)).intValue();
+        return new Double(Math.ceil((now.getTime() - awardDate.getTime())
+                / (GenericOCDSController.DAY_MS * INTERVAL_DAYS))).intValue();
     }
 
     @Override

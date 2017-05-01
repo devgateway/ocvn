@@ -51,8 +51,10 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
 
         for (Detail bid : flaggable.getBids().getDetails()) {
             for (Award award : flaggable.getAwards()) {
-                if (!Award.Status.active.equals(award.getStatus())
-                        || bid.getValue().getAmount().equals(award.getValue().getAmount())) {
+                if (!Award.Status.active.equals(award.getStatus()) || bid.getValue() == null
+                        || bid.getValue().getAmount() == null || award.getValue() == null || award.getValue()
+                        .getAmount() == null || !award.getValue().getCurrency().equals(bid.getValue().getCurrency())
+                        || award.getValue().getAmount().equals(bid.getValue().getAmount())) {
                     continue;
                 }
                 BigDecimal dLeft = relativeDistanceLeft(bid.getValue().getAmount(), award.getValue().getAmount()).
@@ -62,20 +64,17 @@ public class ReleaseFlagI085Processor extends AbstractFlaggedReleaseFlagProcesso
                         multiply(GenericOCDSController.ONE_HUNDRED);
 
 
-                rationale.append(";Award=").append(award.getValue().getAmount())
-                        .append(" with bid=").append(bid.getValue().getAmount());
-
                 //using the same logic as owen here...
                 if (dLeft.doubleValue() % 1 == 0 || dRight.doubleValue() % 1 == 0) {
                     result = true;
+                    rationale.append("Award=").append(award.getValue().getAmount())
+                            .append(" with bid=").append(bid.getValue().getAmount()).append("; ");
                     break;
                 }
-
 
             }
         }
         return result;
     }
-
 
 }

@@ -3,6 +3,7 @@ import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
+import INDICATOR_NAMES from "./indicator-names";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
@@ -154,18 +155,49 @@ class TopFlaggedContracts extends Table{
     const tenderPeriod = entry.get('tenderPeriod');
     const startDate = new Date(tenderPeriod.get('startDate'));
     const endDate = new Date(tenderPeriod.get('endDate'));
-    const flaggedStats = entry.get('flaggedStats');
+    const flags = entry.get('flags');
+    const flaggedStats = flags.get('flaggedStats');
+    const type = flaggedStats.get('type');
+    const flagIds =
+      flags
+        .filter(
+          flag => flag.has('types') && flag.get('types').includes(type) && flag.get('value')
+        )
+        .keySeq();
+
+    const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
+
     return (
       <tr key={index}>
         <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
-        <td>{entry.getIn(['procuringEntity', 'name'])}</td>
+        <td>
+          <div title={procuringEntityName} className="oce-3-line-text">
+            {procuringEntityName}
+          </div>
+        </td>
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{flaggedStats.get('type')}</td>
-        <td>{flaggedStats.get('count')}</td>
+        <td>{type}</td>
+        <td className="hoverable popup-left">
+          {flaggedStats.get('count')}
+          <div className="crd-popup text-center">
+            <div className="row">
+              <div className="col-sm-12 info">
+                Associated {type[0] + type.substr(1).toLowerCase()} Flags
+              </div>
+              <div className="col-sm-12">
+                <hr/>
+              </div>
+              <div className="col-sm-12 info">
+                {flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
+              </div>
+            </div>
+            <div className="arrow"/>
+          </div>
+        </td>
       </tr>
     )
   }
@@ -184,7 +216,7 @@ class TopFlaggedContracts extends Table{
             <th>Awards Amount</th>
             <th>Tender Date</th>
             <th className="flag-type">Flag Type</th>
-            <th>Number of<br/>risk type flags</th>
+            <th>No. of Flags</th>
           </tr>
         </thead>
         <tbody>
@@ -212,7 +244,7 @@ class OverviewPage extends React.Component{
     return (
       <div className="page-overview">
         <section className="chart-corruption-types">
-          <h4>Risk of Fraud, Collusion and Process Rigging Over Time</h4>
+          <h3 className="page-header">Risk of Fraud, Collusion and Process Rigging Over Time</h3>
           <CorruptionType
               filters={filters}
               requestNewData={(_, corruptionType) => this.setState({corruptionType})}
@@ -228,16 +260,16 @@ class OverviewPage extends React.Component{
           />
         </section>
         <section>
-          <h4>The Projects with the Most Fraud, Collusion and Process Rigging Flags</h4>
-          <TopFlaggedContracts
-              filters={filters}
-              data={topFlaggedContracts}
-              translations={translations}
-              years={years}
-              monthly={monthly}
-              months={months}
-              requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
-          />
+          <h3 className="page-header">The Projects with the Most Fraud, Collusion and Process Rigging Flags</h3>
+            <TopFlaggedContracts
+                filters={filters}
+                data={topFlaggedContracts}
+                translations={translations}
+                years={years}
+                monthly={monthly}
+                months={months}
+                requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
+            />
         </section>
       </div>
     )

@@ -61,13 +61,12 @@ class IndicatorTile extends CustomPopupChart{
       xaxis: {
         type: 'category',
         showgrid: false,
-        showline: false
+        showline: false,
+        tickangle: -45
       },
       yaxis: {
-        zeroline: false,
-        showline: false,
-        showticklabels: false,
-        showgrid: false
+        tickangle: -90,
+        nticks: 2
       }
     }
   }
@@ -234,7 +233,7 @@ class CorruptionType extends translatable(React.Component){
     if(!indicators || !indicators.length) return null;
     return (
       <div className="page-corruption-type">
-        <h3>{this.t(`crd:corruption-type:${corruptionType}`)}</h3>
+        <h2 className="page-header">{this.t(`crd:corruption-type:${corruptionType}`)}</h2>
         <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].introduction}</p>
         <div className="row">
           {indicators.map((indicator, index) => {
@@ -250,7 +249,7 @@ class CorruptionType extends translatable(React.Component){
                        filters={filters}
                        requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
                        data={indicatorTiles[indicator]}
-                       margin={{t: 0, r: 20, b: 40, l: 20, pad: 20}}
+                       margin={{t: 10, r: 5, b: 40, l: 20, pad: 5}}
                        height={300}
                        years={years}
                        monthly={monthly}
@@ -262,17 +261,19 @@ class CorruptionType extends translatable(React.Component){
              )
            })}
         </div>
-        <h3>Contracting Process with the Most {this.t(`crd:corruption-type:${corruptionType}`)} Flags</h3>
-        <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</p>
-        <Crosstab
-            filters={filters}
-            years={years}
-            monthly={monthly}
-            months={months}
-            indicators={indicators}
-            data={crosstab}
-            requestNewData={(_, data) => this.setState({crosstab: data})}
-        />
+        <section>
+          <h3 className="page-header">Contracting Process with the Most {this.t(`crd:corruption-type:${corruptionType}`)} Flags</h3>
+          <p className="introduction">{CORRUPTION_TYPE_DESCRIPTION[corruptionType].crosstab}</p>
+          <Crosstab
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+              indicators={indicators}
+              data={crosstab}
+              requestNewData={(_, data) => this.setState({crosstab: data})}
+          />
+        </section>
       </div>
     )
   }
