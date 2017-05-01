@@ -50,6 +50,8 @@ public class MongoTemplateConfiguration {
     }
 
     public void createCorruptionFlagsIndexes() {
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.totalFlagged", Direction.ASC));
+
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats.type", Direction.ASC)
                 .on("flags.flaggedStats.count", Direction.ASC)
         );

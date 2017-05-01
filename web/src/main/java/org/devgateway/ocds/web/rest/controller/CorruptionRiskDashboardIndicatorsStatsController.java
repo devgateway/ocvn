@@ -88,6 +88,28 @@ public class CorruptionRiskDashboardIndicatorsStatsController extends GenericOCD
         return totalIndicatorsByIndicatorType(ELIGIBLE_STATS, filter);
     }
 
+    @ApiOperation(value = "Counts the indicators that are flagged, across all releases. If one "
+            + "indicator has multiple types is only counted once, so this is different from flaggedStats and "
+            + "cannot be reproduced by just summing up all types in flaggedStats!")
+    @RequestMapping(value = "/api/totalFlags", method = {RequestMethod.POST, RequestMethod.GET},
+            produces = "application/json")
+    public List<DBObject> totalFlags(final YearFilterPagingRequest filter) {
+
+        Aggregation agg = newAggregation(
+                match(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)),
+                project().and("flags.totalFlagged").as("totalFlagged"),
+                group().sum("totalFlagged").as(Keys.FLAGGED_COUNT),
+                project(Keys.FLAGGED_COUNT).andExclude(Fields.UNDERSCORE_ID)
+        );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release",
+                DBObject.class);
+        List<DBObject> list = results.getMappedResults();
+        return list;
+    }
+
+
 
     private List<DBObject> totalIndicatorsByIndicatorType(String statsProperty,
                                                           final YearFilterPagingRequest filter) {

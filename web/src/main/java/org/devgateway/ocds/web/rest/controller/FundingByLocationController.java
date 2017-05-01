@@ -37,6 +37,7 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -51,7 +52,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class FundingByLocationController extends GenericOCDSController {
 
     public static final class Keys {
-        public static final String ITEMS_DELIVERY_LOCATION = "items.deliveryLocation";
+        public static final String ITEMS_DELIVERY_LOCATION = "deliveryLocation";
         public static final String TOTAL_TENDERS_AMOUNT = "totalTendersAmount";
         public static final String TENDERS_COUNT = "tendersCount";
         public static final String TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION = "totalTendersWithStartDateAndLocation";
@@ -87,9 +88,12 @@ public class FundingByLocationController extends GenericOCDSController {
                                 MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project), unwind("$tender.items"),
                 unwind("$tender.items.deliveryLocation"),
-                match(where("tender.items.deliveryLocation.geometry.coordinates.0").exists(true)),
-                group(getYearlyMonthlyGroupingFields(filter, "tender." + Keys.ITEMS_DELIVERY_LOCATION))
-                        .sum("$tender.value.amount").as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
+                project(getYearlyMonthlyGroupingFields(filter)).and("tender.value.amount")
+                        .as("tenderAmount")
+                        .and("tender.items.deliveryLocation").as("deliveryLocation"),
+                match(where("deliveryLocation.geometry.coordinates.0").exists(true)),
+                group(getYearlyMonthlyGroupingFields(filter, Keys.ITEMS_DELIVERY_LOCATION))
+                        .sum("tenderAmount").as(Keys.TOTAL_TENDERS_AMOUNT).count().as(Keys.TENDERS_COUNT),
                 getSortByYearMonth(filter)
         // ,skip(filter.getSkip()), limit(filter.getPageSize())
         );

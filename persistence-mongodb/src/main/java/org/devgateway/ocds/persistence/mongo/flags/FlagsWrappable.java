@@ -15,4 +15,6 @@ public interface FlagsWrappable {
 
     Map<FlagType, FlagTypeCount> getEligibleStatsMap();
 
+    void incTotalFlagged();
+
 }
