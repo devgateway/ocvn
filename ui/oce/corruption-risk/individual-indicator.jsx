@@ -38,18 +38,18 @@ class IndividualIndicatorChart extends CustomPopupChart{
       y: totalTrueValues,
       type: 'scatter',
       fill: 'tonexty',
-      name: 'Flagged',
+      name: 'Flagged Procurements',
       hoverinfo: 'name',
       fillcolor: '#85cbfe',
       line: {
         color: '#63a0cd'
-      }
+      },
     }, {
       x: dates,
       y: totalPrecondMetValues,
       type: 'scatter',
       fill: 'tonexty',
-      name: 'Eligible to be flagged',
+      name: 'Eligible Procurements',
       hoverinfo: 'name',
       fillcolor: '#336ba6',
       line: {
@@ -60,7 +60,13 @@ class IndividualIndicatorChart extends CustomPopupChart{
 
   getLayout(){
     return {
-      showlegend: false,
+      legend: {
+        orientation: 'h',
+        xanchor: 'right',
+        yanchor: 'top',
+        x: 1,
+        y: 1.3
+      },
       hovermode: 'closest',
       xaxis: {
         type: 'category',
@@ -130,12 +136,17 @@ class ProjectTable extends Table{
         )
         .keySeq();
 
+    const procuringEntityName = entry.getIn(['procuringEntity', 'name']);
     return (
       <tr key={index}>
         <td>{entry.get('tag', []).join(', ')}</td>
         <td>{entry.get('ocid')}</td>
         <td>{entry.get('title')}</td>
-        <td>{entry.getIn(['procuringEntity', 'name'])}</td>
+        <td>
+          <div title={procuringEntityName} className="oce-3-line-text">
+            {procuringEntityName}
+          </div>
+        </td>
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
@@ -199,32 +210,43 @@ class IndividualIndicatorPage extends React.Component{
     const {indicator, translations, filters, years, monthly, months, width} = this.props;
     return (
       <div className="page-corruption-type">
-        <h4>{INDICATOR_NAMES[indicator].name}</h4>
+        <h2 className="page-header">{INDICATOR_NAMES[indicator].name}</h2>
         <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
         <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>
-        <IndividualIndicatorChart
-            indicator={indicator}
-            translations={translations}
-            filters={filters}
-            years={years}
-            monthly={monthly}
-            months={months}
-            requestNewData={(_, data) => this.setState({chart: data})}
-            data={chart}
-            width={width}
-        />
-        <ProjectTable
-            indicator={indicator}
-            requestNewData={(_, data) => this.setState({table: data})}
-            data={table}
-            translations={translations}
-            filters={filters}
-            years={years}
-            monthly={monthly}
-            months={months}
-        />
+        <section>
+          <h3 className="page-header">
+            Eligible Procurements and Flagged Procurements for {INDICATOR_NAMES[indicator].name}
+          </h3>
+          <IndividualIndicatorChart
+              indicator={indicator}
+              translations={translations}
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+              requestNewData={(_, data) => this.setState({chart: data})}
+              data={chart}
+              width={width}
+              title=""
+          />
+        </section>
+        <section>
+          <h3 className="page-header">
+            List of Procurements Flagged for {INDICATOR_NAMES[indicator].name}
+          </h3>
+          <ProjectTable
+              indicator={indicator}
+              requestNewData={(_, data) => this.setState({table: data})}
+              data={table}
+              translations={translations}
+              filters={filters}
+              years={years}
+              monthly={monthly}
+              months={months}
+          />
+        </section>
       </div>
     )
   }

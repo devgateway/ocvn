@@ -98,7 +98,7 @@ public class MongoTemplateConfiguration {
         createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC).unique());
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procurementMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
