@@ -161,7 +161,7 @@ class TopFlaggedContracts extends Table{
     const flagIds =
       flags
         .filter(
-          flag => flag.has('types') && flag.get('types').includes(type) && flag.get('value')
+          flag => flag.has && flag.has('types') && flag.get('types').includes(type) && flag.get('value')
         )
         .keySeq();
 
