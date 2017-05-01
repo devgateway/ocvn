@@ -65,7 +65,7 @@ public class FundingByLocationController extends GenericOCDSController {
         public static final String TOTAL_PLANNED_AMOUNT = "totalPlannedAmount";
         public static final String YEAR = "year";
         public static final String RECORDS_COUNT = "recordsCount";
-        public static final String PLANNING_BUDGET_PROJECTLOCATION = "planning.budget.projectLocation";
+        public static final String PLANNING_BUDGET_PROJECTLOCATION = "projectLocation";
     }
 
     @ApiOperation(value = "Total estimated funding (tender.value) grouped by "
@@ -182,9 +182,13 @@ public class FundingByLocationController extends GenericOCDSController {
                                         getYearFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
                 new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
                 match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
+                        project(getYearlyMonthlyGroupingFields(filter))
+                                .and("dividedTotal").as("dividedTotal")
+                                .and("cntprj").as("cntprj")
+                                .and("planning.budget.projectLocation").as("projectLocation"),
                 group(getYearlyMonthlyGroupingFields(filter,  Keys.PLANNING_BUDGET_PROJECTLOCATION))
-                        .sum("$dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
-                        .sum("$cntprj").as(Keys.RECORDS_COUNT),
+                        .sum("dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
+                        .sum("cntprj").as(Keys.RECORDS_COUNT),
                         getSortByYearMonth(filter)
                 );
 
