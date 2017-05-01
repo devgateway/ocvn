@@ -51,6 +51,7 @@ public abstract class GenericOCDSController {
 
     private static final int LAST_MONTH_ZERO = 11;
     public static final int BIGDECIMAL_SCALE = 15;
+    public static final int DAY_MS = 86400000;
 
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
 

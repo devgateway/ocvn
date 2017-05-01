@@ -7,12 +7,14 @@ import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.devgateway.ocds.web.rest.controller.FrequentSuppliersTimeIntervalController;
+import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,8 +31,10 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     private static final Integer INTERVAL_DAYS = 365;
     private static final Integer MAX_AWARDS = 3;
 
-    private ConcurrentHashMap<String, FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple>
-            awardsMap;
+    private ConcurrentHashMap<String, FrequentSuppliersTimeIntervalController.FrequentSuppliersResponse>
+            frequentSuppliersMap;
+
+    private Date now;
 
     @Autowired
     private FrequentSuppliersTimeIntervalController frequentSuppliersTimeIntervalController;
@@ -40,11 +44,21 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
         flaggable.getFlags().setI077(flag);
     }
 
+    protected Integer getInterval(Date awardDate) {
+        return new Double(Math.ceil((now.getTime() - awardDate.getTime()) / GenericOCDSController.DAY_MS)).intValue();
+    }
+
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-        return flaggable.getAwards().stream().filter(award ->
-                awardsMap.get(award.getId()) != null).map(award -> rationale
-                .append("Award " + award.getId() + " flagged by tuple " + awardsMap.get(award.getId()) + "; "))
+        return flaggable.getAwards().stream().filter(award -> award.getSuppliers().stream().anyMatch(supplier ->
+                flaggable.getTender() != null && flaggable.getTender().getProcuringEntity() != null
+                        && supplier != null
+                        && frequentSuppliersMap.containsKey(FrequentSuppliersTimeIntervalController.
+                        getFrequentSuppliersResponseKey(flaggable.getTender().getProcuringEntity().getId(),
+                                supplier.getId(), getInterval(award.getDate()))
+                ))
+        ).map(award -> rationale
+                .append("Award ").append(award.getId()).append(" flagged"))
                 .count() > 0;
     }
 
@@ -54,14 +68,16 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
      */
     @Override
     public void reInitialize() {
-        List<FrequentSuppliersTimeIntervalController.FrequentSuppliersTuple> frequentSuppliersTimeInterval
+        now = new Date();
+        List<FrequentSuppliersTimeIntervalController.FrequentSuppliersResponse> frequentSuppliersTimeInterval
                 = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(getIntervalDays(),
-                getMaxAwards());
+                getMaxAwards(), now);
 
-        awardsMap = new ConcurrentHashMap<>();
+        frequentSuppliersMap = new ConcurrentHashMap<>();
 
         frequentSuppliersTimeInterval.
-                forEach(tuple -> tuple.getAwardIds().forEach(awardId -> awardsMap.put(awardId, tuple)));
+                forEach(response -> frequentSuppliersMap.put(
+                        FrequentSuppliersTimeIntervalController.getFrequentSuppliersResponseKey(response), response));
     }
 
     protected Integer getMaxAwards() {
@@ -79,8 +95,6 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
                 Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD_WITH_DATE,
                         FlaggedReleasePredicates.TENDER_PROCURING_ENTITY,
                         FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD));
-
-        reInitialize();
 
     }
 

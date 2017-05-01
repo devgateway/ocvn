@@ -80,6 +80,7 @@
             },
             "numberOfTenderers": 10,
             "procuringEntity": {
+                "id": "E09000001",
                 "identifier": {
                     "id": "E09000001",
                     "legalName": "[ocds-endpoint-001] procuringEntity"
@@ -161,6 +162,7 @@
                 },
                 "suppliers": [
                     {
+                        "id": "GB-COH-1234567844",
                         "identifier": {
                             "scheme": "GB-COH",
                             "id": "1234567844",
@@ -304,6 +306,7 @@
             },
             "numberOfTenderers": 5,
             "procuringEntity": {
+                "id": "E09000005",
                 "identifier": {
                     "id": "E09000005",
                     "legalName": "[ocds-endpoint-002] procuringEntity"
@@ -385,6 +388,7 @@
                 },
                 "suppliers": [
                     {
+                        "id": "GB-COH-1234567845",
                         "identifier": {
                             "scheme": "GB-COH",
                             "id": "1234567845",
@@ -527,6 +531,7 @@
             },
             "numberOfTenderers": 1,
             "procuringEntity": {
+                "id": "E09000003",
                 "identifier": {
                     "id": "E09000003",
                     "legalName": "[ocds-endpoint-003] procuringEntity"
@@ -608,6 +613,7 @@
                 },
                 "suppliers": [
                     {
+                        "id": "GB-COH-1234567844",
                         "identifier": {
                             "scheme": "GB-COH",
                             "id": "1234567844",
