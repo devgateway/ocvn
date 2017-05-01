@@ -50,7 +50,7 @@ public class ReleaseFlags implements FlagsWrappable {
     private Collection<FlagTypeCount> eligibleStats;
 
     //total number of indicators flagged for this release
-    private Integer totalFlagged = 0;
+    private Integer totalFlagged;
 
     @Transient
     private HashMap<FlagType, FlagTypeCount> flaggedStatsMap = new HashMap<>();
@@ -182,6 +182,10 @@ public class ReleaseFlags implements FlagsWrappable {
     }
 
     public void incTotalFlagged() {
-        totalFlagged++;
+        if (totalFlagged == null) {
+            totalFlagged = 1;
+        } else {
+            totalFlagged++;
+        }
     }
 }
