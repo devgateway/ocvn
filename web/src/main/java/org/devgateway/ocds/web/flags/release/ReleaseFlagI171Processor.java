@@ -32,7 +32,6 @@ public class ReleaseFlagI171Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(Arrays.asList(
                 FlaggedReleasePredicates.ACTIVE_AWARD,
-                FlaggedReleasePredicates.ELECTRONIC_SUBMISSION,
                 FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
                 FlaggedReleasePredicates.TENDER_VALUE_AMOUNT
         ));
@@ -54,7 +53,8 @@ public class ReleaseFlagI171Processor extends AbstractFlaggedReleaseFlagProcesso
 
         boolean result = false;
         for (Award award : flaggable.getAwards()) {
-            if (!Award.Status.active.equals(award.getStatus())) {
+            if (!Award.Status.active.equals(award.getStatus()) || award.getValue() == null
+                    || award.getValue().getAmount() == null) {
                 continue;
             }
 

@@ -1,17 +1,18 @@
 package org.devgateway.ocds.web.flags.release;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.PostConstruct;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.Flag;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
 import org.devgateway.ocds.persistence.mongo.flags.preconditions.FlaggedReleasePredicates;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author mpostelnicu
@@ -28,10 +29,11 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
 
     @Override
     protected Boolean calculateFlag(FlaggedRelease flaggable, StringBuffer rationale) {
-        long countAwards = flaggable.getAwards().size();
+        long countBids = flaggable.getBids() != null && flaggable.getBids().getDetails() != null
+                ? flaggable.getBids().getDetails().size() : 0;
 
-        rationale.append("Number of bids: ").append(countAwards);
-        return countAwards == 1;
+        rationale.append("Number of bids: ").append(countBids);
+        return countBids == 1;
     }
 
     @Override
@@ -44,8 +46,7 @@ public class ReleaseFlagI007Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(
                 Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD,
-                        FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD,
-                        FlaggedReleasePredicates.ELECTRONIC_SUBMISSION
+                        FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD
                 ));
     }
 }

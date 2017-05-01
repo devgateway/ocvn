@@ -64,8 +64,13 @@ public final class FlaggedReleasePredicates {
             "Needs to have at least one unsuccessful award",
             p -> p.getAwards().stream().filter(a -> Award.Status.unsuccessful.equals(a.getStatus())).count() > 0);
 
-    public static final NamedPredicate<FlaggedRelease> ELECTRONIC_SUBMISSION = new NamedPredicate<>(
-            "Needs to have electronic submission tender submission method",
-            p -> p.getTender() != null && p.getTender().getSubmissionMethod() != null
-                    && p.getTender().getSubmissionMethod().contains(Tender.SubmissionMethod.electronicSubmission));
+//    public static final NamedPredicate<FlaggedRelease> ELECTRONIC_SUBMISSION = new NamedPredicate<>(
+//            "Needs to have electronic submission tender submission method",
+//            p -> p.getTender() != null && p.getTender().getSubmissionMethod() != null
+//                    && p.getTender().getSubmissionMethod().contains(Tender.SubmissionMethod.electronicSubmission));
+
+//    public static final NamedPredicate<FlaggedRelease> ELECTRONIC_AUCTION = new NamedPredicate<>(
+//            "Needs to have electronic submission tender submission method",
+//            p -> p.getTender() != null && p.getTender().getSubmissionMethod() != null
+//                    && p.getTender().getSubmissionMethod().contains(Tender.SubmissionMethod.electronicAuction));
 }
