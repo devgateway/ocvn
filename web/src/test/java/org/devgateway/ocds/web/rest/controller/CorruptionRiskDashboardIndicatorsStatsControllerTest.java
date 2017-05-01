@@ -260,4 +260,16 @@ public class CorruptionRiskDashboardIndicatorsStatsControllerTest extends Abstra
         Assert.assertTrue(BigDecimal.ZERO.
                 compareTo((BigDecimal)result.get(1).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.PERCENT))==0);
     }
+
+    @Test
+    public void totalFlagsTest() throws Exception {
+
+        final List<DBObject> result = corruptionRiskDashboardIndicatorsStatsController.totalFlags(new
+                YearFilterPagingRequest());
+
+        Assert.assertEquals(2,
+                result.get(0).get(CorruptionRiskDashboardIndicatorsStatsController.Keys.FLAGGED_COUNT));
+    }
+
+
 }
