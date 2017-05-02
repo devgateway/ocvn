@@ -35,6 +35,7 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
             frequentSuppliersMap;
 
     private Date now;
+    private Double nowDouble;
 
     @Autowired
     private FrequentSuppliersTimeIntervalController frequentSuppliersTimeIntervalController;
@@ -45,8 +46,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     }
 
     protected Integer getInterval(Date awardDate) {
-        return new Double(Math.ceil((now.getTime() - awardDate.getTime())
-                / (GenericOCDSController.DAY_MS * INTERVAL_DAYS))).intValue();
+        return new Double(Math.ceil((nowDouble - awardDate.getTime())
+                / GenericOCDSController.DAY_MS / INTERVAL_DAYS)).intValue();
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
                                 supplier.getId(), getInterval(award.getDate()))
                 ))
         ).map(award -> rationale
-                .append("Award ").append(award.getId()).append(" flagged"))
+                .append("Award ").append(award.getId()).append(" flagged; "))
                 .count() > 0;
     }
 
@@ -70,6 +71,7 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     @Override
     public void reInitialize() {
         now = new Date();
+        nowDouble = new Double(now.getTime());
         List<FrequentSuppliersTimeIntervalController.FrequentSuppliersResponse> frequentSuppliersTimeInterval
                 = frequentSuppliersTimeIntervalController.frequentSuppliersTimeInterval(getIntervalDays(),
                 getMaxAwards(), now);
