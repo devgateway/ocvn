@@ -2,7 +2,7 @@ import CustomPopupChart from "./custom-popup-chart";
 import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import Table from "../visualizations/tables/index";
-import INDICATOR_NAMES from "./indicator-names";
+import translatable from "../translatable";
 
 class IndividualIndicatorChart extends CustomPopupChart{
   getCustomEP(){
@@ -162,7 +162,7 @@ class ProjectTable extends Table{
                 <hr/>
               </div>
               <div className="col-sm-12 info">
-                {flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
+                {flagIds.map(flagId => <p key={flagId}>{this.t(`crd:indicators:${flagId}:name`)}</p>)}
               </div>
             </div>
             <div className="arrow"/>
@@ -198,7 +198,7 @@ class ProjectTable extends Table{
   }
 }
 
-class IndividualIndicatorPage extends React.Component{
+class IndividualIndicatorPage extends translatable(React.Component){
   constructor(...args){
     super(...args);
     this.state = {
@@ -210,14 +210,30 @@ class IndividualIndicatorPage extends React.Component{
     const {indicator, translations, filters, years, monthly, months, width} = this.props;
     return (
       <div className="page-corruption-type">
-        <h2 className="page-header">{INDICATOR_NAMES[indicator].name}</h2>
-        <p className="definition">{INDICATOR_NAMES[indicator].indicator}</p>
-        <p className="definition">{INDICATOR_NAMES[indicator].eligibility}</p>
-        <p className="definition">{INDICATOR_NAMES[indicator].thresholds}</p>
-        <p className="definition">{INDICATOR_NAMES[indicator].description_text}</p>
+        <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:indicator")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:indicator`)}
+        </p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:eligibility")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:eligibility`)}
+        </p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:thresholds")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:thresholds`)}
+        </p>
+        <p className="definition">
+          <strong>{this.t("crd:indicators:general:description")}</strong>
+          &nbsp;
+          {this.t(`crd:indicators:${indicator}:description`)}
+        </p>
         <section>
           <h3 className="page-header">
-            Eligible Procurements and Flagged Procurements for {INDICATOR_NAMES[indicator].name}
+            Eligible Procurements and Flagged Procurements for {this.t(`crd:indicators:${indicator}:name`)}
           </h3>
           <IndividualIndicatorChart
               indicator={indicator}
@@ -234,7 +250,7 @@ class IndividualIndicatorPage extends React.Component{
         </section>
         <section>
           <h3 className="page-header">
-            List of Procurements Flagged for {INDICATOR_NAMES[indicator].name}
+            List of Procurements Flagged for {this.t(`crd:indicators:${indicator}:name`)}
           </h3>
           <ProjectTable
               indicator={indicator}
