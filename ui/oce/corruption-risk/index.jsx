@@ -224,13 +224,7 @@ class CorruptionRiskDashboard extends React.Component{
               <i className="glyphicon glyphicon-info-sign"></i>
             </h4>
             <p className="small">
-              The Corruption Risk Dashboard employs a
-              red flagging approach to help users understand
-              the potential presence of fraud, collusion or
-              rigging in public contracting. While flags may
-              indicate the presence of corruption, they may
-              also be attributable to data quality issues or
-              approved practices.
+              The Corruption Risk Dashboard employs a red flagging approach to help users understand the potential presence of fraud, collusion or rigging in public contracting. While flags may indicate the presence of corruption, they may also be attributable to data quality issues, infringements of law or international good practice, or other issues.
             </p>
           </div>
           <section role="navigation" className="row">

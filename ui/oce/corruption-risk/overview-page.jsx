@@ -3,7 +3,6 @@ import {pluck, range} from "../tools";
 import Table from "../visualizations/tables/index";
 import ReactDOMServer from "react-dom/server";
 import CustomPopupChart from "./custom-popup-chart";
-import INDICATOR_NAMES from "./indicator-names";
 
 const pluckObj = (field, obj) => Object.keys(obj).map(key => obj[key][field]);
 
@@ -192,7 +191,7 @@ class TopFlaggedContracts extends Table{
                 <hr/>
               </div>
               <div className="col-sm-12 info">
-                {flagIds.map(flagId => <p key={flagId}>{INDICATOR_NAMES[flagId].name}</p>)}
+                {flagIds.map(flagId => <p key={flagId}>{this.t(`crd:indicators:${flagId}:name`)}</p>)}
               </div>
             </div>
             <div className="arrow"/>
@@ -260,16 +259,16 @@ class OverviewPage extends React.Component{
           />
         </section>
         <section>
-          <h3 className="page-header">The Projects with the Most Fraud, Collusion and Process Rigging Flags</h3>
-            <TopFlaggedContracts
-                filters={filters}
-                data={topFlaggedContracts}
-                translations={translations}
-                years={years}
-                monthly={monthly}
-                months={months}
-                requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
-            />
+          <h3 className="page-header">The Procurement Processes with the Most Flags</h3>
+          <TopFlaggedContracts
+              filters={filters}
+              data={topFlaggedContracts}
+              translations={translations}
+              years={years}
+              monthly={monthly}
+              months={months}
+              requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
+          />
         </section>
       </div>
     )
