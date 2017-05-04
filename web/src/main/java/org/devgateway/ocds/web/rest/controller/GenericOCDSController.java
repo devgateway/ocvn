@@ -350,7 +350,7 @@ public abstract class GenericOCDSController {
     protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
         return filter.getContrMethod() == null ? new Criteria()
                 : createFilterCriteria("tender.contrMethod._id",
-                filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
+                filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toSet()),
                 filter);
     }
 
