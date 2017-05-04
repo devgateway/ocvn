@@ -7,7 +7,7 @@ import CorruptionTypePage from "./corruption-type";
 import {Map, Set} from "immutable";
 import IndividualIndicatorPage from "./individual-indicator";
 import Filters from "./filters";
-import {TotalFlags, TotalFlagsCounter} from "./total-flags";
+import TotalFlags from "./total-flags";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
@@ -33,7 +33,8 @@ class CorruptionRiskDashboard extends React.Component{
       filterBoxIndex: null,
       allMonths: range(1, 12),
       allYears: [],
-      width: 0
+      width: 0,
+      data: Map()
     };
 
     this.destructFilters = cacheFn(filters => {
@@ -171,7 +172,7 @@ class CorruptionRiskDashboard extends React.Component{
 
   render(){
     const {dashboardSwitcherOpen, corruptionType, page, filterBoxIndex, currentFiltersState, appliedFilters
-         , totalFlags, totalFlagsCounter, indicatorTypesMapping, allYears, allMonths} = this.state;
+         , data, indicatorTypesMapping, allYears, allMonths} = this.state;
     const {onSwitch, translations} = this.props;
 
     const {filters, years, months} = this.destructFilters(appliedFilters);
@@ -247,23 +248,12 @@ class CorruptionRiskDashboard extends React.Component{
                )
              })}
           </section>
-          {/* <TotalFlagsCounter
-              data={totalFlagsCounter}
-              requestNewData={(_, totalFlagsCounter) => this.setState({totalFlagsCounter})}
-              translations={translations}
-              filters={filters}
-              years={years}
-              monthly={monthly}
-              months={months}
-              /> */}
           <TotalFlags
               filters={filters}
-              requestNewData={(_, totalFlags) => this.setState({totalFlags})}
+              requestNewData={(path, newData) =>
+                this.setState({data: this.state.data.setIn(['totalFlags'].concat(path), newData)})}
               translations={translations}
-              data={totalFlags}
-              width={250}
-              height={250}
-              margin={{l:40, r:40, t:40, b: 10, pad:20}}
+              data={data.get('totalFlags', Map())}
               years={years}
               months={months}
               monthly={monthly}

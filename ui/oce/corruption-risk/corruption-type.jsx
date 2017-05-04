@@ -224,7 +224,7 @@ class CorruptionType extends translatable(React.Component){
         <div className="row">
           {indicators.map((indicator, index) => {
             const indicatorName = this.t(`crd:indicators:${indicator}:name`);
-            const indicatorDescription = this.t(`crd:indicators:${indicator}:description`);
+            const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
              return (
                <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
                  <div className="border">
