@@ -134,14 +134,14 @@ class Crosstab extends Table{
 
   row(rowData, rowIndicatorID){
     const rowIndicatorName = this.t(`crd:indicators:${rowIndicatorID}:name`);
-    const rowIndicatorDescription = this.t(`crd:indicators:${rowIndicatorID}:description`);
+    const rowIndicatorDescription = this.t(`crd:indicators:${rowIndicatorID}:indicator`);
     return (
       <tr key={rowIndicatorID}>
       <td>{rowIndicatorName}</td>
       <td className="nr-flags">{rowData.getIn([rowIndicatorID, 'count'])}</td>
       {rowData.map((datum, indicatorID) => {
         const indicatorName = this.t(`crd:indicators:${indicatorID}:name`);
-        const indicatorDescription = this.t(`crd:indicators:${indicatorID}:description`);
+        const indicatorDescription = this.t(`crd:indicators:${indicatorID}:indicator`);
         if(indicatorID == rowIndicatorID){
           return <td className="not-applicable" key={indicatorID}>&mdash;</td>
         } else {
