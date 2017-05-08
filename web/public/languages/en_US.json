@@ -4,7 +4,6 @@
   "general:title": "e-Procurement",
   "general:subtitle": "Toolkit",
   "general:description:title": "Toolkit description",
-  "general:description:content": "The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on procurement in Vietnam. All data in the dashboard are collected from the Vietnam Government eProcurement system (eGP). These data are published on a pilot basis and do not represent official government statistics.",
   "general:login": "Log in",
   "general:logout": "Log out",
   "general:viewOnGithub": "View code on Github",
