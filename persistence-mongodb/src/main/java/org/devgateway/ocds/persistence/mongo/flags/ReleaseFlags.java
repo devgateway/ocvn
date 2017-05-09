@@ -50,7 +50,11 @@ public class ReleaseFlags implements FlagsWrappable {
     private Collection<FlagTypeCount> eligibleStats;
 
     //total number of indicators flagged for this release
+
     private Integer totalFlagged;
+
+    @Transient
+    private Integer flagCnt;
 
     @Transient
     private HashMap<FlagType, FlagTypeCount> flaggedStatsMap = new HashMap<>();
@@ -181,11 +185,19 @@ public class ReleaseFlags implements FlagsWrappable {
         this.i171 = i171;
     }
 
-    public void incTotalFlagged() {
-        if (totalFlagged == null) {
-            totalFlagged = 1;
+    public Integer getFlagCnt() {
+        return flagCnt;
+    }
+
+    public void setFlagCnt(Integer flagCnt) {
+        this.flagCnt = flagCnt;
+    }
+
+    public void incFlagCnt() {
+        if (flagCnt == null) {
+            flagCnt = 1;
         } else {
-            totalFlagged++;
+            flagCnt++;
         }
     }
 }

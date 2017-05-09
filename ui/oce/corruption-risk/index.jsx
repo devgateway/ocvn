@@ -8,6 +8,8 @@ import {Map, Set} from "immutable";
 import IndividualIndicatorPage from "./individual-indicator";
 import Filters from "./filters";
 import TotalFlags from "./total-flags";
+import LandingPopup from "./landing-popup";
+import {LOGIN_URL} from "./constants";
 
 const ROLE_ADMIN = 'ROLE_ADMIN';
 
@@ -34,8 +36,10 @@ class CorruptionRiskDashboard extends React.Component{
       allMonths: range(1, 12),
       allYears: [],
       width: 0,
-      data: Map()
+      data: Map(),
+      showLandingPopup: !localStorage.alreadyVisited
     };
+    localStorage.alreadyVisited = true;
 
     this.destructFilters = cacheFn(filters => {
       return {
@@ -56,12 +60,7 @@ class CorruptionRiskDashboard extends React.Component{
           id
         }
       })
-    ).catch(
-      err => {
-        alert('You must be logged in to access Corruption Risk Dashboard');
-        location.href = '/login?referrer=/ui/index.html?corruption-risk-dashboard'
-      }
-    )
+    ).catch(err => this.setState({showLandingPopup: true}))
   }
 
   fetchIndicatorTypesMapping(){
@@ -85,7 +84,7 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   componentDidMount(){
-    this.fetchUserInfo();
+    !this.state.showLandingPopup && this.fetchUserInfo();
     this.fetchIndicatorTypesMapping();
     this.fetchYears();
 
@@ -114,7 +113,7 @@ class CorruptionRiskDashboard extends React.Component{
         </a>
       )
     }
-    return <a href="/login?referrer=/ui/index.html?corruption-risk-dashboard">
+    return <a href={LOGIN_URL}>
           <button className="btn btn-success">Login</button>
     </a>
   }
@@ -172,7 +171,7 @@ class CorruptionRiskDashboard extends React.Component{
 
   render(){
     const {dashboardSwitcherOpen, corruptionType, page, filterBoxIndex, currentFiltersState, appliedFilters
-         , data, indicatorTypesMapping, allYears, allMonths} = this.state;
+         , data, indicatorTypesMapping, allYears, allMonths, showLandingPopup} = this.state;
     const {onSwitch, translations} = this.props;
 
     const {filters, years, months} = this.destructFilters(appliedFilters);
@@ -182,6 +181,7 @@ class CorruptionRiskDashboard extends React.Component{
       <div className="container-fluid dashboard-corruption-risk"
            onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
       >
+        {showLandingPopup && <LandingPopup/>}
         <header className="branding row">
           <div className="col-sm-1 logo-wrapper">
             <img src="assets/logo.png"/>

@@ -102,6 +102,7 @@ public class ReleaseFlaggingService {
     private void prepareStats(FlaggedRelease release) {
         release.getFlags().setFlaggedStats(release.getFlags().getFlaggedStatsMap().values());
         release.getFlags().setEligibleStats(release.getFlags().getEligibleStatsMap().values());
+        release.getFlags().setTotalFlagged(release.getFlags().getFlagCnt());
     }
 
     public void processAndSaveFlagsForAllReleases(Consumer<String> logMessage) {

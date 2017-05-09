@@ -94,7 +94,7 @@ public abstract class AbstractFlagProcessor<T extends Flaggable> {
 
         //flagged
         if (flag.getValue() != null && flag.getValue()) {
-            flaggable.getFlags().incTotalFlagged();
+            flaggable.getFlags().incFlagCnt();
             flag.getTypes().forEach(f -> flaggable.getFlags().getFlaggedStatsMap().
                     put(f, flaggable.getFlags().getFlaggedStatsMap().containsKey(f)
                             ? flaggable.getFlags().getFlaggedStatsMap().get(f).inc() : FlagTypeCount.newInstance(f)));
