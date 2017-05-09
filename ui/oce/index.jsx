@@ -224,7 +224,7 @@ class OCApp extends React.Component{
             href="javascript:void(0);"
             className={cn({active: selectedYears.has(+year)})}
             onDoubleClick={e => toggleOthersYears(year)}
-            onClick={e => e.ctrlKey ? toggleOthersYears(year) : toggleYear(year)}
+            onClick={e => e.shiftKey ? toggleOthersYears(year) : toggleYear(year)}
         >
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
           <span className="ctrl-click-hint">
