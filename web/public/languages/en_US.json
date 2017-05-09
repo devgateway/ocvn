@@ -159,7 +159,7 @@
   "tables:top10suppliers:nrPE": "Number of PEs from which an award has been received",
   "tables:top10suppliers:totalAwardedValue": "Total awarded value (in VND)",
   "tables:top10suppliers:title": "Top 10 suppliers",
-  "yearsBar:ctrlClickHint": "To select a single year only, press 'control' while clicking, or simply double click.",
+  "yearsBar:ctrlClickHint": "To select a single year, hold 'shift' while clicking, or simply double click.",
   "crd:corruptionType:FRAUD:pageTitle": "Fraud Risk",
   "crd:corruptionType:FRAUD:name": "Fraud",
   "crd:corruptionType:FRAUD:introduction": "Fraud is “Any act or omission, including a misrepresentation, that knowingly or recklessly misleads, or attempts to mislead, a party to obtain a financial or other benefit or to avoid an obligation,\" according to the International Financial Institutions (IFI) <a href=\"https://siteresources.worldbank.org/INTDOII/Resources/FinalIFITaskForceFramework&Gdlines.pdf\">Anti-Corruption Task Force Guidelines.</a> Suppliers may engage in a variety of fraudulent activities in attempt to increase their chances at winning contracts or in demonstration of progress in implementation. Some of these fraud schemes include: false invoicing, false bidding, product substitution, fictitious contracting, and shadow bidding. The flags represented in each tile below indicate the possible existance of fraud in a procurement process. To learn more about each flag, click on the associated tile.",
