@@ -55,6 +55,7 @@ class OCVN extends OCApp{
             <div role="navigation">
               {this.navigation()}
             </div>
+            {/*
             <section className="col-sm-12 description">
               <h3><strong>{this.t('general:description:title')}</strong></h3>
               <p>
@@ -63,6 +64,7 @@ class OCVN extends OCApp{
                 </small>
               </p>
             </section>
+            */}
           <section className="col-sm-12 github">
             <a href="https://github.com/devgateway/ocvn" target="_blank">
               <button className="btn btn-default btn-block">
