@@ -35,6 +35,11 @@ public final class FlaggedReleasePredicates {
                     p -> p.getTender() != null
                             && Tender.ProcurementMethod.open.equals(p.getTender().getProcurementMethod()));
 
+    public static final NamedPredicate<FlaggedRelease> SELECTIVE_PROCUREMENT_METHOD =
+            new NamedPredicate<>("Needs to have selective tender procurement method",
+                    p -> p.getTender() != null
+                            && Tender.ProcurementMethod.selective.equals(p.getTender().getProcurementMethod()));
+
     public static final NamedPredicate<FlaggedRelease> LIMITED_PROCUREMENT_METHOD =
             new NamedPredicate<>("Needs to have limited tender procurement method",
                     p -> p.getTender() != null
