@@ -38,7 +38,7 @@ class DateBox extends FilterBox{
            }
 
            const toggleYear = e => {
-             if(e.ctrlKey){
+             if(e.shiftKey){
                toggleOtherYears();
              } else if(selectedYears.has(year)){
                onUpdate('years', selectedYears.delete(year));
@@ -59,7 +59,7 @@ class DateBox extends FilterBox{
          })}
         <p>
           To select a single year and be able to select months,
-          hold 'control' while clicking on a year.
+          hold 'shift' while clicking on a year.
         </p>
         <div className="toggleable-wrapper">
           {selectedYears.count() == 1 && months.map(month => {

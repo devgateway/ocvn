@@ -39,7 +39,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       type: 'scatter',
       fill: 'tonexty',
       name: 'Flagged Procurements',
-      hoverinfo: 'name',
+      hoverinfo: 'none',
       fillcolor: '#85cbfe',
       line: {
         color: '#63a0cd'
@@ -50,7 +50,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       type: 'scatter',
       fill: 'tonexty',
       name: 'Eligible Procurements',
-      hoverinfo: 'name',
+      hoverinfo: 'none',
       fillcolor: '#336ba6',
       line: {
         color: '#224a74'

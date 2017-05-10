@@ -96,9 +96,8 @@ public class ReleaseFlagI077Processor extends AbstractFlaggedReleaseFlagProcesso
     protected void setPredicates() {
         preconditionsPredicates = Collections.synchronizedList(
                 Arrays.asList(FlaggedReleasePredicates.ACTIVE_AWARD_WITH_DATE,
-                        FlaggedReleasePredicates.TENDER_PROCURING_ENTITY,
-                        FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD));
-
+                        FlaggedReleasePredicates.OPEN_PROCUREMENT_METHOD
+                                .or(FlaggedReleasePredicates.SELECTIVE_PROCUREMENT_METHOD)));
     }
 
 

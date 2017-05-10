@@ -27,4 +27,15 @@ public class NamedPredicate<T> implements Predicate<T> {
     public String toString() {
         return name;
     }
+
+
+    @Override
+    public NamedPredicate<T> or(Predicate<? super T> other) {
+        return new NamedPredicate<T>(this.toString() + " OR " + other.toString(), Predicate.super.or(other));
+    }
+
+    @Override
+    public NamedPredicate<T> and(Predicate<? super T> other) {
+        return new NamedPredicate<T>(this.toString() + " AND " + other.toString(), Predicate.super.and(other));
+    }
 }
