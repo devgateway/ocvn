@@ -1,31 +1,32 @@
 import ReactDOM from "react-dom";
 import OCApp from "./oce";
-import OverviewTab from './oce/tabs/overview';
-import LocationTab from './oce/tabs/location';
-import CompetitivenessTab from './oce/tabs/competitiveness';
-import EfficiencyTab from './oce/tabs/efficiency';
-import EProcurementTab from './oce/tabs/e-procurement';
+import OCVNOverviewTab from './ocvn/tabs/overview';
+import OCVNLocation from "./ocvn/tabs/location";
+import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
+import OCVNEfficiency from './ocvn/tabs/efficiency';
+import OCVNEProcurement from './ocvn/tabs/e-procurement';
 import {fetchJson} from "./oce/tools";
 import {Map} from "immutable";
+import OCVNFilters from "./ocvn/filters";
 import styles from "./style.less";
 import ViewSwitcher from "./oce/switcher.jsx";
 import CorruptionRickDashboard from "./oce/corruption-risk";
 
-class OCEChild extends OCApp{
+class OCVN extends OCApp{
   constructor(props) {
     super(props);
-    this.registerTab(OverviewTab);
-    this.registerTab(LocationTab);
-    this.registerTab(CompetitivenessTab);
-    this.registerTab(EfficiencyTab);
-    this.registerTab(EProcurementTab);
+    this.registerTab(OCVNOverviewTab);
+    this.registerTab(OCVNLocation);
+    this.registerTab(OCVNCompetitiveness);
+    this.registerTab(OCVNEfficiency);
+    this.registerTab(OCVNEProcurement);
   }
 
   fetchBidTypes(){
     fetchJson('/api/ocds/bidType/all').then(data =>
         this.setState({
           bidTypes: data.reduce((map, datum) =>
-              map.set(datum.id, datum.description), Map())
+            map.set(datum.id, datum.description), Map())
         })
     );
   }
@@ -64,7 +65,16 @@ class OCEChild extends OCApp{
               </p>
             </section>
             */}
-          </div>
+          <section className="col-sm-12 github">
+            <a href="https://github.com/devgateway/ocvn" target="_blank">
+              <button className="btn btn-default btn-block">
+                <img src="/ui/assets/icons/octocat.png" width={16} height={16}/>
+                &nbsp;
+                {this.t("general:viewOnGithub")}
+              </button>
+            </a>
+          </section>
+        </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
           <div className="row">
@@ -83,9 +93,14 @@ class OCEChild extends OCApp{
   }
 }
 
+OCVN.Filters = OCVNFilters;
+
 const translations = {
-  en_US: require('../web/public/languages/en_US.json')
+  en_US: require('../web/public/languages/en_US.json'),
+  vn_VN: require('../web/public/languages/vn_VN.json'),
 };
+
+OCVN.TRANSLATIONS = translations;
 
 const BILLION = 1000000000;
 const MILLION = 1000000;
@@ -111,11 +126,12 @@ const styling = {
   }
 };
 
-OCEChild.TRANSLATIONS = translations;
+OCVN.STYLING = styling;
+OCVN.TRANSLATIONS = translations;
 
 class OceSwitcher extends ViewSwitcher{}
 
-OceSwitcher.views.default = OCEChild;
+OceSwitcher.views.default = OCVN;
 OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
 
 ReactDOM.render(<OceSwitcher

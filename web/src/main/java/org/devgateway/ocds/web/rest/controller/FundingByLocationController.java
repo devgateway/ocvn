@@ -14,8 +14,11 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ArrayUtils;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.web.rest.controller.request.DefaultFilterPagingRequest;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
+import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -56,7 +59,13 @@ public class FundingByLocationController extends GenericOCDSController {
         public static final String TOTAL_TENDERS_WITH_START_DATE = "totalTendersWithStartDate";
         public static final String PERCENT_TENDERS_WITH_START_DATE_AND_LOCATION =
                 "percentTendersWithStartDateAndLocation";
+        public static final String TOTAL_PLANS_WITH_AMOUNTS = "totalPlansWithAmounts";
+        public static final String TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION = "totalPlansWithAmountsAndLocation";
+        public static final String PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION = "percentPlansWithAmountsAndLocation";
+        public static final String TOTAL_PLANNED_AMOUNT = "totalPlannedAmount";
         public static final String YEAR = "year";
+        public static final String RECORDS_COUNT = "recordsCount";
+        public static final String PLANNING_BUDGET_PROJECTLOCATION = "projectLocation";
     }
 
     @ApiOperation(value = "Total estimated funding (tender.value) grouped by "
@@ -108,7 +117,7 @@ public class FundingByLocationController extends GenericOCDSController {
         project.put(Fields.UNDERSCORE_ID, "$tender._id");
         project.put("tenderItemsDeliveryLocation", new BasicDBObject("$cond",
                 Arrays.asList(new BasicDBObject("$gt",
-                        Arrays.asList("$tender.items.deliveryLocation", null)), 1, 0)));
+                        Arrays.asList("$tender.items.deliveryLocation", 0)), 1, 0)));
 
 
         DBObject project1 = new BasicDBObject();
@@ -131,8 +140,8 @@ public class FundingByLocationController extends GenericOCDSController {
                 group().count().as("totalTendersWithStartDate").sum("hasTenderItemsDeliverLocation")
                         .as(Keys.TOTAL_TENDERS_WITH_START_DATE_AND_LOCATION),
                 new CustomProjectionOperation(project1)
-        // ,skip(filter.getSkip()),limit(filter.getPageSize())
-        );
+                //,skip(filter.getSkip()),limit(filter.getPageSize())
+               );
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> tagCount = results.getMappedResults();
@@ -140,5 +149,104 @@ public class FundingByLocationController extends GenericOCDSController {
     }
 
 
+    @ApiOperation(value = "Planned funding by location by year. Returns the total amount of planning.budget"
+            + " available per planning.budget.projectLocation, grouped by year. "
+            + "This will return full location information, including geocoding data."
+            + "Responds only to the procuring entity id filter: tender.procuringEntity._id")
+    @RequestMapping(value = "/api/plannedFundingByLocation",
+            method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> plannedFundingByLocation(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
+
+        DBObject vars = new BasicDBObject();
+        vars.put("numberOfLocations", new BasicDBObject("$size", "$planning.budget.projectLocation"));
+        vars.put("planningBudget", "$planning.budget.amount.amount");
+        DBObject in = new BasicDBObject("$divide", Arrays.asList("$$planningBudget", "$$numberOfLocations"));
+
+        DBObject let = new BasicDBObject();
+        let.put("vars", vars);
+        let.put("in", in);
+
+        DBObject dividedTotal = new BasicDBObject("$let", let);
+
+        DBObject project = new BasicDBObject();
+        project.put("planning.budget.projectLocation", 1);
+        project.put("cntprj", new BasicDBObject("$literal", 1));
+        project.put("planning.budget.amount.amount", 1);
+        project.put("dividedTotal", dividedTotal);
+        addYearlyMonthlyProjection(filter, project, "$planning.bidPlanProjectDateApprove");
+
+        Aggregation agg =
+                newAggregation(
+                        match(where("planning").exists(true).and("planning.budget.projectLocation.0").exists(true)
+                                .andOperator(getProcuringEntityIdCriteria(filter),
+                                        getYearFilterCriteria(filter, "planning.bidPlanProjectDateApprove"))),
+                new CustomProjectionOperation(project), unwind("$planning.budget.projectLocation"),
+                match(where("planning.budget.projectLocation.geometry.coordinates.0").exists(true)),
+                        project(getYearlyMonthlyGroupingFields(filter))
+                                .and("dividedTotal").as("dividedTotal")
+                                .and("cntprj").as("cntprj")
+                                .and("planning.budget.projectLocation").as("projectLocation"),
+                group(getYearlyMonthlyGroupingFields(filter,  Keys.PLANNING_BUDGET_PROJECTLOCATION))
+                        .sum("dividedTotal").as(Keys.TOTAL_PLANNED_AMOUNT)
+                        .sum("cntprj").as(Keys.RECORDS_COUNT),
+                        getSortByYearMonth(filter)
+                );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+
+    }
+
+
+    @ApiOperation("Calculates percentage of releases with planning with at least one specified location,"
+            + " that is the array planning.budget.projectLocation has to be initialzied."
+            + "Filters out stub planning, therefore planning.budget.amount has to exist."
+            + "Responds only to the procuring entity id filter: tender.procuringEntity._id")
+    @RequestMapping(value = "/api/qualityPlannedFundingByLocation", method = { RequestMethod.POST,
+            RequestMethod.GET }, produces = "application/json")
+    public List<DBObject> qualityPlannedFundingByLocation(
+            @ModelAttribute @Valid final DefaultFilterPagingRequest filter) {
+
+        DBObject project = new BasicDBObject();
+        project.putAll(filterProjectMap);
+        project.put("planning.budget.projectLocation", 1);
+        project.put("planning.budget.amount", 1);
+        project.put(Fields.UNDERSCORE_ID, 0);
+
+        DBObject group = new BasicDBObject();
+        group.put(Fields.UNDERSCORE_ID, null);
+        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, new BasicDBObject("$sum", 1));
+        group.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION,
+                new BasicDBObject("$sum", new BasicDBObject("$cond", Arrays.asList(
+                        new BasicDBObject("$gt",
+                                Arrays.asList(
+                                        new BasicDBObject("$size",
+                                                new BasicDBObject("$ifNull", Arrays.asList(
+                                                        "$planning.budget.projectLocation", ArrayUtils.toArray()))),
+                                        0)),
+                        1, 0))));
+
+        DBObject project2 = new BasicDBObject();
+        project2.put(Fields.UNDERSCORE_ID, 0);
+        project2.put(Keys.TOTAL_PLANS_WITH_AMOUNTS, 1);
+        project2.put(Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION, 1);
+        project2.put(Keys.PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION,
+                new BasicDBObject("$multiply",
+                        Arrays.asList(
+                                new BasicDBObject("$divide",
+                                        Arrays.asList("$totalPlansWithAmountsAndLocation", "$totalPlansWithAmounts")),
+                                100)));
+
+        Aggregation agg = newAggregation(new CustomProjectionOperation(project),
+                match(where("planning.budget.amount").exists(true).andOperator(getProcuringEntityIdCriteria(filter))),
+                new CustomGroupingOperation(group), new CustomProjectionOperation(project2)
+                //, skip(filter.getSkip()),limit(filter.getPageSize())
+                );
+
+        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        List<DBObject> tagCount = results.getMappedResults();
+        return tagCount;
+    }
 
 }

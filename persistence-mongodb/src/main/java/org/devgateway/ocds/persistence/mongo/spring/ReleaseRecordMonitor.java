@@ -3,10 +3,6 @@
  */
 package org.devgateway.ocds.persistence.mongo.spring;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -17,6 +13,10 @@ import org.devgateway.ocds.persistence.mongo.repository.RecordRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * @author mpostelnicu

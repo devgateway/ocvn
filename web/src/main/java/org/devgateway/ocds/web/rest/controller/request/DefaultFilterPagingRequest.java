@@ -38,6 +38,21 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Corresponds to the OCDS Organization.identifier")
     private TreeSet<String> supplierId;
 
+    @ApiModelProperty(value = "This will filter after tender.procurementMethodDetails."
+            + "Valid examples are Đấu thầu rộng rãi, Đấu thầu hạn chế, etc...")
+    private TreeSet<String> bidSelectionMethod;
+
+    @ApiModelProperty(value = "This corresponds the negated bidSelectionMethod filter,"
+            + " matches elements that are NOT in the list of Ids")
+    private TreeSet<String> notBidSelectionMethod;
+
+    @ApiModelProperty(value = "This will filter after tender.contrMethod.id, Values range from 1 to 5.")
+    @EachPattern(regexp = "^[a-zA-Z0-9]*$")
+    private TreeSet<String> contrMethod;
+
+    @ApiModelProperty(value = "This will filter after planning.budget.projectLocation._id")
+    private TreeSet<String> planningLoc;
+
     @ApiModelProperty(value = "This will filter after tender.items.deliveryLocation._id")
     private TreeSet<String> tenderLoc;
 
@@ -60,10 +75,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
             + "Use /api/awardValueInterval to get the maximum allowed.")
     private BigDecimal maxAwardValue;
 
+    @ApiModelProperty(value = "This will search after the City Id of the procuring entity."
+            + "The field is organization.address.postalCode")
+    private TreeSet<String> procuringEntityCityId;
 
     @ApiModelProperty(value = "Filters after tender.submissionMethod='electronicSubmission', also known as"
             + " eBids")
     private Boolean electronicSubmission;
+
+    @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+            + "The field is organization.department._id")
+    private TreeSet<Integer> procuringEntityDepartmentId;
+
+    @ApiModelProperty(value = "This will search after the DepartmentId of the procuring entity."
+            + "The field is organization.group._id")
+    private TreeSet<Integer> procuringEntityGroupId;
+
 
     @ApiModelProperty(value = "Only show the releases that were flagged by at least one indicator")
     private Boolean flagged;
@@ -86,6 +113,22 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
 
     public void setProcuringEntityId(final TreeSet<String> procuringEntityId) {
         this.procuringEntityId = procuringEntityId;
+    }
+
+    public TreeSet<String> getBidSelectionMethod() {
+        return bidSelectionMethod;
+    }
+
+    public void setBidSelectionMethod(final TreeSet<String> bidSelectionMethod) {
+        this.bidSelectionMethod = bidSelectionMethod;
+    }
+
+    public TreeSet<String> getContrMethod() {
+        return contrMethod;
+    }
+
+    public void setContrMethod(TreeSet<String> contrMethod) {
+        this.contrMethod = contrMethod;
     }
 
     public TreeSet<String> getTenderLoc() {
@@ -152,12 +195,19 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.notProcuringEntityId = notProcuringEntityId;
     }
 
+    public TreeSet<String> getProcuringEntityCityId() {
+        return procuringEntityCityId;
+    }
     public Boolean getElectronicSubmission() {
         return electronicSubmission;
     }
 
     public void setElectronicSubmission(Boolean electronicSubmission) {
         this.electronicSubmission = electronicSubmission;
+    }
+
+    public void setProcuringEntityCityId(TreeSet<String> procuringEntityCityId) {
+        this.procuringEntityCityId = procuringEntityCityId;
     }
 
     public TreeSet<String> getProcurementMethod() {
@@ -168,11 +218,44 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
         this.procurementMethod = procurementMethod;
     }
 
+    public TreeSet<Integer> getProcuringEntityDepartmentId() {
+        return procuringEntityDepartmentId;
+    }
+
     public Boolean getFlagged() {
         return flagged;
     }
 
     public void setFlagged(Boolean flagged) {
         this.flagged = flagged;
+    }
+}
+
+    public void setProcuringEntityDepartmentId(TreeSet<Integer> procuringEntityDepartmentId) {
+        this.procuringEntityDepartmentId = procuringEntityDepartmentId;
+    }
+
+    public TreeSet<Integer> getProcuringEntityGroupId() {
+        return procuringEntityGroupId;
+    }
+
+    public void setProcuringEntityGroupId(TreeSet<Integer> procuringEntityGroupId) {
+        this.procuringEntityGroupId = procuringEntityGroupId;
+    }
+
+    public TreeSet<String> getNotBidSelectionMethod() {
+        return notBidSelectionMethod;
+    }
+
+    public void setNotBidSelectionMethod(TreeSet<String> notBidSelectionMethod) {
+        this.notBidSelectionMethod = notBidSelectionMethod;
+    }
+
+    public TreeSet<String> getPlanningLoc() {
+        return planningLoc;
+    }
+
+    public void setPlanningLoc(TreeSet<String> planningLoc) {
+        this.planningLoc = planningLoc;
     }
 }

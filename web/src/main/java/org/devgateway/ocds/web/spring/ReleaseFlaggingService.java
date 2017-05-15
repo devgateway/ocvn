@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
+import org.devgateway.ocds.web.flags.release.vietnam.ReleaseFlagI003Processor;
+import org.devgateway.ocds.web.flags.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI002Processor;
 import org.devgateway.ocds.web.flags.release.ReleaseFlagI007Processor;
@@ -52,6 +54,13 @@ public class ReleaseFlaggingService {
     private ReleaseFlagI019Processor releaseFlagI019Processor;
     @Autowired
     private ReleaseFlagI077Processor releaseFlagI077Processor;
+
+    @Autowired
+    private ReleaseFlagI003Processor releaseFlagI003Processor;
+
+    @Autowired
+    private VietnamReleaseFlagI004Processor vietnamReleaseFlagI004Processor;
+
     @Autowired
     private ReleaseFlagI180Processor releaseFlagI180Processor;
     @Autowired
@@ -122,7 +131,9 @@ public class ReleaseFlaggingService {
     protected void setProcessors() {
         releaseFlagProcessors = Collections.unmodifiableList(Arrays.asList(
                 releaseFlagI038Processor,
+                releaseFlagI003Processor,
                 releaseFlagI007Processor,
+                vietnamReleaseFlagI004Processor,
                 releaseFlagI019Processor,
                 releaseFlagI077Processor,
                 releaseFlagI180Processor,

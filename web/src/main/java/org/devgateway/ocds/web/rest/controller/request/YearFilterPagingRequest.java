@@ -29,7 +29,6 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
             + "parameters, so it only works if and only if the year parameter has one value.")
     @EachRange(min = MIN_MONTH, max = MAX_MONTH)
     protected TreeSet<Integer> month;
-        
     @ApiModelProperty(value = "When true, this parameter will add an extra layer of monthly grouping of all results."
             + " The default is false")
     private Boolean monthly = false;
@@ -41,7 +40,7 @@ public class YearFilterPagingRequest extends DefaultFilterPagingRequest {
     public void setMonthly(Boolean monthly) {
         this.monthly = monthly;
     }
-    
+
     /**
      *
      */

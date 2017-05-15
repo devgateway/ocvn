@@ -54,7 +54,7 @@ public abstract class AbstractExcelControllerTest extends AbstractWebTest {
         final ClassLoader classLoader = getClass().getClassLoader();
 
         final File file = new File(classLoader.getResource("json/endpoint-data-test.json").getFile());
-        final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file);
+        final JsonImportPackage releasePackageJsonImport = new ReleasePackageJsonImport(releaseRepository, file, true);
         releasePackageJsonImport.importObjects();
 
         mockHttpServletResponse = new MockHttpServletResponse();

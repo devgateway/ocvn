@@ -63,6 +63,11 @@ public class XExcelFileReader {
             break;
         }
 
+        if (inputStream == null) {
+            opcPkg.close();
+            throw new RuntimeException(String.format("No Excel sheet with name %s present.", sheetName));
+        }
+
         xmlReader = factory.createXMLStreamReader(inputStream);
 
         while (xmlReader.hasNext()) {

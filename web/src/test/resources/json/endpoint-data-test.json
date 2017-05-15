@@ -15,12 +15,25 @@
         "tag": ["award"],
         "initiationType": "tender",
         "planning": {
+            "bidPlanProjectDateApprove" : "2016-01-10T09:00:00Z",
             "budget": {
                 "description": "[ocds-endpoint-001] planning - budget",
                 "amount": {
                     "amount": 1000.00,
                     "currency": "USD"
                 },
+                "projectLocation" : [
+                    {
+                        "geometry" : {
+                            "type" : "Point",
+                            "coordinates" : [
+                                47.411,
+                                28.36
+                            ]
+                        },
+                        "description" : "Moldova"
+                    }
+                ],
                 "projectID": "SP001"
             },
             "rationale": "[ocds-endpoint-001] - planning rationale"
@@ -30,6 +43,8 @@
             "title": "[ocds-endpoint-001-tender] - Title",
             "description": "[ocds-endpoint-001-tender] - Description",
             "status": "active",
+            "procurementMethodDetails" : "Competitive offers",
+            "publicationMethod": "eGP",
             "items": [
                 {
                     "id": "0001",
@@ -46,7 +61,8 @@
                                 45.9432,
                                 24.9668
                             ]
-                        }
+                        },
+                        "description" : "Romania"
                     }
                 }
             ],

@@ -78,7 +78,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                         new BasicDBObject("$subtract",
                                 Arrays.asList(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF,
                                         MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF)),
-                        DAY_MS));
+                        MongoConstants.DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -123,6 +123,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
+        project1.put(Fields.UNDERSCORE_ID, 0);
         project1.put(Keys.TOTAL_TENDER_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_TENDERS, 1);
         project1.put(Keys.PERCENTAGE_TENDER_WITH_START_END_DATES,
@@ -135,6 +136,9 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                 group().sum("tenderWithStartEndDates").as(Keys.TOTAL_TENDER_WITH_START_END_DATES).count().
                         as(Keys.TOTAL_TENDERS),
                 new CustomProjectionOperation(project1));
+
+
+
 
         AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
         List<DBObject> list = results.getMappedResults();
@@ -150,7 +154,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
 
         DBObject awardLengthDays = new BasicDBObject("$divide", Arrays.asList(
                 new BasicDBObject("$subtract", Arrays.asList("$awards.date",
-                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF)), DAY_MS));
+                        MongoConstants.FieldNames.TENDER_PERIOD_END_DATE_REF)), MongoConstants.DAY_MS));
 
         DBObject project = new BasicDBObject();
         project.put(Fields.UNDERSCORE_ID, 0);
@@ -201,6 +205,7 @@ public class AverageTenderAndAwardPeriodsController extends GenericOCDSControlle
                                 1, 0)));
 
         DBObject project1 = new BasicDBObject();
+        project1.put(Fields.UNDERSCORE_ID, 0);
         project1.put(Keys.TOTAL_AWARD_WITH_START_END_DATES, 1);
         project1.put(Keys.TOTAL_AWARDS, 1);
         project1.put(Keys.PERCENTAGE_AWARD_WITH_START_END_DATES,

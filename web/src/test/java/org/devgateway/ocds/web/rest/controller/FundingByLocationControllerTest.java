@@ -1,16 +1,15 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author idobre
@@ -59,5 +58,42 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
         Assert.assertEquals(3, totalTendersWithStartDate);
         Assert.assertEquals(1, totalTendersWithStartDateAndLocation);
         Assert.assertEquals(33.33, percentTendersWithStartDateAndLocation, 1E-2);
+    }
+
+    @Test
+    public void plannedFundingByLocation() throws Exception {
+        final List<DBObject> plannedFundingByLocation = fundingByLocationController
+                .plannedFundingByLocation(new YearFilterPagingRequest());
+
+        final DBObject first = plannedFundingByLocation.get(0);
+        int year = (int) first.get(FundingByLocationController.Keys.YEAR);
+        BasicDBObject projectLocation = (BasicDBObject) first
+                .get(FundingByLocationController.Keys.PLANNING_BUDGET_PROJECTLOCATION);
+        BasicDBObject geometry = (BasicDBObject) projectLocation.get("geometry");
+        String geometryType = (String) geometry.get("type");
+        List<Double> coordinates = (List<Double>) geometry.get("coordinates");
+        double totalPlannedAmount = (double) first.get(FundingByLocationController.Keys.TOTAL_PLANNED_AMOUNT);
+
+        Assert.assertEquals(2016, year);
+        Assert.assertEquals("Point", geometryType);
+        Assert.assertEquals(new ArrayList<>(Arrays.asList(47.411, 28.36)), coordinates);
+        Assert.assertEquals(1000.0, totalPlannedAmount, 0);
+    }
+
+    @Test
+    public void qualityPlannedFundingByLocation() throws Exception {
+        final List<DBObject> qualityPlannedFundingByLocation = fundingByLocationController
+                .qualityPlannedFundingByLocation(new YearFilterPagingRequest());
+
+        final DBObject first = qualityPlannedFundingByLocation.get(0);
+        int totalPlansWithAmounts = (int) first.get(FundingByLocationController.Keys.TOTAL_PLANS_WITH_AMOUNTS);
+        int totalPlansWithAmountsAndLocation = (int) first
+                .get(FundingByLocationController.Keys.TOTAL_PLANS_WITH_AMOUNTS_AND_LOCATION);
+        double percentPlansWithAmountsAndLocation = (double) first
+                .get(FundingByLocationController.Keys.PERCENT_PLANS_WITH_AMOUNTS_AND_LOCATION);
+
+        Assert.assertEquals(3, totalPlansWithAmounts);
+        Assert.assertEquals(1, totalPlansWithAmountsAndLocation);
+        Assert.assertEquals(33.33, percentPlansWithAmountsAndLocation, 1E-2);
     }
 }
