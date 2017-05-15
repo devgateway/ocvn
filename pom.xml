@@ -26,6 +26,7 @@
         <derby.version>10.13.1.1</derby.version>
         <poi.version>3.14</poi.version>
         <pentaho.poi.version>3.14</pentaho.poi.version>
+        <commons.lang3.version>3.5</commons.lang3.version>
     </properties>
 
     <modules>

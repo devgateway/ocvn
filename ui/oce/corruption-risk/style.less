@@ -171,6 +171,14 @@
     }
   }
 
+  @media (max-height: 650px) {
+    position: relative;
+    aside{
+      position: absolute!important;
+      overflow: hidden;
+    }
+  }
+
   aside{
     @leftPadding: 30px;
     bottom:0;
@@ -180,7 +188,7 @@
     padding-left: @leftPadding;
     padding-top: 10px;
     top: @headerHeight * 1.5;
-    // overflow-y: auto;
+
     .small {
       font-size: 80%;
       line-height:128%;
@@ -192,10 +200,9 @@
     .total-flags{
       background: #eff9ff;
       margin-left: -30px;
-      padding-bottom: 150px;
-      padding-left: 13%;
       position: absolute;
       width: 100%;
+      height: 100%;
       .total-flags-counter{
         width: 250px;
         text-align: center;
@@ -257,7 +264,7 @@
 
     .crd-popup{
       @popupColor: #222c3c;
-      @popupWidth: 300px;//if you're changing this you need to also change POPUP_WIDTH in custom-popup-chart
+      @popupWidth: 300px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
       position: absolute;
       top: 0;
       left: 0;
@@ -373,15 +380,18 @@
     td.hoverable{
       position: relative;
       .crd-popup{
-        display: none;
         padding: 15px;
         height: auto;
+        display: none;
         .and{
           text-transform: uppercase;
           color: #387ab2;
         }
         hr{
           width: auto;
+        }
+        h5{
+          font-weight: bold;
         }
       }
 
@@ -401,7 +411,7 @@
         right: 100%;
         top: -100%;
         bottom: auto;
-        margin-left:0;
+        margin-left: 0;
         margin-right: @arrowSize;
       }
     }

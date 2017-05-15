@@ -11,7 +11,7 @@ class Filters extends React.Component{
     const {onUpdate, translations, currentBoxIndex, requestNewBox, state, allYears, allMonths, onApply, appliedFilters} = this.props;
     const {BOXES} = this.constructor;
     return (
-      <div className="row filters-bar" onClick={e => e.stopPropagation()}>
+      <div className="row filters-bar" onMouseDown={e => e.stopPropagation()}>
         <div className="col-lg-1 col-md-1 col-sm-1">
         </div>
         <div className="col-lg-9 col-md-9 col-sm-9">

@@ -41,16 +41,23 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getLayout(){
+    const data = super.getData();
+    const maxValue = data ?
+      data.reduce((max, datum) => Math.max(max, datum.get('totalTrue')), 0) :
+      0;
+
     return {
       xaxis: {
         type: 'category',
         showgrid: false,
         showline: false,
-        tickangle: -45
+        tickangle: -60
       },
       yaxis: {
         tickangle: -90,
-        nticks: 2
+        tickmode: 'linear',
+        tick0: 0,
+        dtick: maxValue / 2
       }
     }
   }
@@ -198,6 +205,12 @@ class Crosstab extends Table{
   }
 }
 
+function groupBy3(arr){
+  if(arr.length == 0) return [];
+  if(arr.length <= 3) return [arr];
+  return [arr.slice(0, 3)].concat(groupBy3(arr.slice(3)));
+}
+
 class CorruptionType extends translatable(React.Component){
   constructor(...args){
     super(...args);
@@ -217,51 +230,56 @@ class CorruptionType extends translatable(React.Component){
            translations, width} = this.props;
     const {crosstab, indicatorTiles} = this.state;
     if(!indicators || !indicators.length) return null;
+
     return (
       <div className="page-corruption-type">
         <h2 className="page-header">{this.t(`crd:corruptionType:${corruptionType}:pageTitle`)}</h2>
         <p className="introduction" dangerouslySetInnerHTML={{__html: this.t(`crd:corruptionType:${corruptionType}:introduction`)}}/>
-        <div className="row">
-          {indicators.map((indicator, index) => {
-            const indicatorName = this.t(`crd:indicators:${indicator}:name`);
-            const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
-             return (
-               <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
-                 <div className="border">
-                   <h4>{indicatorName}</h4>
-                   <p>{indicatorDescription}</p>
-                   <IndicatorTile
-                       indicator={indicator}
-                       translations={translations}
-                       filters={filters}
-                       requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
-                       data={indicatorTiles[indicator]}
-                       margin={{t: 10, r: 5, b: 40, l: 20, pad: 5}}
-                       height={300}
-                       years={years}
-                       monthly={monthly}
-                       months={months}
-                       width={width/3-60}
-                   />
-                 </div>
-               </div>
-             )
-           })}
-        </div>
+        {groupBy3(indicators).map(row => {
+          return (
+              <div className="row">
+                {row.map(indicator => {
+                  const indicatorName = this.t(`crd:indicators:${indicator}:name`);
+                  const indicatorDescription = this.t(`crd:indicators:${indicator}:indicator`);
+                  return (
+                      <div className="col-sm-4 indicator-tile-container" key={corruptionType+indicator} onClick={e => onGotoIndicator(indicator)}>
+                        <div className="border">
+                          <h4>{indicatorName}</h4>
+                          <p>{indicatorDescription}</p>
+                          <IndicatorTile
+                              indicator={indicator}
+                              translations={translations}
+                              filters={filters}
+                              requestNewData={(_, data) => this.updateIndicatorTile(indicator, data)}
+                              data={indicatorTiles[indicator]}
+                              margin={{t: 10, r: 5, b: 50, l: 20, pad: 5}}
+                              height={300}
+                              years={years}
+                              monthly={monthly}
+                              months={months}
+                              width={width/3-60}
+                          />
+                        </div>
+                      </div>
+                  )
+                })}
+              </div>
+          )
+        })}
         <section>
           <h3 className="page-header">
             {this.t(`crd:corruptionType:${corruptionType}:crosstabTitle`)}
           </h3>
           <p className="introduction">{this.t(`crd:corruptionType:${corruptionType}:crosstab`)}</p>
           <Crosstab
-              filters={filters}
-              years={years}
-              monthly={monthly}
-              months={months}
-              indicators={indicators}
-              data={crosstab}
-              requestNewData={(_, data) => this.setState({crosstab: data})}
-              translations={translations}
+            filters={filters}
+            years={years}
+            monthly={monthly}
+            months={months}
+            indicators={indicators}
+            data={crosstab}
+            requestNewData={(_, data) => this.setState({crosstab: data})}
+            translations={translations}
           />
         </section>
       </div>

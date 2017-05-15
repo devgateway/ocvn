@@ -92,6 +92,9 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     private TreeSet<Integer> procuringEntityGroupId;
 
 
+    @ApiModelProperty(value = "Only show the releases that were flagged by at least one indicator")
+    private Boolean flagged;
+
     public DefaultFilterPagingRequest() {
         super();
     }
@@ -218,6 +221,15 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public TreeSet<Integer> getProcuringEntityDepartmentId() {
         return procuringEntityDepartmentId;
     }
+
+    public Boolean getFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(Boolean flagged) {
+        this.flagged = flagged;
+    }
+
 
     public void setProcuringEntityDepartmentId(TreeSet<Integer> procuringEntityDepartmentId) {
         this.procuringEntityDepartmentId = procuringEntityDepartmentId;

@@ -1,7 +1,7 @@
 import style from "./style.less";
 import cn from "classnames";
 import URI from "urijs";
-import {fetchJson, debounce, cacheFn, range, pluck} from "../tools";
+import {fetchJson, debounce, cacheFn, range, pluck, callFunc} from "../tools";
 import OverviewPage from "./overview-page";
 import CorruptionTypePage from "./corruption-type";
 import {Map, Set} from "immutable";
@@ -179,7 +179,7 @@ class CorruptionRiskDashboard extends React.Component{
 
     return (
       <div className="container-fluid dashboard-corruption-risk"
-           onClick={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
+           onMouseDown={e => this.setState({dashboardSwitcherOpen: false, filterBoxIndex: null})}
       >
         {showLandingPopup && <LandingPopup/>}
         <header className="branding row">
@@ -194,7 +194,7 @@ class CorruptionRiskDashboard extends React.Component{
               </h1>
               {dashboardSwitcherOpen &&
                <div className="dashboard-switcher">
-                 <a href="javascript:void(0);" onClick={e => onSwitch('default')}>
+                 <a href="javascript:void(0);" onClick={e => onSwitch('default')} onMouseDown={callFunc('stopPropagation')}>
                    Default dashboard
                  </a>
                </div>
@@ -218,7 +218,7 @@ class CorruptionRiskDashboard extends React.Component{
             allYears={allYears}
             allMonths={allMonths}
         />
-        <aside className="col-xs-4 col-md-4 col-lg-3">
+        <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
           <div>
             <h4 className="crd-overview-link" onClick={e => this.setState({page: 'overview'})}>
               Corruption Risk Overview

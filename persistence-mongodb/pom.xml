@@ -29,7 +29,6 @@
         <ehcache.version>2.6.11</ehcache.version>
         <json.schema.validator.version>2.2.6</json.schema.validator.version>
         <json.patch.version>1.9</json.patch.version>
-        <commons.lang3.version>3.2.1</commons.lang3.version>
     </properties>
 
     <parent>
