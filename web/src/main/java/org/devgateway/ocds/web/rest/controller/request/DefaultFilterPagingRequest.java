@@ -229,7 +229,7 @@ public class DefaultFilterPagingRequest extends GenericPagingRequest {
     public void setFlagged(Boolean flagged) {
         this.flagged = flagged;
     }
-}
+
 
     public void setProcuringEntityDepartmentId(TreeSet<Integer> procuringEntityDepartmentId) {
         this.procuringEntityDepartmentId = procuringEntityDepartmentId;
