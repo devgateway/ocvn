@@ -37,7 +37,7 @@ class OCVN extends OCApp{
         <header className="branding row">
           <div className="col-sm-offset-1 col-sm-4">
             {/*this.dashboardSwitcher()*/}
-            <h1>{this.t('general:subtitle')}
+            <h1>{this.t('general:title')}
               <small>{this.t('general:subtitle')}</small>
             </h1>
           </div>
