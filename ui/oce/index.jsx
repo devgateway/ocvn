@@ -273,7 +273,7 @@ class OCApp extends React.Component{
 
   languageSwitcher(){
     const {TRANSLATIONS} = this.constructor;
-    if(!TRANSLATIONS.length) return null;
+    if(Object.keys(TRANSLATIONS).length <= 1) return null;
     return Object.keys(TRANSLATIONS).map(locale =>
         <img className="icon"
              src={`assets/flags/${locale}.png`}
