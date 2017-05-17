@@ -6,7 +6,7 @@ class TenderLocations extends Map{
     let data = super.getData();
     if(!data) return [];
     return data
-        .groupBy(location => location.getIn(['items.deliveryLocation', '_id']))
+        .groupBy(location => location.getIn(['deliveryLocation', '_id']))
         .map(locations => locations.reduce((reducedLocation, location) => {
           return {
             "_id": location.getIn(['deliveryLocation', '_id']),
