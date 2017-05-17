@@ -4,6 +4,7 @@ import {pluckImm, debounce} from "../tools";
 import backendYearFilterable from "../backend-year-filterable";
 import Visualization from "../visualization";
 import {fromJS} from "immutable";
+import translatable from "../translatable";
 
 Plotly.register([
   require('plotly.js/lib/pie')
@@ -20,23 +21,23 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
       hole: .85,
       type: 'pie',
       marker: {
-        colors: ['#fac329', '#289df5', '#3372b1']
-      }
+        colors: ['#fac329', '#289df5', '#3372b1']//if you change this colors you'll have to also change it for the custom legend in ./style.less
+      },
+      outsidetextfont: {
+        size: 15,
+        color: '#3fc529'
+      },
+      insidetextfont: {
+        size: 15,
+        color: '#3fc529'
+      },
     }];
   }
 
   getLayout(){
     const {width} = this.props;
     return {
-      legend: {
-        orientation: 'h',
-        font: {
-          size: 9
-        },
-        x: 0.15,
-        y: -0.2,
-        tracegroupgap: 1
-      },
+      showlegend: false,
       paper_bgcolor: 'rgba(0,0,0,0)'
     }
   }
@@ -46,19 +47,22 @@ TotalFlagsChart.endpoint = 'totalFlaggedIndicatorsByIndicatorType';
 
 class Counter extends backendYearFilterable(Visualization){
   render(){
-    const {data, width} = this.props;
+    const {data} = this.props;
     if(!data) return null;
     return (
-      <h4 className="total-flags-counter" style={{width}}>
-        Total flags: {data.getIn([0, 'flaggedCount'], 0)} 
-      </h4>
+      <div className="total-flags-counter">
+        <div className="text text-left">Total Flags:</div>
+        <div className="count text-right">
+          {data.getIn([0, 'flaggedCount'], 0)}
+        </div>
+      </div>
     )
   }
 }
 
 Counter.endpoint = 'totalFlags';
 
-class TotalFlags extends React.Component{
+class TotalFlags extends translatable(React.Component){
   constructor(...args){
     super(...args);
     this.state = {
@@ -66,11 +70,10 @@ class TotalFlags extends React.Component{
 
     this.updateSidebarWidth = debounce(() =>
       this.setState({
-        width: document.getElementById('crd-sidebar').offsetWidth - 30
+        width: document.getElementById('crd-sidebar').offsetWidth
       })
     );
   }
-
 
   componentDidMount(){
     this.updateSidebarWidth();
@@ -95,20 +98,24 @@ class TotalFlags extends React.Component{
           years={years}
           months={months}
           monthly={monthly}
-          width={width}
         />
         <TotalFlagsChart
           data={data.get('chart')}
           requestNewData={(_, data) => requestNewData(['chart'], data)}
           translations={translations}
           width={width}
-          height={250}
-          margin={{l:0, r:0, t: 40, b: 0, pad:0}}
+          height={200}
+          margin={{l:0, r:0, t: 40, b: 20, pad:0}}
           filters={filters}
           years={years}
           months={months}
           monthly={monthly}
         />
+        <div className="crd-legend">
+          <div className="fraud">{this.t("crd:corruptionType:FRAUD:name")}</div>
+          <div className="rigging">{this.t("crd:corruptionType:RIGGING:name")}</div>
+          <div className="collusion">{this.t("crd:corruptionType:COLLUSION:name")}</div>
+        </div>
       </div>
     )
   }
