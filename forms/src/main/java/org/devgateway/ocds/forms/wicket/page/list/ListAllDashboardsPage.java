@@ -24,7 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.page.edit.EditUserDashboardPage;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.page.lists.AbstractListPage;
 import org.wicketstuff.annotation.mount.MountPath;
 

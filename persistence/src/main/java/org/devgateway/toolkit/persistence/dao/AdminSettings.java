@@ -21,6 +21,11 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
 
     private Boolean rebootServer = false;
 
+    /**
+     * This disables the security of /api/ endpoints, should be used for demo purposes only
+     */
+    private Boolean disableApiSecurity = false;
+
     @Override
     public AbstractAuditableEntity getParent() {
         return null;
@@ -40,5 +45,13 @@ public class AdminSettings extends AbstractAuditableEntity implements Serializab
 
     public void setRebootServer(final Boolean rebootServer) {
         this.rebootServer = rebootServer;
+    }
+
+    public Boolean getDisableApiSecurity() {
+        return disableApiSecurity;
+    }
+
+    public void setDisableApiSecurity(Boolean disableApiSecurity) {
+        this.disableApiSecurity = disableApiSecurity;
     }
 }

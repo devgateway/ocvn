@@ -43,7 +43,7 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.ComponentUtil;
 import org.devgateway.toolkit.forms.wicket.components.util.CustomDownloadLink;
 import org.devgateway.toolkit.forms.wicket.events.EditingDisabledEvent;

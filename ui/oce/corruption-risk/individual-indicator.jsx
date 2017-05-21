@@ -99,13 +99,13 @@ class IndividualIndicatorChart extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-8 text-right title">Projects Flagged</div>
+          <div className="col-sm-8 text-right title">Procurements Flagged</div>
           <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-8 text-right title">Eligible Projects</div>
+          <div className="col-sm-8 text-right title">Eligible Procurements</div>
           <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-8 text-right title">% Eligible Projects Flagged</div>
+          <div className="col-sm-8 text-right title">% Eligible Procurements Flagged</div>
           <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-8 text-right title">% Projects Eligible</div>
+          <div className="col-sm-8 text-right title">% Procurements Eligible</div>
           <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>

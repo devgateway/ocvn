@@ -9,7 +9,7 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.forms.security.SecurityUtil;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.springframework.data.domain.Page;

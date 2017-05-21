@@ -18,7 +18,7 @@ import org.devgateway.ocds.forms.wicket.page.list.ListAllDashboardsPage;
 import org.devgateway.ocds.forms.wicket.providers.LabelPersistableJpaRepositoryTextChoiceProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
 import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2MultiChoiceBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextAreaFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;

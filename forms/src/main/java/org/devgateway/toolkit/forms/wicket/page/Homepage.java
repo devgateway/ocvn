@@ -19,7 +19,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 
 /**
  * @author mpostelnicu

@@ -1,7 +1,7 @@
 import Chart from "../visualizations/charts/frontend-date-filterable";
 import ReactIgnore from "../react-ignore.jsx";
 import cn from "classnames";
-import {POPUP_HEIGHT} from "./constants";
+import {POPUP_HEIGHT, POPUP_WIDTH} from "./constants";
 
 class CustomPopupChart extends Chart{
   constructor(...args){
@@ -26,7 +26,6 @@ class CustomPopupChart extends Chart{
     const point = data.points[0];
     const year = point.x;
     const traceName = point.data.name;
-    const POPUP_WIDTH = 300;
     const POPUP_ARROW_SIZE = 8;
 
     const {xaxis, yaxis} = point;

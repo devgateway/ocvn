@@ -86,13 +86,13 @@ class IndicatorTile extends CustomPopupChart{
           <div className="col-sm-12">
             <hr/>
           </div>
-          <div className="col-sm-8 text-right title">Projects Flagged</div>
+          <div className="col-sm-8 text-right title">Procurements Flagged</div>
           <div className="col-sm-4 text-left info">{datum.get('totalTrue')}</div>
-          <div className="col-sm-8 text-right title">Eligible Projects</div>
+          <div className="col-sm-8 text-right title">Eligible Procurements</div>
           <div className="col-sm-4 text-left info">{datum.get('totalPrecondMet')}</div>
-          <div className="col-sm-8 text-right title">% Eligible Projects Flagged</div>
+          <div className="col-sm-8 text-right title">% Eligible Procurements Flagged</div>
           <div className="col-sm-4 text-left info">{datum.get('percentTruePrecondMet').toFixed(2)} %</div>
-          <div className="col-sm-8 text-right title">% Projects Eligible</div>
+          <div className="col-sm-8 text-right title">% Procurements Eligible</div>
           <div className="col-sm-4 text-left info">{datum.get('percentPrecondMet').toFixed(2)} %</div>
         </div>
         <div className="arrow"/>
@@ -162,13 +162,13 @@ class Crosstab extends Table{
               <div className="crd-popup text-left">
                 <div className="row">
                   <div className="col-sm-12 info">
-                    {percent ? percent.toFixed(2) : 0}% of projects flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
+                    {percent ? percent.toFixed(2) : 0}% of procurements flagged for "{rowIndicatorName}" are also flagged for "{indicatorName}"
                   </div>
                   <div className="col-sm-12">
                     <hr/>
                   </div>
                   <div className="col-sm-12 info">
-                    <h4>{count} Projects flagged with both;</h4>
+                    <h4>{count} Procurements flagged with both;</h4>
                     <p><strong>{rowIndicatorName}</strong>: {rowIndicatorDescription}</p>
                     <p className="and">and</p>
                     <p><strong>{indicatorName}</strong>: {indicatorDescription}</p>

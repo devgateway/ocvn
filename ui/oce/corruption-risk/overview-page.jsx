@@ -134,9 +134,9 @@ class CorruptionType extends CustomPopupChart{
           <div className="col-sm-5 text-left info">{indicatorCount}</div>
           <div className="col-sm-7 text-right title">Total Flags</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedCount}</div>
-          <div className="col-sm-7 text-right title">Total Projects Flagged</div>
+          <div className="col-sm-7 text-right title">Total Procurements Flagged</div>
           <div className="col-sm-5 text-left info">{dataForPoint.flaggedProjectCount}</div>
-          <div className="col-sm-7 text-right title">% Total Projects Flagged</div>
+          <div className="col-sm-7 text-right title">% Total Procurements Flagged</div>
           <div className="col-sm-5 text-left info">{dataForPoint.percent.toFixed(2)}%</div>
         </div>
         <div className="arrow"/>

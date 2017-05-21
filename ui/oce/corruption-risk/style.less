@@ -174,8 +174,15 @@
   @media (max-height: 650px) {
     position: relative;
     aside{
-      position: absolute!important;
-      overflow: hidden;
+      .crd-description-text p{
+        display: none;
+      }
+      section[role=navigation]{
+        margin-top: 0;
+      }
+      .crd-description-text:hover p{
+        display: block;
+      }
     }
   }
 
@@ -203,9 +210,52 @@
       position: absolute;
       width: 100%;
       height: 100%;
+      @infoWidth: 250px;
       .total-flags-counter{
-        width: 250px;
-        text-align: center;
+        width: @infoWidth;
+        margin: 20px auto 0 auto;
+        .text{
+          float: left;
+          font-size: 1.5em;
+          padding-top: (2em - 1.5em) / 2;
+        }
+        .count{
+          font-size: 2em;
+        }
+      }
+      .crd-legend{
+        width: @infoWidth;
+        @boxSize: 11px;
+        margin: 20px auto;
+        div{
+          width: @infoWidth / 4;
+          float: left;
+          font-size: @boxSize;
+          text-align: center;
+          &:before{
+            display: inline-block;
+            content: "";
+            width: @boxSize;
+            height: @boxSize;
+            margin-top: 4px;
+            margin-right: @boxSize / 2;
+            transform: translateY(1px);
+            border: 2px solid red;
+            border-radius: @boxSize;
+          }
+        }
+        .rigging{
+          width: @infoWidth / 2;
+          &:before{
+            border-color: #3372b1;
+          }
+        }
+        .fraud:before{
+          border-color: #289df5;
+        }
+        .collusion:before{
+          border-color: #fac329;
+        }
       }
     }
     .crd-overview-link{
@@ -264,7 +314,7 @@
 
     .crd-popup{
       @popupColor: #222c3c;
-      @popupWidth: 300px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
+      @popupWidth: 400px;//if you're changing this you need to also change POPUP_WIDTH in constants.es6
       position: absolute;
       top: 0;
       left: 0;
@@ -375,6 +425,9 @@
         color: #b6cddc;
         background: #f1faff;
       }
+      .crd-popup{
+        width: 300px;
+      }
     }
 
     td.hoverable{
@@ -473,6 +526,10 @@
     .popup-title, .section-title h5{
       color: #27587e;
       font-weight: bold;
+    }
+    hr{
+      margin-top: 5px;
+      margin-bottom: 0;
     }
     .close-button{
       color: #c9c9c9;
