@@ -130,6 +130,26 @@ public class XExcelFileReader {
         while (xmlReader.hasNext()) {
             xmlReader.next();
             if (xmlReader.isStartElement()) {
+                //this is for xlsx without stringsTable, just inline
+                if (xmlReader.getLocalName().equals("is")) {
+                    if (cellType != null && cellType.equals("inlineStr")) {
+                        while (xmlReader.hasNext()) {
+                            xmlReader.next();
+
+                            if (xmlReader.isStartElement() && xmlReader.getLocalName().equals("t")) {
+                                return xmlReader.getElementText();
+                            } else {
+                                if (xmlReader.isEndElement() && xmlReader.getLocalName().equals("t")) {
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //this part is for xlsx with stringsTable
                 if (xmlReader.getLocalName().equals("v")) {
                     if (cellType != null && cellType.equals("s")) {
                         int idx = Integer.parseInt(xmlReader.getElementText());

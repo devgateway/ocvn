@@ -192,6 +192,8 @@ public class VNImportService implements ExcelImportService {
         msgBuffer.append(message).append("\r\n");
     }
 
+
+
     private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer,
             final int importRowBatch) {
         logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
@@ -206,7 +208,7 @@ public class VNImportService implements ExcelImportService {
             rows = reader.readRows(importRowBatch);
             while (!rows.isEmpty()) {
                 importer.importRows(rows);
-                rowNo += importRowBatch;
+                rowNo += rows.size();
                 if (rowNo % LOG_IMPORT_EVERY == 0) {
                     logMessage("Import Speed " + rowNo * MS_IN_SECOND / (System.currentTimeMillis() - startTime)
                             + " rows per second.");
@@ -295,7 +297,7 @@ public class VNImportService implements ExcelImportService {
 
             if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
-                        new LocationRowImporter(locationRepository, this, 1), 1);
+                        new LocationRowImporter(locationRepository, this, 1));
             }
             
                         
@@ -320,12 +322,12 @@ public class VNImportService implements ExcelImportService {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
                         new PublicInstitutionRowImporter(vnOrganizationRepository, cityRepository,
                                 orgGroupRepository, departmentRepository,
-                                this, 2), 1);
+                                this, 2));
             }
 
             if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2), 1);
+                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2));
             }
 
             if (prototypeDatabase != null) {
