@@ -27,7 +27,6 @@
         <poi.version>3.14</poi.version>
         <pentaho.poi.version>3.14</pentaho.poi.version>
         <commons.lang3.version>3.5</commons.lang3.version>
-        <pentaho.poi.version>3.12</pentaho.poi.version>
         <docker.image.prefix>devgateway/toolkit</docker.image.prefix>
         <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
     </properties>
