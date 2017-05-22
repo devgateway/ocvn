@@ -9,12 +9,14 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.forms.security;
+package org.devgateway.toolkit.web.security;
 
 import java.security.Principal;
-
+import java.util.List;
+import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.devgateway.toolkit.persistence.dao.categories.Role;
+import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -45,6 +47,24 @@ public final class SecurityUtil {
         }
         return null;
     }
+
+
+    public static Boolean getDisabledApiSecurity(AdminSettingsRepository adminSettingsRepository) {
+        List<AdminSettings> all = adminSettingsRepository.findAll();
+        if (all == null || all.size() == 0) {
+            return false;
+        }
+        if (all.size() > 1) {
+            throw new RuntimeException("Multiple admin settings found! Only one or zero allowed!");
+        }
+
+        if (all.get(0).getDisableApiSecurity() == null) {
+            return false;
+        }
+
+        return all.get(0).getDisableApiSecurity();
+    }
+
 
     /**
      * Returns true if the user has ROLE_ADMIN

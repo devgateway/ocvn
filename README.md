@@ -24,7 +24,7 @@ The project uses open source technologies exclusively, with the following list o
 - [Spring Framework](https://projects.spring.io/spring-framework/) - for security, service oriented architecture and REST API.
 - [JPA persistence](http://hibernate.org/orm/) for temporarily storing and organizing the MS Excel Files containing the raw data.
 - [Apache POI](https://poi.apache.org/) for reading the native MS Excel input dataset.
-- [MongoDB](https://www.mongodb.org/) - as the native OCDS NoSQL datastore. We have implemented the whole OCDS 1.0 standard schema and all data used in analytics/maps as well as raw OCDS export is stored directly into this format in MongoDB. 
+- [MongoDB](https://www.mongodb.org/) - as the native OCDS NoSQL datastore. We have implemented the whole OCDS 1.0 standard schema and all data used in analytics/maps as well as raw OCDS export is stored directly into this format in MongoDB.
 - [Apache Wicket](http://wicket.apache.org/) - for the admin interface that runs the upload/import process of raw data
 - [React](https://facebook.github.io/react/) - for integrating the dashboard/map/filter technologies
 - [Plot.ly](https://plot.ly/) - as the chart library
@@ -34,7 +34,7 @@ The project's source code is licensed under the open source [MIT](https://openso
 
 ## Architecture
 
-This is a mavenized multi-module project. It is built on the open source [dg-toolkit](https://github.com/devgateway/dg-toolkit) architecture. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates. 
+This is a mavenized multi-module project. It is built on the open source [dg-toolkit](https://github.com/devgateway/dg-toolkit) architecture. Each module can be started independently of the rest. All modules are based on [Spring Boot](http://projects.spring.io/spring-boot/) templates.
 
 <img src="ocvn.mmd.png" width="400">
 
@@ -43,7 +43,7 @@ The project uses [the gitflow workflow](https://github.com/devgateway/ocvn/blob/
 ### Modules
 
 - [persistence](https://github.com/devgateway/ocvn/tree/master/persistence) - this is a module responsible with [JPA 2.0](https://en.wikipedia.org/wiki/Java_Persistence_API) data persistence. It is also provides [HATEOAS](https://en.wikipedia.org/wiki/HATEOAS) services on top of the existing entities.
- 
+
 - [persistence-mongodb](https://github.com/devgateway/ocvn/tree/master/persistence-mongodb) - this is a module responsible with Spring Data MongoDB access. It stores the MongoDB DAO and MongoDB Template configuration files.
 
 - [web](https://github.com/devgateway/ocvn/tree/master/web) - this module provides REST endpoints for the services needed, as well as basic security. It depends on the **persistence** module.
@@ -90,11 +90,33 @@ DG-toolkit is a package of several modules, among which forms and web are runnab
 We are closely following the spring boot executable/fat jar documentation which provides an extremely nice way to run a jar as a linux system service. This works for both the old System V and the new systemd. You can find [the full Spring documentation here] (http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#deployment-service).
 
 
+## Start a new project with DG-Toolkit as the base
+
+DG-Toolkit should be used as a template project, so as starting point for other projects. This should be done by forking the repository. Unfortunately Github denies forking of repositories inside the same organization, so @devgateway can own only one DG-Toolkit fork (the current one). A chat with Github support has not solved the problem, they used to have this functionality but have opted to disable it. Therefore one cannot use the FORK button on Github, but since Git is the back-end of Github, this does not mean you cannot fork it using git on your machine.
+
+To fork DG-Toolkit you can simply create a new independent github repository, and after creation add a new remote on your machine. So you will have /origin/ that points to the new repo, and say dg-toolkit remote that points to the DG-Toolkit repo url. After this you should be able to merge from dg-toolkit remote to the origin remote, that is, you can take DG-Toolkit code and merge it over your existing empty project, thus you will get the DG-Toolkit tree inside your local project. This is much better than just copy-pasting the contents of DG-Toolkit. If you use remotes, you can later merge new fixes and features from DG-Toolkit back into your project, thus you keep your project up to date with fixes coming from DG-Toolkit.
+
+## Contributing code back to DG-Toolkit
+
+There are several ways in which this can be achieved:
+
+### Forking DG-Tookit for a feature/fix development
+
+The best and easiest is to fork DG-Toolkit for the sole purpose of developing a new module/feature/fix. You can very well use your own private github user space to do this and thus you can use the FORK button on the Ghihub page. After the fork you can commit all your new stuff to your copy of DG-Tooolkit then ask for a Pull Request of your code back into DG-Toolkit.
+
+### Develop the contributions in an already forked project
+
+Yes, it would be cool if we could develop the new contribution as part of your current project, which was forked some time ago from DG-Toolkit. It is possible but it is a bit trickier. You will not be able to merge your project back to DG-Toolkit, because this will bring all your project's custom code into DG-Toolkit, so basically the customized implementation the client has asked for, like all the dashboards and forms that it asked. That is undesirable.
+
+One simple solution to this is to commit the changes you are willing to merge back to DG-Toolkit as atomic changes. That means that when you commit your files, you commit only those files that are related to that new feature and nothing else. For example let's suppose you want to develop a new search module that will use Lucene for indexing and you will like to merge this new module to DG-Toolkit. You should commit all the code that has to do with the search module in separate commits that do not contain other code, for example if the search module is also used in a dashboard page in your project, you will commit that linking in a separate commit , so keep the commits that target the module functionality separate.
+
+Then, you can cherry-pick your project's branch over the dg-tookit remote branch. By doing so, you can pick what commits to apply and what to leave out and you will choose only the commits that implement the generic new module functionality and you will leave out the client-specific customizations that are not meant to be posted to DG-Toolkit
+
 ## Thanks!
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)
 
-OCVN uses YourKit Java Profiler for Performance Tuning. 
+OCVN uses YourKit Java Profiler for Performance Tuning.
 
 YourKit supports open source projects with its full-featured Java Profiler.
 YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a>

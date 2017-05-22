@@ -3,7 +3,7 @@ package org.devgateway.toolkit.web.spring;
 import org.jminix.console.application.MiniConsoleApplication;
 import org.jminix.console.servlet.SpringMiniConsoleServlet;
 import org.jminix.server.WebSpringServerConnectionProvider;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

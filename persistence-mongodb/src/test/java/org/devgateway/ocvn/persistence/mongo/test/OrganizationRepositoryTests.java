@@ -9,15 +9,12 @@ import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.toolkit.persistence.mongo.spring.MongoPersistenceApplication;
+import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,9 +26,7 @@ import static org.junit.Assert.assertThat;
  * @author mpostelnicu
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(MongoPersistenceApplication.class)
-public class OrganizationRepositoryTests {
+public class OrganizationRepositoryTests extends AbstractMongoTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganizationRepositoryTests.class);
 

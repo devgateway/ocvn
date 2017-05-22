@@ -27,7 +27,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.forms.security.SecurityUtil;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.devgateway.toolkit.forms.wicket.SSAuthenticatedWebSession;
 import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;

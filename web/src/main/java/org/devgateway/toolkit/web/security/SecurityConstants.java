@@ -12,7 +12,7 @@
 /**
  * 
  */
-package org.devgateway.toolkit.forms.security;
+package org.devgateway.toolkit.web.security;
 
 /**
  * @author mpostelnicu

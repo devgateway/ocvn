@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.devgateway.toolkit.web.spring;
 
+import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.devgateway.toolkit.persistence.spring.CustomJPAUserDetailsService;
+import org.devgateway.toolkit.web.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,10 +36,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
- *
  * @author mpostelnicu This configures the spring security for the Web project.
  *         An
- *
  */
 
 @Configuration
@@ -51,11 +51,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     protected CustomJPAUserDetailsService customJPAUserDetailsService;
 
+    @Autowired
+    protected AdminSettingsRepository adminSettingsRepository;
+
     @Value("${allowedApiEndpoints}")
     private String[] allowedApiEndpoints;
 
     @Value("${roleHierarchy}")
     private String roleHierarchyStringRepresentation;
+
 
     @Bean
     public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
@@ -73,10 +77,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/", "/home", "/v2/api-docs/**", "/swagger-ui.html**", "/webjars/**", "/images/**",
-                "/configuration/**", "/swagger-resources/**", "/dashboard", "/languages/**",
+                "/configuration/**", "/swagger-resources/**", "/dashboard", "/languages/**", "/isAuthenticated",
                 "/wicket/resource/**/*.ttf", "/wicket/resource/**/*.woff",
+                SecurityUtil.getDisabledApiSecurity(adminSettingsRepository) ? "/api/**" : "/",
                 "/wicket/resource/**/*.woff2", "/wicket/resource/**/*.css.map"
-                ).antMatchers(allowedApiEndpoints);
+        ).antMatchers(allowedApiEndpoints);
 
     }
 

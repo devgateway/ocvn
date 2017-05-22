@@ -1,20 +1,20 @@
 package org.devgateway.toolkit.forms.wicket.page;
 
-import java.util.List;
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxToggleBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.TextFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.page.edit.AbstractEditPage;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.wicketstuff.annotation.mount.MountPath;
+
+import java.util.List;
 
 /**
  * @author idobre
@@ -29,6 +29,8 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
     private TextFieldBootstrapFormComponent<Integer> excelBatchSize;
 
     private CheckBoxToggleBootstrapFormComponent rebootServer;
+
+    private CheckBoxToggleBootstrapFormComponent disableApiSecurity;
 
     @SpringBean
     protected AdminSettingsRepository adminSettingsRepository;
@@ -67,7 +69,11 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
 
         editForm.add(new Label("systemTitle", new StringResourceModel("systemTitle", this, null)));
 
-        rebootServer = new CheckBoxToggleBootstrapFormComponent("rebootServer");
-        editForm.add(rebootServer);
+//        rebootServer = new CheckBoxToggleBootstrapFormComponent("rebootServer");
+//        editForm.add(rebootServer);
+
+
+        disableApiSecurity = new CheckBoxToggleBootstrapFormComponent("disableApiSecurity");
+        editForm.add(disableApiSecurity);
     }
 }

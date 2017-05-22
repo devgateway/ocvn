@@ -95,7 +95,7 @@ class ProcurementsTable extends Table{
         <td>{tenderValue && tenderValue.get('amount')} {tenderValue && tenderValue.get('currency')}</td>
         <td>{awardValue.get('amount')} {awardValue.get('currency')}</td>
         <td>{startDate.toLocaleDateString()}&mdash;{endDate.toLocaleDateString()}</td>
-        <td>{type}</td>
+        <td>{this.t(`crd:corruptionType:${type}:name`)}</td>
         <Popup
           flaggedStats={flaggedStats}
           type={type}

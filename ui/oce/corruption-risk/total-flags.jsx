@@ -14,9 +14,10 @@ class TotalFlagsChart extends backendYearFilterable(Chart){
   getData(){
     const data = super.getData();
     if(!data || !data.count()) return [];
+    const labels = data.map(datum => this.t(`crd:corruptionType:${datum.get('type')}:name`)).toJS();
     return [{
       values: data.map(pluckImm('indicatorCount')).toJS(),
-      labels: data.map(pluckImm('type')).toJS(),
+      labels: labels,
       textinfo: 'value',
       hole: .85,
       type: 'pie',
