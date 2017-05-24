@@ -1,5 +1,5 @@
-import FrontendDateFilterableChart from "../../oce/visualizations/charts/frontend-date-filterable";
-import {pluckImm} from "../../oce/tools";
+import FrontendDateFilterableChart from "./frontend-date-filterable";
+import {pluckImm} from "../../tools";
 
 class PercentWithTenders extends FrontendDateFilterableChart{
   static getName(t){return t('charts:percentWithTenders:title')}
@@ -37,7 +37,6 @@ class PercentWithTenders extends FrontendDateFilterableChart{
     }
   }
 }
-
 
 PercentWithTenders.endpoint = 'percentTendersWithLinkedProcurementPlan';
 PercentWithTenders.excelEP = 'tendersWithLinkedProcurementPlanExcelChart';
