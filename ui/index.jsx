@@ -1,1 +1,1 @@
-require('./oce-standalone/index.jsx');
+require('./ocvn/index.jsx');

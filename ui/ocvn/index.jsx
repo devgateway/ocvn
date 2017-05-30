@@ -1,15 +1,15 @@
 import ReactDOM from "react-dom";
-import OCApp from "./oce";
-import OCVNOverviewTab from './ocvn/tabs/overview';
-import OCVNLocation from "./ocvn/tabs/location";
-import OCVNCompetitiveness from './ocvn/tabs/competitiveness';
-import OCVNEfficiency from './ocvn/tabs/efficiency';
-import OCVNEProcurement from './ocvn/tabs/e-procurement';
-import {fetchJson} from "./oce/tools";
+import OCApp from "../oce";
+import OCVNOverviewTab from './tabs/overview';
+import OCVNLocation from "./tabs/location";
+import OCVNCompetitiveness from './tabs/competitiveness';
+import OCVNEfficiency from './tabs/efficiency';
+import OCVNEProcurement from './tabs/e-procurement';
+import {fetchJson} from "../oce/tools";
 import {Map} from "immutable";
-import OCVNFilters from "./ocvn/filters";
+import OCVNFilters from "./filters";
 import styles from "./style.less";
-import ViewSwitcher from "./oce/switcher.jsx";
+import ViewSwitcher from "../oce/switcher.jsx";
 /* import CorruptionRickDashboard from "./oce/corruption-risk";*/
 
 class OCVN extends OCApp{
@@ -97,8 +97,8 @@ class OCVN extends OCApp{
 OCVN.Filters = OCVNFilters;
 
 const translations = {
-  en_US: require('../web/public/languages/en_US.json'),
-  vn_VN: require('../web/public/languages/vn_VN.json'),
+  en_US: require('../../web/public/languages/en_US.json'),
+  vn_VN: require('../../web/public/languages/vn_VN.json'),
 };
 
 OCVN.TRANSLATIONS = translations;
