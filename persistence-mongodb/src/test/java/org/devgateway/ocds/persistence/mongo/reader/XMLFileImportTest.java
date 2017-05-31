@@ -7,6 +7,7 @@ import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,6 +42,7 @@ public class XMLFileImportTest extends AbstractMongoTest {
     }
 
     @Test
+    @Ignore
     public void process() throws Exception {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("xml/release.xml").getFile());

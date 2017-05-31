@@ -35,6 +35,7 @@ class IndicatorTile extends CustomPopupChart{
     return [{
       x: dates,
       y: values,
+      hoverinfo: 'none',
       type: 'scatter',
       fill: 'tonexty'
     }];

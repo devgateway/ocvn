@@ -1,9 +1,8 @@
 package org.devgateway.ocds.web.rest.controller.selector;
 
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.web.rest.controller.request.OrganizationIdWrapper;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.annotations.ApiOperation;
 
 /**
  *
@@ -51,5 +48,7 @@ public class OrganizationSearchController extends AbstractOrganizationSearchCont
     public List<Organization> searchText(@Valid final TextSearchRequest request) {
         return organizationSearchTextByType(request, null);
     }
+
+
 
 }

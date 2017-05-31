@@ -58,6 +58,7 @@ public class CorruptionRiskDashboardTablesControllerTest extends AbstractEndPoin
         final List<DBObject> result = corruptionRiskDashboardTablesController
                 .corruptionRiskOverviewTable(new YearFilterPagingRequest());
         Assert.assertEquals(1, result.size());
-        Assert.assertEquals(2, ((DBObject)result.get(0).get("flaggedStats")).get("count"));
+        Assert.assertEquals("[ocds-endpoint-001] procuringEntity name",
+                ((DBObject)result.get(0).get("procuringEntity")).get("name"));
     }
 }

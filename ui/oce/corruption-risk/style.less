@@ -486,39 +486,14 @@
   }
 
   .crd-landing-popup{
-    @popupSize: 75%;
+    @popupWidth: 75%;
     position: fixed;
     background: #f9fff6;
     z-index: 9999;
-    width: @popupSize;
-    top: (100% - @popupSize) / 2;
-    left: (100% - @popupSize) / 2;
-    @media (max-width: 1850px) {
-      @popupSize: 80%;
-      top: (100% - @popupSize) / 2;
-      bottom: (100% - @popupSize) / 2;
-    }
-    @media (max-width: 1750px) {
-      @popupSize: 85%;
-      top: (100% - @popupSize) / 2;
-      bottom: (100% - @popupSize) / 2;
-    }
-    @media (max-width: 1650px) {
-      @popupSize: 90%;
-      top: (100% - @popupSize) / 2;
-      bottom: (100% - @popupSize) / 2;
-    }
-    @media (max-width: 1400px) {
-      @popupSize: 95%;
-      top: (100% - @popupSize) / 2;
-      bottom: (100% - @popupSize) / 2;
-    }
-    @media (max-width: 1300px) {
-      @popupSize: 99%;
-      top: (100% - @popupSize) / 2;
-      bottom: (100% - @popupSize) / 2;
-    }
-    bottom: (100% - @popupSize) / 2;
+    width: @popupWidth;
+    height: auto;
+    max-height: 99%;
+    left: (100% - @popupWidth) / 2;
     padding: 30px;
     overflow-x: hidden;
     overflow-y: auto;

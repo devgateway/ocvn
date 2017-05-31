@@ -141,7 +141,7 @@ public class FormsWebApplication extends AuthenticatedWebApplication {
         // The boostrap.css file is loaded as dependency in MainCss Instance
         // settings.setCssResourceReference(EmptyCss.INSTANCE);
 
-        settings.useCdnResources(true);
+        settings.useCdnResources(false);
 
         // use the default bootstrap theme
         Bootstrap.install(this, settings);

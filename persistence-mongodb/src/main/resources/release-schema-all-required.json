@@ -760,7 +760,7 @@
                     "description": "The number of units required",
                     "mergeStrategy": "ocdsVersion",
                     "minimum": 0,
-                    "type": ["integer", "null"]
+                    "type": ["number", "null"]
                 },
                 "unit": {
                     "description": "Description of the unit which the good comes in e.g. hours, kilograms. Made up of a unit name, and the value of a single unit.",
