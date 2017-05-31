@@ -1,6 +1,12 @@
 package org.devgateway.ocds.web.spring;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Consumer;
+import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
@@ -9,15 +15,13 @@ import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
+import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.function.Consumer;
 
 /**
  * Created by mpostelnicu on 10-May-17.
@@ -33,9 +37,15 @@ public class OCDSPopulatorService {
     private OrganizationRepository organizationRepository;
     @Autowired
     private ClassificationRepository classificationRepository;
+    @Autowired
+    private VNLocationRepository locationRepository;
 
     private String getRandomTxt() {
         return RandomStringUtils.randomAlphabetic(10, 15);
+    }
+
+    private Double getRandomGeo() {
+        return -8 + RandomUtils.nextDouble(0, 7);
     }
 
     public void logMessage(String message) {
@@ -49,6 +59,15 @@ public class OCDSPopulatorService {
                 this::logMessage);
 
         logMessage.accept("<b>RANDOMIZE ORGS COMPLETED.</b>");
+    }
+
+    public void randomizeLocations(Consumer<String> logMessage) {
+        logMessage.accept("<b>RANDOMIZE LOCATIONS.</b>");
+
+        MongoUtil.processRepositoryItemsPaginated(locationRepository, this::randomizeLocation,
+                this::logMessage);
+
+        logMessage.accept("<b>RANDOMIZE LOCATIONS COMPLETED.</b>");
     }
 
     public void randomizeReleases(Consumer<String> logMessage) {
@@ -67,6 +86,13 @@ public class OCDSPopulatorService {
                 this::logMessage);
 
         logMessage.accept("<b>RANDOMIZE CLASSIFICATIONS COMPLETED.</b>");
+    }
+
+
+    public void randomizeLocation(VNLocation l) {
+        l.setDescription(getRandomTxt());
+        l.setGeometry(new GeoJsonPoint(-94.578333d + getRandomGeo(), 39.099722d + getRandomGeo()));
+        locationRepository.save(l);
     }
 
 
@@ -117,6 +143,7 @@ public class OCDSPopulatorService {
     }
 
     public void randomizeRelease(Release r) {
+        r.setOcid(getRandomTxt());
         if (r.getBids() != null && r.getBids().getDetails() != null) {
             r.getBids().getDetails().forEach(d ->
                     replaceEntitiesWithSavedEntities(d.getTenderers(), organizationRepository));
@@ -152,6 +179,10 @@ public class OCDSPopulatorService {
                             i.setClassification(getSavedEntityFromEntity(i.getClassification(),
                                     classificationRepository));
                         }
+                        if (i.getDeliveryLocation() != null) {
+                            i.setDeliveryLocation(getSavedEntityFromEntity(i.getDeliveryLocation(),
+                                    locationRepository));
+                        }
                     });
                 }
             }
@@ -159,15 +190,15 @@ public class OCDSPopulatorService {
 
         }
         releaseRepository.save(r);
-
     }
 
 
-//    @PostConstruct
-//    public void setProcessors() {
-//        randomizeOrganizations(this::logMessage);
-//        randomizeClassifications(this::logMessage);
-//        randomizeReleases(this::logMessage);
-//    }
+    @PostConstruct
+    public void setProcessors() {
+        randomizeOrganizations(this::logMessage);
+        randomizeLocations(this::logMessage);
+        randomizeClassifications(this::logMessage);
+        randomizeReleases(this::logMessage);
+    }
 
 }
