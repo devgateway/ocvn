@@ -14,12 +14,12 @@
  */
 package org.devgateway.toolkit.forms.wicket.components.form;
 
+import de.agilecoders.wicket.core.util.Attributes;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2BootstrapTheme;
 import org.wicketstuff.select2.Select2Choice;
-
-import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * @author mpostelnicu
@@ -80,6 +80,7 @@ public class Select2ChoiceBootstrapFormComponent<TYPE>
         field.getSettings().setAllowClear(true);
         field.getSettings().setCloseOnSelect(true);
         field.getSettings().setDropdownAutoWidth(true);
+        field.getSettings().setTheme(new Select2BootstrapTheme(false));
         super.onInitialize();
 
     }

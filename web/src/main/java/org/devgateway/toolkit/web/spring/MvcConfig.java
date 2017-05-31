@@ -14,6 +14,8 @@ package org.devgateway.toolkit.web.spring;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import org.apache.commons.io.FileCleaningTracker;
 import org.bson.types.ObjectId;
 import org.devgateway.ocds.web.cache.generators.GenericExcelChartKeyGenerator;
@@ -26,9 +28,6 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
@@ -43,6 +42,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public Jackson2ObjectMapperBuilder objectMapperBuilder() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
 
+        //builder.featuresToEnable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
         builder.serializationInclusion(Include.NON_EMPTY).dateFormat(dateFormatGmt);

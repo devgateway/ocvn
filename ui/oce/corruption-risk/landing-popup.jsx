@@ -1,6 +1,14 @@
 import {LOGIN_URL} from "./constants";
+import {debounce} from "../tools";
 
 class LandingPopup extends React.Component{
+  constructor(...args){
+    super(...args);
+    this.state = {
+      top: 0
+    }
+  }
+
   onClose(){
     const {redirectToLogin, requestClosing} = this.props;
     if(redirectToLogin){
@@ -10,12 +18,29 @@ class LandingPopup extends React.Component{
     }
   }
 
+  recalcTop(){
+    this.setState({
+      top: (window.innerHeight - this.refs.thePopup.offsetHeight) / 2
+    })
+  }
+
+  componentDidMount(){
+    this.recalcTop();
+    this.windowResizeListener = debounce(this.recalcTop.bind(this));
+    window.addEventListener("resize", this.windowResizeListener);
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener("resize", this.windowResizeListener);
+  }
+
   render(){
+    const {top} = this.state;
     return (
       <div>
         <div className="crd-landing-popup-overlay" onClick={this.onClose.bind(this)}/>
 
-        <div className="crd-landing-popup">
+        <div className="crd-landing-popup" ref="thePopup" style={{top}}>
           <div className="container-fluid">
             <div className="row">
               <div className="col-sm-1 text-right">

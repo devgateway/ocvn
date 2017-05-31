@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * Created by mpostelnicu on 2/15/17.
@@ -48,6 +49,8 @@ public class TranslationService {
      * @return
      */
     public String getValue(String language, String key) {
+        Assert.notNull(language, "Language must not be null!");
+        Assert.notNull(key, "Key must not be null!");
         ensureLanguageLoaded(language);
         return translations.get(language).get(key);
     }

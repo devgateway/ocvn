@@ -2,6 +2,15 @@ package org.devgateway.ocds.web.spring;
 
 import com.google.common.io.Files;
 import com.mongodb.DBObject;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -48,15 +57,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -111,7 +111,7 @@ public class VNImportService implements ExcelImportService {
     private MongoTemplateConfiguration mongoTemplateConfiguration;
 
     @Autowired
-    private OcdsSchemaValidatorService validationService;
+    private OcdsSchemaValidatorService ocdsSchemaValidator;
 
     @Autowired(required = false)
     private CacheManager cacheManager;
@@ -410,7 +410,7 @@ public class VNImportService implements ExcelImportService {
         Page<Release> page;
         do {
             page = releaseRepository.findAll(new PageRequest(pageNumber++, VALIDATION_BATCH));
-            page.getContent().parallelStream().map(rel -> validationService.validate(rel))
+            page.getContent().parallelStream().map(rel -> ocdsSchemaValidator.validate(rel))
                     .filter(r -> !r.getReport().isSuccess()).forEach(r -> logMessage(
                             "<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
             processedCount += page.getNumberOfElements();
@@ -429,7 +429,7 @@ public class VNImportService implements ExcelImportService {
     }
 
     public OcdsSchemaValidatorService getValidationService() {
-        return validationService;
+        return ocdsSchemaValidator;
     }
 
 }

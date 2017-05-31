@@ -9,30 +9,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ListReportProvider;
 import com.github.fge.jsonschema.core.report.LogLevel;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author mpostelnicu
- *
  */
 public class OcdsSchemaValidatorService {
     private final Logger logger = LoggerFactory.getLogger(OcdsSchemaValidatorService.class);
+    private String schemaLocation = null;
     private JsonSchema schema;
 
     public static final String OCDS_SCHEMA_LOCATION = "/release-schema.json";
+    public static final String OCDS_SCHEMA_ALL_REQUIRED = "/release-schema-all-required.json";
     public static final String OCDS_LOCATION_PATCH_LOCATION = "/location_patch_schema.json";
+    public static final String OCDS_BID_EXTENSION = "/ocds_bid_extension.mergepatch.json";
 
     private ObjectMapper jacksonObjectMapper;
     private String[] patchResourceNames;
@@ -65,24 +67,34 @@ public class OcdsSchemaValidatorService {
         this.jacksonObjectMapper = jacksonObjectMapper;
     }
 
+    public OcdsSchemaValidatorService(final ObjectMapper jacksonObjectMapper, String schemaLocation) {
+        this.jacksonObjectMapper = jacksonObjectMapper;
+        this.schemaLocation = schemaLocation;
+    }
+
     public OcdsSchemaValidatorService withJsonPatches(final String... patchResourceNames) {
         this.patchResourceNames = patchResourceNames;
         return this;
     }
 
     /**
-     * Intializes the JSON schema validator plus the provided patches 
+     * Intializes the JSON schema validator plus the provided patches
      */
     public void init() {
         try {
 
-            ocdsSchemaNode = JsonLoader.fromResource(OCDS_SCHEMA_LOCATION);
+            ocdsSchemaNode = JsonLoader.fromResource(schemaLocation == null ? OCDS_SCHEMA_LOCATION : schemaLocation);
 
             if (patchResourceNames != null && patchResourceNames.length > 0) {
                 for (int i = 0; i < patchResourceNames.length; i++) {
-                    JsonNode locationPatchNode = JsonLoader.fromResource(patchResourceNames[i]);
-                    JsonPatch locationPatch = JsonPatch.fromJson(locationPatchNode);
-                    ocdsSchemaNode = locationPatch.apply(ocdsSchemaNode);
+                    JsonNode node = JsonLoader.fromResource(patchResourceNames[i]);
+                    if (patchResourceNames[i].contains("mergepatch")) {
+                        JsonMergePatch patch = JsonMergePatch.fromJson(node);
+                        ocdsSchemaNode = patch.apply(ocdsSchemaNode);
+                    } else {
+                        JsonPatch patch = JsonPatch.fromJson(node);
+                        ocdsSchemaNode = patch.apply(ocdsSchemaNode);
+                    }
                 }
             }
 
@@ -103,6 +115,7 @@ public class OcdsSchemaValidatorService {
 
     /**
      * Validates the incoming {@link JsonNode} against OCDS schema
+     *
      * @param jsonNode
      * @return
      */

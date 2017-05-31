@@ -74,14 +74,14 @@ public class TopTenControllerTest extends AbstractEndPointControllerTest {
 
 
         final DBObject first = topTenLargestSuppliers.get(0);
-        Assert.assertEquals(6040000.0, first.get(TopTenController.Keys.TOTAL_AWARD_AMOUNT));
-        Assert.assertEquals(2, first.get(TopTenController.Keys.TOTAL_CONTRACTS));
-        Assert.assertEquals(null,
+        Assert.assertEquals(6000000d, first.get(TopTenController.Keys.TOTAL_AWARD_AMOUNT));
+        Assert.assertEquals(1, first.get(TopTenController.Keys.TOTAL_CONTRACTS));
+        Assert.assertEquals("E09000005",
                 ((Collection) first.get(TopTenController.Keys.PROCURING_ENTITY_IDS)).iterator().next());
-        Assert.assertEquals(null, first.get(TopTenController.Keys.SUPPLIER_ID));
+        Assert.assertEquals("GB-COH-1234567845", first.get(TopTenController.Keys.SUPPLIER_ID));
         Assert.assertEquals(1, first.get(TopTenController.Keys.PROCURING_ENTITY_IDS_COUNT));
 
-        Assert.assertEquals(1, topTenLargestSuppliers.size());
+        Assert.assertEquals(2, topTenLargestSuppliers.size());
 
     }
 }

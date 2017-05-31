@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ReleaseRepositoryTest extends AbstractMongoTest {
 
-    private String ocid = "release-1";
+    private String ocid = "release-X";
 
     @Autowired
     private ReleaseRepository releaseRepository;
