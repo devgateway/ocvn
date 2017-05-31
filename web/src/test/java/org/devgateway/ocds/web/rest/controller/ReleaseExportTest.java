@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.File;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -72,29 +71,29 @@ public class ReleaseExportTest extends AbstractWebTest {
     @Test
     public void testReleaseExportIsValid() throws Exception {
         final ClassLoader classLoader = getClass().getClassLoader();
-//        final File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
-//
-//        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
-//        final Release release = (Release) releaseJsonImport.importObject();
-//
-//        final MvcResult result = this.mockMvc.perform(
-//                MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
-//                        accept(MediaType.APPLICATION_JSON_UTF8)).
-//                andExpect(status().isOk()).
-//                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
-//                andReturn();
-//        final String content = result.getResponse().getContentAsString();
-//
-//        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
-//        final OcdsSchemaValidatorService.ProcessingReportWithNode processingReport =
+        final File file = new File(classLoader.getResource("json/award-release-test.json").getFile());
+
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file, false);
+        final Release release = (Release) releaseJsonImport.importObject();
+
+        final MvcResult result = this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
+                        accept(MediaType.APPLICATION_JSON_UTF8)).
+                andExpect(status().isOk()).
+                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
+                andReturn();
+        final String content = result.getResponse().getContentAsString();
+
+        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
+        final OcdsSchemaValidatorService.ProcessingReportWithNode processingReport =
                 ocdsSchemaValidator.validate(jsonNodeResponse);
-//
-//        if (!processingReport.getReport().isSuccess()) {
-//            for (ProcessingMessage processingMessage : processingReport.getReport()) {
-//                logger.error(">>> processingMessage: \n" + processingMessage);
-//            }
-//        }
-//        Assert.assertEquals("Is the release valid?", true, processingReport.getReport().isSuccess());
+
+        if (!processingReport.getReport().isSuccess()) {
+            for (ProcessingMessage processingMessage : processingReport.getReport()) {
+                logger.error(">>> processingMessage: \n" + processingMessage);
+            }
+        }
+        Assert.assertEquals("Is the release valid?", true, processingReport.getReport().isSuccess());
     }
 
     @Test
@@ -102,27 +101,27 @@ public class ReleaseExportTest extends AbstractWebTest {
         final ClassLoader classLoader = getClass().getClassLoader();
         final File file = new File(classLoader.getResource("json/full-release.json").getFile());
 
-//        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file);
-//        final Release release = (Release) releaseJsonImport.importObject();
-//
-//        final MvcResult result = this.mockMvc.perform(
-//                MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
-//                        accept(MediaType.APPLICATION_JSON_UTF8)).
-//                andExpect(status().isOk()).
-//                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
-//                andReturn();
-//        final String content = result.getResponse().getContentAsString();
-//
-//        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
-//        final OcdsSchemaValidatorService.ProcessingReportWithNode processingReport =
+        final JsonImport releaseJsonImport = new ReleaseJsonImport(releaseRepository, file, false);
+        final Release release = (Release) releaseJsonImport.importObject();
+
+        final MvcResult result = this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/ocds/release/ocid/" + release.getOcid()).
+                        accept(MediaType.APPLICATION_JSON_UTF8)).
+                andExpect(status().isOk()).
+                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
+                andReturn();
+        final String content = result.getResponse().getContentAsString();
+
+        final JsonNode jsonNodeResponse = JsonLoader.fromString(content);
+        final OcdsSchemaValidatorService.ProcessingReportWithNode processingReport =
                 ocdsSchemaAllRequiredValidator.validate(jsonNodeResponse);
-//
-//        if (!processingReport.getReport().isSuccess()) {
-//            for (ProcessingMessage processingMessage : processingReport.getReport()) {
-//                logger.error(">>> processingMessage: \n" + processingMessage);
-//            }
-//        }
-//        Assert.assertEquals("Do we implement the entire standard (with all fields required)?",
-//                true, processingReport.getReport().isSuccess());
+
+        if (!processingReport.getReport().isSuccess()) {
+            for (ProcessingMessage processingMessage : processingReport.getReport()) {
+                logger.error(">>> processingMessage: \n" + processingMessage);
+            }
+        }
+        Assert.assertEquals("Do we implement the entire standard (with all fields required)?",
+                true, processingReport.getReport().isSuccess());
     }
 }
