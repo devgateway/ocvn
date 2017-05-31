@@ -92,7 +92,7 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
             return null;
         }
         try {
-            return Integer.parseInt(string);
+            return getDouble(string).intValue();
         } catch (NumberFormatException e) {
             throw new RuntimeException("Cell value " + string + " is not a valid integer.");
         }
