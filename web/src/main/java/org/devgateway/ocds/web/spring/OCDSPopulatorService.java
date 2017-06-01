@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
-import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.log4j.Logger;
@@ -228,12 +227,12 @@ public class OCDSPopulatorService {
     }
 
 
-    @PostConstruct
-    public void setProcessors() {
-        randomizeOrganizations(this::logMessage);
-        randomizeLocations(this::logMessage);
-        randomizeClassifications(this::logMessage);
-        randomizeReleases(this::logMessage);
-    }
+//    @PostConstruct
+//    public void setProcessors() {
+//        randomizeOrganizations(this::logMessage);
+//        randomizeLocations(this::logMessage);
+//        randomizeClassifications(this::logMessage);
+//        randomizeReleases(this::logMessage);
+//    }
 
 }
