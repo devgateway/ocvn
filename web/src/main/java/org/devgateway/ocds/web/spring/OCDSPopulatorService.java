@@ -11,6 +11,7 @@ import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
@@ -45,6 +46,10 @@ public class OCDSPopulatorService {
 
     private Double getRandomGeo() {
         return -8 + RandomUtils.nextDouble(0, 7);
+    }
+
+    private Integer getRandomInt() {
+        return RandomUtils.nextInt(0, 4);
     }
 
     public void logMessage(String message) {
@@ -144,11 +149,13 @@ public class OCDSPopulatorService {
     public void randomizeRelease(Release r) {
         r.setOcid(getRandomTxt());
         if (r.getBids() != null && r.getBids().getDetails() != null) {
-            r.getBids().getDetails().forEach(d ->
-                    replaceEntitiesWithSavedEntities(d.getTenderers(), organizationRepository));
+            r.getBids().getDetails().forEach(d -> {
+                replaceEntitiesWithSavedEntities(d.getTenderers(), organizationRepository);
+                if (d.getValue() != null) {
+                    d.getValue().setCurrency("BTC");
+                }
+            });
         }
-
-
 
         if (r.getAwards() != null) {
             r.getAwards().forEach(award -> {
@@ -172,6 +179,24 @@ public class OCDSPopulatorService {
             }
 
             if (r.getTender() != null) {
+                if (r.getTender().getProcurementMethod() != null) {
+                    Tender.ProcurementMethod pm = null;
+                    switch (getRandomInt()) {
+                        case 0:
+                            pm = Tender.ProcurementMethod.open;
+                            break;
+                        case 1:
+                            pm = Tender.ProcurementMethod.limited;
+                            break;
+                        case 2:
+                            pm = Tender.ProcurementMethod.open;
+                            break;
+                        default:
+                            pm = Tender.ProcurementMethod.selective;
+                            break;
+                    }
+                    r.getTender().setProcurementMethod(pm);
+                }
                 if (r.getTender().getValue() != null) {
                     r.getTender().getValue().setCurrency("BTC");
                 }
