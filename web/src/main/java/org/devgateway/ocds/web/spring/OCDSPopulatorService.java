@@ -147,6 +147,9 @@ public class OCDSPopulatorService {
             r.getBids().getDetails().forEach(d ->
                     replaceEntitiesWithSavedEntities(d.getTenderers(), organizationRepository));
         }
+
+
+
         if (r.getAwards() != null) {
             r.getAwards().forEach(award -> {
                 if (award.getSuppliers() != null) {
@@ -155,6 +158,9 @@ public class OCDSPopulatorService {
                 }
                 award.setDescription(getRandomTxt());
                 award.setTitle(getRandomTxt());
+                if (award.getValue() != null) {
+                    award.getValue().setCurrency("BTC");
+                }
             });
             if (r.getBuyer() != null) {
                 r.setBuyer(getSavedEntityFromEntity(r.getBuyer(), organizationRepository));
@@ -166,6 +172,10 @@ public class OCDSPopulatorService {
             }
 
             if (r.getTender() != null) {
+                if (r.getTender().getValue() != null) {
+                    r.getTender().getValue().setCurrency("BTC");
+                }
+
                 if (r.getTender().getProcuringEntity() != null) {
                     r.getTender().setProcuringEntity(getSavedEntityFromEntity(r.getTender().getProcuringEntity(),
                             organizationRepository));
