@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
+import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
@@ -45,6 +47,10 @@ public class OCDSPopulatorService {
 
     private Double getRandomGeo() {
         return -8 + RandomUtils.nextDouble(0, 7);
+    }
+
+    private Integer getRandomInt() {
+        return RandomUtils.nextInt(0, 4);
     }
 
     public void logMessage(String message) {
@@ -174,6 +180,24 @@ public class OCDSPopulatorService {
             }
 
             if (r.getTender() != null) {
+                if (r.getTender().getProcurementMethod() != null) {
+                    Tender.ProcurementMethod pm = null;
+                    switch (getRandomInt()) {
+                        case 0:
+                            pm = Tender.ProcurementMethod.open;
+                            break;
+                        case 1:
+                            pm = Tender.ProcurementMethod.limited;
+                            break;
+                        case 2:
+                            pm = Tender.ProcurementMethod.open;
+                            break;
+                        default:
+                            pm = Tender.ProcurementMethod.selective;
+                            break;
+                    }
+                    r.getTender().setProcurementMethod(pm);
+                }
                 if (r.getTender().getValue() != null) {
                     r.getTender().getValue().setCurrency("BTC");
                 }
@@ -204,12 +228,12 @@ public class OCDSPopulatorService {
     }
 
 
-//    @PostConstruct
-//    public void setProcessors() {
-//        randomizeOrganizations(this::logMessage);
-//        randomizeLocations(this::logMessage);
-//        randomizeClassifications(this::logMessage);
-//        randomizeReleases(this::logMessage);
-//    }
+    @PostConstruct
+    public void setProcessors() {
+        randomizeOrganizations(this::logMessage);
+        randomizeLocations(this::logMessage);
+        randomizeClassifications(this::logMessage);
+        randomizeReleases(this::logMessage);
+    }
 
 }
