@@ -144,11 +144,13 @@ public class OCDSPopulatorService {
     public void randomizeRelease(Release r) {
         r.setOcid(getRandomTxt());
         if (r.getBids() != null && r.getBids().getDetails() != null) {
-            r.getBids().getDetails().forEach(d ->
-                    replaceEntitiesWithSavedEntities(d.getTenderers(), organizationRepository));
+            r.getBids().getDetails().forEach(d -> {
+                replaceEntitiesWithSavedEntities(d.getTenderers(), organizationRepository);
+                if (d.getValue() != null) {
+                    d.getValue().setCurrency("BTC");
+                }
+            });
         }
-
-
 
         if (r.getAwards() != null) {
             r.getAwards().forEach(award -> {
