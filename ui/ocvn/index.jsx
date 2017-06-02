@@ -70,8 +70,8 @@ class OCVN extends OCApp{
               <a href="https://github.com/devgateway/ocvn" target="_blank">
                 <button className="btn btn-default btn-block">
                   <img src="/ui/assets/icons/octocat.png" width={16} height={16}/>
-					        &nbsp;
-						      {this.t("general:viewOnGithub")}
+                  &nbsp;
+                  {this.t("general:viewOnGithub")}
                 </button>
               </a>
             </section>
