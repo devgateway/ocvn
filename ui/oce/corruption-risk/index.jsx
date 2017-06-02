@@ -119,7 +119,8 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   getPage(){
-    const {translations, styling} = this.props;
+    const {translations} = this.props;
+    const styling = this.constructor.STYLING || this.props.styling;
     const {page, appliedFilters, indicatorTypesMapping, width} = this.state;
 
     const {filters, years, months} = this.destructFilters(appliedFilters);
@@ -142,28 +143,32 @@ class CorruptionRiskDashboard extends React.Component{
       const indicators =
         Object.keys(indicatorTypesMapping).filter(key => indicatorTypesMapping[key].types.indexOf(corruptionType) > -1);
 
-      return <CorruptionTypePage
-                 indicators={indicators}
-                 onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
-                 filters={filters}
-                 translations={translations}
-                 corruptionType={corruptionType}
-                 years={years}
-                 monthly={monthly}
-                 months={months}
-                 width={width}
-             />;
+      return (
+        <CorruptionTypePage
+          indicators={indicators}
+          onGotoIndicator={individualIndicator => this.setState({page: 'individual-indicator', individualIndicator})}
+          filters={filters}
+          translations={translations}
+          corruptionType={corruptionType}
+          years={years}
+          monthly={monthly}
+          months={months}
+          width={width}
+          styling={styling}
+        />
+      );
     } else if(page == 'individual-indicator'){
       const {individualIndicator} = this.state;
       return (
         <IndividualIndicatorPage
-            indicator={individualIndicator}
-            filters={filters}
-            translations={translations}
-            years={years}
-            monthly={monthly}
-            months={months}
-            width={width}
+          indicator={individualIndicator}
+          filters={filters}
+          translations={translations}
+          years={years}
+          monthly={monthly}
+          months={months}
+          width={width}
+          styling={styling}
         />
       )
     }
@@ -196,7 +201,7 @@ class CorruptionRiskDashboard extends React.Component{
               {dashboardSwitcherOpen &&
                 <div className="dashboard-switcher">
                   <a href="javascript:void(0);" onClick={e => onSwitch('default')} onMouseDown={callFunc('stopPropagation')}>
-                    Default dashboard
+                    M&E Toolkit
                   </a>
                 </div>
               }

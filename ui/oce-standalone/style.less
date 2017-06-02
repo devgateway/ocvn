@@ -1,8 +1,10 @@
 @red: #cc3c3b;
+@lessRed: #bc2626;
 @base-unit: 1em;
+@headerHeight: 64px;
 
 .content{
-  margin-top: 3em;
+  margin-top: @headerHeight * 2;
   margin-bottom: 96px;
 }
 
@@ -20,7 +22,7 @@ header.branding{
   top: 0;
   right: 0;
   left: 0;
-  height: 64px;
+  height: @headerHeight;
   z-index: 1002;
 
   h1, small{
@@ -28,13 +30,9 @@ header.branding{
   }
 
   h1{
-    font-size: 24px;
-    margin-top: 10px;
-    small{
-      text-transform: uppercase;
-      display: block;
-      font-size: 18px;
-    }
+    @fontSize: 21px;
+    font-size: @fontSize;
+    margin-top: (@headerHeight - @fontSize) / 2.1;
   }
 
   .menu{
@@ -52,50 +50,22 @@ header.branding{
       padding: 20px;
     }
   }
+}
 
-  .header-icons.user-tools{
-    font-size: 1em;
-    .glyphicon {
-      color: #f0f0f0;
-    }
-    a{
-      color: white;
-      text-transform: uppercase;
-      &, :hover{
-        text-decoration: none;
-      }
-    }
-  }
-
-  .header-icons{
-    cursor: pointer;
-    &.user-tools{
-      cursor: default;
-    }
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .icon {
-      box-shadow: 0px 1px 10px 1px #B53636;
-      -webkit-box-shadow: 0px 1px 10px 1px #B53636;
-      -moz-box-shadow: 0px 1px 10px 1px #B53636;
-      -o-box-shadow: 0px 1px 10px 1px #B53636;
-      margin-right: @base-unit / 2.5;
-      width: 2.2em;
-      &:hover {
-        box-shadow: 0px 1px 10px 1px #db5151;
-        -webkit-box-shadow: 0px 1px 10px 1px #db5151;
-        -moz-box-shadow: 0px 1px 10px 1px #db5151;
-        -o-box-shadow: 0px 1px 10px 1px #db5151;
-      }
-    }
-  }
+.header-tools{
+  background: @lessRed;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: @headerHeight;
+  height: @headerHeight;
+  z-index: 1001;
 }
 
 aside {
   z-index: 1;
   position: fixed!important;
-  top: 64px;
+  top: @headerHeight * 2;
   bottom: 0;
   height: auto;
   background-color: #e9e9e9;
@@ -104,17 +74,6 @@ aside {
   section.col-sm-12 {
     padding: 15px 20px 15px 20px;
     border-bottom: 1px solid #ccc;
-  }
-
-  section.description{
-    background: #ffffff;
-    line-height: 120%;
-    h3 {
-      color: @red;
-      font-size: 1em;
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
   }
 }
 
@@ -125,7 +84,7 @@ aside {
   position: fixed;
   bottom: @yearsBarBottom;
   border-bottom: 2px solid #c5c5c5;
-  z-index: 9999;
+  z-index: 10000;
   padding-left: 0;
   padding-right: 0;
   display: table;
@@ -182,41 +141,62 @@ footer.main-footer{
   right: 0;
   bottom: 0;
   background: @red;
-  z-index: 9998;
+  z-index: 1;
 }
 
-@active-color: #808080;
 @circle-grey: #666666;
 @tab-light-grey: #f2f2f2;
 
-aside [role=navigation] a{
-  border-bottom: 1px solid #c5c5c5;
-  color: #707070;
-  display: block;
-  cursor: pointer;
-  font-size: 1.05em;
-  line-height: 190%;
-  padding: 15px 0 15px 20px;
-  text-decoration: none;
-  text-transform: uppercase;
-  &:hover {
-    background-color: @active-color;
-    color: @tab-light-grey;
-  }
-  &.active{
-    background-color: @active-color;
-    color: @tab-light-grey;
-  }
-  .circle{
-    background-color: @circle-grey;
-    border-radius: 50%;
-    color: @tab-light-grey;
+aside [role=navigation]{
+  @active-color: #ffffff;
+  a{
+    border-bottom: 1px solid #c5c5c5;
+    color: #707070;
     display: block;
-    float: left;
-    height: 1.6em;
-    margin-right: 0.4em;
-    text-align: center;
-    width: 1.6em;
+    cursor: pointer;
+    font-size: 1.05em;
+    line-height: 190%;
+    padding: 15px 0 15px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    &:hover, &.active{
+      background-color: @active-color;
+    }
+    .circle{
+      background-color: @circle-grey;
+      border-radius: 50%;
+      color: @tab-light-grey;
+      display: block;
+      float: left;
+      height: 1.6em;
+      margin-right: 0.4em;
+      text-align: center;
+      width: 1.6em;
+    }
+  }
+
+  .navigation-item-overview{
+    cursor: pointer;
+    a{
+      border-bottom: none;
+      .glyphicon-info-sign{
+        font-size: 1.3em;
+        color: #3bb54e;
+        float: right;
+        padding-right: 20px;
+      }
+    }
+    .description{
+      border-bottom: 1px solid #c5c5c5;
+      padding: 0 20px 20px 20px;
+      color: #bc2626;
+      font-size: 12px;
+    }
+    &:hover, &.active{
+      .description, a{
+        background: @active-color;
+      }
+    }
   }
 }
 
@@ -246,17 +226,16 @@ aside [role=navigation] a{
 @active-color: #808080;
 
 .filters{
-  background: #be3131;
-  border-left: 1px solid transparent;
-  border-right: 1px solid #a62323;
+  background: @lessRed;
+  color: white;
   cursor: pointer;
   display: block;
   float: left;
-  height: 100%;
+  width: 33%;
+  height: @headerHeight;
   position: relative;
   transition: background-color .4s ease-in-out;
   text-align: center;
-  width: 33%;
 
   &:hover {
     background: @active-color;
@@ -291,6 +270,7 @@ aside [role=navigation] a{
     transform-origin: 50% 0;
     transition: transform .4s ease-in-out, opacity .4s ease-in-out;
     width: 800px;
+    z-index: 1;
 
     section{
       header{
@@ -341,8 +321,6 @@ aside [role=navigation] a{
 
   &.open{
     background-color: @active-color;
-    border-left: 1px solid white;
-    border-right: 1px solid white;
     .box{
       opacity: 1;
       transform: scaleY(1) scaleX(1) translateY(0);
@@ -353,6 +331,19 @@ aside [role=navigation] a{
     max-height: 300px;
     overflow-y: auto;
   }
+}
+
+.filters-hint{
+  @filtersFontSize: 14px;
+  font-size: @filtersFontSize;
+  line-height: @filtersFontSize;
+  padding-top: (@headerHeight - @filtersFontSize) / 2.1;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: left;
+  width: 33%;
+  float: left;
 }
 
 .btn {
@@ -368,7 +359,6 @@ aside [role=navigation] a{
 .top-nav-icon {
   display: inline-block;
   margin-right: 0.3em;
-  margin-top: -0.3em;
   position: relative;
   width: 1.2em;
 }
@@ -408,4 +398,37 @@ aside [role=navigation] a{
 .dashboard-hint{
   text-transform: none;
   margin-top: 10px;
+}
+
+.login-logout, .export-btn{
+  float: right;
+  button{
+    @buttonHeight: 36px;
+    background: #9d9d9d;
+    color: white;
+    border: none;
+    margin-right: 20px;
+    height: @buttonHeight;
+    margin-top: (@headerHeight - @buttonHeight) / 2;
+  }
+}
+
+.login-logout button{
+  width: 130px;
+}
+
+.export-btn button{
+  width: 70px;
+}
+
+.export-progress .progress{
+  @progressBarHeight: 20px;
+  margin-top: (@headerHeight - @progressBarHeight) / 2;
+  margin-right: 20px;
+  float: right;
+  width: 200px;
+}
+
+.logo-wrapper>*{
+  float:left;
 }

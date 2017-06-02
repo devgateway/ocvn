@@ -10,12 +10,16 @@ import {Map} from "immutable";
 import styles from "./style.less";
 import ViewSwitcher from "../oce/switcher.jsx";
 import CorruptionRickDashboard from "../oce/corruption-risk";
+import cn from "classnames";
+
+class OCEDemoLocation extends LocationTab{}
+OCEDemoLocation.CENTER = [37, -100];
 
 class OCEChild extends OCApp{
   constructor(props) {
     super(props);
     this.registerTab(OverviewTab);
-    this.registerTab(LocationTab);
+    this.registerTab(OCEDemoLocation);
     this.registerTab(CompetitivenessTab);
     this.registerTab(EfficiencyTab);
     this.registerTab(EProcurementTab);
@@ -23,47 +27,133 @@ class OCEChild extends OCApp{
 
   fetchBidTypes(){
     fetchJson('/api/ocds/bidType/all').then(data =>
-        this.setState({
-          bidTypes: data.reduce((map, datum) =>
-              map.set(datum.id, datum.description), Map())
-        })
+      this.setState({
+        bidTypes: data.reduce((map, datum) =>
+          map.set(datum.id, datum.description), Map())
+      })
     );
+  }
+
+  loginBox(){
+    let linkUrl, text;
+    if(this.state.user.loggedIn){
+      linkUrl = "/preLogout?referrer=/ui/index.html"
+      text = this.t("general:logout");
+    } else {
+      linkUrl = "/login?referrer=/ui/index.html";
+      text = this.t("general:login");
+    }
+    return <a href={linkUrl} className="login-logout">
+      <button className="btn btn-default">
+        {text}
+      </button>
+    </a>
+  }
+
+  dashboardSwitcher(){
+    const {dashboardSwitcherOpen} = this.state;
+    const {onSwitch} = this.props;
+    return (
+      <div className={cn('dash-switcher-wrapper', {open: dashboardSwitcherOpen})}>
+        <h1 onClick={this.toggleDashboardSwitcher.bind(this)}>
+          <strong>Monitoring & Evaluation</strong> Toolkit
+          <i className="glyphicon glyphicon-menu-down"/>
+        </h1>
+        {dashboardSwitcherOpen &&
+          <div className="dashboard-switcher">
+            <a href="javascript:void(0);" onClick={e => onSwitch('corruptionRiskDashboard')}>
+              Corruption Risk Dashboard
+            </a>
+          </div>
+        }
+      </div>
+    )
+  }
+
+  exportBtn(){
+    if(this.state.exporting){
+      return (
+        <div className="export-progress">
+          <div className="progress">
+            <div className="progress-bar progress-bar-danger" role="progressbar" style={{width: "100%"}}>
+              {this.t('export:exporting')}
+            </div>
+          </div>
+        </div>
+      )
+    }
+    return (
+      <div className="export-btn">
+        <button className="btn btn-default" onClick={e => this.downloadExcel()}>
+          <i className="glyphicon glyphicon-download-alt"></i>
+        </button>
+      </div>
+    )
+  }
+
+  navigationLink(Tab, index){
+    if(OverviewTab != Tab) return super.navigationLink(Tab, index);
+    const {getName, icon} = Tab;
+    return (
+      <div
+        className={cn('navigation-item-overview', {active: index == this.state.currentTab})}
+        onClick={_ => this.setState({currentTab: index})}
+      >
+        <a href="javascript:void(0);" key={index} className="col-sm-12">
+          <span className="circle">
+            <img className="nav-icon" src={`assets/icons/${icon}.svg`}/>
+            <i className={`glyphicon glyphicon-${icon}`}/>
+          </span>
+    	    &nbsp;
+		  {getName(this.t.bind(this))}
+      <i className="glyphicon glyphicon-info-sign"/>
+        </a>
+        <div className="description col-sm-12">
+          The Procurement M&E Prototype is an interactive platform for analyzing, monitoring, and evaluating information on public procurement. It is specifically designed to help users understand procurement efficiency, and the competitiveness and cost-effectiveness of public markets.
+        </div>
+      </div>
+    )
   }
 
   render(){
     return (
       <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>
         <header className="branding row">
-          <div className="col-sm-offset-1 col-sm-4">
+          <div className="col-sm-9 logo-wrapper">
+            <img src="assets/dg-logo.svg"/>
             {this.dashboardSwitcher()}
           </div>
-          <div className="col-sm-6 menu">
-            {this.filters()}
-            {this.comparison()}
-            {this.exportBtn()}
-          </div>
-          <div className="col-sm-2 header-icons user-tools">
+          <div className="col-sm-3">
             {this.loginBox()}
           </div>
-          <div className="col-sm-1 header-icons language-switcher">
-            {this.languageSwitcher()}
-          </div>
         </header>
+        <div className="header-tools row">
+          <div className="col-xs-offset-4 col-md-osset-3 col-lg-offset-2 col-sm-5 menu">
+            <div className="filters-hint">
+              Filter your data
+            </div>
+            {this.filters()}
+            {this.comparison()}
+          </div>
+          <div className="col-xs-3 col-md-4 col-lg-5">
+            {this.exportBtn()}
+          </div>
+        </div>
         <aside className="col-xs-4 col-md-3 col-lg-2">
           <div className="row">
             <div role="navigation">
               {this.navigation()}
             </div>
             {/*
-            <section className="col-sm-12 description">
-              <h3><strong>{this.t('general:description:title')}</strong></h3>
-              <p>
+                <section className="col-sm-12 description">
+                <h3><strong>{this.t('general:description:title')}</strong></h3>
+                <p>
                 <small>
-                  {this.t('general:description:content')}
+                {this.t('general:description:content')}
                 </small>
-              </p>
-            </section>
-            */}
+                </p>
+                </section>
+              */}
           </div>
         </aside>
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
@@ -72,7 +162,7 @@ class OCEChild extends OCApp{
           </div>
         </div>
         {this.showMonths() && <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 months-bar" role="navigation">
-        {this.monthsBar()}
+          {this.monthsBar()}
         </div>}
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
           {this.yearsBar()}
@@ -95,7 +185,7 @@ const formatNumber = number => number.toLocaleString(undefined, {maximumFraction
 const styling = {
   charts: {
     axisLabelColor: "#cc3c3b",
-    traceColors: ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"],
+    traceColors: ["#137acb", "#ffcc00", "#69bd48"],
     hoverFormat: ',.2f',
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;
@@ -111,7 +201,12 @@ const styling = {
   }
 };
 
+OCEChild.STYLING = styling;
 OCEChild.TRANSLATIONS = translations;
+
+CorruptionRickDashboard.STYLING = JSON.parse(JSON.stringify(styling));
+
+CorruptionRickDashboard.STYLING.charts.traceColors = ["#234e6d", "#3f7499", "#80b1d3", "#afd5ee", "#d9effd"];
 
 class OceSwitcher extends ViewSwitcher{}
 
@@ -119,13 +214,13 @@ OceSwitcher.views.default = OCEChild;
 OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
 
 ReactDOM.render(<OceSwitcher
-                    translations={translations['en_US']}
-                    styling={styling}
+                  translations={translations['en_US']}
+                  styling={styling}
                 />, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
     e=o.createElement(i);r=o.getElementsByTagName(i)[0];
     e.src='//www.google-analytics.com/analytics.js';
     r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));

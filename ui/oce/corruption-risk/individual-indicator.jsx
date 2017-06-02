@@ -3,6 +3,8 @@ import {Map} from "immutable";
 import {pluckImm} from "../tools";
 import Table from "../visualizations/tables/index";
 import translatable from "../translatable";
+import CRDPage from "./page";
+import {colorLuminance} from "./tools";
 
 class IndividualIndicatorChart extends CustomPopupChart{
   getCustomEP(){
@@ -12,6 +14,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
 
   getData(){
     const data = super.getData();
+    const {traceColors} = this.props.styling.charts;
     if(!data) return [];
     const {monthly} = this.props;
     let dates = monthly ?
@@ -40,9 +43,9 @@ class IndividualIndicatorChart extends CustomPopupChart{
       fill: 'tonexty',
       name: 'Flagged Procurements',
       hoverinfo: 'none',
-      fillcolor: '#85cbfe',
+      fillcolor: traceColors[0],
       line: {
-        color: '#63a0cd'
+        color: colorLuminance(traceColors[0], -.3),
       },
     }, {
       x: dates,
@@ -51,9 +54,9 @@ class IndividualIndicatorChart extends CustomPopupChart{
       fill: 'tonexty',
       name: 'Eligible Procurements',
       hoverinfo: 'none',
-      fillcolor: '#336ba6',
+      fillcolor: traceColors[1],
       line: {
-        color: '#224a74'
+        color: colorLuminance(traceColors[1], -.3)
       }
     }];
   }
@@ -71,7 +74,8 @@ class IndividualIndicatorChart extends CustomPopupChart{
       xaxis: {
         type: 'category',
         showgrid: false
-      }
+      },
+      yaxis: {}
     }
   }
 
@@ -127,7 +131,7 @@ class ProjectTable extends ProcurementsTable{
   }
 }
 
-class IndividualIndicatorPage extends translatable(React.Component){
+class IndividualIndicatorPage extends translatable(CRDPage){
   constructor(...args){
     super(...args);
     this.state = {
@@ -136,7 +140,8 @@ class IndividualIndicatorPage extends translatable(React.Component){
 
   render(){
     const {chart, table} = this.state;
-    const {indicator, translations, filters, years, monthly, months, width} = this.props;
+    const {indicator, translations, filters, years, monthly, months, width
+    , styling} = this.props;
     return (
       <div className="page-corruption-type">
         <h2 className="page-header">{this.t(`crd:indicators:${indicator}:name`)}</h2>
@@ -165,15 +170,16 @@ class IndividualIndicatorPage extends translatable(React.Component){
             Eligible Procurements and Flagged Procurements for {this.t(`crd:indicators:${indicator}:name`)}
           </h3>
           <IndividualIndicatorChart
-              indicator={indicator}
-              translations={translations}
-              filters={filters}
-              years={years}
-              monthly={monthly}
-              months={months}
-              requestNewData={(_, data) => this.setState({chart: data})}
-              data={chart}
-              width={width}
+            indicator={indicator}
+            translations={translations}
+            filters={filters}
+            years={years}
+            monthly={monthly}
+            months={months}
+            requestNewData={(_, data) => this.setState({chart: data})}
+            data={chart}
+            width={width}
+            styling={styling}
           />
         </section>
         <section>
@@ -181,14 +187,14 @@ class IndividualIndicatorPage extends translatable(React.Component){
             List of Procurements Flagged for {this.t(`crd:indicators:${indicator}:name`)}
           </h3>
           <ProjectTable
-              indicator={indicator}
-              requestNewData={(_, data) => this.setState({table: data})}
-              data={table}
-              translations={translations}
-              filters={filters}
-              years={years}
-              monthly={monthly}
-              months={months}
+            indicator={indicator}
+            requestNewData={(_, data) => this.setState({table: data})}
+            data={table}
+            translations={translations}
+            filters={filters}
+            years={years}
+            monthly={monthly}
+            months={months}
           />
         </section>
       </div>

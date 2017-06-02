@@ -104,6 +104,10 @@ class Tab extends Visualization{
             )
         , Set())
   }
+
+  componentDidMount(){
+    window.scrollTo(0, 0);
+  }
 }
 
 Tab.visualizations = [];

@@ -1,9 +1,8 @@
 package org.devgateway.ocds.web.rest.controller.selector;
 
 import java.util.List;
-
+import java.util.regex.Pattern;
 import javax.validation.Valid;
-
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
@@ -12,14 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- *
  * @author mpostelnicu
- *
  */
 public abstract class AbstractOrganizationSearchController extends GenericOCDSController {
 
@@ -33,7 +28,11 @@ public abstract class AbstractOrganizationSearchController extends GenericOCDSCo
         if (request.getText() == null) {
             query = new Query();
         } else {
-            query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
+            //this is for Full Text Search, in case we need this later, right now it's not very useful
+            //query = TextQuery.queryText(new TextCriteria().matching(request.getText())).sortByScore();
+
+            query = new Query().addCriteria(Criteria.where("name")
+                    .regex(Pattern.compile(request.getText(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE)));
         }
         if (type != null) {
             query.addCriteria(Criteria.where("roles").is(type))
