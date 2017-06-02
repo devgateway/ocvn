@@ -1,6 +1,30 @@
 import Table from "./index";
 import orgNamesFetching from "../../orgnames-fetching";
-import {pluckImm} from "../../tools";
+import {pluckImm, fetchJson} from "../../tools";
+import translatable from '../../translatable';
+
+class WinCount extends translatable(React.Component){
+  constructor(...args){
+    super(...args);
+    this.state = {
+      cnt: this.t("general:loading")
+    }
+  }
+
+  componentDidMount(){
+    const {id} = this.props;
+    fetchJson(`/api/activeAwardsCount?supplierId=${id}`)
+      .then(response => this.setState({
+        cnt: response[0].cnt
+      }))
+  }
+
+  render(){
+    const {id} = this.props;
+    const {cnt} = this.state;
+    return <td>{cnt}</td>
+  }
+}
 
 class FrequentTenderers extends orgNamesFetching(Table){
   constructor(...args){
@@ -10,12 +34,15 @@ class FrequentTenderers extends orgNamesFetching(Table){
   }
 
   row(entry, index){
+    const {translations} = this.props;
+    const id1 = entry.get('tendererId1');
+    const id2 = entry.get('tendererId2');
     return <tr key={index}>
-      <td>{this.getOrgName(entry.getIn(['id', 'tendererId1']))}</td>
-      <td>{this.getOrgName(entry.getIn(['id', 'tendererId2']))}</td>
-      <td>{entry.getIn(['value', 'pairCount'])}</td>
-      <td>{entry.getIn(['value', 'winner1Count'])}</td>
-      <td>{entry.getIn(['value', 'winner2Count'])}</td>
+      <td>{this.getOrgName(id1)}</td>
+      <td>{this.getOrgName(id2)}</td>
+      <td>{entry.get('pairCount')}</td>
+      <WinCount id={id1} translations={translations}/>
+      <WinCount id={id2} translations={translations}/>
     </tr>
   }
 
@@ -24,8 +51,11 @@ class FrequentTenderers extends orgNamesFetching(Table){
   }
 
   getOrgsWithoutNamesIds(){
-    if(!this.props.data) return [];
-    return this.props.data.map(pluckImm('id')).flatten().filter(id => !this.state.orgNames[id]).toJS();
+    const {data} = this.props;
+    if(!data) return [];
+    return data.map(datum => List([datum.get('tendererId1'), datum.get('tendererId2')]))
+      .flatten()
+      .filter(id => !this.state.orgNames[id]).toJS();
   }
 
   render(){

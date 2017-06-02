@@ -21,8 +21,8 @@ class MapVisual extends frontendDateFilterable(Visualization){
   }
 
   render(){
-    let {translations, filters, years, styling, monthly, months} = this.props;
-    return <Map center={[14.5, 105]} zoom={5}>
+    let {translations, filters, years, styling, monthly, months, center, zoom} = this.props;
+    return <Map center={center} zoom={zoom}>
       {this.getTiles()}
       <Cluster maxAmount={this.getMaxAmount()}>
         {this.getData().map(location => (
