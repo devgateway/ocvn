@@ -8,13 +8,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Classification;
+import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
 import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
@@ -32,7 +32,7 @@ public class OCDSPopulatorService {
 
     protected static Logger logger = Logger.getLogger(OCDSPopulatorService.class);
     @Autowired
-    private ReleaseRepository releaseRepository;
+    private FlaggedReleaseRepository releaseRepository;
     @Autowired
     private OrganizationRepository organizationRepository;
     @Autowired
@@ -94,14 +94,14 @@ public class OCDSPopulatorService {
 
 
     public void randomizeLocation(VNLocation l) {
-        l.setDescription(getRandomTxt());
+        l.setDescription("Location " + getRandomTxt());
         l.setGeometry(new GeoJsonPoint(-94.578333d + getRandomGeo(), 39.099722d + getRandomGeo()));
         locationRepository.save(l);
     }
 
 
     public void randomizeOrganization(Organization o) {
-        o.setName(getRandomTxt());
+        o.setName("Organization " + getRandomTxt());
         if (o.getAddress() != null) {
             o.getAddress().setCountryName(getRandomTxt());
             o.getAddress().setLocality(getRandomTxt());
@@ -120,7 +120,7 @@ public class OCDSPopulatorService {
     }
 
     public void randomizeClassification(Classification c) {
-        c.setDescription(getRandomTxt());
+        c.setDescription("Classification " + getRandomTxt());
         classificationRepository.save(c);
     }
 
@@ -146,7 +146,7 @@ public class OCDSPopulatorService {
         }
     }
 
-    public void randomizeRelease(Release r) {
+    public void randomizeRelease(FlaggedRelease r) {
         r.setOcid(getRandomTxt());
         if (r.getBids() != null && r.getBids().getDetails() != null) {
             r.getBids().getDetails().forEach(d -> {
