@@ -149,10 +149,9 @@ class OCApp extends React.Component{
               value={compareBy}
               onChange={e => this.updateComparisonCriteria(e.target.value)}
           >
-            <option value="">{this.t('header:comparison:criteria:none')}</option>
-            <option value="bidTypeId">{this.t('header:comparison:criteria:bidType')}</option>
-            <option value="bidSelectionMethod">{this.t('header:comparison:criteria:bidSelectionMethod')}</option>
-            <option value="procuringEntityId">{this.t('header:comparison:criteria:procuringEntity')}</option>
+            {this.constructor.COMPARISON_TYPES.map(({value, label}, index) =>
+              <option key={index} value={value}>{this.t(label)}</option>
+            )}
           </select>
         </div>
       </div>
@@ -357,5 +356,16 @@ OCApp.STYLING = {
     traceColors: []
   }
 };
+
+OCApp.COMPARISON_TYPES = [{
+  value: '',
+  label: 'header:comparison:criteria:none'
+}, {
+  value: 'bidTypeId',
+  label: 'header:comparison:criteria:bidType'
+}, {
+  value: 'procuringEntityId',
+  label: 'header:comparison:criteria:procuringEntity'
+}];
 
 export default OCApp;

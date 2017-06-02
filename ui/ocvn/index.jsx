@@ -24,10 +24,10 @@ class OCVN extends OCApp{
 
   fetchBidTypes(){
     fetchJson('/api/ocds/bidType/all').then(data =>
-        this.setState({
-          bidTypes: data.reduce((map, datum) =>
-            map.set(datum.id, datum.description), Map())
-        })
+      this.setState({
+        bidTypes: data.reduce((map, datum) =>
+          map.set(datum.id, datum.description), Map())
+      })
     );
   }
 
@@ -83,7 +83,7 @@ class OCVN extends OCApp{
           </div>
         </div>
         {this.showMonths() && <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 months-bar" role="navigation">
-            {this.monthsBar()}
+          {this.monthsBar()}
         </div>}
         <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
           {this.yearsBar()}
@@ -129,6 +129,10 @@ const styling = {
 
 OCVN.STYLING = styling;
 OCVN.TRANSLATIONS = translations;
+OCVN.COMPARISON_TYPES.push({
+  value: 'bidSelectionMethod',
+  label: 'header:comparison:criteria:bidSelectionMethod'
+});
 
 ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
@@ -144,7 +148,7 @@ ReactDOM.render(<OCVN/>, document.getElementById('dg-container'));
 
 if("ocvn.developmentgateway.org" == location.hostname){
   (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
     e=o.createElement(i);r=o.getElementsByTagName(i)[0];
     e.src='//www.google-analytics.com/analytics.js';
     r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
