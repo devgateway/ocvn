@@ -189,10 +189,8 @@ class CorruptionRiskDashboard extends React.Component{
         {showLandingPopup &&
           <LandingPopup redirectToLogin={!disabledApiSecurity} requestClosing={e => this.setState({showLandingPopup: false})}/>}
         <header className="branding row">
-          <div className="col-sm-1 logo-wrapper">
-            <img src="assets/logo.png"/>
-          </div>
-          <div className="col-sm-8">
+          <div className="col-sm-9 logo-wrapper">
+            <img src="assets/dg-logo.svg"/>
             <div className={cn('dash-switcher-wrapper', {open: dashboardSwitcherOpen})}>
               <h1 className="corruption-dash-title" onClick={this.toggleDashboardSwitcher.bind(this)}>
                 Corruption Risk Dashboard

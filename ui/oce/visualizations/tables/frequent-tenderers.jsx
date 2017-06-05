@@ -1,3 +1,4 @@
+import { List } from 'immutable';
 import Table from "./index";
 import orgNamesFetching from "../../orgnames-fetching";
 import {pluckImm, fetchJson} from "../../tools";

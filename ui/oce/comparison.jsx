@@ -4,8 +4,6 @@ import {max, cacheFn, download} from "./tools";
 import {List, Set, Map} from "immutable";
 import orgNamesFetching from "./orgnames-fetching";
 
-
-
 class Comparison extends orgNamesFetching(translatable(PureRenderCompoent)){
   getComponent(){
     return this.props.Component;
@@ -33,7 +31,7 @@ class Comparison extends orgNamesFetching(translatable(PureRenderCompoent)){
       return bidTypes.get(comparisonCriteriaValues[index], this.t('general:comparison:other'))
     } else if("procuringEntityId" == compareBy){
       const orgId = comparisonCriteriaValues[index];
-      return this.state.orgNames[orgId] || orgId;
+      return this.state.orgNames[orgId] || orgId || this.t('general:comparison:other');
     }
     return comparisonCriteriaValues[index] || this.t('general:comparison:other');
   }

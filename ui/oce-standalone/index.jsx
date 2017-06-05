@@ -84,7 +84,7 @@ class OCEChild extends OCApp{
     }
     return (
       <div className="export-btn">
-        <button className="btn btn-default" onClick={e => this.downloadExcel()}>
+        <button className="btn btn-default">
           <i className="glyphicon glyphicon-download-alt"></i>
         </button>
       </div>
@@ -128,18 +128,18 @@ class OCEChild extends OCApp{
           </div>
         </header>
         <div className="header-tools row">
-          <div className="col-xs-offset-4 col-md-osset-3 col-lg-offset-2 col-sm-5 menu">
+          <div className="col-xs-offset-4 col-md-offset-3 col-sm-5 menu">
             <div className="filters-hint">
               Filter your data
             </div>
             {this.filters()}
             {this.comparison()}
           </div>
-          <div className="col-xs-3 col-md-4 col-lg-5">
+          <div className="col-xs-3 col-md-4">
             {this.exportBtn()}
           </div>
         </div>
-        <aside className="col-xs-4 col-md-3 col-lg-2">
+        <aside className="col-xs-4 col-md-3">
           <div className="row">
             <div role="navigation">
               {this.navigation()}
@@ -156,15 +156,15 @@ class OCEChild extends OCApp{
               */}
           </div>
         </aside>
-        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10">
+        <div className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9">
           <div className="row">
             {this.content()}
           </div>
         </div>
-        {this.showMonths() && <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 months-bar" role="navigation">
+        {this.showMonths() && <div className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9 months-bar" role="navigation">
           {this.monthsBar()}
         </div>}
-        <div className="col-xs-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-8 col-md-9 col-lg-10 years-bar" role="navigation">
+        <div className="col-xs-offset-4 col-md-offset-3 col-xs-8 col-md-9 years-bar" role="navigation">
           {this.yearsBar()}
         </div>
         <footer className="col-sm-12 main-footer">&nbsp;</footer>
