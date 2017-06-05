@@ -56,7 +56,8 @@ class CostEffectiveness extends FrontendDateFilterableChart{
         type: "category"
       },
       yaxis: {
-        title: this.t('charts:costEffectiveness:yAxisTitle')
+        title: this.t('charts:costEffectiveness:yAxisTitle'),
+        tickprefix: "   "
       }
     }
   }
