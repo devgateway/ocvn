@@ -86,36 +86,6 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
     }
 
     @Test
-    public void percentTendersUsingEBidExcelChart() throws Exception {
-        LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
-        tenderPercentagesExcelController.percentTendersUsingEBidExcelChart(
-                filter,
-                mockHttpServletResponse);
-
-        final byte[] responseOutput = mockHttpServletResponse.getContentAsByteArray();
-        final Workbook workbook = new XSSFWorkbook(new ByteArrayInputStream(responseOutput));
-        Assert.assertNotNull(workbook);
-
-        final Sheet sheet = workbook.getSheet(ChartType.area.toString());
-        Assert.assertNotNull("check chart type, sheet name should be the same as the type", sheet);
-
-        final XSSFDrawing drawing = (XSSFDrawing) sheet.getDrawingPatriarch();
-        final List<XSSFChart> charts =  drawing.getCharts();
-        Assert.assertEquals("number of charts", 1, charts.size());
-
-        final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title",
-                translationService.getValue(filter.getLanguage(),"charts:percentEBid:title"),
-                chart.getTitle().getString());
-
-        final List<? extends XSSFChartAxis> axis = chart.getAxis();
-        Assert.assertEquals("number of axis", 2, axis.size());
-
-        final CTChart ctChart = chart.getCTChart();
-        Assert.assertEquals("Check if we have 1 area chart", 1, ctChart.getPlotArea().getAreaChartArray().length);
-    }
-
-    @Test
     public void numberTendersUsingEBidExcelChart() throws Exception {
         LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
         tenderPercentagesExcelController.numberTendersUsingEBidExcelChart(
@@ -146,9 +116,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
     }
 
     @Test
-    public void percentTendersUsingEgpExcelChart() throws Exception {
+    public void percentTendersUsingEBidExcelChart() throws Exception {
         LangYearFilterPagingRequest filter = getLangYearFilterMockRequest();
-        tenderPercentagesExcelController.percentTendersUsingEgpExcelChart(
+        tenderPercentagesExcelController.percentTendersUsingEBidExcelChart(
                 filter,
                 mockHttpServletResponse);
 
@@ -164,8 +134,9 @@ public class TenderPercentagesExcelControllerTest extends AbstractExcelControlle
         Assert.assertEquals("number of charts", 1, charts.size());
 
         final XSSFChart chart = charts.get(0);
-        Assert.assertEquals("chart title",  translationService.getValue(filter.getLanguage(),
-                "charts:percentEProcurement:title"), chart.getTitle().getString());
+        Assert.assertEquals("chart title",
+                translationService.getValue(filter.getLanguage(),"charts:percentEBid:title"),
+                chart.getTitle().getString());
 
         final List<? extends XSSFChartAxis> axis = chart.getAxis();
         Assert.assertEquals("number of axis", 2, axis.size());

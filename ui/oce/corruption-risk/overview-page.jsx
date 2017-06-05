@@ -82,9 +82,9 @@ class CorruptionType extends CustomPopupChart{
       legend: {
         orientation: 'h',
         xanchor: 'right',
-        yanchor: 'top',
+        yanchor: 'bottom',
         x: 1,
-        y: 1.3
+        y: 1
       }
     }
   }
@@ -155,29 +155,29 @@ class OverviewPage extends CRDPage{
         <section className="chart-corruption-types">
           <h3 className="page-header">Risk of Fraud, Collusion and Process Rigging Over Time</h3>
           <CorruptionType
-              filters={filters}
-              requestNewData={(_, corruptionType) => this.setState({corruptionType})}
-              translations={translations}
-              data={corruptionType}
-              years={years}
-              monthly={monthly}
-              months={months}
-              styling={styling}
-              indicatorTypesMapping={indicatorTypesMapping}
-              width={width}
-              margin={{t: 0, r: 0, b: 0, r: 0, pad: 40}}
+            filters={filters}
+            requestNewData={(_, corruptionType) => this.setState({corruptionType})}
+            translations={translations}
+            data={corruptionType}
+            years={years}
+            monthly={monthly}
+            months={months}
+            styling={styling}
+            indicatorTypesMapping={indicatorTypesMapping}
+            width={width - 20}
+            margin={{t: 0, r: 0, b: 0, r: 0, pad: 40}}
           />
         </section>
         <section>
           <h3 className="page-header">The Procurement Processes with the Most Flags</h3>
           <TopFlaggedContracts
-              filters={filters}
-              data={topFlaggedContracts}
-              translations={translations}
-              years={years}
-              monthly={monthly}
-              months={months}
-              requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
+            filters={filters}
+            data={topFlaggedContracts}
+            translations={translations}
+            years={years}
+            monthly={monthly}
+            months={months}
+            requestNewData={(_, topFlaggedContracts) => this.setState({topFlaggedContracts})}
           />
         </section>
       </div>

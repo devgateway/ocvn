@@ -5,6 +5,7 @@ import CustomPopupChart from "./custom-popup-chart";
 import Table from "../visualizations/tables/index";
 import translatable from '../translatable';
 import CRDPage from "./page";
+import { colorLuminance } from './tools';
 
 class IndicatorTile extends CustomPopupChart{
   getCustomEP(){
@@ -13,15 +14,16 @@ class IndicatorTile extends CustomPopupChart{
   }
 
   getData(){
+    const color = this.props.styling.charts.traceColors[2];
     const data = super.getData();
     if(!data) return [];
     const {monthly} = this.props;
     let dates = monthly ?
-                  data.map(datum => {
-                    const month = datum.get('month');
-                    return this.t(`general:months:${month}`);
-                  }).toJS() :
-                  data.map(pluckImm('year')).toJS();
+      data.map(datum => {
+        const month = datum.get('month');
+        return this.t(`general:months:${month}`);
+      }).toJS() :
+      data.map(pluckImm('year')).toJS();
 
     let values = data.map(pluckImm('totalTrue')).toJS();
 
@@ -39,7 +41,10 @@ class IndicatorTile extends CustomPopupChart{
       hoverinfo: 'none',
       type: 'scatter',
       fill: 'tonexty',
-      fillcolor: this.props.styling.charts.traceColors[0],
+      fillcolor: color,
+      line: {
+        color: colorLuminance(color, -.3)
+      }
     }];
   }
 

@@ -194,39 +194,6 @@ public class TenderPercentagesExcelController extends ExcelChartOCDSController {
                         categories, values));
     }
 
-    @ApiOperation(value = "Exports *Percent of Tenders Using e-Procurement* dashboard in Excel format.")
-    @RequestMapping(value = "/api/ocds/percentTendersUsingEgpExcelChart",
-            method = {RequestMethod.GET, RequestMethod.POST})
-    public void percentTendersUsingEgpExcelChart(@ModelAttribute @Valid final LangYearFilterPagingRequest filter,
-                                                 final HttpServletResponse response) throws IOException {
-        final String chartTitle = translationService.getValue(filter.getLanguage(),
-                "charts:percentEProcurement:title");
-
-        // fetch the data that will be displayed in the chart
-        final List<DBObject> percentTendersUsingEgp = tenderPercentagesController.percentTendersUsingEgp(filter);
-
-        final List<?> categories = excelChartHelper.getCategoriesFromDBObject(getExportYearMonthXAxis(filter),
-                percentTendersUsingEgp);
-        final List<List<? extends Number>> values = new ArrayList<>();
-
-        final List<Number> percentEgp = excelChartHelper.getValuesFromDBObject(percentTendersUsingEgp, categories,
-                getExportYearMonthXAxis(filter), TenderPercentagesController.Keys.PERCENTAGE_EGP);
-        values.add(percentEgp);
-
-        final List<String> seriesTitle = Arrays.asList(
-                translationService.getValue(filter.getLanguage(),
-                        "charts:percentEProcurement:yAxisTitle"));
-
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=" + chartTitle + ".xlsx");
-        response.getOutputStream().write(
-                excelChartGenerator.getExcelChart(
-                        ChartType.area,
-                        chartTitle,
-                        seriesTitle,
-                        categories, values));
-    }
-
     @ApiOperation(value = "Exports *Percentage of plans with tender* dashboard in Excel format.")
     @RequestMapping(value = "/api/ocds/tendersWithLinkedProcurementPlanExcelChart",
             method = {RequestMethod.GET, RequestMethod.POST})
