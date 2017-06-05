@@ -1,26 +1,6 @@
 import FilterBox from "./box";
-import MultipleSelect from "../../filters/inputs/multiple-select";
 import {Set} from "immutable";
-
-class ProcurementMethod extends MultipleSelect{
-  getTitle(t){
-    return 'Procurement method';
-  }
-
-  getId(option){
-    return option.get('_id');
-  }
-
-  getLabel(option){
-    return option.get('_id');
-  }
-
-  transform(data){
-    return data.filter(({_id}) => !!_id);
-  }
-}
-
-ProcurementMethod.ENDPOINT = 'ocds/procurementMethod/all';
+import ProcurementMethod from '../../filters/procurement-method.jsx';
 
 class ProcurementMethodBox extends FilterBox{
   isActive(){

@@ -52,7 +52,8 @@ class OverviewChart extends FrontendDateFilterableChart{
       },
       yaxis: {
         title: this.t('charts:overview:yAxisName'),
-        exponentformat: 'none'
+        exponentformat: 'none',
+        tickprefix: "   "
       }
     }
   }
