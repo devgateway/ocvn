@@ -34,7 +34,7 @@ class Filters extends React.Component{
            })}
         </div>
         <div className="col-lg-1 col-md-1 col-sm-1 download">
-          <button className="btn btn-success">
+          <button className="btn btn-default" disabled>
             <i className="glyphicon glyphicon-download-alt"></i>
           </button>
         </div>

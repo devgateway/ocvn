@@ -10,7 +10,8 @@ class TotalAmountsByItem extends BidsByItem{
         type: "category"
       },
       yaxis: {
-        title: this.t('charts:amountsByItem:yAxisTitle')
+        title: this.t('charts:amountsByItem:yAxisTitle'),
+        tickprefix: "   "
       }
     }
   }

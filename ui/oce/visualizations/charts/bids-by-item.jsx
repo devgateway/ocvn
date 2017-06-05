@@ -10,7 +10,8 @@ class BidsByItem extends CatChart{
         type: "category"
       },
       yaxis: {
-        title: this.t('charts:bidsByItem:yAxisTitle')
+        title: this.t('charts:bidsByItem:yAxisTitle'),
+        tickprefix: "   "
       }
     }
   }

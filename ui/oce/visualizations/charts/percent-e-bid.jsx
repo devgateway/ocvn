@@ -31,7 +31,8 @@ class PercentEbid extends FrontendDateFilterable{
       },
       yaxis: {
         title: this.t('charts:percentEBid:yAxisName'),
-        hoverformat: hoverFormat
+        hoverformat: hoverFormat,
+        tickprefix: "   "
       }
     }
   }

@@ -31,7 +31,8 @@ class NrEbid extends FrontendDateFilterableChart{
       },
       yaxis: {
         title: this.t('charts:nrEBid:yAxisTitle'),
-        hoverformat: hoverFormat
+        hoverformat: hoverFormat,
+        tickprefix: "   "
       }
     }
   }
