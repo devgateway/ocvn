@@ -59,6 +59,7 @@
   "filters:tabs:amounts:title": "Amounts",
   "filters:tabs:organizations:title": "Organizations",
   "filters:tabs:tenderRules:title": "Invitation to bid rules",
+  "filters:tabs:procurementMethod:title": "Procurement method",
   "tabs:competitiveness:title": "Competitiveness",
   "tabs:eProcurement:title": "E-Procurement",
   "tabs:efficiency:title": "Efficiency",

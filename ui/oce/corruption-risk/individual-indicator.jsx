@@ -66,7 +66,7 @@ class IndividualIndicatorChart extends CustomPopupChart{
       legend: {
         orientation: 'h',
         xanchor: 'right',
-        yanchor: 'top',
+        yanchor: 'bottom',
         x: 1,
         y: 1
       },
@@ -180,7 +180,7 @@ class IndividualIndicatorPage extends translatable(CRDPage){
             data={chart}
             width={width - 20}
             styling={styling}
-            margin={{t: 0, r: 0, b: 20, r: 0, pad: 40}}
+            margin={{t: 0, b: 80, r: 40, pad: 40}}
           />
         </section>
         <section>

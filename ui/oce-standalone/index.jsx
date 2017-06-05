@@ -84,7 +84,7 @@ class OCEChild extends OCApp{
     }
     return (
       <div className="export-btn">
-        <button className="btn btn-default">
+        <button className="btn btn-default" disabled>
           <i className="glyphicon glyphicon-download-alt"></i>
         </button>
       </div>
@@ -104,7 +104,7 @@ class OCEChild extends OCApp{
             <img className="nav-icon" src={`assets/icons/${icon}.svg`}/>
             <i className={`glyphicon glyphicon-${icon}`}/>
           </span>
-    	    &nbsp;
+    	  &nbsp;
 		  {getName(this.t.bind(this))}
       <i className="glyphicon glyphicon-info-sign"/>
         </a>
@@ -185,7 +185,7 @@ const formatNumber = number => number.toLocaleString(undefined, {maximumFraction
 const styling = {
   charts: {
     axisLabelColor: "#cc3c3b",
-    traceColors: ["#137acb", "#ffcc00", "#69bd48"],
+    traceColors: ['#324d6e', '#ecac00', '#4b6f33'],
     hoverFormat: ',.2f',
     hoverFormatter: number => {
       if(typeof number == "undefined") return number;

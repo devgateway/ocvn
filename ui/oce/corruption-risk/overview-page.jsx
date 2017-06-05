@@ -165,7 +165,7 @@ class OverviewPage extends CRDPage{
             styling={styling}
             indicatorTypesMapping={indicatorTypesMapping}
             width={width - 20}
-            margin={{t: 0, r: 0, b: 0, r: 0, pad: 40}}
+            margin={{t: 0, b: 40, r: 40, pad: 20}}
           />
         </section>
         <section>

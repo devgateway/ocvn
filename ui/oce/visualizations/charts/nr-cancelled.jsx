@@ -33,7 +33,8 @@ class NrCancelled extends FrontendDateFilterableChart{
       },
       yaxis: {
         title: this.t('charts:nrCancelled:yAxisTitle'),
-        hoverformat: hoverFormat
+        hoverformat: hoverFormat,
+        tickprefix: "   "
       }
     }
   }
