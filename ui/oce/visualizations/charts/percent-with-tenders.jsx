@@ -32,7 +32,8 @@ class PercentWithTenders extends FrontendDateFilterableChart{
       },
       yaxis: {
         title: this.t('charts:percentWithTenders:yAxisTitle'),
-        hoverformat: '.2f'
+        hoverformat: '.2f',
+        tickprefix: "   "
       }
     }
   }

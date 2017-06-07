@@ -36,6 +36,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/dashboard").setViewName("redirect:/ui/index.html");
+        registry.addViewController("/corruption-risk")
+                .setViewName("redirect:/ui/index.html?corruption-risk-dashboard");
     }
 
     @Bean

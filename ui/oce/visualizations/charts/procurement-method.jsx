@@ -14,7 +14,8 @@ class ProcurementMethod extends CatChart{
         type: "category"
       },
       yaxis: {
-        title: this.t('charts:procurementMethod:yAxisName')
+        title: this.t('charts:procurementMethod:yAxisName'),
+        tickprefix: "   "
       }
     }
   }

@@ -84,7 +84,7 @@ class CorruptionRiskDashboard extends React.Component{
   }
 
   componentDidMount(){
-    !this.state.showLandingPopup && this.fetchUserInfo();
+    this.fetchUserInfo();
     this.fetchIndicatorTypesMapping();
     this.fetchYears();
 
