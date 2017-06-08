@@ -19,6 +19,7 @@ import java.util.Collection;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2BootstrapTheme;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import de.agilecoders.wicket.core.util.Attributes;
@@ -79,6 +80,7 @@ public class Select2MultiChoiceBootstrapFormComponent<TYPE>
         field.getSettings().setAllowClear(true);
         field.getSettings().setCloseOnSelect(true);
         field.getSettings().setDropdownAutoWidth(true);
+        field.getSettings().setTheme(new Select2BootstrapTheme(false));
         field.getSettings().setEscapeMarkup("function (m) {return m;}");
         super.onInitialize();
 

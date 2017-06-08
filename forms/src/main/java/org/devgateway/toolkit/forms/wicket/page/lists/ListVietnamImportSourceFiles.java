@@ -19,7 +19,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocvn.forms.wicket.page.EditVietnamImportSourceFiles;
 import org.devgateway.ocvn.persistence.dao.VietnamImportSourceFiles;
 import org.devgateway.ocvn.persistence.repository.VietnamImportSourceFilesRepository;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @AuthorizeInstantiation(SecurityConstants.Roles.ROLE_ADMIN)

@@ -16,7 +16,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.ocds.forms.wicket.providers.PersonDashboardJpaRepositoryProvider;
 import org.devgateway.ocds.persistence.dao.UserDashboard;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.forms.wicket.providers.SortableJpaRepositoryDataProvider;
 import org.devgateway.toolkit.persistence.repository.PersonRepository;
 import org.wicketstuff.annotation.mount.MountPath;

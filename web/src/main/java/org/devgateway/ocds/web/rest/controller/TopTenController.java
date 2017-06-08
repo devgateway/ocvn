@@ -14,11 +14,11 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomGroupingOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomOperation;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
-import org.hibernate.jpamodelgen.xml.jaxb.Basic;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort.Direction;
@@ -36,10 +36,9 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -132,7 +131,8 @@ public class TopTenController extends GenericOCDSController {
 
         Aggregation agg = newAggregation(
                 match(where("tender.value.amount").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomOperation(new BasicDBObject("$project", project)),
                 sort(Direction.DESC, "tender.value.amount"), limit(10));
 

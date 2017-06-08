@@ -31,7 +31,8 @@ class CancelledPercents extends FrontendDateFilterableChart{
       },
       yaxis: {
         title: this.t('charts:cancelledPercents:yAxisName'),
-        hoverformat: hoverFormat
+        hoverformat: hoverFormat,
+        tickprefix: "   "
       }
     }
   }

@@ -1,16 +1,15 @@
 package org.devgateway.ocds.web.rest.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author idobre
@@ -68,7 +67,8 @@ public class FundingByLocationControllerTest extends AbstractEndPointControllerT
 
         final DBObject first = plannedFundingByLocation.get(0);
         int year = (int) first.get(FundingByLocationController.Keys.YEAR);
-        BasicDBObject projectLocation = (BasicDBObject) first.get("budget.projectLocation");
+        BasicDBObject projectLocation = (BasicDBObject) first
+                .get(FundingByLocationController.Keys.PLANNING_BUDGET_PROJECTLOCATION);
         BasicDBObject geometry = (BasicDBObject) projectLocation.get("geometry");
         String geometryType = (String) geometry.get("type");
         List<Double> coordinates = (List<Double>) geometry.get("coordinates");

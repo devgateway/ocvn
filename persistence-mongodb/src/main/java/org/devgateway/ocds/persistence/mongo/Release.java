@@ -1,14 +1,11 @@
 package org.devgateway.ocds.persistence.mongo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,11 +17,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Schema for an Open Contracting Release
@@ -41,6 +41,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
         "initiationType",
         "planning",
         "tender",
+        "bids",
         "buyer",
         "awards",
         "contracts",
@@ -144,6 +145,19 @@ public class Release implements Identifiable {
     @ExcelExportSepareteSheet
     @JsonProperty("tender")
     private Tender tender;
+
+    /**
+     * Bids
+     * <p>
+     * Summary and detailed information about bids received and evaluated as part of this contracting process.
+     *
+     */
+    @JsonProperty("bids")
+    @ExcelExport
+    @ExcelExportSepareteSheet
+    @JsonPropertyDescription("Summary and detailed information about bids received and evaluated as part"
+            + " of this contracting process.")
+    private Bids bids = new Bids();
 
     /**
      * Organization
@@ -411,6 +425,28 @@ public class Release implements Identifiable {
     }
 
     /**
+     * Bids
+     * <p>
+     * Summary and detailed information about bids received and evaluated as part of this contracting process.
+     *
+     */
+    @JsonProperty("bids")
+    public Bids getBids() {
+        return bids;
+    }
+
+    /**
+     * Bids
+     * <p>
+     * Summary and detailed information about bids received and evaluated as part of this contracting process.
+     *
+     */
+    @JsonProperty("bids")
+    public void setBids(Bids bids) {
+        this.bids = bids;
+    }
+
+    /**
      * Organization
      * <p>
      * An organization.
@@ -561,6 +597,7 @@ public class Release implements Identifiable {
                 append(awards, rhs.awards).
                 append(contracts, rhs.contracts).
                 append(language, rhs.language).
+                append(bids, rhs.bids).
                 isEquals();
     }
 

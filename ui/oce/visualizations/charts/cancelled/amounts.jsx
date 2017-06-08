@@ -41,7 +41,8 @@ class CancelledFunding extends FrontendDateFilterableChart{
         type: 'category'
       },
       yaxis: {
-        title: this.t('charts:cancelledAmounts:yAxisName')
+        title: this.t('charts:cancelledAmounts:yAxisName'),
+        tickprefix: "   "
       }
     }
   }

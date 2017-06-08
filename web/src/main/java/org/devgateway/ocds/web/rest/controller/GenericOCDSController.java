@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -51,6 +52,7 @@ public abstract class GenericOCDSController {
 
     private static final int LAST_MONTH_ZERO = 11;
     public static final int BIGDECIMAL_SCALE = 15;
+    public static final int DAY_MS = 86400000;
 
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
 
@@ -165,6 +167,29 @@ public abstract class GenericOCDSController {
         }
         return new CustomSortingOperation(sort);
     }
+
+    /**
+     * Similar to {@link #getSortByYearMonth(YearFilterPagingRequest)} but it can be used
+     * if additional grouping elements are present, besides month and year
+     *
+     * @param filter
+     * @return
+     */
+    protected CustomSortingOperation getSortByYearMonthWhenOtherGroups(YearFilterPagingRequest filter,
+                                                                       String... otherSort) {
+        DBObject sort = new BasicDBObject();
+        if (filter.getMonthly()) {
+            sort.put("_id.year", 1);
+            sort.put("_id.month", 1);
+        } else {
+            sort.put("_id.year", 1);
+        }
+        if (otherSort != null) {
+            Arrays.asList(otherSort).forEach(s -> sort.put(s, 1));
+        }
+        return new CustomSortingOperation(sort);
+    }
+
 
     protected void addYearlyMonthlyReferenceToGroup(YearFilterPagingRequest filter, DBObject group) {
         if (filter.getMonthly()) {
@@ -325,12 +350,12 @@ public abstract class GenericOCDSController {
     protected Criteria getContrMethodFilterCriteria(final DefaultFilterPagingRequest filter) {
         return filter.getContrMethod() == null ? new Criteria()
                 : createFilterCriteria("tender.contrMethod._id",
-                filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toList()),
+                filter.getContrMethod().stream().map(s -> new ObjectId(s)).collect(Collectors.toSet()),
                 filter);
     }
 
 
-    private <S> Criteria createFilterCriteria(final String filterName, final List<S> filterValues,
+    private <S> Criteria createFilterCriteria(final String filterName, final Set<S> filterValues,
                                               final DefaultFilterPagingRequest filter) {
         if (filterValues == null) {
             return new Criteria();
@@ -338,7 +363,7 @@ public abstract class GenericOCDSController {
         return where(filterName).in(filterValues.toArray());
     }
 
-    private <S> Criteria createNotFilterCriteria(final String filterName, final List<S> filterValues,
+    private <S> Criteria createNotFilterCriteria(final String filterName, final Set<S> filterValues,
                                                  final DefaultFilterPagingRequest filter) {
         if (filterValues == null) {
             return new Criteria();
@@ -385,6 +410,20 @@ public abstract class GenericOCDSController {
         return new Criteria();
     }
 
+    /**
+     * Add the filter by flagged
+     *
+     * @param filter
+     * @return
+     */
+    protected Criteria getFlaggedCriteria(final DefaultFilterPagingRequest filter) {
+        if (filter.getFlagged() != null && filter.getFlagged()) {
+            return where("flags.flaggedStats.0").exists(true);
+        }
+
+        return new Criteria();
+    }
+
     protected Criteria getNotProcuringEntityIdCriteria(final DefaultFilterPagingRequest filter) {
         return createNotFilterCriteria("tender.procuringEntity._id", filter.getNotProcuringEntityId(), filter);
     }
@@ -401,6 +440,17 @@ public abstract class GenericOCDSController {
         return createFilterCriteria("awards.suppliers._id", filter.getSupplierId(), filter);
     }
 
+    /**
+     * Appends the procurement method for this filter, this will fitler based
+     * on tender.procurementMethod
+     *
+     * @param filter
+     * @return the {@link Criteria} for this filter
+     */
+    protected Criteria getProcurementMethodCriteria(final DefaultFilterPagingRequest filter) {
+        return createFilterCriteria("tender.procurementMethod", filter.getProcurementMethod(), filter);
+    }
+
     @PostConstruct
     protected void init() {
         Map<String, Object> tmpMap = new HashMap<>();
@@ -408,6 +458,8 @@ public abstract class GenericOCDSController {
         tmpMap.put("tender.procuringEntity.group._id", 1);
         tmpMap.put("tender.procuringEntity.department._id", 1);
         tmpMap.put("tender.procuringEntity.address.postalCode", 1);
+        tmpMap.put("tender.procurementMethod", 1);
+        tmpMap.put("tender.submissionMethod", 1);
         tmpMap.put("awards.suppliers._id", 1);
         tmpMap.put("tender.items.classification._id", 1);
         tmpMap.put("tender.items.deliveryLocation._id", 1);
@@ -427,24 +479,28 @@ public abstract class GenericOCDSController {
             yearCriteria[0] = new Criteria();
         } else {
             yearCriteria = new Criteria[filter.getYear().size()];
-            for (int i = 0; i < filter.getYear().size(); i++) {
-                yearCriteria[i] = where(dateProperty).gte(getStartDate(filter.getYear().get(i)))
-                        .lte(getEndDate(filter.getYear().get(i)));
+            Integer[] yearArray = filter.getYear().toArray(new Integer[0]);
+            for (int i = 0; i < yearArray.length; i++) {
+                yearCriteria[i] = where(dateProperty).gte(getStartDate(yearArray[i]))
+                        .lte(getEndDate(yearArray[i]));
             }
             criteria = criteria.orOperator(yearCriteria);
 
             if (filter.getMonth() != null && filter.getYear().size() == 1) {
+                Integer[] monthArray = filter.getMonth().toArray(new Integer[0]);
                 criteria = new Criteria(); //we reset the criteria because we use only one year
                 Criteria[] monthCriteria = new Criteria[filter.getMonth().size()];
-                for (int i = 0; i < filter.getMonth().size(); i++) {
-                    monthCriteria[i] = where(dateProperty).gte(getMonthStartDate(filter.getYear().get(0),
-                            filter.getMonth().get(i)))
-                            .lte(getMonthEndDate(filter.getYear().get(0),
-                                    filter.getMonth().get(i)));
+                for (int i = 0; i < monthArray.length; i++) {
+                    monthCriteria[i] = where(dateProperty).gte(getMonthStartDate(yearArray[0],
+                            monthArray[i]))
+                            .lte(getMonthEndDate(yearArray[0],
+                                    monthArray[i]));
                 }
                 criteria = criteria.orOperator(monthCriteria);
             }
         }
+
+//        logger.info("Criteria=" + criteria.getCriteriaObject());
 
         return criteria;
     }
@@ -477,10 +533,12 @@ public abstract class GenericOCDSController {
                 getBidSelectionMethod(filter),
                 getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByBidPlanLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
+                getFlaggedCriteria(filter),
                 getElectronicSubmissionCriteria(filter));
     }
 
@@ -497,11 +555,13 @@ public abstract class GenericOCDSController {
                 getNotBidSelectionMethod(filter),
                 getContrMethodFilterCriteria(filter),
                 getSupplierIdCriteria(filter),
+                getProcurementMethodCriteria(filter),
                 getByTenderDeliveryLocationIdentifier(filter),
                 getByBidPlanLocationIdentifier(filter),
                 getByTenderAmountIntervalCriteria(filter),
                 getByAwardAmountIntervalCriteria(filter),
                 getElectronicSubmissionCriteria(filter),
+                getFlaggedCriteria(filter),
                 getYearFilterCriteria(filter, dateProperty));
     }
 

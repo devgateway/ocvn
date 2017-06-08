@@ -62,9 +62,7 @@ Cancelled.comparable = true;
 Cancelled.compareWith = class CancelledComparison extends Comparison{
   constructor(props){
     super(props);
-    this.state = {
-      percents: false
-    }
+    this.state.percents = false;
   }
 
   getComponent(){

@@ -2,6 +2,15 @@ package org.devgateway.ocds.web.spring;
 
 import com.google.common.io.Files;
 import com.mongodb.DBObject;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -48,15 +57,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -111,7 +111,7 @@ public class VNImportService implements ExcelImportService {
     private MongoTemplateConfiguration mongoTemplateConfiguration;
 
     @Autowired
-    private OcdsSchemaValidatorService validationService;
+    private OcdsSchemaValidatorService ocdsSchemaValidator;
 
     @Autowired(required = false)
     private CacheManager cacheManager;
@@ -192,6 +192,8 @@ public class VNImportService implements ExcelImportService {
         msgBuffer.append(message).append("\r\n");
     }
 
+
+
     private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer,
             final int importRowBatch) {
         logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
@@ -206,7 +208,7 @@ public class VNImportService implements ExcelImportService {
             rows = reader.readRows(importRowBatch);
             while (!rows.isEmpty()) {
                 importer.importRows(rows);
-                rowNo += importRowBatch;
+                rowNo += rows.size();
                 if (rowNo % LOG_IMPORT_EVERY == 0) {
                     logMessage("Import Speed " + rowNo * MS_IN_SECOND / (System.currentTimeMillis() - startTime)
                             + " rows per second.");
@@ -295,7 +297,7 @@ public class VNImportService implements ExcelImportService {
 
             if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
-                        new LocationRowImporter(locationRepository, this, 1), 1);
+                        new LocationRowImporter(locationRepository, this, 1));
             }
             
                         
@@ -320,12 +322,12 @@ public class VNImportService implements ExcelImportService {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
                         new PublicInstitutionRowImporter(vnOrganizationRepository, cityRepository,
                                 orgGroupRepository, departmentRepository,
-                                this, 2), 1);
+                                this, 2));
             }
 
             if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2), 1);
+                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2));
             }
 
             if (prototypeDatabase != null) {
@@ -408,7 +410,7 @@ public class VNImportService implements ExcelImportService {
         Page<Release> page;
         do {
             page = releaseRepository.findAll(new PageRequest(pageNumber++, VALIDATION_BATCH));
-            page.getContent().parallelStream().map(rel -> validationService.validate(rel))
+            page.getContent().parallelStream().map(rel -> ocdsSchemaValidator.validate(rel))
                     .filter(r -> !r.getReport().isSuccess()).forEach(r -> logMessage(
                             "<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
             processedCount += page.getNumberOfElements();
@@ -427,7 +429,7 @@ public class VNImportService implements ExcelImportService {
     }
 
     public OcdsSchemaValidatorService getValidationService() {
-        return validationService;
+        return ocdsSchemaValidator;
     }
 
 }

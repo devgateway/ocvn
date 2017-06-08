@@ -2,6 +2,7 @@ package org.devgateway.ocds.web.rest.controller.export;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.excel.ExcelFile;
 import org.devgateway.ocds.persistence.mongo.excel.ReleaseExportFile;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
@@ -42,7 +43,8 @@ public class ExcelGenerator extends GenericOCDSController {
                 Sort.Direction.ASC, "id");
 
         List<Release> releases = mongoTemplate.find(
-                query(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate")).with(pageRequest),
+                query(getYearDefaultFilterCriteria(filter,
+                        MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)).with(pageRequest),
                 Release.class);
 
         ExcelFile releaseExcelFile = new ReleaseExportFile(releases);

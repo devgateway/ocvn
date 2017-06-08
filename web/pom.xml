@@ -50,6 +50,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang3.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
@@ -57,7 +63,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
         <dependency>

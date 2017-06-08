@@ -10,6 +10,7 @@ let fetchEP = url => fetch(url.clone().query(""), {
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
+  credentials: 'same-origin',
   body: url.query()
 }).then(callFunc('json'));
 
@@ -31,13 +32,21 @@ class Visualization extends translatable(Component){
     let promise = false;
     if(endpoint) promise = fetchEP(this.buildUrl(endpoint));
     if(endpoints) promise = Promise.all(endpoints.map(this.buildUrl.bind(this)).map(fetchEP));
+    if("function" == typeof this.getCustomEP){
+      const customEP = this.getCustomEP();
+      if(Array.isArray(customEP)){
+        promise = Promise.all(customEP.map(this.buildUrl.bind(this)).map(fetchEP));
+      } else {
+        promise = fetchEP(this.buildUrl(customEP));
+      }
+    }
     if(!promise) return;
     this.setState({loading: true});
     promise
-        .then(this.transform)
-        .then(fromJS)
-        .then(data => requestNewData([], data))
-        .then(() => this.setState({loading: false}));
+      .then(this.transform.bind(this))
+      .then(fromJS)
+      .then(data => requestNewData([], data))
+      .then(() => this.setState({loading: false}));
   }
 
   transform(data){return data;}

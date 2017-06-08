@@ -3,6 +3,7 @@ package org.devgateway.toolkit.persistence.mongo.spring;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
@@ -47,16 +48,26 @@ public class MongoTemplateConfiguration {
 
         logger.info("Added mandatory Mongo indexes");
     }
-    
+
     public void createCorruptionFlagsIndexes() {
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.eligibleStats", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.totalFlagged", Direction.ASC));
+
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.flaggedStats.type", Direction.ASC)
+                .on("flags.flaggedStats.count", Direction.ASC)
+        );
+
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("flags.eligibleStats.type", Direction.ASC)
+                .on("flags.eligibleStats.count", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I038_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I003_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I007_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I004_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I077_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I180_VALUE, Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I019_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I002_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I085_VALUE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on(FlagsConstants.I171_VALUE, Direction.ASC));
     }
 
     @PostConstruct
@@ -85,11 +96,11 @@ public class MongoTemplateConfiguration {
     }
 
     public void createPostImportStructures() {
-        
+
         createCorruptionFlagsIndexes();
 
         // initialize some extra indexes
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("ocid", Direction.ASC).unique());
 
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.procurementMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
@@ -110,8 +121,9 @@ public class MongoTemplateConfiguration {
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.submissionMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.publicationMethod", Direction.ASC));
         mongoTemplate.indexOps(Release.class)
-                .ensureIndex(new Index().on("tender.tenderPeriod.startDate", Direction.ASC));
-        mongoTemplate.indexOps(Release.class).ensureIndex(new Index().on("tender.tenderPeriod.endDate", Direction.ASC));
+                .ensureIndex(new Index().on(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE, Direction.ASC));
+        mongoTemplate.indexOps(Release.class).ensureIndex(new Index()
+                .on(MongoConstants.FieldNames.TENDER_PERIOD_END_DATE, Direction.ASC));
         mongoTemplate.indexOps(Release.class)
                 .ensureIndex(new Index().on("tender.items.classification._id", Direction.ASC));
         mongoTemplate.indexOps(Release.class).ensureIndex(new Index().

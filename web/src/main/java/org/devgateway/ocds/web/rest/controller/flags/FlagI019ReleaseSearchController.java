@@ -1,7 +1,7 @@
 package org.devgateway.ocds.web.rest.controller.flags;
 
+import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.FlagsConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.springframework.cache.annotation.CacheConfig;
@@ -30,7 +30,7 @@ public class FlagI019ReleaseSearchController extends AbstractFlagReleaseSearchCo
     @ApiOperation(value = "Search releases by flag i019")
     @RequestMapping(value = "/api/flags/i019/releases",
             method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json")
-    protected List<FlaggedRelease> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
+    public List<DBObject> releaseFlagSearch(@ModelAttribute @Valid YearFilterPagingRequest filter) {
         return super.releaseFlagSearch(filter);
     }
 }

@@ -20,6 +20,13 @@ public final class MongoConstants {
 
     public static final int IMPORT_ROW_BATCH = 1000;
 
+    public static final class FieldNames {
+        public static final String TENDER_PERIOD_START_DATE = "tender.tenderPeriod.startDate";
+        public static final String TENDER_PERIOD_END_DATE = "tender.tenderPeriod.endDate";
+        public static final String TENDER_PERIOD_START_DATE_REF = "$" + TENDER_PERIOD_START_DATE;
+        public static final String TENDER_PERIOD_END_DATE_REF = "$" + TENDER_PERIOD_END_DATE;
+    }
+
     public static final int MINIMUM_MONGO_YEAR = 2010;
 
     public static final int MAXIMUM_MONGO_YEAR = 2020;

@@ -11,17 +11,10 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.rest.controller;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import io.swagger.annotations.ApiOperation;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -33,10 +26,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import javax.validation.Valid;
+import java.util.List;
 
-import io.swagger.annotations.ApiOperation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.skip;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  *
@@ -62,12 +60,14 @@ public class AverageNumberOfTenderersController extends GenericOCDSController {
     public List<DBObject> averageNumberOfTenderers(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project.put("tender.numberOfTenderers", 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.numberOfTenderers").gt(0).and("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where("tender.numberOfTenderers").gt(0)
+                        .and(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project),
                 group(getYearlyMonthlyGroupingFields(filter)).avg("tender.numberOfTenderers")
                         .as(Keys.AVERAGE_NO_OF_TENDERERS),

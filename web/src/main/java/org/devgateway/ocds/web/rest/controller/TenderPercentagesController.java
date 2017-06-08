@@ -14,9 +14,6 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.Arrays;
-import java.util.List;
-import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
@@ -32,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.limit;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -74,7 +74,7 @@ public class TenderPercentagesController extends GenericOCDSController {
     public List<DBObject> percentTendersCancelled(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();        
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put("tender.status", 1);
 
         DBObject group = new BasicDBObject();        
@@ -90,8 +90,9 @@ public class TenderPercentagesController extends GenericOCDSController {
                 Arrays.asList(new BasicDBObject("$divide", Arrays.asList("$totalCancelled", "$totalTenders")), 100)));
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
@@ -114,7 +115,7 @@ public class TenderPercentagesController extends GenericOCDSController {
                                                                @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();        
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put("tender.numberOfTenderers", 1);
 
         DBObject group = new BasicDBObject();
@@ -131,8 +132,9 @@ public class TenderPercentagesController extends GenericOCDSController {
                 100)));
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS,
@@ -154,7 +156,7 @@ public class TenderPercentagesController extends GenericOCDSController {
     public List<DBObject> percentTendersAwarded(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put("tender.numberOfTenderers", 1);
 
         DBObject group = new BasicDBObject();
@@ -175,8 +177,10 @@ public class TenderPercentagesController extends GenericOCDSController {
                         100)));
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true).and("tender.numberOfTenderers").gt(0)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE)
+                        .exists(true).and("tender.numberOfTenderers").gt(0)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group),
                 new CustomProjectionOperation(project2),
                 transformYearlyGrouping(filter).andInclude(Keys.TOTAL_TENDERS_WITH_ONE_OR_MORE_TENDERERS,
@@ -200,7 +204,7 @@ public class TenderPercentagesController extends GenericOCDSController {
     public List<DBObject> percentTendersUsingEBid(@ModelAttribute @Valid final YearFilterPagingRequest filter) {
 
         DBObject project1 = new BasicDBObject();
-        addYearlyMonthlyProjection(filter, project1, "$tender.tenderPeriod.startDate");
+        addYearlyMonthlyProjection(filter, project1, MongoConstants.FieldNames.TENDER_PERIOD_START_DATE_REF);
         project1.put(Fields.UNDERSCORE_ID, "$tender._id");        
         project1.put("electronicSubmission", new BasicDBObject("$cond", Arrays.asList(new BasicDBObject("$eq",
                         Arrays.asList("$tender.submissionMethod",
@@ -224,9 +228,11 @@ public class TenderPercentagesController extends GenericOCDSController {
                 .asList(new BasicDBObject("$divide", Arrays.asList("$totalTendersUsingEbid", "$totalTenders")), 100)));
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true).and("tender.submissionMethod.0").exists(true).
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .and("tender.submissionMethod.0").exists(true).
                         and("awards.status").is("active")
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 unwind("$tender.submissionMethod"),
                 new CustomProjectionOperation(project1), new CustomGroupingOperation(group1),
                 new CustomGroupingOperation(group2),

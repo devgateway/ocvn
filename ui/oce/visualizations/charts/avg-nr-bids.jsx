@@ -31,7 +31,8 @@ class AvgNrBids extends FrontendDateFilterableChart{
       },
       yaxis: {
         title: this.t('charts:avgNrBids:yAxisTitle'),
-        hoverformat: hoverFormat
+        hoverformat: hoverFormat,
+        tickprefix: "   "
       }
     }
   }

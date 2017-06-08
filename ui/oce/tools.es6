@@ -8,7 +8,7 @@ export var callFunc = funcName => obj => obj[funcName]();
 
 export var pluck = fieldName => obj => obj[fieldName];
 
-export var pluckImm = fieldName => imm => imm.get(fieldName);
+export var pluckImm = (fieldName, ...args) => imm => imm.get(fieldName, ...args);
 
 export var fetchJson = url => fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
 
@@ -78,7 +78,7 @@ export let download = ({ep, filters, years, months, t}) => {
       .addSearch(filters.toJS())
       .addSearch('year', years.toArray())
       //this sin shall be atoned for in the future
-      .addSearch('language', localStorage.oceLocale);
+      .addSearch('language', localStorage.oceLocale || 'en_US');
 
   if(years.count() == 1){
     url = url.addSearch('month', months && months.toJS()).addSearch('monthly', true);
@@ -114,4 +114,6 @@ export const shallowCopy = original => {
 
 export const arrReplace = (a, b, [head, ...tail]) => "undefined" == typeof head ?
     tail :
-    [a == head ? b : head].concat(arrReplace(a, b, tail));
+  [a == head ? b : head].concat(arrReplace(a, b, tail));
+
+export const range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));

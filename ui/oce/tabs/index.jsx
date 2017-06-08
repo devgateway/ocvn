@@ -77,6 +77,7 @@ class Tab extends Visualization{
                       width={width}
                       translations={translations}
                       styling={styling}
+                      margin={{t: 10, l: 100, b: 80, r: 20, pad: 20}}
                   />
               )
       )}
@@ -103,6 +104,10 @@ class Tab extends Visualization{
                     , Set())
             )
         , Set())
+  }
+
+  componentDidMount(){
+    window.scrollTo(0, 0);
   }
 }
 

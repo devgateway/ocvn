@@ -14,8 +14,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.Valid;
+import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.toolkit.persistence.mongo.aggregate.CustomProjectionOperation;
 import org.springframework.cache.annotation.CacheConfig;
@@ -29,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -67,8 +68,9 @@ public class TendersByItemClassification extends GenericOCDSController {
         project.put("tender.value.amount", 1);
 
         Aggregation agg = newAggregation(
-                match(where("tender.tenderPeriod.startDate").exists(true)
-                        .andOperator(getYearDefaultFilterCriteria(filter, "tender.tenderPeriod.startDate"))),
+                match(where(MongoConstants.FieldNames.TENDER_PERIOD_START_DATE).exists(true)
+                        .andOperator(getYearDefaultFilterCriteria(filter,
+                                MongoConstants.FieldNames.TENDER_PERIOD_START_DATE))),
                 new CustomProjectionOperation(project), unwind("tender.items"),
                 group("$tender." + Keys.ITEMS_CLASSIFICATION).count().as(Keys.TOTAL_TENDERS)
                         .sum("tender.value.amount").as(Keys.TOTAL_TENDER_AMOUNT),

@@ -1,10 +1,8 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
+import org.devgateway.ocds.persistence.mongo.Detail;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tender;
@@ -14,7 +12,11 @@ import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
+import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
 import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
 
 /**
  * Specific {@link RowImporter} for eBid Awards {@link VNAward} in the custom
@@ -67,6 +69,18 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
                     Organization.OrganizationType.supplier, organizationRepository);
         }
 
+        Organization supplierOrganization = supplier;
+        Detail detail = null;
+        if (supplierOrganization != null && getRowCell(row, 1) != null) {
+            Amount value2 = new Amount();
+            value2.setCurrency("VND");
+            value2.setAmount(getDecimal(getRowCell(row, 1)));
+            VNTendererOrganization tendererOrganization = new VNTendererOrganization(supplier);
+            tendererOrganization.setBidValue(value2);
+            supplierOrganization = tendererOrganization;
+            detail = newBidDetailFromAwardData(getRowCell(row, 0), value2, supplier);
+        }
+
         award.setStatus("Y".equals(getRowCell(row, 5)) ? Award.Status.active : Award.Status.unsuccessful);
 
         // active=successful awards have suppliers
@@ -96,7 +110,13 @@ public class EBidAwardRowImporter extends AwardReleaseRowImporter {
 
         // regardless if the award is active or not, we add the supplier to
         // tenderers
-        release.getTender().getTenderers().add(supplier);
+        if (supplierOrganization != null) {
+            release.getTender().getTenderers().add(supplierOrganization);
+        }
+
+        if (detail != null) {
+            release.getBids().getDetails().add(detail);
+        }
 
         release.getTender().setNumberOfTenderers(release.getTender().getTenderers().size());
 

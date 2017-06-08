@@ -5,14 +5,14 @@ class PlannedLocations extends Map{
     let data = super.getData();
     if(!data) return [];
     return data
-        .groupBy(location => location.getIn(['budget.projectLocation', '_id']))
+        .groupBy(location => location.getIn(['projectLocation', '_id']))
         .map(locations => locations.reduce((reducedLocation, location) => {
           return {
-            "_id": location.getIn(['budget.projectLocation', '_id']),
-            "name": location.getIn(['budget.projectLocation', 'description']),
+            "_id": location.getIn(['projectLocation', '_id']),
+            "name": location.getIn(['projectLocation', 'description']),
             "amount": reducedLocation.amount + location.get('totalPlannedAmount'),
             "count": reducedLocation.count + location.get('recordsCount'),
-            "coords": location.getIn(['budget.projectLocation', 'geometry', 'coordinates']).toJS()
+            "coords": location.getIn(['projectLocation', 'geometry', 'coordinates']).toJS()
           }
         }, {
           "amount": 0,

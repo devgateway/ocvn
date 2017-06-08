@@ -65,24 +65,31 @@ class LocationTab extends Tab{
   render(){
     let {currentLayer} = this.state;
     let {data, requestNewData, translations, filters, years, styling} = this.props;
-    let Map = this.constructor.LAYERS[currentLayer];
-    return <div className="col-sm-12 content map-content">
+    const {LAYERS, CENTER, ZOOM} = this.constructor;
+    let Map = LAYERS[currentLayer];
+    return (
+      <div className="col-sm-12 content map-content">
       {this.maybeGetSwitcher()}
       <Map
-          {...this.props}
-          data={data.get(currentLayer)}
-          requestNewData={(_, data) => requestNewData([currentLayer], data)}
-          translations={translations}
-          filters={filters}
-          years={years}
-          styling={styling}
+	      {...this.props}
+	      data={data.get(currentLayer)}
+	      requestNewData={(_, data) => requestNewData([currentLayer], data)}
+	      translations={translations}
+	      filters={filters}
+	      years={years}
+	      styling={styling}
+	      center={CENTER}
+	      zoom={ZOOM}
       />
-    </div>
+      </div>
+    )
   }
 }
 
 LocationTab.icon = "planning";
 LocationTab.computeComparisonYears = null;
 LocationTab.LAYERS = [TenderLocations];
+LocationTab.CENTER = [14.5, 105];
+LocationTab.ZOOM = 5;
 
 export default LocationTab;

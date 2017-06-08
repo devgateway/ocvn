@@ -26,7 +26,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.devgateway.toolkit.forms.WebConstants;
-import org.devgateway.toolkit.forms.security.SecurityConstants;
+import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;

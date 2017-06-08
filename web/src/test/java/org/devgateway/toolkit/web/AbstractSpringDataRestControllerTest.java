@@ -3,14 +3,10 @@
  */
 package org.devgateway.toolkit.web;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Collections;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
+import org.devgateway.ocds.web.rest.controller.request.GenericPagingRequest;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author mpostelnicuThis helps us test Spring Data Rest
@@ -61,7 +61,7 @@ public abstract class AbstractSpringDataRestControllerTest extends AbstractWebTe
     public void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         this.persistentEntityResourceAssembler = mock(PersistentEntityResourceAssembler.class);
-        this.pageRequest = mock(PageRequest.class);
+        this.pageRequest = new PageRequest(0, GenericPagingRequest.DEFAULT_PAGE_SIZE);
 
         mockHttpServletRequestForResouceAssemblerSupport();
     }

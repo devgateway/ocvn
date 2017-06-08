@@ -2,7 +2,7 @@ import Component from "../pure-render-component";
 import translatable from "../translatable";
 import cn from "classnames";
 import Organizations from "./tabs/organizations";
-import TenderRules from "./tabs/tender-rules";
+import ProcurementRules from "./tabs/procurement-rules.jsx";
 import Amounts from "./tabs/amounts";
 import {Map} from "immutable";
 import {send, fetchJson, callFunc} from "../tools";
@@ -179,6 +179,6 @@ class Filters extends translatable(Component){
   }
 }
 
-Filters.TABS = [Organizations, TenderRules, Amounts];
+Filters.TABS = [Organizations, ProcurementRules, Amounts];
 
 export default Filters;

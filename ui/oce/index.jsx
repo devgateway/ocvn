@@ -1,11 +1,9 @@
 import cn from "classnames";
 import {fromJS, Map, Set} from "immutable";
-import {fetchJson, debounce, download, pluck} from "./tools";
+import {fetchJson, debounce, download, pluck, range} from "./tools";
 import URI from "urijs";
 import Filters from "./filters";
 import OCEStyle from "./style.less";
-
-let range = (from, to) => from > to ? [] : [from].concat(range(from + 1, to));
 
 const MENU_BOX_COMPARISON = "menu-box";
 const MENU_BOX_FILTERS = 'filters';
@@ -151,10 +149,9 @@ class OCApp extends React.Component{
               value={compareBy}
               onChange={e => this.updateComparisonCriteria(e.target.value)}
           >
-            <option value="">{this.t('header:comparison:criteria:none')}</option>
-            <option value="bidTypeId">{this.t('header:comparison:criteria:bidType')}</option>
-            <option value="bidSelectionMethod">{this.t('header:comparison:criteria:bidSelectionMethod')}</option>
-            <option value="procuringEntityId">{this.t('header:comparison:criteria:procuringEntity')}</option>
+            {this.constructor.COMPARISON_TYPES.map(({value, label}, index) =>
+              <option key={index} value={value}>{this.t(label)}</option>
+            )}
           </select>
         </div>
       </div>
@@ -226,7 +223,7 @@ class OCApp extends React.Component{
             href="javascript:void(0);"
             className={cn({active: selectedYears.has(+year)})}
             onDoubleClick={e => toggleOthersYears(year)}
-            onClick={e => e.ctrlKey ? toggleOthersYears(year) : toggleYear(year)}
+            onClick={e => e.shiftKey ? toggleOthersYears(year) : toggleYear(year)}
         >
           <i className="glyphicon glyphicon-ok-circle"></i> {year}
           <span className="ctrl-click-hint">
@@ -274,7 +271,9 @@ class OCApp extends React.Component{
   }
 
   languageSwitcher(){
-    return Object.keys(this.constructor.TRANSLATIONS).map(locale =>
+    const {TRANSLATIONS} = this.constructor;
+    if(Object.keys(TRANSLATIONS).length <= 1) return null;
+    return Object.keys(TRANSLATIONS).map(locale =>
         <img className="icon"
              src={`assets/flags/${locale}.png`}
              alt={`${locale} flag`}
@@ -357,5 +356,16 @@ OCApp.STYLING = {
     traceColors: []
   }
 };
+
+OCApp.COMPARISON_TYPES = [{
+  value: '',
+  label: 'header:comparison:criteria:none'
+}, {
+  value: 'bidTypeId',
+  label: 'header:comparison:criteria:bidType'
+}, {
+  value: 'procuringEntityId',
+  label: 'header:comparison:criteria:procuringEntity'
+}];
 
 export default OCApp;
