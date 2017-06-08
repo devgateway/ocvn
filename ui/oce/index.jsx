@@ -298,22 +298,22 @@ class OCApp extends React.Component{
   }
 
   exportBtn(){
-    if(this.state.exporting){
-      return (
-          <div className="filters">
-            <div className="progress">
-              <div className="progress-bar progress-bar-danger" role="progressbar" style={{width: "100%"}}>
-                {this.t('export:exporting')}
-              </div>
-            </div>
-          </div>
-      )
+    const { filters, selectedYears, locale, selectedMonths } = this.state;
+    let url = new URI('/api/ocds/excelExport')
+      .addSearch(filters.toJS())
+      .addSearch('year', selectedYears.toArray())
+      .addSearch('language', locale);
+
+    if(selectedYears.count() == 1){
+      url = url.addSearch('month', selectedMonths && selectedMonths.toJS())
+        .addSearch('monthly', true);
     }
-    return <div className="filters" onClick={e => this.downloadExcel()}>
+
+    return <a className="filters" href={url} download="export.zip">
       <img className="top-nav-icon" src="assets/icons/export.svg" width="100%" height="100%"/>
       {this.t('export:export')}
       <i className="glyphicon glyphicon-menu-down"></i>
-    </div>
+    </a>
   }
 
   toggleDashboardSwitcher(e){
