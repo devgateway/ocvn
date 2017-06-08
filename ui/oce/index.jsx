@@ -309,11 +309,15 @@ class OCApp extends React.Component{
         .addSearch('monthly', true);
     }
 
-    return <a className="filters" href={url} download="export.zip">
-      <img className="top-nav-icon" src="assets/icons/export.svg" width="100%" height="100%"/>
-      {this.t('export:export')}
-      <i className="glyphicon glyphicon-menu-down"></i>
-    </a>
+    return (
+      <div className="filters">
+        <a className="export-link" href={url} download="export.zip">
+          <img className="top-nav-icon" src="assets/icons/export.svg" width="100%" height="100%"/>
+          {this.t('export:export')}
+          <i className="glyphicon glyphicon-menu-down"></i>
+        </a>
+      </div>
+    )
   }
 
   toggleDashboardSwitcher(e){
