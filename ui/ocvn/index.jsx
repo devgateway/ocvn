@@ -35,13 +35,13 @@ class OCVN extends OCApp{
     return (
       <div className="container-fluid dashboard-default" onClick={_ => this.setState({menuBox: ""})}>
         <header className="branding row">
-          <div className="col-sm-offset-1 col-sm-4">
+          <div className="logo-container col-sm-4">
             {/*this.dashboardSwitcher()*/}
             <h1>{this.t('general:title')}
               <small>{this.t('general:subtitle')}</small>
             </h1>
           </div>
-          <div className="col-sm-6 menu">
+          <div className="col-sm-5 menu">
             {this.filters()}
             {this.comparison()}
             {this.exportBtn()}

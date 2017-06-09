@@ -43,5 +43,7 @@ public final class FieldType {
             .add(boolean.class)
             .add(int.class)
             .add(long.class)
+            .add(Double.class)
+            .add(double.class)
             .build();
 }

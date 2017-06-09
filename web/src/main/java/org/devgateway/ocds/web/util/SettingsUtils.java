@@ -1,12 +1,13 @@
 package org.devgateway.ocds.web.util;
 
-import java.util.List;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author idobre
@@ -18,7 +19,7 @@ public class SettingsUtils {
 
     public static final String DEFAULT_LANGUAGE = "en_US";
 
-    private static final Integer EXCELBATCHSIZEDEFAULT = 10000;
+    private static final Integer EXCELBATCHSIZEDEFAULT = 5000;
 
     @Autowired
     private AdminSettingsRepository adminSettingsRepository;
