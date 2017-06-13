@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.flags.AbstractFlaggedReleaseFlagProcessor;
 import org.devgateway.ocds.persistence.mongo.flags.ReleaseFlags;
+import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.flags.release.vietnam.ReleaseFlagI003Processor;
 import org.devgateway.ocds.web.flags.release.vietnam.VietnamReleaseFlagI004Processor;
 import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;

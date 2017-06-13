@@ -12,6 +12,9 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
 import com.mongodb.DBObject;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -22,13 +25,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Run this application only when you need access to Spring Data JPA but without
@@ -39,7 +37,6 @@ import java.util.List;
 @SpringBootApplication
 @ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
-@EnableMongoRepositories(basePackages = "org.devgateway")
 @EnableMongoAuditing
 @EnableCaching
 public class MongoPersistenceApplication {

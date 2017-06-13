@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.devgateway.ocds.persistence.mongo.repository;
+package org.devgateway.ocds.persistence.mongo.repository.main;
 
 import java.util.Collection;
 import java.util.List;

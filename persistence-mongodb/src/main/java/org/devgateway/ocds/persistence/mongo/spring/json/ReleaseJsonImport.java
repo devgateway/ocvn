@@ -2,7 +2,7 @@ package org.devgateway.ocds.persistence.mongo.spring.json;
 
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json2object.JsonToObject;
 import org.devgateway.ocds.persistence.mongo.spring.json2object.ReleaseJsonToObject;
 import org.springframework.transaction.annotation.Transactional;

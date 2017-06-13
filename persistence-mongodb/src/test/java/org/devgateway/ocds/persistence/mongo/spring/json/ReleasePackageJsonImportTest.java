@@ -1,5 +1,7 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
+import org.devgateway.ocds.persistence.mongo.*;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import java.io.File;
 import java.util.Collection;
 import java.util.Set;

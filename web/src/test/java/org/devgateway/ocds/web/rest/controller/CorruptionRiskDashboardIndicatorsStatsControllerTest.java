@@ -3,7 +3,7 @@ package org.devgateway.ocds.web.rest.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import org.devgateway.ocds.persistence.mongo.flags.FlagType;
-import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocds.web.spring.ReleaseFlaggingService;
 import org.junit.Assert;
