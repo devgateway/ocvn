@@ -6,10 +6,10 @@ import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.GenericOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.GenericOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.City;
-import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.CityRepository;
 
 /**
  * @author mpostelnicu

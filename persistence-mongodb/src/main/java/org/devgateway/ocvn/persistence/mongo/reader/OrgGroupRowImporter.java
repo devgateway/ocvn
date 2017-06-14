@@ -5,7 +5,7 @@ import java.text.ParseException;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.OrgGroupRepository;
 
 /**
  * @author mpostelnicu Specific {@link RowImporter} Cities. Organization#address

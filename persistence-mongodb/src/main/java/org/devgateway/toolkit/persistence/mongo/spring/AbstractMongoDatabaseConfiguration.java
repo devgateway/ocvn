@@ -136,7 +136,6 @@ public abstract class AbstractMongoDatabaseConfiguration {
         getTemplate().indexOps(Organization.class).ensureIndex(new TextIndexDefinitionBuilder().onField("name")
                 .onField("id").onField("additionalIdentifiers._id").build());
 
-        getLogger().info("Added extra Mongo indexes");
         getTemplate().indexOps(VNLocation.class)
                 .ensureIndex(new TextIndexDefinitionBuilder().onField("description").onField("uri").build());
 

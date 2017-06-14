@@ -18,8 +18,9 @@ import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.VNLocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.Fields;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationSearchController extends GenericOCDSController {
 
     @Autowired
+    @Qualifier("VNLocationRepository")
     private VNLocationRepository locationRepository;
 
     @RequestMapping(value = "/api/ocds/location/all", method = { RequestMethod.POST, RequestMethod.GET },

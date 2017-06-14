@@ -12,7 +12,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @Configuration
 @EnableMongoRepositories(
-        basePackages = {"org.devgateway.ocds.persistence.mongo.repository.main"},
+        basePackages = {"org.devgateway.ocds.persistence.mongo.repository.main",
+                "org.devgateway.ocvn.persistence.mongo.repository.main"},
         mongoTemplateRef = "mongoTemplate"
 )
 public class MongoDatabaseConfiguration extends AbstractMongoDatabaseConfiguration {

@@ -15,10 +15,10 @@ import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowFlaggedReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowVNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
@@ -33,18 +33,20 @@ import org.devgateway.ocvn.persistence.mongo.reader.ProcurementPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.PublicInstitutionRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.TenderRowImporter;
-import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.ContrMethodRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowCityRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowOrgDepartmentRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowOrgGroupRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowVNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
-import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
+import org.devgateway.toolkit.persistence.mongo.spring.ShadowMongoDatabaseConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -69,6 +71,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 @Service
 @Transactional
+@Profile({"!integration", "shadow-integration"})
 public class VNImportService implements ExcelImportService {
 
     private static final int MS_IN_SECOND = 1000;
@@ -78,37 +81,38 @@ public class VNImportService implements ExcelImportService {
     private static final int VALIDATION_BATCH = 5000;
 
     @Autowired
-    private ReleaseRepository releaseRepository;
+    private ShadowFlaggedReleaseRepository releaseRepository;
 
     @Autowired
-    private OrganizationRepository organizationRepository;
+    private ShadowOrganizationRepository organizationRepository;
     
     @Autowired
-    private VNOrganizationRepository vnOrganizationRepository;
+    private ShadowVNOrganizationRepository vnOrganizationRepository;
 
     @Autowired
-    private ClassificationRepository classificationRepository;
+    private ShadowClassificationRepository classificationRepository;
 
     @Autowired
     private ContrMethodRepository contrMethodRepository;
 
     @Autowired
-    private VNLocationRepository locationRepository;
+    private ShadowVNLocationRepository locationRepository;
     
     @Autowired
-    private CityRepository cityRepository;
+    private ShadowCityRepository cityRepository;
     
     @Autowired
-    private OrgDepartmentRepository departmentRepository;
+    private ShadowOrgDepartmentRepository departmentRepository;
     
     @Autowired
-    private OrgGroupRepository orgGroupRepository;
+    private ShadowOrgGroupRepository orgGroupRepository;
     
     @Autowired
+    @Qualifier("shadowMongoTemplate")
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private MongoTemplateConfiguration mongoTemplateConfiguration;
+    private ShadowMongoDatabaseConfiguration mongoTemplateConfiguration;
 
     @Autowired
     private OcdsSchemaValidatorService ocdsSchemaValidator;

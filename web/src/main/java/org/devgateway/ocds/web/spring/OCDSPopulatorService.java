@@ -11,18 +11,15 @@ import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
 import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.main.ClassificationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
@@ -42,6 +39,7 @@ public class OCDSPopulatorService {
     @Autowired
     private ClassificationRepository classificationRepository;
     @Autowired
+    @Qualifier("VNLocationRepository")
     private VNLocationRepository locationRepository;
 
     private String getRandomTxt() {

@@ -1,9 +1,11 @@
 package org.devgateway.ocds.web.rest.controller.test;
 
 import com.mongodb.DBObject;
+import java.io.IOException;
+import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
@@ -21,14 +23,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-
-import java.io.IOException;
-import java.util.List;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author mpostelnicu
  *
  */
+@ActiveProfiles("shadow-integration")
 public class VNImportAndEndpointsTest extends AbstractWebTest {
 
     @Autowired

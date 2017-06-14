@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
  * Created by mpostelnicu on 6/12/17.
  */
 @Configuration
-@Profile("!integration")
+@Profile({"!integration", "shadow-integration"})
 public class MongoTemplateConfig {
 
     @Autowired
