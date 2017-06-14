@@ -1,11 +1,12 @@
 package org.devgateway.toolkit.persistence.mongo.spring;
 
-import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
  * Created by mpostelnicu on 6/12/17.
  */
 @Configuration
+@Profile("!integration")
 public class MongoTemplateConfig {
 
     @Autowired
@@ -20,8 +22,7 @@ public class MongoTemplateConfig {
 
     @Bean(autowire = Autowire.BY_NAME, name = "mongoTemplate")
     public MongoTemplate mongoTemplate() throws Exception {
-        return new MongoTemplate(new SimpleMongoDbFactory(new MongoClient(properties.getHost(), properties.getPort()),
-                properties.getDatabase()));
+        return new MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri())));
     }
 
     /**
@@ -33,8 +34,7 @@ public class MongoTemplateConfig {
      */
     @Bean(autowire = Autowire.BY_NAME, name = "shadowMongoTemplate")
     public MongoTemplate shadowMongoTemplate() throws Exception {
-        return new MongoTemplate(new SimpleMongoDbFactory(new MongoClient(properties.getHost(), properties.getPort()),
-                properties.getDatabase() + "-shadow"));
+        return new MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri() + "-shadow")));
     }
 
 

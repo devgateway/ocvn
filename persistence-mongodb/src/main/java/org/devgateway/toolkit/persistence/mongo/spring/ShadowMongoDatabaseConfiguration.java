@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         basePackages = {"org.devgateway.ocds.persistence.mongo.repository.shadow"},
         mongoTemplateRef = "shadowMongoTemplate"
 )
+@Profile("!integration")
 public class ShadowMongoDatabaseConfiguration extends AbstractMongoDatabaseConfiguration {
 
     protected final Logger logger = LoggerFactory.getLogger(ShadowMongoDatabaseConfiguration.class);
