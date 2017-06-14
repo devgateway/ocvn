@@ -16,4 +16,6 @@ public interface ExcelImportService extends ImportService {
     void importAllSheets(List<String> fileTypes, byte[] prototypeDatabase, byte[] locations,
             byte[] publicInstitutionsSuppliers, byte[] cdg, Boolean purgeDatabase, Boolean validateData,
             Boolean cleanData) throws InterruptedException;
+
+    boolean copyShadowToMain();
 }

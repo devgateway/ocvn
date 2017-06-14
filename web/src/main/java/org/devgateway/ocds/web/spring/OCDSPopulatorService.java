@@ -33,7 +33,7 @@ public class OCDSPopulatorService {
 
     protected static Logger logger = Logger.getLogger(OCDSPopulatorService.class);
     @Autowired
-    private FlaggedReleaseRepository releaseRepository;
+    private FlaggedReleaseRepository flaggedReleaseRepository;
     @Autowired
     private OrganizationRepository organizationRepository;
     @Autowired
@@ -79,7 +79,7 @@ public class OCDSPopulatorService {
     public void randomizeReleases(Consumer<String> logMessage) {
         logMessage.accept("<b>RANDOMIZE RELEASES.</b>");
 
-        MongoUtil.processRepositoryItemsPaginated(releaseRepository, this::randomizeRelease,
+        MongoUtil.processRepositoryItemsPaginated(flaggedReleaseRepository, this::randomizeRelease,
                 this::logMessage);
 
         logMessage.accept("<b>RANDOMIZE RELEASES COMPLETED.</b>");
@@ -225,7 +225,7 @@ public class OCDSPopulatorService {
 
 
         }
-        releaseRepository.save(r);
+        flaggedReleaseRepository.save(r);
     }
 
 

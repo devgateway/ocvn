@@ -144,7 +144,7 @@ public class VietnamImportPage extends BasePage {
 
     protected void addForm() {
         importForm = new BootstrapForm<VietnamImportBean>("form",
-                new CompoundPropertyModel<>(new DozerModel<>(new VietnamImportBean())));
+                new CompoundPropertyModel<VietnamImportBean>(new DozerModel<>(new VietnamImportBean())));
         importForm.setOutputMarkupId(true);
         add(importForm);
     }
