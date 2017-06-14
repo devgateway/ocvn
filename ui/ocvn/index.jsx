@@ -97,7 +97,10 @@ class OCVN extends OCApp{
 OCVN.Filters = OCVNFilters;
 
 const translations = {
-  en_US: require('../../web/public/languages/en_US.json'),
+  en_US: Object.assign({},
+    require('../../web/public/languages/en_US.json'),
+    require('../../web/public/languages/en_US_ocvn.json')
+  ),
   vn_VN: require('../../web/public/languages/vn_VN.json'),
 };
 
