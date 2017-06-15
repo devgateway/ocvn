@@ -19,13 +19,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * Generic superclass for importing rows from excel data sources
  *
- * @author mpostelnicu
- *
- * @param <T>
- *            - the type of OCDS/dervied entity to be imported
+ * @param <T>  - the type of OCDS/dervied entity to be imported
  * @param <ID> the id type
- * @param <R>
- *            - the main repository that is able to save <T>
+ * @param <R>  - the main repository that is able to save <T>
+ * @author mpostelnicu
  */
 public abstract class RowImporter<T, ID extends Serializable, R extends MongoRepository<T, ID>> {
 
@@ -143,6 +140,7 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
     }
 
     public boolean importRows(final List<String[]> rows) throws ParseException {
+        boolean r = true;
 
         for (String[] row : rows) {
             if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
@@ -155,12 +153,13 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
             } catch (Exception e) {
                 importService.logMessage(
                         "    <font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
+                r = false;
                 // throw e; we do not stop
             }
         }
 
         logger.debug("Finished importing " + importedRows + " rows.");
-        return true;
+        return r;
     }
 
     public abstract void importRow(String[] row) throws ParseException;

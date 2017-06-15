@@ -148,7 +148,6 @@ public class VNImportService implements ExcelImportService {
 
     private BigDecimal getMaxTenderValue() {
         Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true)),
-                project().and("tender.value.amount").as("tender.value.amount"),
                 group().max("tender.value.amount").as("maxTenderValue"),
                 project().andInclude("maxTenderValue").andExclude(Fields.UNDERSCORE_ID));
 
@@ -212,7 +211,9 @@ public class VNImportService implements ExcelImportService {
             long rowNo = 0;
             rows = reader.readRows(importRowBatch);
             while (!rows.isEmpty()) {
-                importer.importRows(rows);
+                if (!importer.importRows(rows)) {
+                    success = false;
+                }
                 rowNo += rows.size();
                 if (rowNo % LOG_IMPORT_EVERY == 0) {
                     logMessage("Import Speed " + rowNo * MS_IN_SECOND / (System.currentTimeMillis() - startTime)
