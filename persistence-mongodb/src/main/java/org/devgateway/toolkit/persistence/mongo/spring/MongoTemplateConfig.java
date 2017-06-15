@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 
 /**
  * Created by mpostelnicu on 6/12/17.
@@ -20,9 +22,14 @@ public class MongoTemplateConfig {
     @Autowired
     private MongoProperties properties;
 
+    @Autowired
+    private CustomConversions customConversions;
+
     @Bean(autowire = Autowire.BY_NAME, name = "mongoTemplate")
     public MongoTemplate mongoTemplate() throws Exception {
-        return new MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri())));
+        MongoTemplate template = new MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri())));
+        ((MappingMongoConverter) template.getConverter()).setCustomConversions(customConversions);
+        return template;
     }
 
     /**
@@ -34,7 +41,10 @@ public class MongoTemplateConfig {
      */
     @Bean(autowire = Autowire.BY_NAME, name = "shadowMongoTemplate")
     public MongoTemplate shadowMongoTemplate() throws Exception {
-        return new MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri() + "-shadow")));
+        MongoTemplate template = new
+                MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri() + "-shadow")));
+        ((MappingMongoConverter) template.getConverter()).setCustomConversions(customConversions);
+        return template;
     }
 
 
