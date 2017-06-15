@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.util.Assert;
@@ -37,7 +36,6 @@ import org.springframework.util.ObjectUtils;
 @SpringBootApplication
 @ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/persistence/mongo/application.properties")
-@EnableMongoAuditing
 @EnableCaching
 public class MongoPersistenceApplication {
 
