@@ -1,8 +1,10 @@
-import Tab from "../index";
-import {Set} from "immutable";
-import TenderLocations from "../../visualizations/map/tender-locations";
+import ReactDOM from 'react-dom';
 import cn from "classnames";
+import {Set} from "immutable";
+import Tab from "../index";
+import TenderLocations from "../../visualizations/map/tender-locations";
 import style from "./style.less";
+import {debounce} from '../../tools.es6';
 
 class LocationTab extends Tab{
   static getName(t){return t('tabs:location:title')}
@@ -53,13 +55,31 @@ class LocationTab extends Tab{
 
   componentDidMount(){
     super.componentDidMount();
-    let zoom = document.querySelector('.leaflet-control-zoom');
+    const zoom = document.querySelector('.leaflet-control-zoom');
+    this.recalcHeight();
+    this.windowResizeListener = debounce(this.recalcHeight.bind(this));
+    window.addEventListener('resize', this.windowResizeListener);
+
     this.setState({
       switcherPos: {
         top: zoom.offsetTop,
         left: zoom.offsetLeft + zoom.offsetWidth + 10
       }
-    })
+    });
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('resize', this.windowResizeListener);
+  }
+
+  getHeight(){
+    const TOP_OFFSET = 64;
+    const BOTTOM_OFFSET = 66;
+    return window.innerHeight - TOP_OFFSET - BOTTOM_OFFSET;
+  }
+
+  recalcHeight(){
+    ReactDOM.findDOMNode(this.refs.the_layer).style.height = this.getHeight() + 'px';
   }
 
   render(){
@@ -69,18 +89,19 @@ class LocationTab extends Tab{
     let Map = LAYERS[currentLayer];
     return (
       <div className="col-sm-12 content map-content">
-      {this.maybeGetSwitcher()}
-      <Map
-	      {...this.props}
-	      data={data.get(currentLayer)}
-	      requestNewData={(_, data) => requestNewData([currentLayer], data)}
-	      translations={translations}
-	      filters={filters}
-	      years={years}
-	      styling={styling}
-	      center={CENTER}
-	      zoom={ZOOM}
-      />
+        {this.maybeGetSwitcher()}
+        <Map
+          {...this.props}
+          data={data.get(currentLayer)}
+          requestNewData={(_, data) => requestNewData([currentLayer], data)}
+          translations={translations}
+          filters={filters}
+          years={years}
+          styling={styling}
+          center={CENTER}
+          zoom={ZOOM}
+          ref="the_layer"
+        />
       </div>
     )
   }
