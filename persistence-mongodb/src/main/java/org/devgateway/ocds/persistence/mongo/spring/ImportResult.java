@@ -5,6 +5,11 @@ package org.devgateway.ocds.persistence.mongo.spring;
  */
 public class ImportResult {
 
+    public ImportResult(Boolean success, StringBuffer msgBuffer) {
+        this.success = success;
+        this.msgBuffer = msgBuffer;
+    }
+
     private Boolean success;
 
     private StringBuffer msgBuffer;
