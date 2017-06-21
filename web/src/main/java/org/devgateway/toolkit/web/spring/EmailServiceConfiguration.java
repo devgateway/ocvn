@@ -13,9 +13,11 @@ package org.devgateway.toolkit.web.spring;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
+@Profile("!integration")
 public class EmailServiceConfiguration {
 
     private static final int SMTP_PORT = 25;
