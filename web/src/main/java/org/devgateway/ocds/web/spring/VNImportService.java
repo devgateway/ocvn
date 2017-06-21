@@ -60,6 +60,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
 
+
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
@@ -288,10 +289,12 @@ public class VNImportService implements ExcelImportService {
     }
 
     @Async
-    public ImportResult importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
+    public ImportResult importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase,
+                                        final byte[] locations,
                                         final byte[] publicInstitutionsSuppliers, final byte[] cdg,
                                         final Boolean purgeDatabase,
-                                        final Boolean validateData, final Boolean flagData) throws InterruptedException {
+                                        final Boolean validateData, final Boolean flagData)
+            throws InterruptedException {
 
         String tempDirPath = null;
 
@@ -411,6 +414,8 @@ public class VNImportService implements ExcelImportService {
                     e.printStackTrace();
                 }
             }
+
+            return new ImportResult(success, msgBuffer);
         }
     }
 
