@@ -2,15 +2,6 @@ package org.devgateway.ocds.web.spring;
 
 import com.google.common.io.Files;
 import com.mongodb.DBObject;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -20,6 +11,7 @@ import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowOrganizatio
 import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowVNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
+import org.devgateway.ocds.persistence.mongo.spring.ImportResult;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
@@ -58,6 +50,15 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
@@ -287,10 +288,10 @@ public class VNImportService implements ExcelImportService {
     }
 
     @Async
-    public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-                                final byte[] publicInstitutionsSuppliers, final byte[] cdg,
-                                final Boolean purgeDatabase,
-                                final Boolean validateData, final Boolean flagData) throws InterruptedException {
+    public ImportResult importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
+                                        final byte[] publicInstitutionsSuppliers, final byte[] cdg,
+                                        final Boolean purgeDatabase,
+                                        final Boolean validateData, final Boolean flagData) throws InterruptedException {
 
         String tempDirPath = null;
 
@@ -398,6 +399,7 @@ public class VNImportService implements ExcelImportService {
             success = false;
         } finally {
             clearAllCaches(); // always clears caches post import
+
             if (tempDirPath != null) {
                 try {
                     FileUtils.deleteDirectory(Paths.get(new URL(tempDirPath).toURI()).toFile());
