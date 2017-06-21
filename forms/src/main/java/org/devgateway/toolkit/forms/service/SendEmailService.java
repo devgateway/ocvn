@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Service to send emails to users to validate email addresses or reset passwords
- * @author mpostelnicu
  *
+ * @author mpostelnicu
  */
 @Component
 public class SendEmailService {
@@ -42,20 +42,25 @@ public class SendEmailService {
     /**
      * Send a reset password email. This is UNSAFE because passwords are sent in clear text.
      * Nevertheless some customers will ask for these emails to be sent, so ...
+     *
      * @param person
      * @param newPassword
      */
     public void sendEmailResetPassword(final Person person, final String newPassword) {
-
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(person.getEmail());
-        msg.setFrom("support@developmentgateway.org");
-        msg.setSubject("Recover your password");
-        msg.setText("Dear " + person.getFirstName() + " " + person.getLastName() + ",\n\n"
+        sendEmail("Recover your password", "Dear " + person.getFirstName() + " " + person.getLastName()
+                + ",\n\n"
                 + "These are your new login credentials for E-Procurement Toolkit.\n\n" + "Username: "
                 + person.getUsername() + "\n" + "Password: " + newPassword + "\n\n"
                 + "At login, you will be prompted to change your password to one of your choice.\n\n" + "Thank you,\n"
-                + "DG Team");
+                + "DG Team", person.getEmail());
+    }
+
+    public void sendEmail(final String subject, final String text, final String to) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(to);
+        msg.setFrom("support@developmentgateway.org");
+        msg.setSubject(subject);
+        msg.setText(text);
         try {
             javaMailSenderImpl.send(msg);
         } catch (MailException e) {

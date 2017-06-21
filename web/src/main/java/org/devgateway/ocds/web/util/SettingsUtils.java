@@ -24,7 +24,7 @@ public class SettingsUtils {
     @Autowired
     private AdminSettingsRepository adminSettingsRepository;
 
-    private AdminSettings getSettings() {
+    public AdminSettings getSettings() {
         List<AdminSettings> list = adminSettingsRepository.findAll();
         if (list.size() == 0) {
             return new AdminSettings();

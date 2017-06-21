@@ -140,8 +140,7 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
     }
 
     public boolean importRows(final List<String[]> rows) throws ParseException {
-        boolean r = true;
-
+boolean r = true;
         for (String[] row : rows) {
             if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
                 continue;
@@ -155,6 +154,7 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
                         "    <font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
                 r = false;
                 // throw e; we do not stop
+                r = false;
             }
         }
 
