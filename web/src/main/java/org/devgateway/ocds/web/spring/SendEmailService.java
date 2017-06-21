@@ -9,7 +9,7 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.forms.service;
+package org.devgateway.ocds.web.spring;
 
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,7 +9,7 @@
  * Contributors:
  * Development Gateway - initial API and implementation
  *******************************************************************************/
-package org.devgateway.toolkit.forms.service;
+package org.devgateway.ocds.web.spring;
 
 import java.io.File;
 import org.apache.commons.io.FileUtils;
