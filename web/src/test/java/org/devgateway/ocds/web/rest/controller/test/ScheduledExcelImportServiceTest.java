@@ -16,14 +16,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author mpostelnicu
- *
  */
-@ActiveProfiles("shadow-integration")
+@ActiveProfiles({"shadow-integration", "integration"})
 public class ScheduledExcelImportServiceTest extends AbstractWebTest {
-
-    @Autowired
-    @InjectMocks
-    public ScheduledExcelImportService scheduledExcelImportService;
 
     @Mock
     private SettingsUtils settingsUtils;
@@ -31,23 +26,26 @@ public class ScheduledExcelImportServiceTest extends AbstractWebTest {
     @Mock
     private SendEmailService sendEmailService;
 
+    @InjectMocks
+    @Autowired
+    public ScheduledExcelImportService scheduledExcelImportService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        AdminSettings mockSettings=new AdminSettings();
+        AdminSettings mockSettings = new AdminSettings();
         mockSettings.setAdminEmail("mpostelnicu@developmentgateway.org");
         mockSettings.setEnableDailyAutomatedImport(true);
-        mockSettings.setImportFilesPath("/test");
+        mockSettings.setImportFilesPath("/");
         Mockito.when(settingsUtils.getSettings()).thenReturn(mockSettings);
     }
 
     @Test
     public void testScheduledExcelImportService() {
-        scheduledExcelImportService.excelImportService();
-
+        scheduledExcelImportService.excelImportService(VNImportAndEndpointsTest.PROTOTYPE_DB_TEST_FILE,
+                VNImportAndEndpointsTest.LOCATION_TEST_FILE,
+                VNImportAndEndpointsTest.ORGS_TEST_FILE,
+                VNImportAndEndpointsTest.CITY_DEPT_GROUP_TEST_FILE, true);
     }
-
-
 
 }

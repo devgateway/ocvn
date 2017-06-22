@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
                 "org.devgateway.ocvn.persistence.mongo.repository.shadow"},
         mongoTemplateRef = "shadowMongoTemplate"
 )
-@Profile({"!integration", "shadow-integration"})
+@Profile("!integration")
 public class ShadowMongoDatabaseConfiguration extends AbstractMongoDatabaseConfiguration {
 
     protected final Logger logger = LoggerFactory.getLogger(ShadowMongoDatabaseConfiguration.class);

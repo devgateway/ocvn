@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
  * Created by mpostelnicu on 6/12/17.
  */
 @Configuration
-@Profile({"!integration", "shadow-integration"})
+@Profile("!integration")
 public class MongoTemplateConfig {
 
     @Autowired

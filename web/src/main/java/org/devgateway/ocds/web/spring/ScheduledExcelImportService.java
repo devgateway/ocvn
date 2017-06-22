@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.spring;
 
-import java.io.File;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
@@ -23,6 +23,9 @@ import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class ScheduledExcelImportService {
@@ -51,12 +54,17 @@ public class ScheduledExcelImportService {
         excelImportService(settings.getImportFilesPath() + File.separator + MAIN_FILE,
                 settings.getImportFilesPath() + File.separator + LOCATIONS_FILE,
                 settings.getImportFilesPath() + File.separator + ORGS_FILE,
-                settings.getImportFilesPath() + File.separator + CITY_DEPARTMENT_GROUP_FILE);
+                settings.getImportFilesPath() + File.separator + CITY_DEPARTMENT_GROUP_FILE, false);
     }
 
 
+    public byte[] getByteArrayForResourceWithPath(String path, Boolean resource) throws IOException {
+        return resource ? IOUtils.toByteArray(getClass().getResourceAsStream(path))
+                : FileUtils.readFileToByteArray(new File(path));
+    }
+
     public void excelImportService(String prototypeDatabasePath, String
-            locationsPath, String publicInstitutionsSuppliers, String cdg) {
+            locationsPath, String publicInstitutionsSuppliers, String cdg, Boolean resource) {
 
         AdminSettings settings = settingsUtils.getSettings();
 
@@ -68,10 +76,10 @@ public class ScheduledExcelImportService {
 
         try {
             result = excelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
-                    FileUtils.readFileToByteArray(new File(prototypeDatabasePath)),
-                    FileUtils.readFileToByteArray(new File(locationsPath)),
-                    FileUtils.readFileToByteArray(new File(publicInstitutionsSuppliers)),
-                    FileUtils.readFileToByteArray(new File(cdg)),
+                    getByteArrayForResourceWithPath(prototypeDatabasePath, resource),
+                    getByteArrayForResourceWithPath(locationsPath, resource),
+                    getByteArrayForResourceWithPath(publicInstitutionsSuppliers, resource),
+                    getByteArrayForResourceWithPath(cdg, resource),
                     true, true, true
             );
 
