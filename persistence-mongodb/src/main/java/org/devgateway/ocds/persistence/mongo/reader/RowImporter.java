@@ -150,17 +150,15 @@ boolean r = true;
                 importRow(row);
                 importedRows++;
             } catch (Exception e) {
+                boolean criticalError = true;
                 if (e instanceof ImportWarningRuntimeException) {
-                    r = true;
+                    criticalError = false;
                 } else {
                     r = false;
                 }
                 importService.logMessage(
-                        "    <font style='" + (r ? "italic" : "color:red") + "'>Error importing row "
+                        "    <font style='" + (criticalError ? "color:red" : "italic") + "'>Error importing row "
                                 + cursorRowNo + ". " + e + "</font>");
-                r = false;
-                // throw e; we do not stop
-                r = false;
             }
         }
 
