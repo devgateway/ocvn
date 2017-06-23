@@ -150,8 +150,14 @@ boolean r = true;
                 importRow(row);
                 importedRows++;
             } catch (Exception e) {
+                if (e instanceof ImportWarningRuntimeException) {
+                    r = true;
+                } else {
+                    r = false;
+                }
                 importService.logMessage(
-                        "    <font style='color:red'>Error importing row " + cursorRowNo + ". " + e + "</font>");
+                        "    <font style='" + (r ? "italic" : "color:red") + "'>Error importing row "
+                                + cursorRowNo + ". " + e + "</font>");
                 r = false;
                 // throw e; we do not stop
                 r = false;
