@@ -19,6 +19,8 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 @Profile("!integration")
 public class MongoTemplateConfig {
 
+    public static final String SHADOW_POSTFIX = "-shadow";
+
     @Autowired
     private MongoProperties properties;
 
@@ -42,10 +44,9 @@ public class MongoTemplateConfig {
     @Bean(autowire = Autowire.BY_NAME, name = "shadowMongoTemplate")
     public MongoTemplate shadowMongoTemplate() throws Exception {
         MongoTemplate template = new
-                MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri() + "-shadow")));
+                MongoTemplate(new SimpleMongoDbFactory(new MongoClientURI(properties.getUri() + SHADOW_POSTFIX)));
         ((MappingMongoConverter) template.getConverter()).setCustomConversions(customConversions);
         return template;
     }
-
 
 }

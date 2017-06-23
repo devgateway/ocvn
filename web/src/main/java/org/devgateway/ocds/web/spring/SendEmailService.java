@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.spring;
 
+import org.apache.log4j.Logger;
 import org.devgateway.toolkit.persistence.dao.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,7 +26,10 @@ import org.springframework.stereotype.Component;
  * @author mpostelnicu
  */
 @Component
+@Profile("!integration")
 public class SendEmailService {
+
+    private static final Logger LOGGER = Logger.getLogger(SendEmailService.class);
 
     @Autowired
     private JavaMailSender javaMailSenderImpl;
@@ -62,6 +67,7 @@ public class SendEmailService {
         msg.setSubject(subject);
         msg.setText(text);
         try {
+            LOGGER.info("Sending email " + msg);
             javaMailSenderImpl.send(msg);
         } catch (MailException e) {
             e.printStackTrace();
