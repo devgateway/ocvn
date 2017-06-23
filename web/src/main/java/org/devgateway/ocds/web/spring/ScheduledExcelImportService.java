@@ -62,13 +62,13 @@ public class ScheduledExcelImportService {
                 : FileUtils.readFileToByteArray(new File(path));
     }
 
-    public void excelImportService(String prototypeDatabasePath, String
+    public boolean excelImportService(String prototypeDatabasePath, String
             locationsPath, String publicInstitutionsSuppliers, String cdg, Boolean resource) {
 
         AdminSettings settings = settingsUtils.getSettings();
 
         if (BooleanUtils.isFalse(settings.getEnableDailyAutomatedImport())) {
-            return;
+            return true;
         }
 
         ImportResult result = null;
@@ -92,5 +92,7 @@ public class ScheduledExcelImportService {
             sendEmailService.sendEmail("Excel import failed!", result.getMsgBuffer().toString(),
                     settings.getAdminEmail());
         }
+
+        return result.getSuccess();
     }
 }

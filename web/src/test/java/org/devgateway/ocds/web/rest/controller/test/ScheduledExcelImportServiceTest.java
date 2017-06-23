@@ -13,6 +13,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * @author mpostelnicu
  */
@@ -40,10 +43,10 @@ public class ScheduledExcelImportServiceTest extends AbstractWebTest {
 
     @Test
     public void testScheduledExcelImportService() {
-        scheduledExcelImportService.excelImportService(VNImportAndEndpointsTest.PROTOTYPE_DB_TEST_FILE,
+        assertTrue(scheduledExcelImportService.excelImportService(VNImportAndEndpointsTest.PROTOTYPE_DB_TEST_FILE,
                 VNImportAndEndpointsTest.LOCATION_TEST_FILE,
                 VNImportAndEndpointsTest.ORGS_TEST_FILE,
-                VNImportAndEndpointsTest.CITY_DEPT_GROUP_TEST_FILE, true);
+                VNImportAndEndpointsTest.CITY_DEPT_GROUP_TEST_FILE, true));
     }
 
 }
