@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.devgateway.ocds.web.spring;
 
+import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
@@ -23,9 +25,6 @@ import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
 
 @Service
 public class ScheduledExcelImportService {

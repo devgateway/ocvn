@@ -2,6 +2,15 @@ package org.devgateway.ocds.web.spring;
 
 import com.google.common.io.Files;
 import com.mongodb.DBObject;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
@@ -37,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -49,16 +57,6 @@ import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
 
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -72,7 +70,6 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 @Service
 @Transactional
-@Profile({"!integration", "shadow-integration"})
 public class VNImportService implements ExcelImportService {
 
     private static final int MS_IN_SECOND = 1000;

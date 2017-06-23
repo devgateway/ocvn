@@ -1,6 +1,8 @@
 package org.devgateway.ocds.web.rest.controller.test;
 
 import com.mongodb.DBObject;
+import java.io.IOException;
+import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
@@ -21,16 +23,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.test.context.ActiveProfiles;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * @author mpostelnicu
  *
  */
-@ActiveProfiles({"shadow-integration", "integration"})
 public class VNImportAndEndpointsTest extends AbstractWebTest {
 
     public static final String PROTOTYPE_DB_TEST_FILE="/testImport/test_egp_Jun21_Import.xlsx";

@@ -12,12 +12,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author mpostelnicu
  */
-@ActiveProfiles({"shadow-integration", "integration"})
 public class ScheduledExcelImportServiceTest extends AbstractWebTest {
 
     @Mock
