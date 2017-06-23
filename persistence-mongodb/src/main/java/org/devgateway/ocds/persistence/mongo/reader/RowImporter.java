@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
@@ -117,11 +116,13 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
             calendar = DateUtil.getJavaCalendar(Double.parseDouble(string), false,
                     TimeZone.getTimeZone(MongoConstants.DEFAULT_IMPORT_TIMEZONE));
             if (calendar.get(Calendar.YEAR) < MongoConstants.MINIMUM_MONGO_YEAR) {
-                throw new RuntimeException("Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
+                throw new ImportWarningRuntimeException(
+                        "Years below " + MongoConstants.MINIMUM_MONGO_YEAR + " are not allowed"
                         + " (" + calendar.get(Calendar.YEAR) + ").");
             }
             if (calendar.get(Calendar.YEAR) > MongoConstants.MAXIMUM_MONGO_YEAR) {
-                throw new RuntimeException("Years above " + MongoConstants.MAXIMUM_MONGO_YEAR + " are not allowed"
+                throw new ImportWarningRuntimeException(
+                        "Years above " + MongoConstants.MAXIMUM_MONGO_YEAR + " are not allowed"
                         + " (" + calendar.get(Calendar.YEAR) + ").");
             }
         } catch (NumberFormatException e) {
@@ -140,7 +141,7 @@ public abstract class RowImporter<T, ID extends Serializable, R extends MongoRep
     }
 
     public boolean importRows(final List<String[]> rows) throws ParseException {
-boolean r = true;
+        boolean r = true;
         for (String[] row : rows) {
             if (cursorRowNo++ < skipRows || isRowEmpty(row)) {
                 continue;

@@ -11,6 +11,7 @@ import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.persistence.mongo.reader.ImportWarningRuntimeException;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
@@ -67,13 +68,14 @@ public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {
         if (release.getTender().getValue() != null && award.getValue() != null
                 && !release.getTender().getValue().getAmount().equals(BigDecimal.ZERO) && release.getTender().getValue()
                 .getAmount().multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
-            throw new RuntimeException("Award value is more than 4x larger than the tender value!");
+            throw new ImportWarningRuntimeException("Award value is more than 4x larger than the tender value!");
         }
 
         if ((release.getTender().getValue() == null
                 || release.getTender().getValue().getAmount().equals(BigDecimal.ZERO)) && award.getValue() != null
                 && maxTenderValue.multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
-            throw new RuntimeException("Award value is more than 4x larger than the largest tender value!");
+            throw new ImportWarningRuntimeException(
+                    "Award value is more than 4x larger than the largest tender value!");
         }
     }
 

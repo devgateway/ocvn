@@ -222,7 +222,7 @@ public class VNImportService implements ExcelImportService {
             }
 
         } catch (Exception e) {
-            logMessage("<font style='color:red'>" + e + "</font>");
+            logMessage("<font style='color:red'> CRITICAL " + e + "</font>");
             e.printStackTrace();
             success = false;
         } finally {
@@ -389,6 +389,8 @@ public class VNImportService implements ExcelImportService {
 
             if (success) {
                 success = copyShadowToMain();
+            } else {
+                logMessage("<b>CRITICAL ERRORS FOUND DURING IMPORT. NEWLY IMPORTED DATA WILL BE DISCARDED.</b>");
             }
 
             logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
@@ -454,7 +456,7 @@ public class VNImportService implements ExcelImportService {
             page.getContent().parallelStream().map(rel -> ocdsSchemaValidator.validate(rel))
                     .filter(r -> !r.getReport().isSuccess()).forEach(r -> {
                 logMessage(
-                        "<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>");
+                        "<font style=''>OCDS Validation Failed: " + r.toString() + "</font>");
                 success = false;
             });
             processedCount += page.getNumberOfElements();

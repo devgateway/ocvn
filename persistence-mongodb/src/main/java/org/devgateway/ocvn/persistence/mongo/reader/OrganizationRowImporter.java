@@ -5,6 +5,7 @@ import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
+import org.devgateway.ocds.persistence.mongo.reader.ImportWarningRuntimeException;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.repository.main.GenericOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
@@ -39,7 +40,7 @@ public abstract class OrganizationRowImporter<O extends Organization>
             OrganizationType type) {
         if (containsIdentifier(organization, identifier)) {
             if (type == null || organization.getRoles().contains(type)) {
-                throw new RuntimeException(
+                throw new ImportWarningRuntimeException(
                         "Duplicate identifier " + identifier.getId() + " for organization " + organization);
             } else {
                 organization.getRoles().add(type);
