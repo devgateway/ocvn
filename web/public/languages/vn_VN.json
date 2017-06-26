@@ -101,7 +101,7 @@
 	"charts:percentEBid:yAxisName": "Phần trăm",
 	"charts:percentEBid:title": "% đơn vị dự thầu sử dụng đấu thầu điện tử",
 	"charts:procurementMethod:unspecified": "Không xác định",
-	"charts:procurementMethod:xAxisName": "Phương pháp",
+	"charts:procurementMethod:xAxisName": "Hình thức lựa chọn nhà thầu",
 	"charts:procurementMethod:yAxisName": "Số tiền (VNĐ)",
 	"charts:procurementMethod:title": "Hình thức lựa chọn nhà thầu",
 	"charts:cancelledAmounts:xAxisName": "Năm",
