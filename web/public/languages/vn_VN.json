@@ -124,7 +124,7 @@
 	"tables:top10tenders:endDate": "Ngày kết thúc",
 	"tables:top10tenders:procuringEntity": "Bên mời thầu",
 	"tables:top10tenders:estimatedValue": "Trị giá ước tính",
-	"tables:top10tenders:title": "Nhóm 10 nhà thầu lớn nhất",
+	"tables:top10tenders:title": "Nhóm 10 nhà thầu trúng nhiều gói thầu nhất",
 	"tables:frequentTenderers:supplier": "nhà cung cấp",
 	"tables:frequentTenderers:nrITB": "số gói thầu có nhà thầu đã từng cùng tham gia dự thầu",
 	"tables:frequentTenderers:title": "tần suất cùng tham gia dự thầu",
