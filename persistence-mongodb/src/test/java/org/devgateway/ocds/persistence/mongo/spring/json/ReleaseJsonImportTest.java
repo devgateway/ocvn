@@ -37,7 +37,7 @@ public class ReleaseJsonImportTest extends AbstractMongoTest {
                 + "        budget: {\n"
                 + "            description: \"budget desc...\",\n"
                 + "            amount: {\n"
-                + "                amount: 10000,\n"
+                + "                amount: 10000.0,\n"
                 + "                currency: \"USD\"\n"
                 + "            }\n"
                 + "        }\n"
