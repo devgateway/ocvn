@@ -118,7 +118,7 @@
 	"tables:top10awards:date": "Ngày tháng",
 	"tables:top10awards:supplier": "Nhà cung cấp",
 	"tables:top10awards:value": "Trị giá",
-	"tables:top10awards:title": "Nhóm 10 gói thầu lớn nhất",
+	"tables:top10awards:title": "Nhóm 10 gói thầu có giá gói thầu lớn nhất đã có KQLCNT",
 	"tables:top10tenders:number": "Số TBMT",
 	"tables:top10tenders:startDate": "Ngày bắt đầu",
 	"tables:top10tenders:endDate": "Ngày kết thúc",
