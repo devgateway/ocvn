@@ -72,7 +72,7 @@
 	"charts:bidPeriod:traces:total": "Tổng",
 	"charts:bidPeriod:xAxisTitle": "Số ngày thực hiện",
 	"charts:bidPeriod:yAxisTitle": "Năm",
-	"charts:bidPeriod:title": "Thời gian đấu thầu",
+	"charts:bidPeriod:title": "Thời gian trong đấu thầu",
 	"charts:bidsByItem:title": "số TBMT theo hạng mục",
 	"charts:bidsByItem:xAxisTitle": "Hạng mục",
 	"charts:bidsByItem:yAxisTitle": "Số lượng",
