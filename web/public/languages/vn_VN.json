@@ -144,7 +144,7 @@
 	"charts:bidSelectionMethod:title": "Hình thức lựa chọn nhà thầu",
 	"charts:cancelledFunding:title": "Phân loại hủy thầu theo nguyên nhân hủy",
 	"charts:cancelledFunding:xAxisTitle": "Năm",
-	"charts:cancelledFunding:yAxisTitle": "Số tiền (VNĐ)",
+	"charts:cancelledFunding:yAxisTitle": "Triệu đồng hoặc tỷ đồng",
 	"charts:percentEProcurement:xAxisTitle": "Năm",
 	"charts:percentEProcurement:yAxisTitle": "Phần trăm",
 	"charts:percentEProcurement:title": "% đơn vị dự thầu sử dụng hệ thống mạng đấu thầu quốc gia",
