@@ -85,7 +85,7 @@
 	"charts:costEffectiveness:yAxisTitle": "Triệu đồng hoặc tỷ đồng",
 	"charts:costEffectiveness:title": "Tiết kiệm trong đấu thầu",
 	"charts:general:noData": "Không có dữ liệu",
-	"charts:nrCancelled:title": "số TBMT bị hủy",
+	"charts:nrCancelled:title": "Số gói thầu bị hủy",
 	"charts:nrCancelled:xAxisTitle": "Năm",
 	"charts:nrCancelled:yAxisTitle": "Số lượng",
 	"charts:nrEBid:xAxisTitle": "Năm",
