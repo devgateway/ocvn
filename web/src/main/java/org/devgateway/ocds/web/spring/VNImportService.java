@@ -15,11 +15,12 @@ import org.apache.commons.io.FileUtils;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.shadow.ShadowVNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
+import org.devgateway.ocds.persistence.mongo.spring.ImportResult;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
 import org.devgateway.ocvn.persistence.mongo.dao.ImportFileTypes;
 import org.devgateway.ocvn.persistence.mongo.reader.BidPlansRowImporter;
@@ -33,13 +34,13 @@ import org.devgateway.ocvn.persistence.mongo.reader.ProcurementPlansRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.PublicInstitutionRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.SupplierRowImporter;
 import org.devgateway.ocvn.persistence.mongo.reader.TenderRowImporter;
-import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowCityRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowContrMethodRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowOrgDepartmentRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowOrgGroupRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.shadow.ShadowVNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.reader.XExcelFileReader;
-import org.devgateway.toolkit.persistence.mongo.spring.MongoTemplateConfiguration;
+import org.devgateway.toolkit.persistence.mongo.spring.ShadowMongoDatabaseConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,44 +79,47 @@ public class VNImportService implements ExcelImportService {
     private static final int VALIDATION_BATCH = 5000;
 
     @Autowired
-    private ReleaseRepository releaseRepository;
+    private ShadowReleaseRepository shadowReleaseRepository;
 
     @Autowired
-    private OrganizationRepository organizationRepository;
-    
-    @Autowired
-    private VNOrganizationRepository vnOrganizationRepository;
+    private ShadowOrganizationRepository shadowOrganizationRepository;
 
     @Autowired
-    private ClassificationRepository classificationRepository;
+    private ShadowVNOrganizationRepository shadowVNOrganizationRepository;
 
     @Autowired
-    private ContrMethodRepository contrMethodRepository;
+    private ShadowClassificationRepository shadowClassificationRepository;
 
     @Autowired
-    private VNLocationRepository locationRepository;
-    
+    private ShadowContrMethodRepository shadowContrMethodRepository;
+
     @Autowired
-    private CityRepository cityRepository;
-    
+    private ShadowVNLocationRepository shadowVNLocationRepository;
+
     @Autowired
-    private OrgDepartmentRepository departmentRepository;
-    
+    private ShadowCityRepository shadowCityRepository;
+
     @Autowired
-    private OrgGroupRepository orgGroupRepository;
-    
+    private ShadowOrgDepartmentRepository shadowOrgDepartmentRepository;
+
+    @Autowired
+    private ShadowOrgGroupRepository shadowOrgGroupRepository;
+
+    @Autowired
+    private MongoTemplate shadowMongoTemplate;
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private MongoTemplateConfiguration mongoTemplateConfiguration;
+    private ShadowMongoDatabaseConfiguration mongoTemplateConfiguration;
 
     @Autowired
     private OcdsSchemaValidatorService ocdsSchemaValidator;
 
     @Autowired(required = false)
     private CacheManager cacheManager;
-    
+
     @Autowired
     private ReleaseFlaggingService releaseFlaggingService;
 
@@ -127,6 +131,7 @@ public class VNImportService implements ExcelImportService {
     public static final String ORGS_FILE_NAME = "orgs";
     public static final String CITY_DEPT_GRP_NAME = "cdg";
     public static final String DATABASE_FILE_NAME = "database";
+    private boolean success;
 
     // TODO: remove these
     // URL prototypeDatabaseFile =
@@ -139,14 +144,13 @@ public class VNImportService implements ExcelImportService {
             throws Exception {
         importSheet(fileUrl, sheetName, importer, MongoConstants.IMPORT_ROW_BATCH);
     }
-    
+
     private BigDecimal getMaxTenderValue() {
         Aggregation agg = Aggregation.newAggregation(match(where("tender.value.amount").exists(true)),
-                project().and("tender.value.amount").as("tender.value.amount"),
                 group().max("tender.value.amount").as("maxTenderValue"),
                 project().andInclude("maxTenderValue").andExclude(Fields.UNDERSCORE_ID));
 
-        AggregationResults<DBObject> results = mongoTemplate.aggregate(agg, "release", DBObject.class);
+        AggregationResults<DBObject> results = shadowMongoTemplate.aggregate(agg, "release", DBObject.class);
 
         return results.getMappedResults().size() == 0 ? BigDecimal.ZERO
                 : BigDecimal.valueOf((double) results.getMappedResults().get(0).get("maxTenderValue"));
@@ -158,7 +162,7 @@ public class VNImportService implements ExcelImportService {
     private void purgeDatabase() {
         logMessage("Purging database...");
 
-        ScriptOperations scriptOps = mongoTemplate.scriptOps();
+        ScriptOperations scriptOps = shadowMongoTemplate.scriptOps();
         ExecutableMongoScript echoScript = new ExecutableMongoScript("db.dropDatabase()");
         scriptOps.execute(echoScript);
 
@@ -193,9 +197,8 @@ public class VNImportService implements ExcelImportService {
     }
 
 
-
     private void importSheet(final URL fileUrl, final String sheetName, final RowImporter<?, ?, ?> importer,
-            final int importRowBatch) {
+                             final int importRowBatch) {
         logMessage("<b>Importing " + sheetName + " using " + importer.getClass().getSimpleName() + "</b>");
 
         XExcelFileReader reader = null;
@@ -207,7 +210,9 @@ public class VNImportService implements ExcelImportService {
             long rowNo = 0;
             rows = reader.readRows(importRowBatch);
             while (!rows.isEmpty()) {
-                importer.importRows(rows);
+                if (!importer.importRows(rows)) {
+                    success = false;
+                }
                 rowNo += rows.size();
                 if (rowNo % LOG_IMPORT_EVERY == 0) {
                     logMessage("Import Speed " + rowNo * MS_IN_SECOND / (System.currentTimeMillis() - startTime)
@@ -217,8 +222,9 @@ public class VNImportService implements ExcelImportService {
             }
 
         } catch (Exception e) {
-            logMessage("<font style='color:red'>" + e + "</font>");
+            logMessage("<font style='color:red'> CRITICAL " + e + "</font>");
             e.printStackTrace();
+            success = false;
         } finally {
             if (reader != null) {
                 reader.close();
@@ -241,12 +247,13 @@ public class VNImportService implements ExcelImportService {
      * object, creates a temp dir and drops them there.
      *
      * @return the path of the temp dir created, that contains the files save
-     *         from {@link org.devgateway.ocvn.persistence.dao.VietnamImportSourceFiles}
+     * from {@link org.devgateway.ocvn.persistence.dao.VietnamImportSourceFiles}
      * @throws FileNotFoundException
      * @throws IOException
      */
     private String saveSourceFilesToTempDir(final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers,  final byte[] cdg) throws FileNotFoundException, IOException {
+                                            final byte[] publicInstitutionsSuppliers, final byte[] cdg)
+            throws FileNotFoundException, IOException {
         File tempDir = Files.createTempDir();
         if (prototypeDatabase != null) {
             FileOutputStream prototypeDatabaseOutputStream =
@@ -267,7 +274,7 @@ public class VNImportService implements ExcelImportService {
             publicInstitutionsSuppliersOutputStream.write(publicInstitutionsSuppliers);
             publicInstitutionsSuppliersOutputStream.close();
         }
-                       
+
         if (cdg != null) {
             FileOutputStream cdgOutputStream =
                     new FileOutputStream(new File(tempDir, CITY_DEPT_GRP_NAME));
@@ -279,11 +286,16 @@ public class VNImportService implements ExcelImportService {
     }
 
     @Async
-    public void importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase, final byte[] locations,
-            final byte[] publicInstitutionsSuppliers, final byte[] cdg, final Boolean purgeDatabase,
-            final Boolean validateData, final Boolean flagData) throws InterruptedException {
+    public ImportResult importAllSheets(final List<String> fileTypes, final byte[] prototypeDatabase,
+                                        final byte[] locations,
+                                        final byte[] publicInstitutionsSuppliers, final byte[] cdg,
+                                        final Boolean purgeDatabase,
+                                        final Boolean validateData, final Boolean flagData)
+            throws InterruptedException {
 
         String tempDirPath = null;
+
+        success = true;
 
         clearAllCaches(); // clears caches before import starts
 
@@ -297,66 +309,68 @@ public class VNImportService implements ExcelImportService {
 
             if (fileTypes.contains(ImportFileTypes.LOCATIONS) && locations != null) {
                 importSheet(new URL(tempDirPath + LOCATIONS_FILE_NAME), "Sheet1",
-                        new LocationRowImporter(locationRepository, this, 1));
+                        new LocationRowImporter(shadowVNLocationRepository, this, 1));
             }
-            
-                        
+
+
             if (cdg != null && fileTypes.contains(ImportFileTypes.CITIES)) {
                 importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "City",
-                        new CityRowImporter(cityRepository, this, 1));
+                        new CityRowImporter(shadowCityRepository, this, 1));
             }
-            
-            
+
+
             if (cdg != null && fileTypes.contains(ImportFileTypes.ORG_DEPARTMENTS)) {
                 importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "Department",
-                        new OrgDepartmentRowImporter(departmentRepository, this, 1));
+                        new OrgDepartmentRowImporter(shadowOrgDepartmentRepository, this, 1));
             }
-            
-            
+
+
             if (cdg != null && fileTypes.contains(ImportFileTypes.ORG_GROUPS)) {
                 importSheet(new URL(tempDirPath + CITY_DEPT_GRP_NAME), "Group",
-                        new OrgGroupRowImporter(orgGroupRepository, this, 1));
+                        new OrgGroupRowImporter(shadowOrgGroupRepository, this, 1));
             }
 
             if (fileTypes.contains(ImportFileTypes.PUBLIC_INSTITUTIONS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_PUB_INSTITU_MAST",
-                        new PublicInstitutionRowImporter(vnOrganizationRepository, cityRepository,
-                                orgGroupRepository, departmentRepository,
+                        new PublicInstitutionRowImporter(shadowVNOrganizationRepository, shadowCityRepository,
+                                shadowOrgGroupRepository, shadowOrgDepartmentRepository,
                                 this, 2));
             }
 
             if (fileTypes.contains(ImportFileTypes.SUPPLIERS) && publicInstitutionsSuppliers != null) {
                 importSheet(new URL(tempDirPath + ORGS_FILE_NAME), "UM_SUPPLIER_ENTER_MAST",
-                        new SupplierRowImporter(organizationRepository, cityRepository, this, 2));
+                        new SupplierRowImporter(shadowOrganizationRepository, shadowCityRepository, this, 2));
             }
 
             if (prototypeDatabase != null) {
                 if (fileTypes.contains(ImportFileTypes.PROCUREMENT_PLANS)) {
                     importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "ProcurementPlans",
-                            new ProcurementPlansRowImporter(releaseRepository, this, locationRepository, 1));
+                            new ProcurementPlansRowImporter(shadowReleaseRepository,
+                                    this, shadowVNLocationRepository, 1));
                 }
 
                 if (fileTypes.contains(ImportFileTypes.BID_PLANS)) {
                     importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "BidPlans",
-                            new BidPlansRowImporter(releaseRepository, this, 1));
+                            new BidPlansRowImporter(shadowReleaseRepository, this, 1));
                 }
 
                 if (fileTypes.contains(ImportFileTypes.TENDERS)) {
                     importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Tender",
-                            new TenderRowImporter(releaseRepository, this, organizationRepository,
-                                    classificationRepository, contrMethodRepository, locationRepository, 1));
+                            new TenderRowImporter(shadowReleaseRepository, this, shadowOrganizationRepository,
+                                    shadowClassificationRepository, shadowContrMethodRepository,
+                                    shadowVNLocationRepository, 1));
                 }
 
                 BigDecimal maxTenderValue = getMaxTenderValue();
-                
+
                 if (fileTypes.contains(ImportFileTypes.EBID_AWARDS)) {
                     importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "eBid_Awards", new EBidAwardRowImporter(
-                            releaseRepository, this, organizationRepository, 1, maxTenderValue));
+                            shadowReleaseRepository, this, shadowOrganizationRepository, 1, maxTenderValue));
                 }
 
                 if (fileTypes.contains(ImportFileTypes.OFFLINE_AWARDS)) {
                     importSheet(new URL(tempDirPath + DATABASE_FILE_NAME), "Offline_Awards",
-                            new OfflineAwardRowImporter(releaseRepository, this, organizationRepository, 1,
+                            new OfflineAwardRowImporter(shadowReleaseRepository, this, shadowOrganizationRepository, 1,
                                     maxTenderValue));
                 }
             }
@@ -368,9 +382,15 @@ public class VNImportService implements ExcelImportService {
             if (validateData) {
                 validateData();
             }
-            
+
             if (flagData) {
                 flagData();
+            }
+
+            if (success) {
+                success = copyShadowToMain();
+            } else {
+                logMessage("<b>CRITICAL ERRORS FOUND DURING IMPORT. NEWLY IMPORTED DATA WILL BE DISCARDED.</b>");
             }
 
             logMessage("<b>IMPORT PROCESS COMPLETED.</b>");
@@ -378,8 +398,10 @@ public class VNImportService implements ExcelImportService {
         } catch (Exception e) {
             logger.error(e.getMessage());
             e.printStackTrace();
+            success = false;
         } finally {
             clearAllCaches(); // always clears caches post import
+
             if (tempDirPath != null) {
                 try {
                     FileUtils.deleteDirectory(Paths.get(new URL(tempDirPath).toURI()).toFile());
@@ -391,13 +413,34 @@ public class VNImportService implements ExcelImportService {
                     e.printStackTrace();
                 }
             }
+
+            return new ImportResult(success, msgBuffer);
         }
     }
 
+    @Override
+    public boolean copyShadowToMain() {
+        boolean r = true;
+        logMessage("<b>REPLACING MAIN DATABASE WITH IMPORT RESULT</b>");
+        try {
+            ScriptOperations scriptOps = mongoTemplate.scriptOps();
+            ExecutableMongoScript echoScript = new ExecutableMongoScript("db.dropDatabase()");
+            scriptOps.execute(echoScript);
+
+            echoScript = new ExecutableMongoScript("db.copyDatabase('ocvn-shadow','ocvn')");
+            scriptOps.execute(echoScript);
+            logMessage("<b>DATABASE REPLACED</b>");
+        } catch (Exception e) {
+            e.printStackTrace();
+            r = false;
+        }
+        return r;
+    }
+
     private void flagData() {
-        
+
         releaseFlaggingService.processAndSaveFlagsForAllReleases(this::logMessage);
-        
+
     }
 
     public void validateData() {
@@ -409,10 +452,13 @@ public class VNImportService implements ExcelImportService {
 
         Page<Release> page;
         do {
-            page = releaseRepository.findAll(new PageRequest(pageNumber++, VALIDATION_BATCH));
+            page = shadowReleaseRepository.findAll(new PageRequest(pageNumber++, VALIDATION_BATCH));
             page.getContent().parallelStream().map(rel -> ocdsSchemaValidator.validate(rel))
-                    .filter(r -> !r.getReport().isSuccess()).forEach(r -> logMessage(
-                            "<font style='color:red'>OCDS Validation Failed: " + r.toString() + "</font>"));
+                    .filter(r -> !r.getReport().isSuccess()).forEach(r -> {
+                logMessage(
+                        "<font style=''>OCDS Validation Failed: " + r.toString() + "</font>");
+                success = false;
+            });
             processedCount += page.getNumberOfElements();
             logMessage("Validated " + processedCount + " releases");
         } while (!page.isLast());

@@ -12,7 +12,7 @@
 package org.devgateway.ocds.web.rest.controller.selector;
 
 import org.devgateway.ocds.persistence.mongo.Classification;
-import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ClassificationRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;

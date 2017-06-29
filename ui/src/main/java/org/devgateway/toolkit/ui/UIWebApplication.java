@@ -2,6 +2,7 @@ package org.devgateway.toolkit.ui;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
 
 /**
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
  *
  */
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { EmbeddedMongoAutoConfiguration.class })
 @PropertySource("classpath:/org/devgateway/toolkit/ui/application.properties")
 public class UIWebApplication {
 

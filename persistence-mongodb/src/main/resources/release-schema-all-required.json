@@ -697,6 +697,75 @@
                 }
             }
         },
+        "OrganizationReference": {
+            "properties": {
+                "name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "description": "The name of the party being referenced. This must match the name of an entry in the parties section.",
+                    "title": "Organization name",
+                    "minLength": 1
+                },
+                "id": {
+                    "type": [
+                        "string",
+                        "integer"
+                    ],
+                    "description": "The id of the party being referenced. This must match the id of an entry in the parties section.",
+                    "title": "Organization ID",
+                    "minLength": 1
+                },
+                "identifier": {
+                    "title": "Primary identifier",
+                    "description": "The primary identifier for this organization. Identifiers that uniquely pick out a legal entity should be preferred. Consult the [organization identifier guidance](http://standard.open-contracting.org/1.1/en/schema/identifiers/) for the preferred scheme and identifier to use.",
+                    "deprecated": {
+                        "deprecatedVersion": "1.1",
+                        "description": "From version 1.1, organisations should be referenced by their identifier and name in a document, and detailed legal identifier information should only be provided in the relevant cross-referenced entry in the parties section at the top level of a release."
+                    },
+                    "$ref": "#/definitions/Identifier"
+                },
+                "address": {
+                    "deprecated": {
+                        "deprecatedVersion": "1.1",
+                        "description": "From version 1.1, organisations should be referenced by their identifier and name in a document, and address information should only be provided in the relevant cross-referenced entry in the parties section at the top level of a release."
+                    },
+                    "$ref": "#/definitions/Address",
+                    "description": "(Deprecated outside the parties section)",
+                    "title": "Address"
+                },
+                "additionalIdentifiers": {
+                    "type": "array",
+                    "deprecated": {
+                        "deprecatedVersion": "1.1",
+                        "description": "From version 1.1, organisations should be referenced by their identifier and name in a document, and additional identifiers for an organisation should be provided in the relevant cross-referenced entry in the parties section at the top level of a release."
+                    },
+                    "items": {
+                        "$ref": "#/definitions/Identifier"
+                    },
+                    "title": "Additional identifiers",
+                    "uniqueItems": true,
+                    "wholeListMerge": true,
+                    "description": "(Deprecated outside the parties section) A list of additional / supplemental identifiers for the organization, using the [organization identifier guidance](http://standard.open-contracting.org/1.1/en/schema/identifiers/). This could be used to provide an internally used identifier for this organization in addition to the primary legal entity identifier."
+                },
+                "contactPoint": {
+                    "deprecated": {
+                        "deprecatedVersion": "1.1",
+                        "description": "From version 1.1, organisations should be referenced by their identifier and name in a document, and contact point information for an organisation should be provided in the relevant cross-referenced entry in the parties section at the top level of a release."
+                    },
+                    "$ref": "#/definitions/ContactPoint",
+                    "description": "(Deprecated outside the parties section)",
+                    "title": "Contact point"
+                }
+            },
+            "required": [
+                "id", "name", "identifier", "address", "additionalIdentifiers", "contactPoint"
+            ],
+            "type": "object",
+            "description": "The id and name of the party being referenced. Used to cross-reference to the parties section",
+            "title": "Organization reference"
+        },
         "Organization": {
             "title": "Organization",
             "description": "An organization.",

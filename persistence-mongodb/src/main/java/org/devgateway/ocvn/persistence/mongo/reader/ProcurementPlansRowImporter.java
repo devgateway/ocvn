@@ -1,19 +1,18 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import java.text.ParseException;
-
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNBudget;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.VNLocationRepository;
 
 /**
  *
@@ -25,7 +24,7 @@ public class ProcurementPlansRowImporter extends ReleaseRowImporter {
     private VNLocationRepository locationRepository;
 
     public ProcurementPlansRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-            final VNLocationRepository locationRepository, final int skipRows) {
+                                       final VNLocationRepository locationRepository, final int skipRows) {
         super(releaseRepository, importService, skipRows);
         this.locationRepository = locationRepository;
     }

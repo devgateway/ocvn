@@ -1,7 +1,7 @@
 package org.devgateway.ocds.persistence.mongo.spring.json;
 
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -37,7 +37,7 @@ public class ReleaseJsonImportTest extends AbstractMongoTest {
                 + "        budget: {\n"
                 + "            description: \"budget desc...\",\n"
                 + "            amount: {\n"
-                + "                amount: 10000,\n"
+                + "                amount: 10000.0,\n"
                 + "                currency: \"USD\"\n"
                 + "            }\n"
                 + "        }\n"

@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @author mpostelnicu
  *
  */
-@Profile("integration")
+@Profile({"integration", "shadow-integration"})
 @Configuration
 public class TestUserDetailsConfiguration {
 

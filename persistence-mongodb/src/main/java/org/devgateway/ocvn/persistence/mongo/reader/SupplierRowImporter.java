@@ -1,14 +1,13 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import java.text.ParseException;
-
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.CityRepository;
 
 /**
  * @author mpostelnicu Specific {@link RowImporter} for Suppliers, in the custom
@@ -18,7 +17,7 @@ import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
 public class SupplierRowImporter extends OrganizationRowImporter<Organization> {
 
     public SupplierRowImporter(final OrganizationRepository repository, final CityRepository cityRepository,
-            final ImportService importService, final int skipRows) {
+                               final ImportService importService, final int skipRows) {
         super(repository, cityRepository, importService, skipRows);
     }
 

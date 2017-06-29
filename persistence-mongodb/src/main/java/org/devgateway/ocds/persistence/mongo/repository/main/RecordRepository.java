@@ -1,4 +1,4 @@
-package org.devgateway.ocds.persistence.mongo.repository;
+package org.devgateway.ocds.persistence.mongo.repository.main;
 
 import org.devgateway.ocds.persistence.mongo.Record;
 import org.springframework.data.mongodb.repository.MongoRepository;

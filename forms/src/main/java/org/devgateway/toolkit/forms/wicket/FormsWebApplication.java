@@ -24,6 +24,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteF
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.editor.SummernoteStoredImageResourceReference;
 import de.agilecoders.wicket.less.BootstrapLess;
 import de.agilecoders.wicket.webjars.WicketWebjars;
+import java.math.BigDecimal;
 import nl.dries.wicket.hibernate.dozer.SessionFinderHolder;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
@@ -49,14 +50,13 @@ import org.devgateway.toolkit.forms.wicket.page.user.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
-
-import java.math.BigDecimal;
 
 /**
  * The web application class also serves as spring boot starting point by using
@@ -67,7 +67,7 @@ import java.math.BigDecimal;
  *
  */
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication(exclude = { EmbeddedMongoAutoConfiguration.class })
 @ComponentScan("org.devgateway")
 @PropertySource("classpath:/org/devgateway/toolkit/forms/application.properties")
 @EnableCaching

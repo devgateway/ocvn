@@ -32,6 +32,12 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
 
     private CheckBoxToggleBootstrapFormComponent disableApiSecurity;
 
+    private TextFieldBootstrapFormComponent<String> adminEmail;
+
+    private CheckBoxToggleBootstrapFormComponent enableDailyAutomatedImport;
+
+    private TextFieldBootstrapFormComponent<String> importFilesPath;
+
     @SpringBean
     protected AdminSettingsRepository adminSettingsRepository;
 
@@ -72,8 +78,18 @@ public class EditAdminSettingsPage extends AbstractEditPage<AdminSettings> {
 //        rebootServer = new CheckBoxToggleBootstrapFormComponent("rebootServer");
 //        editForm.add(rebootServer);
 
-
         disableApiSecurity = new CheckBoxToggleBootstrapFormComponent("disableApiSecurity");
         editForm.add(disableApiSecurity);
+
+        enableDailyAutomatedImport = new CheckBoxToggleBootstrapFormComponent("enableDailyAutomatedImport");
+        editForm.add(enableDailyAutomatedImport);
+
+
+        adminEmail = new TextFieldBootstrapFormComponent<>("adminEmail");
+        editForm.add(adminEmail);
+
+        importFilesPath = new TextFieldBootstrapFormComponent<>("importFilesPath");
+        editForm.add(importFilesPath);
+
     }
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.devgateway.ocds.persistence.mongo.repository;
+package org.devgateway.ocds.persistence.mongo.repository.main;
 
 import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 

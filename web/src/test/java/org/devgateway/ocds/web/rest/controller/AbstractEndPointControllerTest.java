@@ -2,7 +2,7 @@ package org.devgateway.ocds.web.rest.controller;
 
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImportPackage;
 import org.devgateway.ocds.persistence.mongo.spring.json.ReleasePackageJsonImport;
 import org.devgateway.toolkit.web.AbstractWebTest;

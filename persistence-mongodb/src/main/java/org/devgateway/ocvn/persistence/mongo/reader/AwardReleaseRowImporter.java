@@ -3,6 +3,7 @@
  */
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.math.BigDecimal;
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Detail;
@@ -10,13 +11,12 @@ import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
+import org.devgateway.ocds.persistence.mongo.reader.ImportWarningRuntimeException;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
-
-import java.math.BigDecimal;
 
 /**
  * @author mpostelnicu
@@ -68,13 +68,14 @@ public abstract class AwardReleaseRowImporter extends ReleaseRowImporter {
         if (release.getTender().getValue() != null && award.getValue() != null
                 && !release.getTender().getValue().getAmount().equals(BigDecimal.ZERO) && release.getTender().getValue()
                 .getAmount().multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
-            throw new RuntimeException("Award value is more than 4x larger than the tender value!");
+            throw new ImportWarningRuntimeException("Award value is more than 4x larger than the tender value!");
         }
 
         if ((release.getTender().getValue() == null
                 || release.getTender().getValue().getAmount().equals(BigDecimal.ZERO)) && award.getValue() != null
                 && maxTenderValue.multiply(BigDecimal.valueOf(4d)).compareTo(award.getValue().getAmount()) < 0) {
-            throw new RuntimeException("Award value is more than 4x larger than the largest tender value!");
+            throw new ImportWarningRuntimeException(
+                    "Award value is more than 4x larger than the largest tender value!");
         }
     }
 

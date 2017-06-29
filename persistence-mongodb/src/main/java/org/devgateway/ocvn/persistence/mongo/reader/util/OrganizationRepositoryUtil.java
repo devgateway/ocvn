@@ -3,7 +3,7 @@ package org.devgateway.ocvn.persistence.mongo.reader.util;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 
 public final class OrganizationRepositoryUtil {
 
