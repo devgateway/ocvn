@@ -12,7 +12,13 @@ import ViewSwitcher from "../oce/switcher.jsx";
 import CorruptionRickDashboard from "../oce/corruption-risk";
 import cn from "classnames";
 
-class OCEDemoLocation extends LocationTab{}
+class OCEDemoLocation extends LocationTab{
+  getHeight(){
+    const TOP_OFFSET = 128;
+    const BOTTOM_OFFSET = 66;
+    return window.innerHeight - TOP_OFFSET - BOTTOM_OFFSET;
+  }
+}
 OCEDemoLocation.CENTER = [37, -100];
 
 class OCEChild extends OCApp{
