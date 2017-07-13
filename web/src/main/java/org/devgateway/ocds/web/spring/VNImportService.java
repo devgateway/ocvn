@@ -457,7 +457,7 @@ public class VNImportService implements ExcelImportService {
                     .filter(r -> !r.getReport().isSuccess()).forEach(r -> {
                 logMessage(
                         "<font style=''>OCDS Validation Failed: " + r.toString() + "</font>");
-                success = false;
+                //success = false; //we consider validation as non critical, so we don't stop
             });
             processedCount += page.getNumberOfElements();
             logMessage("Validated " + processedCount + " releases");
