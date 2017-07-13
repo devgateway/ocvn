@@ -1,5 +1,7 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Detail;
@@ -7,16 +9,13 @@ import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNAward;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTendererOrganization;
 import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
-
-import java.math.BigDecimal;
-import java.text.ParseException;
 
 /**
  * Specific {@link RowImporter} for Offline Awards, in the custom Excel format

@@ -6,7 +6,7 @@ import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import java.io.File;
 import org.apache.log4j.Logger;
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.OcdsSchemaValidatorService;
 import org.devgateway.ocds.persistence.mongo.spring.json.JsonImport;
 import org.devgateway.ocds.persistence.mongo.spring.json.ReleaseJsonImport;

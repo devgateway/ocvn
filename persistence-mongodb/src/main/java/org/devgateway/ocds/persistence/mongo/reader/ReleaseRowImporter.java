@@ -1,10 +1,10 @@
 package org.devgateway.ocds.persistence.mongo.reader;
 
-import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
-import org.devgateway.ocds.persistence.mongo.spring.ImportService;
-
 import java.text.ParseException;
+import java.util.Date;
+import org.devgateway.ocds.persistence.mongo.Release;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 
 /**
  * @author mpostelnicu
@@ -19,6 +19,7 @@ public abstract class ReleaseRowImporter extends RowImporter<Release, String, Re
     @Override
     public void importRow(final String[] row) throws ParseException {
         Release release = createReleaseFromReleaseRow(row);
+        release.setDate(new Date());
         if (release.getId() == null) {
             repository.insert(release);
         } else {

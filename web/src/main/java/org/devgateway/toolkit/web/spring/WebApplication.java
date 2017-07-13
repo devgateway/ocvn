@@ -13,6 +13,7 @@ package org.devgateway.toolkit.web.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
@@ -21,7 +22,7 @@ import org.springframework.context.annotation.PropertySource;
  *
  */
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { EmbeddedMongoAutoConfiguration.class })
 @PropertySource("classpath:/org/devgateway/toolkit/web/application.properties")
 @ComponentScan("org.devgateway.toolkit")
 public class WebApplication {

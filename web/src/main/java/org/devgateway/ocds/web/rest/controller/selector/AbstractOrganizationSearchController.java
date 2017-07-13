@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import javax.validation.Valid;
 import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;

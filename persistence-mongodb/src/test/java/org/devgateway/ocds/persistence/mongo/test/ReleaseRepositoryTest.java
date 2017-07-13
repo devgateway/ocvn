@@ -1,7 +1,7 @@
 package org.devgateway.ocds.persistence.mongo.test;
 
 import org.devgateway.ocds.persistence.mongo.Release;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.Assert;
 import org.junit.Test;

@@ -12,13 +12,14 @@ import org.devgateway.ocds.persistence.mongo.FlaggedRelease;
 import org.devgateway.ocds.persistence.mongo.Identifiable;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Tender;
-import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.FlaggedReleaseRepository;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.FlaggedReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.VNLocationRepository;
 import org.devgateway.toolkit.persistence.mongo.spring.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,13 @@ public class OCDSPopulatorService {
 
     protected static Logger logger = Logger.getLogger(OCDSPopulatorService.class);
     @Autowired
-    private FlaggedReleaseRepository releaseRepository;
+    private FlaggedReleaseRepository flaggedReleaseRepository;
     @Autowired
     private OrganizationRepository organizationRepository;
     @Autowired
     private ClassificationRepository classificationRepository;
     @Autowired
+    @Qualifier("VNLocationRepository")
     private VNLocationRepository locationRepository;
 
     private String getRandomTxt() {
@@ -77,7 +79,7 @@ public class OCDSPopulatorService {
     public void randomizeReleases(Consumer<String> logMessage) {
         logMessage.accept("<b>RANDOMIZE RELEASES.</b>");
 
-        MongoUtil.processRepositoryItemsPaginated(releaseRepository, this::randomizeRelease,
+        MongoUtil.processRepositoryItemsPaginated(flaggedReleaseRepository, this::randomizeRelease,
                 this::logMessage);
 
         logMessage.accept("<b>RANDOMIZE RELEASES COMPLETED.</b>");
@@ -223,7 +225,7 @@ public class OCDSPopulatorService {
 
 
         }
-        releaseRepository.save(r);
+        flaggedReleaseRepository.save(r);
     }
 
 

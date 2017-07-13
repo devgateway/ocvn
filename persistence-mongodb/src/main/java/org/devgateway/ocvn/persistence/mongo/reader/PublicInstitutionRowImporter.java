@@ -5,14 +5,14 @@ package org.devgateway.ocvn.persistence.mongo.reader;
 
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.VNOrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.VNOrganizationRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgDepartment;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
 import org.devgateway.ocvn.persistence.mongo.dao.VNOrganization;
-import org.devgateway.ocvn.persistence.mongo.repository.CityRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgDepartmentRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.CityRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.OrgDepartmentRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.OrgGroupRepository;
 
 import java.text.ParseException;
 

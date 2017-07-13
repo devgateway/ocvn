@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocds.web.rest.controller.request.TextSearchRequest;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.OrgGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

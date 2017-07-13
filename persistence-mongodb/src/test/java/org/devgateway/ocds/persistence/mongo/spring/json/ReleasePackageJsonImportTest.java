@@ -3,24 +3,19 @@ package org.devgateway.ocds.persistence.mongo.spring.json;
 import java.io.File;
 import java.util.Collection;
 import java.util.Set;
-
 import org.devgateway.ocds.persistence.mongo.Award;
 import org.devgateway.ocds.persistence.mongo.Contract;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.Tag;
 import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.Transaction;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * @author idobre

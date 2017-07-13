@@ -8,7 +8,7 @@ import org.devgateway.ocds.persistence.mongo.ContactPoint;
 import org.devgateway.ocds.persistence.mongo.Identifier;
 import org.devgateway.ocds.persistence.mongo.Organization;
 import org.devgateway.ocds.persistence.mongo.Organization.OrganizationType;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
 import org.devgateway.toolkit.persistence.mongo.AbstractMongoTest;
 import org.junit.Before;
 import org.junit.Test;

@@ -35,7 +35,7 @@ import org.devgateway.ocds.persistence.repository.UserDashboardRepository;
 import org.devgateway.toolkit.forms.WebConstants;
 import org.devgateway.toolkit.web.security.SecurityConstants;
 import org.devgateway.toolkit.web.security.SecurityUtil;
-import org.devgateway.toolkit.forms.service.SendEmailService;
+import org.devgateway.ocds.web.spring.SendEmailService;
 import org.devgateway.toolkit.forms.wicket.components.form.CheckBoxBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.PasswordFieldBootstrapFormComponent;
 import org.devgateway.toolkit.forms.wicket.components.form.Select2ChoiceBootstrapFormComponent;

@@ -1,45 +1,52 @@
-import Marker from "../location/marker";
-import Component from "../../../pure-render-component";
-import {Popup} from "react-leaflet";
-import translatable from "../../../translatable";
-import cn from "classnames";
-import OverviewChart from "../../../visualizations/charts/overview";
-import CostEffectiveness from "../../../visualizations/charts/cost-effectiveness";
-import {cacheFn, download} from "../../../tools"
+import ReactDOM from 'react-dom';
+import { Popup } from 'react-leaflet';
+import cn from 'classnames';
+import Marker from '../location/marker';
+import Component from '../../../pure-render-component';
+import translatable from '../../../translatable';
+import OverviewChart from '../../../visualizations/charts/overview';
+import CostEffectiveness from '../../../visualizations/charts/cost-effectiveness';
+import { cacheFn, download } from '../../../tools';
 import ProcurementMethodChart from '../../../visualizations/charts/procurement-method';
-import ReactDOM from "react-dom";
-import style from "./style.less";
+// eslint-disable-next-line no-unused-vars
+import style from './style.less';
 
-class LocationWrapper extends translatable(Component){
-  constructor(props){
+class LocationWrapper extends translatable(Component) {
+  constructor(props) {
     super(props);
     this.state = {
-      currentTab: 0
-    }
+      currentTab: 0,
+    };
   }
 
-  render(){
-    let {currentTab} = this.state;
-    let {data, translations, filters, years, styling, monthly, months} = this.props;
-    let CurrentTab = this.constructor.TABS[currentTab];
+  render() {
+    const { currentTab } = this.state;
+    const { data, translations, filters, years, styling, monthly, months } = this.props;
+    const CurrentTab = this.constructor.TABS[currentTab];
+    const t = translationKey => this.t(translationKey);
     return (
-        <Marker {...this.props}>
-          <Popup className="tender-locations-popup">
-            <div>
-              <header>
-                {data.name}
-              </header>
-              <section className="tabs-bar row">
-                {this.constructor.TABS.map((Tab, index) =>
-                    <div key={index}
-                        className={cn("col-sm-3 text-center", {active: index == currentTab})}
-                        onClick={e => this.setState({currentTab: index})}
-                    >
-                      <a href="javascript:void(0);">{Tab.getName(this.t.bind(this))}</a>
-                    </div>
-                )}
-              </section>
-              <CurrentTab
+      <Marker {...this.props}>
+        <Popup className="tender-locations-popup">
+          <div>
+            <header>
+              {data.name}
+            </header>
+            <div className="row">
+              <div className="tabs-bar col-xs-4">
+                {this.constructor.TABS.map((Tab, index) => (
+                  <div
+                    key={Tab.getName(t)}
+                    className={cn({ active: index === currentTab })}
+                    onClick={() => this.setState({ currentTab: index })}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <a href="#">{Tab.getName(t)}</a>
+                  </div>
+                ))}
+              </div>
+              <div className="col-xs-8">
+                <CurrentTab
                   data={data}
                   translations={translations}
                   filters={filters}
@@ -47,117 +54,130 @@ class LocationWrapper extends translatable(Component){
                   monthly={monthly}
                   months={months}
                   styling={styling}
-              />
+                />
+              </div>
             </div>
-          </Popup>
-        </Marker>
-    )
+          </div>
+        </Popup>
+      </Marker>
+    );
   }
 }
 
-class Tab extends translatable(Component){}
+class Tab extends translatable(Component) {}
 
-export class OverviewTab extends Tab{
-  static getName(t){return t('maps:tenderLocations:tabs:overview:title')}
+export class OverviewTab extends Tab {
+  static getName(t) { return t('maps:tenderLocations:tabs:overview:title'); }
 
-  render(){
-    let {data} = this.props;
-    let {count, amount} = data;
-    return <div>
+  render() {
+    const { data } = this.props;
+    const { count, amount } = data;
+    return (<div>
       <p>
         <strong>{this.t('maps:tenderLocations:tabs:overview:nrOfTenders')}</strong> {count}
       </p>
       <p>
         <strong>{this.t('maps:tenderLocations:tabs:overview:totalFundingByLocation')}</strong> {amount.toLocaleString()}
       </p>
-    </div>
+    </div>);
   }
 }
 
-let addTenderDeliveryLocationId = cacheFn(
-    (filters, id) => filters.set('tenderLoc', id)
+const addTenderDeliveryLocationId = cacheFn(
+  (filters, id) => filters.set('tenderLoc', id),
 );
 
-export class ChartTab extends Tab{
-  constructor(props){
+export class ChartTab extends Tab {
+  constructor(props) {
     super(props);
     this.state = {
-      chartData: null
-    }
+      chartData: null,
+    };
   }
 
-  getMargins(){
+  static getMargins() {
     return {
       t: 0,
       l: 50,
       r: 50,
-      b: 50
-    }
+      b: 50,
+    };
   }
 
-  getChartClass(){return ""}
+  static getChartClass() { return ''; }
 
-  render(){
-    let {filters, styling, years, translations, data, monthly, months} = this.props;
-    let decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
-    let doExcelExport = e => download({
+  render() {
+    const { filters, styling, years, translations, data, monthly, months } = this.props;
+    const decoratedFilters = addTenderDeliveryLocationId(filters, data._id);
+    const doExcelExport = () => download({
       ep: this.constructor.Chart.excelEP,
       filters: decoratedFilters,
       years,
       months,
-      t: this.t.bind(this)
+      t: translationKey => this.t(translationKey),
     });
-    return <div className={cn("map-chart", this.getChartClass())}>
+    return (<div className={cn('map-chart', this.constructor.getChartClass())}>
       <this.constructor.Chart
-          filters={decoratedFilters}
-          styling={styling}
-          years={years}
-          monthly={monthly}
-          months={months}
-          translations={translations}
-          data={this.state.chartData}
-          requestNewData={(_, chartData) => this.setState({chartData})}
-          width={500}
-          height={350}
-          margin={this.getMargins()}
-          legend="h"
+        filters={decoratedFilters}
+        styling={styling}
+        years={years}
+        monthly={monthly}
+        months={months}
+        translations={translations}
+        data={this.state.chartData}
+        requestNewData={(_, chartData) => this.setState({ chartData })}
+        width={500}
+        height={350}
+        margin={this.constructor.getMargins()}
+        legend="h"
       />
       <div className="chart-toolbar">
-        <div className="btn btn-default" onClick={doExcelExport}>
+        <div
+          className="btn btn-default"
+          onClick={doExcelExport}
+          role="button"
+          tabIndex={0}
+        >
           <img
-              src="assets/icons/export-black.svg"
-              width="16"
-              height="16"
+            src="assets/icons/export-black.svg"
+            alt="Export"
+            width="16"
+            height="16"
           />
         </div>
 
-        <div className="btn btn-default" onClick={e => ReactDOM.findDOMNode(this).querySelector(".modebar-btn:first-child").click()}>
-          <img src="assets/icons/camera.svg"/>
+        <div
+          className="btn btn-default"
+          onClick={() => ReactDOM.findDOMNode(this).querySelector('.modebar-btn:first-child').click()}
+          role="button"
+          tabIndex={0}
+        >
+          <img src="assets/icons/camera.svg" alt="Screenshot" />
         </div>
       </div>
-    </div>
+    </div>);
   }
 }
 
-export class OverviewChartTab extends ChartTab{
-  static getName(t){return t('charts:overview:title')}
+export class OverviewChartTab extends ChartTab {
+  static getName(t) { return t('charts:overview:title'); }
 
-  getChartClass(){return "overview";}
+  static getChartClass() { return 'overview'; }
 }
 
 OverviewChartTab.Chart = OverviewChart;
 
-export class CostEffectivenessTab extends ChartTab{
-  static getName(t){return t('charts:costEffectiveness:title')}
+export class CostEffectivenessTab extends ChartTab {
+  static getName(t) { return t('charts:costEffectiveness:title'); }
 }
 
 CostEffectivenessTab.Chart = CostEffectiveness;
 
-export class ProcurementMethodTab extends ChartTab{
-  static getName(t){return t('charts:procurementMethod:title')}
+export class ProcurementMethodTab extends ChartTab {
+  static getName(t) { return t('charts:procurementMethod:title'); }
 
-  getMargins(){
-    let margins = super.getMargins();
+  static getMargins() {
+    const margins = super.getMargins();
     margins.r = 100;
     margins.b = 100;
     return margins;

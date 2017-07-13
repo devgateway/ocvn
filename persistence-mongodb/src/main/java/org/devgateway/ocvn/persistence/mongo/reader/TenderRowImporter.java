@@ -1,7 +1,6 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import java.text.ParseException;
-
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Classification;
 import org.devgateway.ocds.persistence.mongo.Item;
@@ -13,9 +12,9 @@ import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.ClassificationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.OrganizationRepository;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ClassificationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.OrganizationRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
 import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
@@ -23,8 +22,8 @@ import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
 import org.devgateway.ocvn.persistence.mongo.reader.util.OrganizationRepositoryUtil;
-import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.ContrMethodRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.VNLocationRepository;
 
 /**
  * Specific {@link RowImporter} for Tenders, in the custom Excel format provided
@@ -41,9 +40,10 @@ public class TenderRowImporter extends ReleaseRowImporter {
     private VNLocationRepository locationRepository;
 
     public TenderRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-            final OrganizationRepository organizationRepository,
-            final ClassificationRepository classificationRepository, final ContrMethodRepository contrMethodRepository,
-            final VNLocationRepository locationRepository, final int skipRows) {
+                             final OrganizationRepository organizationRepository,
+                             final ClassificationRepository classificationRepository,
+                             final ContrMethodRepository contrMethodRepository,
+                             final VNLocationRepository locationRepository, final int skipRows) {
         super(releaseRepository, importService, skipRows);
         this.organizationRepository = organizationRepository;
         this.classificationRepository = classificationRepository;

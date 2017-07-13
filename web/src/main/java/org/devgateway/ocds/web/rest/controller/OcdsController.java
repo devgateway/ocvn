@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.devgateway.ocds.persistence.mongo.Publisher;
 import org.devgateway.ocds.persistence.mongo.Release;
 import org.devgateway.ocds.persistence.mongo.ReleasePackage;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.json.Views;
 import org.devgateway.ocds.web.rest.controller.request.YearFilterPagingRequest;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;

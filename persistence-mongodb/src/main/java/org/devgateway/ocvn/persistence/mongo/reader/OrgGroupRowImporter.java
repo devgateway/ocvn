@@ -1,11 +1,11 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
 import java.text.ParseException;
-
+import org.devgateway.ocds.persistence.mongo.reader.ImportWarningRuntimeException;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.OrgGroup;
-import org.devgateway.ocvn.persistence.mongo.repository.OrgGroupRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.OrgGroupRepository;
 
 /**
  * @author mpostelnicu Specific {@link RowImporter} Cities. Organization#address
@@ -25,7 +25,7 @@ public class OrgGroupRowImporter extends RowImporter<OrgGroup, Integer, OrgGroup
         OrgGroup g = repository.findOne(getInteger(getRowCell(row, 1)));
         
         if (g != null) {
-            throw new RuntimeException("Duplicate identifer for org group " + g);
+            throw new ImportWarningRuntimeException("Duplicate identifer for org group " + g);
         }
         g = new OrgGroup();
         

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.devgateway.ocds.web.rest.controller.GenericOCDSController;
 import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
-import org.devgateway.ocvn.persistence.mongo.repository.ContrMethodRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.ContrMethodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

@@ -5,7 +5,7 @@ import org.devgateway.ocds.persistence.mongo.Location;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNLocation;
-import org.devgateway.ocvn.persistence.mongo.repository.VNLocationRepository;
+import org.devgateway.ocvn.persistence.mongo.repository.main.VNLocationRepository;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import java.text.ParseException;

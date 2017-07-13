@@ -1,4 +1,4 @@
-package org.devgateway.ocvn.persistence.mongo.repository;
+package org.devgateway.ocvn.persistence.mongo.repository.main;
 
 import org.devgateway.ocvn.persistence.mongo.dao.ContrMethod;
 import org.springframework.cache.annotation.CacheConfig;

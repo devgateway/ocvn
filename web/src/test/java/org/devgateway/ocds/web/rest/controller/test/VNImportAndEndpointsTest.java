@@ -1,9 +1,11 @@
 package org.devgateway.ocds.web.rest.controller.test;
 
 import com.mongodb.DBObject;
+import java.io.IOException;
+import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.devgateway.ocds.persistence.mongo.Organization;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ExcelImportService;
 import org.devgateway.ocds.web.rest.controller.AverageNumberOfTenderersController;
 import org.devgateway.ocds.web.rest.controller.AverageTenderAndAwardPeriodsController;
@@ -22,14 +24,16 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 
-import java.io.IOException;
-import java.util.List;
-
 /**
  * @author mpostelnicu
  *
  */
 public class VNImportAndEndpointsTest extends AbstractWebTest {
+
+    public static final String PROTOTYPE_DB_TEST_FILE="/testImport/test_egp_Jun21_Import.xlsx";
+    public static final String LOCATION_TEST_FILE="/testImport/test_Location_Table_Geocoded.xlsx";
+    public static final String ORGS_TEST_FILE="/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx";
+    public static final String CITY_DEPT_GROUP_TEST_FILE="/testImport/test_city_department_group.xlsx";
 
     @Autowired
     private ExcelImportService vnExcelImportService;
@@ -66,10 +70,10 @@ public class VNImportAndEndpointsTest extends AbstractWebTest {
         }
 
         vnExcelImportService.importAllSheets(ImportFileTypes.ALL_FILE_TYPES,
-                loadResourceStreamAsByteArray("/testImport/test_egp_Jun21_Import.xlsx"),
-                loadResourceStreamAsByteArray("/testImport/test_Location_Table_Geocoded.xlsx"),
-                loadResourceStreamAsByteArray("/testImport/test_UM_PUBINSTITU_SUPPLIERS_DQA.xlsx"), 
-                loadResourceStreamAsByteArray("/testImport/test_city_department_group.xlsx"),
+                loadResourceStreamAsByteArray(PROTOTYPE_DB_TEST_FILE),
+                loadResourceStreamAsByteArray(LOCATION_TEST_FILE),
+                loadResourceStreamAsByteArray(ORGS_TEST_FILE),
+                loadResourceStreamAsByteArray(CITY_DEPT_GROUP_TEST_FILE),
                 true, false, false);
     }
 

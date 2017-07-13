@@ -1,5 +1,6 @@
 package org.devgateway.ocvn.persistence.mongo.reader;
 
+import java.text.ParseException;
 import org.devgateway.ocds.persistence.mongo.Amount;
 import org.devgateway.ocds.persistence.mongo.Budget;
 import org.devgateway.ocds.persistence.mongo.Release;
@@ -8,13 +9,11 @@ import org.devgateway.ocds.persistence.mongo.Tender;
 import org.devgateway.ocds.persistence.mongo.constants.MongoConstants;
 import org.devgateway.ocds.persistence.mongo.reader.ReleaseRowImporter;
 import org.devgateway.ocds.persistence.mongo.reader.RowImporter;
-import org.devgateway.ocds.persistence.mongo.repository.ReleaseRepository;
+import org.devgateway.ocds.persistence.mongo.repository.main.ReleaseRepository;
 import org.devgateway.ocds.persistence.mongo.spring.ImportService;
 import org.devgateway.ocvn.persistence.mongo.dao.VNItem;
 import org.devgateway.ocvn.persistence.mongo.dao.VNPlanning;
 import org.devgateway.ocvn.persistence.mongo.dao.VNTender;
-
-import java.text.ParseException;
 
 /**
  * @author mpostelnicu Specific {@link RowImporter} for Bid Plans in the custom Excel
@@ -24,7 +23,7 @@ import java.text.ParseException;
 public class BidPlansRowImporter extends ReleaseRowImporter {
 
     public BidPlansRowImporter(final ReleaseRepository releaseRepository, final ImportService importService,
-            final int skipRows) {
+                               final int skipRows) {
         super(releaseRepository, importService, skipRows);
     }
 

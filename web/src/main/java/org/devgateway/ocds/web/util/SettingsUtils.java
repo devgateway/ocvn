@@ -1,13 +1,12 @@
 package org.devgateway.ocds.web.util;
 
+import java.util.List;
 import org.devgateway.toolkit.persistence.dao.AdminSettings;
 import org.devgateway.toolkit.persistence.repository.AdminSettingsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author idobre
@@ -24,7 +23,7 @@ public class SettingsUtils {
     @Autowired
     private AdminSettingsRepository adminSettingsRepository;
 
-    private AdminSettings getSettings() {
+    public AdminSettings getSettings() {
         List<AdminSettings> list = adminSettingsRepository.findAll();
         if (list.size() == 0) {
             return new AdminSettings();
