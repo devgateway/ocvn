@@ -85,7 +85,7 @@ $ cp forms/target/forms-*-SNAPSHOT.jar ocvn.jar
 $ cp forms/forms.conf ocvn.conf
 ```
 
-### Edit configuration file oce.conf
+### Edit configuration file ocvn.conf
 
 - Replace {website.url} with your website's URL
 
