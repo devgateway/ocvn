@@ -1,4 +1,4 @@
-# Installation Document OC-Explorer
+# Installation Document OC Vietnam
 
 ## VPS (virtual server) requirements
 
@@ -52,7 +52,7 @@ $ sudo chown -R oce:oce /derby
 ```
 $ sudo apt install p7zip
 $ wget http://url-to-derby-download-provided-by-dg-team
-$ 7zr x -o/derby oce-derby-*.7z
+$ 7zr x -o/derby ocvn-derby-*.7z
 ```
 
 ## Download and compile the open source code from github.com
@@ -66,13 +66,13 @@ $ 7zr x -o/derby oce-derby-*.7z
 
 ```
 $ su - oce
-$ git clone https://github.com/devgateway/oc-explorer.git
+$ git clone https://github.com/devgateway/ocvn.git
 ```
 
 ### Compile the code
 
 ```
-$ cd oc-explorer
+$ cd ocvn
 $ git checkout master
 $ mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true install
 ```
@@ -81,8 +81,8 @@ $ mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true install
 
 ```
 $ cd ~
-$ cp forms/target/forms-*-SNAPSHOT.jar oce.jar
-$ cp forms/forms.conf oce.conf
+$ cp forms/target/forms-*-SNAPSHOT.jar ocvn.jar
+$ cp forms/forms.conf ocvn.conf
 ```
 
 ### Edit configuration file oce.conf
@@ -92,11 +92,11 @@ $ cp forms/forms.conf oce.conf
 ### Make symlink to enable startup as service
 
 ```
-$ sudo ln -s /home/oce/oce.jar /etc/init.d/oce
-$ sudo update-rc.d oce defaults
+$ sudo ln -s /home/oce/ocvn.jar /etc/init.d/ocvn
+$ sudo update-rc.d ocvn defaults
 ```
 
 
 ## Start the server
 
-`$ sudo service oce start`
+`$ sudo service ocvn start`
