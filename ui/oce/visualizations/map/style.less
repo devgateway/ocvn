@@ -2,9 +2,42 @@
 @windowHeight: 400px;
 @borderRadius: 12px;
 
+.leaflet-popup{
+  padding: 0;
+  .leaflet-popup-content-wrapper{
+    padding: 0;
+    height: 300px;
+  }
+}
+
 .leaflet-popup-content{
-  width: 750px!important;
-  height: 400px;
+  width: 550px!important;
+
+  .svg-container{
+    svg{
+      width: auto;
+      display: block;
+      margin-left: -10px;
+    }
+  }
+
+  .count{
+    clear: both;
+    color: #ca3d3f;
+    display: block;
+    font-size: 2em;
+  }
+
+  .chart-toolbar{
+    &.chart-btns{
+      right: -10px;
+      top: 3px;
+      .btn-default{
+        outline: none;
+      }
+    }
+  }
+
 }
 
 .tender-locations-popup{
@@ -15,33 +48,34 @@
     margin-right: -20px;
     border-top-right-radius: @borderRadius;
     border-top-left-radius: @borderRadius;
-    padding: 15px;
+    padding: 7px 15px 7px 15px;
     color: white;
-    font-size: 2em;
-    font-weight: bolder;
-    height: @headerHeight;
+    font-size: 1.1em;
+    font-weight: bold;
+    height: @headerHeight - 31;
   }
 
   a.leaflet-popup-close-button{
-    top: 1em;
-    right: 15px;
-    padding-top: 7px;
+    color: #ffffff;
+    top: 0.3em;
+    right: 10px;
+    &:hover{
+      color: #000000;
+    }
   }
 
   .tabs-bar{
     background: #272727;
-    font-size: 1.2em;
+    font-size: 1em;
     margin-left: -5px;
-    height: @windowHeight - @headerHeight + 14px;//magic number, leaflet's borders n stuff
+    /*height: @windowHeight - @headerHeight + 14px;//magic number, leaflet's borders n stuff*/
+    height: @windowHeight - @headerHeight - 69px;
     border-bottom-left-radius: @borderRadius;
     div{
-      padding: 10px 10px 10px 25px;
+      padding: 10px 10px 10px 15px;
       margin-left: -15px;
       margin-right: -15px;
       border-right: 3px solid transparent;
-      &:first-child{
-        margin-top: 10px;
-      }
       &:focus{
         outline: none;
       }
@@ -69,3 +103,5 @@
     }
   }
 }
+
+

@@ -1,4 +1,6 @@
 import ProcurementMethod from "../../oce/visualizations/charts/procurement-method";
+import style from '../style.less';
+
 
 class BidSelectionMethod extends ProcurementMethod{}
 

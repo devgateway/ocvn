@@ -1,6 +1,7 @@
 import Overview from "../../oce/visualizations/charts/overview";
 import {pluckImm, yearlyResponse2obj, monthlyResponse2obj} from "../../oce/tools";
 
+
 class OCVNOverview extends Overview{
   transform([bidplansResponse, tendersResponse, awardsResponse]){
     const transformed = super.transform([tendersResponse, awardsResponse]);

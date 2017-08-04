@@ -74,10 +74,12 @@ export class OverviewTab extends Tab {
     const { count, amount } = data;
     return (<div>
       <p>
-        <strong>{this.t('maps:tenderLocations:tabs:overview:nrOfTenders')}</strong> {count}
+        <strong>{this.t('maps:tenderLocations:tabs:overview:nrOfTenders')}</strong> 
+        <span className="count">{count}</span>
       </p>
       <p>
-        <strong>{this.t('maps:tenderLocations:tabs:overview:totalFundingByLocation')}</strong> {amount.toLocaleString()}
+        <strong>{this.t('maps:tenderLocations:tabs:overview:totalFundingByLocation')}</strong> 
+        <span className="count">{amount.toLocaleString()}</span>
       </p>
     </div>);
   }
@@ -126,12 +128,12 @@ export class ChartTab extends Tab {
         translations={translations}
         data={this.state.chartData}
         requestNewData={(_, chartData) => this.setState({ chartData })}
-        width={500}
-        height={350}
+        width={390}
+        height={250}
         margin={this.constructor.getMargins()}
         legend="h"
       />
-      <div className="chart-toolbar">
+      <div className="chart-toolbar chart-btns">
         <div
           className="btn btn-default"
           onClick={doExcelExport}
