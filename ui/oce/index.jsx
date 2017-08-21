@@ -39,22 +39,18 @@ class OCApp extends React.Component {
     };
   }
 
-  componentWillMount() {
-    this.setState({
-      width: document.querySelector('.years-bar').offsetWidth - 30,
-    });
-  }
-
   componentDidMount() {
     this.fetchBidTypes();
     this.fetchYears();
     this.fetchUserInfo();
 
-    window.addEventListener('resize', debounce(() => {
-      this.setState({
-        width: document.querySelector('.years-bar').offsetWidth - 30,
-      });
-    }));
+    const calcYearsBarWidth = () => this.setState({
+      width: document.querySelector('.years-bar').offsetWidth - 30,
+    });
+
+    calcYearsBarWidth();
+
+    window.addEventListener('resize', calcYearsBarWidth);
   }
 
   setMenuBox(e, slug) {
