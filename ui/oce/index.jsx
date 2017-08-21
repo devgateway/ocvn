@@ -50,7 +50,7 @@ class OCApp extends React.Component {
 
     calcYearsBarWidth();
 
-    window.addEventListener('resize', calcYearsBarWidth);
+    window.addEventListener('resize', debounce(calcYearsBarWidth));
   }
 
   setMenuBox(e, slug) {
