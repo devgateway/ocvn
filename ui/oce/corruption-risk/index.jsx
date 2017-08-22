@@ -292,7 +292,7 @@ CorruptionRiskDashboard.propTypes = {
   styling: PropTypes.object.isRequired,
   onSwitch: PropTypes.func.isRequired,
   route: PropTypes.array.isRequired,
-  navigate: PropTypes.fund.isRequired
+  navigate: PropTypes.func.isRequired
 };
 
 export default CorruptionRiskDashboard;
