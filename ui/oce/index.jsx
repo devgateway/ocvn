@@ -361,7 +361,7 @@ class OCApp extends React.Component {
         </h1>
         {dashboardSwitcherOpen &&
         <div className="dashboard-switcher">
-          <a href="javascript:void(0);" onClick={() => onSwitch('corruptionRiskDashboard')}>
+          <a href="javascript:void(0);" onClick={() => onSwitch('crd')}>
              Corruption Risk Dashboard
           </a>
         </div>

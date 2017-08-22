@@ -1,28 +1,35 @@
-import URI from "urijs";
+import PropTypes from 'prop-types';
+import { getRoute, navigate, onNavigation } from './router';
 
 class OCESwitcher extends React.Component{
   constructor(...args){
     super(...args);
-		const uri = new URI(location);
-		const view = uri.hasQuery('corruption-risk-dashboard') ?
-								 'corruptionRiskDashboard' :
-								 Object.keys(this.constructor.views)[0];
+    const view = getRoute()[0] || Object.keys(this.constructor.views)[0];
 
-    this.state={
-      view
-    }
+    this.state = {
+      view,
+    };
+
+    onNavigation(([view]) => this.setState({view}));
   }
 
-  render(){
-    const {translations, styling} = this.props;
+  render() {
+    const { translations, styling } = this.props;
     const CurrentView = this.constructor.views[this.state.view];
-    return <CurrentView
-               onSwitch={view => this.setState({view})}
-               translations={translations}
-               styling={styling}
-           />;
+    return (
+      <CurrentView
+        onSwitch={navigate}
+        translations={translations}
+        styling={styling}
+      />
+    );
   }
 }
+
+OCESwitcher.propTypes = {
+  translations: PropTypes.object.isRequired,
+  styling: PropTypes.object.isRequired,
+};
 
 OCESwitcher.views = {};
 

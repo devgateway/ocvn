@@ -198,7 +198,7 @@ class CorruptionRiskDashboard extends React.Component{
               </h1>
               {dashboardSwitcherOpen &&
                 <div className="dashboard-switcher">
-                  <a href="javascript:void(0);" onClick={e => onSwitch('default')} onMouseDown={callFunc('stopPropagation')}>
+                  <a href="javascript:void(0);" onClick={e => onSwitch('m-and-e')} onMouseDown={callFunc('stopPropagation')}>
                     M&E Toolkit
                   </a>
                 </div>

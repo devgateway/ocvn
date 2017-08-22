@@ -67,7 +67,7 @@ class OCEChild extends OCApp{
         </h1>
         {dashboardSwitcherOpen &&
           <div className="dashboard-switcher">
-            <a href="javascript:void(0);" onClick={e => onSwitch('corruptionRiskDashboard')}>
+            <a href="javascript:void(0);" onClick={e => onSwitch('crd')}>
               Corruption Risk Dashboard
             </a>
           </div>
@@ -216,8 +216,8 @@ CorruptionRickDashboard.STYLING.charts.traceColors = ["#234e6d", "#3f7499", "#80
 
 class OceSwitcher extends ViewSwitcher{}
 
-OceSwitcher.views.default = OCEChild;
-OceSwitcher.views.corruptionRiskDashboard = CorruptionRickDashboard;
+OceSwitcher.views['m-and-e'] = OCEChild;
+OceSwitcher.views.crd = CorruptionRickDashboard;
 
 ReactDOM.render(<OceSwitcher
                   translations={translations['en_US']}
