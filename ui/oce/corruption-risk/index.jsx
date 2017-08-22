@@ -29,7 +29,6 @@ class CorruptionRiskDashboard extends React.Component {
         loggedIn: false,
         isAdmin: false,
       },
-      page: 'overview',
       indicatorTypesMapping: {},
       currentFiltersState: Map(),
       appliedFilters: Map(),
@@ -67,9 +66,11 @@ class CorruptionRiskDashboard extends React.Component {
   }
 
   getPage() {
-    const { translations } = this.props;
+    const { translations, route, navigate } = this.props;
     const styling = this.constructor.STYLING || this.props.styling;
-    const { page, appliedFilters, indicatorTypesMapping, width } = this.state;
+    const [page] = route;
+
+    const { appliedFilters, indicatorTypesMapping, width } = this.state;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
@@ -85,8 +86,8 @@ class CorruptionRiskDashboard extends React.Component {
         styling={styling}
         width={width}
       />);
-    } else if (page === 'corruption-type') {
-      const { corruptionType } = this.state;
+    } else if (page === 'type') {
+      const [, corruptionType] = route;
 
       const indicators =
         Object.keys(indicatorTypesMapping).filter(key =>
@@ -95,7 +96,7 @@ class CorruptionRiskDashboard extends React.Component {
       return (
         <CorruptionTypePage
           indicators={indicators}
-          onGotoIndicator={individualIndicator => this.setState({ page: 'individual-indicator', individualIndicator })}
+          onGotoIndicator={individualIndicator => navigate('indicator', individualIndicator)}
           filters={filters}
           translations={translations}
           corruptionType={corruptionType}
@@ -106,8 +107,8 @@ class CorruptionRiskDashboard extends React.Component {
           styling={styling}
         />
       );
-    } else if (page === 'individual-indicator') {
-      const { individualIndicator } = this.state;
+    } else if (page === 'indicator') {
+      const [, individualIndicator] = route;
       return (
         <IndividualIndicatorPage
           indicator={individualIndicator}
@@ -177,10 +178,11 @@ class CorruptionRiskDashboard extends React.Component {
   }
 
   render() {
-    const { dashboardSwitcherOpen, corruptionType, page, filterBoxIndex, currentFiltersState,
+    const { dashboardSwitcherOpen, corruptionType, filterBoxIndex, currentFiltersState,
       appliedFilters, data, indicatorTypesMapping, allYears, allMonths, showLandingPopup,
       disabledApiSecurity } = this.state;
-    const { onSwitch, translations } = this.props;
+    const { onSwitch, translations, route, navigate } = this.props;
+    const [page] = route;
 
     const { filters, years, months } = this.destructFilters(appliedFilters);
     const monthly = years.count() === 1;
@@ -238,7 +240,7 @@ class CorruptionRiskDashboard extends React.Component {
         />
         <aside className="col-xs-4 col-md-4 col-lg-3" id="crd-sidebar">
           <div className="crd-description-text">
-            <h4 className="crd-overview-link" onClick={() => this.setState({ page: 'overview' })}>
+            <h4 className="crd-overview-link" onClick={() => navigate('overview')}>
               Corruption Risk Overview
               <i className="glyphicon glyphicon-info-sign" />
             </h4>
@@ -256,8 +258,8 @@ class CorruptionRiskDashboard extends React.Component {
               return (
                 <a
                   href="javascript:void(0);"
-                  onClick={() => this.setState({ page: 'corruption-type', corruptionType: slug })}
-                  className={cn({ active: page === 'corruption-type' && slug === corruptionType })}
+                  onClick={() => navigate('type', slug)}
+                  className={cn({ active: page === 'type' && slug === corruptionType })}
                   key={slug}
                 >
                   <img src={`assets/icons/${slug}.png`} alt="Tab icon" />
@@ -289,6 +291,8 @@ CorruptionRiskDashboard.propTypes = {
   translations: PropTypes.object.isRequired,
   styling: PropTypes.object.isRequired,
   onSwitch: PropTypes.func.isRequired,
+  route: PropTypes.array.isRequired,
+  navigate: PropTypes.fund.isRequired
 };
 
 export default CorruptionRiskDashboard;

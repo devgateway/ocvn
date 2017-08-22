@@ -13,10 +13,9 @@ class OCESwitcher extends React.Component{
 
   render() {
     const { translations, styling } = this.props;
-    const { route } = this.state;
     const { views } = this.constructor;
 
-    let [dashboard] = route;
+    let [dashboard, ...route] = this.state.route;
     if (!dashboard) dashboard = Object.keys(views)[0];
     const CurrentView = views[dashboard];
 
@@ -25,6 +24,8 @@ class OCESwitcher extends React.Component{
         onSwitch={navigate}
         translations={translations}
         styling={styling}
+        route={route}
+        navigate={navigate.bind(null, dashboard)}
       />
     );
   }
