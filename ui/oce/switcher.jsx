@@ -4,18 +4,22 @@ import { getRoute, navigate, onNavigation } from './router';
 class OCESwitcher extends React.Component{
   constructor(...args){
     super(...args);
-    const view = getRoute()[0] || Object.keys(this.constructor.views)[0];
-
     this.state = {
-      view,
+      route: getRoute(),
     };
 
-    onNavigation(([view]) => this.setState({view}));
+    onNavigation(route => this.setState({ route }));
   }
 
   render() {
     const { translations, styling } = this.props;
-    const CurrentView = this.constructor.views[this.state.view];
+    const { route } = this.state;
+    const { views } = this.constructor;
+
+    let [dashboard] = route;
+    if (!dashboard) dashboard = Object.keys(views)[0];
+    const CurrentView = views[dashboard];
+
     return (
       <CurrentView
         onSwitch={navigate}
