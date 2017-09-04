@@ -1,13 +1,13 @@
-import MultipleSelect from "../../oce/filters/inputs/multiple-select";
+import MultipleSelect from '../../oce/filters/inputs/multiple-select';
 
-class PEDepartment extends MultipleSelect{
-  getTitle(){return this.t('filters:peDepartment:title')}
+class PEDepartment extends MultipleSelect {
+  getTitle() { return this.t('filters:peDepartment:title'); }
 
-  getId(option){return option.get('id');}
+  getId(option) { return option.get('id'); }
 
-  getLabel(option){return option.get('name');}
+  getLabel(option) { return option.get('name'); }
 }
 
-PEDepartment.ENDPOINT = 'ocds/orgDepartment/all';
+PEDepartment.ENDPOINT = '/api/ocds/orgDepartment/all';
 
 export default PEDepartment;

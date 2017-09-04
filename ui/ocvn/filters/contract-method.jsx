@@ -1,19 +1,19 @@
-import MultipleSelect from "../../oce/filters/inputs/multiple-select";
+import MultipleSelect from '../../oce/filters/inputs/multiple-select';
 
-class ContractMethod extends MultipleSelect{
-  getTitle(){
+class ContractMethod extends MultipleSelect {
+  getTitle() {
     return this.t('filters:contractMethod:title');
   }
 
-  getId(option){
+  getId(option) {
     return option.get('id');
   }
 
-  getLabel(option){
+  getLabel(option) {
     return option.get('details');
   }
 }
 
-ContractMethod.ENDPOINT = 'ocds/contrMethod/all';
+ContractMethod.ENDPOINT = '/api/ocds/contrMethod/all';
 
 export default ContractMethod;

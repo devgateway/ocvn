@@ -224,7 +224,7 @@ class CorruptionRiskDashboard extends React.Component {
           <div className="col-sm-1" />
         </header>
         <Filters
-          onUpdate={filtersState => this.setState({ filtersState })}
+          onUpdate={currentFiltersState => this.setState({ currentFiltersState })}
           onApply={filtersToApply => this.setState({
             filterBoxIndex: null,
             appliedFilters: filtersToApply,

@@ -1,19 +1,19 @@
-import MultipleSelect from "../../oce/filters/inputs/multiple-select";
+import MultipleSelect from '../../oce/filters/inputs/multiple-select';
 
-class Locations extends MultipleSelect{
-  getTitle(){
+class Locations extends MultipleSelect {
+  getTitle() {
     return this.t('filters:locations:title');
   }
 
-  getId(option){
+  getId(option) {
     return option.get('id');
   }
 
-  getLabel(option){
+  getLabel(option) {
     return option.get('description');
   }
 }
 
-Locations.ENDPOINT = 'ocds/location/all';
+Locations.ENDPOINT = '/api/ocds/location/all';
 
 export default Locations;

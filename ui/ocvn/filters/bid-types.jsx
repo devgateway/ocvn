@@ -1,19 +1,19 @@
-import MultipleSelect from "../../oce/filters/inputs/multiple-select";
+import MultipleSelect from '../../oce/filters/inputs/multiple-select';
 
-class BidTypes extends MultipleSelect{
-  getTitle(){
+class BidTypes extends MultipleSelect {
+  getTitle() {
     return this.t('filters:bidArea:title');
   }
 
-  getOptions(){
+  getOptions() {
     return this.props.options;
   }
 
-  getId(_, id){
+  getId(_, id) {
     return id;
   }
 
-  getLabel(label){
+  getLabel(label) {
     return label;
   }
 }

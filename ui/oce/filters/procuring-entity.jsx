@@ -1,11 +1,11 @@
-import TypeAhead from "./inputs/type-ahead";
+import TypeAhead from './inputs/type-ahead';
 
-class ProcuringEntity extends TypeAhead{
-  static getName(t){
-      return t('filters:procuringEntity:title');
+class ProcuringEntity extends TypeAhead {
+  getTitle() {
+    return this.t('filters:procuringEntity:title');
   }
 }
 
-ProcuringEntity.endpoint = '/api/ocds/organization/procuringEntity/all';
+ProcuringEntity.ENDPOINT = '/api/ocds/organization/procuringEntity/all';
 
-export default ProcuringEntity
+export default ProcuringEntity;
