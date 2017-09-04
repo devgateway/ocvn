@@ -56,7 +56,7 @@ class TypeAhead extends orgNamesFetching(translatable(Component)) {
     const haveQuery = query.length >= this.constructor.MIN_QUERY_LENGTH;
     return (
       <section className="field type-ahead">
-        <header>{this.constructor.getName(str => this.t(str)) } ({selected.count()})</header>
+        <header>{this.getTitle()} ({selected.count()})</header>
         <section className="options">
           {selected.map(id => this.constructor.renderOption({
             id,

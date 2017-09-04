@@ -1,8 +1,8 @@
 import TypeAhead from './inputs/type-ahead';
 
 class ProcuringEntity extends TypeAhead {
-  static getName(t) {
-    return t('filters:procuringEntity:title');
+  getTitle() {
+    return this.t('filters:procuringEntity:title');
   }
 }
 
