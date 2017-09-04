@@ -27,7 +27,9 @@ class MultipleSelect extends translatable(Component) {
 
   componentDidMount() {
     const { ENDPOINT } = this.constructor;
-    if (ENDPOINT) fetchJson(`/api/${ENDPOINT}`).then(data => this.setState({ options: fromJS(this.transform(data)) }));
+    if (ENDPOINT) {
+      fetchJson(ENDPOINT).then(data => this.setState({options: fromJS(this.transform(data))}));
+    }
   }
 
   selectAll() {
