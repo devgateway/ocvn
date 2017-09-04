@@ -75,11 +75,11 @@ class TypeAhead extends orgNamesFetching(translatable(Component)) {
 
           {haveQuery && <div className="result-count">{this.t_n('filters:typeAhead:result:sg', 'filters:typeAhead:result:pl', options.count())}</div>}
 
-          {options.filter(option => !selected.has(option.get('id'))).map(option => this.renderOption({
+          {options.filter(option => !selected.has(option.get('id'))).map(option => this.constructor.renderOption({
             id: option.get('id'),
             name: option.get('name'),
             checked: false,
-            cb: selectedOption => this.select(selectedOption),
+            cb: () => this.select(option),
           }))}
         </section>
       </section>
