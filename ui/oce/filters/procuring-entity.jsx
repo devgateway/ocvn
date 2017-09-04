@@ -6,6 +6,6 @@ class ProcuringEntity extends TypeAhead {
   }
 }
 
-ProcuringEntity.endpoint = '/api/ocds/organization/procuringEntity/all';
+ProcuringEntity.ENDPOINT = '/api/ocds/organization/procuringEntity/all';
 
 export default ProcuringEntity;

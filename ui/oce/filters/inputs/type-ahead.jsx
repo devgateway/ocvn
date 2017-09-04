@@ -15,7 +15,7 @@ class TypeAhead extends orgNamesFetching(translatable(Component)) {
   updateQuery(query) {
     this.setState({ query });
     if (query.length >= this.constructor.MIN_QUERY_LENGTH) {
-      fetchJson(new URI(this.constructor.endpoint).addSearch('text', query).toString())
+      fetchJson(new URI(this.constructor.ENDPOINT).addSearch('text', query).toString())
         .then(data => this.setState({ options: fromJS(data) }));
     } else {
       this.setState({ options: fromJS([]) });

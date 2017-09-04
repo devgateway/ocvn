@@ -6,6 +6,6 @@ class Supplier extends TypeAhead {
   }
 }
 
-Supplier.endpoint = '/api/ocds/organization/supplier/all';
+Supplier.ENDPOINT = '/api/ocds/organization/supplier/all';
 
 export default Supplier;
