@@ -1,13 +1,13 @@
-import MultipleSelect from "../../oce/filters/inputs/multiple-select";
+import MultipleSelect from '../../oce/filters/inputs/multiple-select';
 
-class PEGroup extends MultipleSelect{
-  getTitle(){return this.t('filters:peGroup:title')}
+class PEGroup extends MultipleSelect {
+  getTitle() { return this.t('filters:peGroup:title'); }
 
-  getId(option){return option.get('id');}
+  getId(option) { return option.get('id'); }
 
-  getLabel(option){return option.get('name');}
+  getLabel(option) { return option.get('name'); }
 }
 
-PEGroup.ENDPOINT = 'ocds/orgGroup/all';
+PEGroup.ENDPOINT = '/api/ocds/orgGroup/all';
 
 export default PEGroup;

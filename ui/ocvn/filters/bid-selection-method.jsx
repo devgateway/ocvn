@@ -1,23 +1,23 @@
 import MultipleSelect from "../../oce/filters/inputs/multiple-select";
 
 class BidSelectionMethod extends MultipleSelect{
-  getTitle(){
+  getTitle() {
     return this.t('filters:bidSelectionMethod:title');
   }
 
-  getId(option){
+  getId(option) {
     return option.get('_id');
   }
 
-  getLabel(option){
+  getLabel(option) {
     return option.get('_id');
   }
 
-  transform(data){
-    return data.filter(({_id}) => !!_id);
+  transform(data) {
+    return data.filter(({ _id }) => !!_id);
   }
 }
 
-BidSelectionMethod.ENDPOINT = 'ocds/bidSelectionMethod/all';
+BidSelectionMethod.ENDPOINT = '/api/ocds/bidSelectionMethod/all';
 
 export default BidSelectionMethod;
